@@ -23,19 +23,16 @@ namespace scl
 			ERROR_FWRITE
 		} num_t;
 
-		typedef enum
-		{
-			FLAG_NONE = 0x00,
+		typedef uint32_t flags_t;
 
-			FLAG_FILE_NAME = 0x01,
-			FLAG_FILE_MODE = 0x02,
-			FLAG_STREAM = 0x04,
-		} flags_t;
+		const flags_t FLAG_NONE = 0x00;
 
-		inline void operator|=(flags_t flags, flags_t f2)
-		{
-			flags = static_cast<flags_t>(static_cast<uint32_t>(flags) | static_cast<uint32_t>(f2));
-		}
+		const flags_t FLAG_FILE_NAME = 0x01;
+		const flags_t FLAG_FILE_MODE = 0x02;
+
+		const flags_t FLAG_STREAM = 0x04;
+
+		const flags_t FLAG_SIZE = 0x05;
 
 		num_t num;
 
@@ -45,7 +42,10 @@ namespace scl
 
 			const char *file_name;
 			const char *file_mode;
+
 			const FILE *stream;
+
+			size_t size;
 		} info;
 
 		static inline void clear_num()
@@ -74,6 +74,12 @@ namespace scl
 		{
 			info.flags |= FLAG_STREAM;
 			info.stream = stream;
+		}
+
+		static inline void set_info_size(const size_t size)
+		{
+			info.flags |= FLAG_SIZE;
+			info.size = size;
 		}
 	}
 }

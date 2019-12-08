@@ -89,6 +89,7 @@ namespace scl
 			return write_number;
 		}
 
+#if 0
 		static inline void read_file(buffer_t *buffer, FILE *file)
 		{
 			return;
@@ -98,5 +99,7 @@ namespace scl
 		{
 			return;
 		}
+#endif
+
 	}
 }
