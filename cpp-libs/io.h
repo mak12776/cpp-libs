@@ -63,14 +63,40 @@ namespace scl
 			return size;
 		}
 
+		static inline size_t safe_fread(void *pntr, size_t size, FILE *file)
+		{
+			size_t read_number;
+
+			read_number = fread(pntr, 1, size, file);
+			if (read_number != size)
+			{
+				num = ERROR_FREAD;
+				set_info_stream(file);
+			}
+			return read_number;
+		}
+
+		static inline size_t safe_write(void *pntr, size_t size, FILE *file)
+		{
+			size_t write_number;
+
+			write_number = fwrite(pntr, 1, size, file);
+			if (write_number != size)
+			{
+				num = ERROR_FWRITE;
+				set_info_stream(file);
+			}
+			return write_number;
+		}
+
 		static inline void read_file(buffer_t *buffer, FILE *file)
 		{
-
+			return;
 		}
 
 		static inline void read_file_name(buffer_t *buffer, const char *name)
 		{
-
+			return;
 		}
 	}
 }

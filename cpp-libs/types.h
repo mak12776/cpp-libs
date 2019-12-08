@@ -14,4 +14,6 @@ namespace scl
 
 	typedef u8char_t* u8string_t;
 	typedef s8char_t* s8string_t;
+
+	typedef uint8_t char_t;				/* used for IO structures */
 }

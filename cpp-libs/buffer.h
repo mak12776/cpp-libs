@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include "types.h"
+#include "io.h"
 
 using namespace scl;
 
@@ -9,8 +10,6 @@ namespace scl
 {
 	namespace buffer
 	{
-		typedef uint8_t char_t;
-
 		typedef struct
 		{
 			char_t *pntr;
@@ -44,6 +43,19 @@ namespace scl
 			delete[] buffer->pntr;
 			delete buffer;
 		}
+
+		typedef struct
+		{
+			size_t start;
+			size_t end;
+		} view_t;
+
+		typedef struct
+		{
+			char_t *pntr;
+			view_t view;
+		} packed_view_t;
+
 	}
 }
 
