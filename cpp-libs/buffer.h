@@ -1,10 +1,14 @@
 #pragma once
 
 #include <cstdint>
+
+#include "error.h"
+
 #include "types.h"
 #include "io.h"
 
 using namespace scl;
+using namespace scl::error;
 
 namespace scl
 {
@@ -44,18 +48,92 @@ namespace scl
 			delete buffer;
 		}
 
+		static inline size_t count_lines(buffer_t *buffer)
+		{
+			size_t index;
+			size_t total;
+
+			if (buffer->size == 0)
+			{
+				num = ERROR_BAD_ARGUMENT;
+				set_info_function_name("count_lines");
+				set_info_argument_name("buffer");
+			}
+
+			index = 0;
+			total = 0;
+
+#define CH (buffer->pntr[index])
+#define END (index == buffer->size)
+#define INC_INDEX_CHECK_END {index += 1; if (END) return total;}
+
+		loop:
+			if (CH == '\n')
+			{
+				total += 1;
+
+				goto next;
+			}
+
+		check_cr:
+			if (CH == '\r')
+			{
+				total += 1;
+
+				INC_INDEX_CHECK_END;
+
+				if (CH == '\n')
+					goto next;
+
+				goto check_cr;
+			}
+
+			index += 1;
+			if (END)
+			{
+				total += 1;
+				return total;
+			}
+
+			goto loop;
+
+		next:
+			INC_INDEX_CHECK_END;
+
+			goto loop;
+
+#undef CH
+#undef END
+#undef INC_INDEX_CHECK_END
+		}
+	}
+
+	namespace view
+	{
 		typedef struct
 		{
 			size_t start;
 			size_t end;
 		} view_t;
+	}
 
+	namespace packed_view
+	{
 		typedef struct
 		{
 			char_t *pntr;
-			view_t view;
+			view::view_t view;
 		} packed_view_t;
+	}
 
+	namespace buffer_views
+	{
+		typedef struct
+		{
+			buffer::buffer_t buffer;
+			view::view_t *views;
+			size_t total;
+		} buffer_views_t;
 	}
 }
 

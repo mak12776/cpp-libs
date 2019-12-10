@@ -20,19 +20,21 @@ namespace scl
 			ERROR_FTELL,
 
 			ERROR_FREAD,
-			ERROR_FWRITE
+			ERROR_FWRITE,
+
+			ERROR_BAD_ARGUMENT,
 		} num_t;
 
 		typedef uint32_t flags_t;
 
 		const flags_t FLAG_NONE = 0x00;
 
-		const flags_t FLAG_FILE_NAME = 0x01;
-		const flags_t FLAG_FILE_MODE = 0x02;
-
-		const flags_t FLAG_STREAM = 0x04;
-
-		const flags_t FLAG_SIZE = 0x05;
+		const flags_t FLAG_STREAM = 0x01;
+		const flags_t FLAG_SIZE = 0x02;
+		const flags_t FLAG_FILE_NAME = 0x04;
+		const flags_t FLAG_FILE_MODE = 0x08;
+		const flags_t FLAG_FUNCTION_NAME = 0x1;
+		const flags_t FLAG_ARGUMENT_NAME = 0x2;
 
 		num_t num;
 
@@ -40,12 +42,14 @@ namespace scl
 		{
 			flags_t flags;
 
+			const FILE *stream;
+			size_t size;
+
 			const char *file_name;
 			const char *file_mode;
 
-			const FILE *stream;
-
-			size_t size;
+			const char *function_name;
+			const char *argument_name;
 		} info;
 
 		static inline void clear_num()
@@ -80,6 +84,18 @@ namespace scl
 		{
 			info.flags |= FLAG_SIZE;
 			info.size = size;
+		}
+
+		static inline void set_info_function_name(const char *name)
+		{
+			info.flags |= FLAG_FUNCTION_NAME;
+			info.function_name = name;
+		}
+
+		static inline void set_info_argument_name(const char *name)
+		{
+			info.flags |= FLAG_ARGUMENT_NAME;
+			info.argument_name = name;
 		}
 	}
 }

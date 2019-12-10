@@ -8,4 +8,5 @@
 
 #include "io.h"
 #include "buffer.h"
+#include "string.h"
 #include "memory.h"
