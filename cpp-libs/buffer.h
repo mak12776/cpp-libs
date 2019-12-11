@@ -13,13 +13,13 @@ namespace scl
 	{
 		typedef struct
 		{
-			byte_t *pntr;
+			byte *pntr;
 			size_t size;
 		} buffer_t;
 
 		static inline void initialize(buffer_t *buffer, size_t size)
 		{
-			buffer->pntr = new byte_t[size];
+			buffer->pntr = new byte[size];
 			buffer->size = size;
 		}
 
@@ -33,7 +33,7 @@ namespace scl
 		{
 			buffer_t *result = new buffer_t;
 
-			result->pntr = new byte_t[size];
+			result->pntr = new byte[size];
 			result->size = size;
 
 			return result;
@@ -118,7 +118,7 @@ namespace scl
 	{
 		typedef struct
 		{
-			byte_t *pntr;
+			byte *pntr;
 			view::view_t view;
 		} packed_view_t;
 	}
