@@ -2,14 +2,12 @@
 
 #include <cstdint>
 
-#include "types.h"
-
-using namespace scl;
-
 namespace scl
 {
 	namespace error
 	{
+		// types
+
 		typedef enum
 		{
 			NO_ERROR,
@@ -33,8 +31,8 @@ namespace scl
 		const flags_t FLAG_SIZE = 0x02;
 		const flags_t FLAG_FILE_NAME = 0x04;
 		const flags_t FLAG_FILE_MODE = 0x08;
-		const flags_t FLAG_FUNCTION_NAME = 0x1;
-		const flags_t FLAG_ARGUMENT_NAME = 0x2;
+		const flags_t FLAG_FUNCTION_NAME = 0x10;
+		const flags_t FLAG_ARGUMENT_NAME = 0x20;
 
 		num_t num;
 
@@ -51,6 +49,8 @@ namespace scl
 			const char *function_name;
 			const char *argument_name;
 		} info;
+
+		// functions
 
 		static inline void clear_num()
 		{

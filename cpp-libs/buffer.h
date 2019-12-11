@@ -7,22 +7,19 @@
 #include "types.h"
 #include "io.h"
 
-using namespace scl;
-using namespace scl::error;
-
 namespace scl
 {
 	namespace buffer
 	{
 		typedef struct
 		{
-			char_t *pntr;
+			byte_t *pntr;
 			size_t size;
 		} buffer_t;
 
 		static inline void initialize(buffer_t *buffer, size_t size)
 		{
-			buffer->pntr = new char_t[size];
+			buffer->pntr = new byte_t[size];
 			buffer->size = size;
 		}
 
@@ -36,7 +33,7 @@ namespace scl
 		{
 			buffer_t *result = new buffer_t;
 
-			result->pntr = new char_t[size];
+			result->pntr = new byte_t[size];
 			result->size = size;
 
 			return result;
@@ -55,9 +52,9 @@ namespace scl
 
 			if (buffer->size == 0)
 			{
-				num = ERROR_BAD_ARGUMENT;
-				set_info_function_name("count_lines");
-				set_info_argument_name("buffer");
+				error::num = error::ERROR_BAD_ARGUMENT;
+				error::set_info_function_name("count_lines");
+				error::set_info_argument_name("buffer->size");
 			}
 
 			index = 0;
@@ -121,7 +118,7 @@ namespace scl
 	{
 		typedef struct
 		{
-			char_t *pntr;
+			byte_t *pntr;
 			view::view_t view;
 		} packed_view_t;
 	}

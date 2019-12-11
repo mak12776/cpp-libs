@@ -8,7 +8,7 @@ namespace scl
 {
 	namespace string
 	{
-		static inline size_t find_char(char_t *pntr, size_t start, size_t end, char_t ch)
+		static inline size_t find_char(byte_t *pntr, size_t start, size_t end, byte_t ch)
 		{
 			size_t index;
 
@@ -22,7 +22,7 @@ namespace scl
 			return end;
 		}
 
-		static inline size_t rfind_char(char_t *pntr, size_t start, size_t end, char_t ch)
+		static inline size_t rfind_char(byte_t *pntr, size_t start, size_t end, byte_t ch)
 		{
 			size_t index;
 
@@ -36,7 +36,7 @@ namespace scl
 			return end;
 		}
 
-		static inline size_t find_test(char_t *pntr, size_t start, size_t end, int (*test) (int))
+		static inline size_t find_test(byte_t *pntr, size_t start, size_t end, int (*test) (int))
 		{
 			size_t index;
 
@@ -50,7 +50,7 @@ namespace scl
 			return end;
 		}
 
-		static inline size_t rfind_test(char_t *pntr, size_t start, size_t end, int (*test) (int))
+		static inline size_t rfind_test(byte_t *pntr, size_t start, size_t end, int (*test) (int))
 		{
 			size_t index;
 
