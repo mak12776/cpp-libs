@@ -13,10 +13,8 @@ namespace scl
 
 			pntr = malloc(size);
 			if (pntr == nullptr)
-			{
-				error::num = error::ERROR_NO_MEMORY;
-				error::set_info_size(size);
-			}
+				error::set_error_no_memory(size);
+			
 			return pntr;
 		}
 	}

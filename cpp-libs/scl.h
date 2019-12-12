@@ -3,6 +3,12 @@
 #include <string>
 #include <iostream>
 
+/* usefull macros:
+ *		SCL_CATCH_EXCEPTIONS
+*/
+
+#define SCL_CATCH_EXCEPTIONS
+
 #include "types.h"
 #include "error.h"
 #include "math.h"

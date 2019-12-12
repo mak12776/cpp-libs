@@ -52,9 +52,8 @@ namespace scl
 
 			if (buffer->size == 0)
 			{
-				error::num = error::ERROR_BAD_ARGUMENT;
-				error::set_info_function_name("count_lines");
-				error::set_info_argument_name("buffer->size");
+				error::set_error_bad_argument("count_lines", "buffer->size");
+				return 0;
 			}
 
 			index = 0;

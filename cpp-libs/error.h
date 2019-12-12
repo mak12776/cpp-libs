@@ -26,7 +26,7 @@ namespace scl
 
 			ERROR_BAD_ARGUMENT,
 
-			ERROR_BAD_ALLOC,
+			ERROR_BAD_ALLOC_EXCEPTION,
 		} num_t;
 
 		static inline const char *get_string(num_t num)
@@ -34,6 +34,7 @@ namespace scl
 			switch (num)
 			{
 #define ERROR_CASE(NAME) case NAME: return #NAME;
+
 				ERROR_CASE(NO_ERROR);
 
 				ERROR_CASE(ERROR_NO_MEMORY);
@@ -51,10 +52,11 @@ namespace scl
 				ERROR_CASE(ERROR_BAD_ARGUMENT);
 
 #undef ERROR_CASE
-			default: return "UNKNOWN NUMBER";
+			default: return "UNKNOWN ERROR";
 			}
 		}
 
+#if 0
 		typedef uint32_t flags_t;
 
 		const flags_t FLAG_NONE = 0x00;
@@ -65,69 +67,90 @@ namespace scl
 		const flags_t FLAG_FILE_MODE = 0x08;
 		const flags_t FLAG_FUNCTION_NAME = 0x10;
 		const flags_t FLAG_ARGUMENT_NAME = 0x20;
+#endif
+
+		// variables
 
 		num_t num = NO_ERROR;
 
 		struct
 		{
-			flags_t flags;
-
-			const FILE *stream;
-			size_t size;
-
+			/* usages are shown by following functions*/
 			const char *file_name;
 			const char *file_mode;
-
+			size_t size;
+			const FILE *stream;
 			const char *function_name;
 			const char *argument_name;
+			const char *type_name;
 		} info;
-
+		
 		// functions
 
-		static inline void clear_num()
+		static inline void clear_error()
 		{
 			num = NO_ERROR;
 		}
 
-		static inline void clear_info()
+		static inline void set_error_no_memory(size_t size)
 		{
-			info.flags = FLAG_NONE;
-		}
-
-		static inline void set_info_file_name(const char *name)
-		{
-			info.flags |= FLAG_FILE_NAME;
-			info.file_name = name;
-		}
-
-		static inline void set_info_file_mode(const char *mode)
-		{
-			info.flags |= FLAG_FILE_MODE;
-			info.file_mode = mode;
-		}
-
-		static inline void set_info_stream(FILE *stream)
-		{
-			info.flags |= FLAG_STREAM;
-			info.stream = stream;
-		}
-
-		static inline void set_info_size(const size_t size)
-		{
-			info.flags |= FLAG_SIZE;
+			num = ERROR_NO_MEMORY;
 			info.size = size;
 		}
 
-		static inline void set_info_function_name(const char *name)
+		static inline void set_error_fopen(const char *name, const char *mode)
 		{
-			info.flags |= FLAG_FUNCTION_NAME;
-			info.function_name = name;
+			num = ERROR_FOPEN;
+			info.file_name = name;
+			info.file_mode = mode;
 		}
 
-		static inline void set_info_argument_name(const char *name)
+		static inline void set_error_ftell(FILE *stream)
 		{
-			info.flags |= FLAG_ARGUMENT_NAME;
-			info.argument_name = name;
+			num = ERROR_FTELL;
+			info.stream = stream;
+		}
+
+		static inline void set_error_fseek(FILE *stream)
+		{
+			num = ERROR_FSEEK;
+			info.stream = stream;
+		}
+
+		static inline void set_error_fread(FILE *stream)
+		{
+			num = ERROR_FREAD;
+			info.stream = stream;
+		}
+
+		static inline void set_error_fwrite(FILE *stream)
+		{
+			num = ERROR_FWRITE;
+			info.stream = stream;
+		}
+
+		static inline void set_error_int_overflow()
+		{
+			num = ERROR_INT_OVERFLOW;
+		}
+
+		static inline void set_error_float_overflow()
+		{
+			num = ERROR_FLOAT_OVERFLOW;
+		}
+
+		static inline void set_error_bad_argument(const char *function_name, const char *argument_name)
+		{
+			num = ERROR_BAD_ARGUMENT;
+			info.function_name = function_name;
+			info.argument_name = argument_name;
+		}
+
+		static inline void set_error_bad_alloc_exception(const char *type_name, size_t size)
+		{
+			num = ERROR_BAD_ALLOC_EXCEPTION;
+			info.type_name = type_name;
+			info.size = size;
 		}
 	}
 }

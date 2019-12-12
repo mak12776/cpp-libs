@@ -30,9 +30,7 @@ namespace scl
 				case RGB: return 3;
 				case RGBA: return 4;
 				default:
-					error::num = error::ERROR_BAD_ARGUMENT;
-					error::set_info_function_name("get_width");
-					error::set_info_argument_name("mode");
+					error::set_error_bad_argument("get_width", "mode");
 					return 0;
 				}
 			}
@@ -46,9 +44,7 @@ namespace scl
 				case RGB: return "RGB";
 				case RGBA: return "RGBA";
 				default:
-					error::num = error::ERROR_BAD_ARGUMENT;
-					error::set_info_function_name("get_string");
-					error::set_info_argument_name("mode");
+					error::set_error_bad_argument("get_string", "mode");
 					return 0;
 				}
 			}
@@ -91,14 +87,17 @@ namespace scl
 				math::safe_mul_size(size.y, x_width, y_width);
 				if (error::num) return;
 
+#ifdef SCL_CATCH_EXCEPTIONS
 				try
 				{
 					image->data = new byte[image->y_wdith];
 				}
 				catch (std::bad_alloc &exception)
 				{
-					error::num = error::ERROR_BAD_ALLOC;
+					error::set_error_bad_alloc_exception("byte", image->y_wdith);
+					return;
 				}
+#endif
 				
 				image->mode = mode;
 				image->color_width = color_width;
