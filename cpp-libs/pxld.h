@@ -97,14 +97,20 @@ namespace scl
 					error::set_error_bad_alloc_exception("byte", image->y_wdith);
 					return;
 				}
+#else
+				image->data = new byte[image->y_wdith];
 #endif
-				
+
 				image->mode = mode;
 				image->color_width = color_width;
 				image->x_width = x_width;
 				image->y_wdith = y_width;
 			}
+
+			static inline void finalize(image_t *image)
+			{
+				delete[] image->data;
+			}
 		}
-		
 	}
 }

@@ -6,15 +6,15 @@
 
 namespace scl
 {
-	namespace analyzer
+	namespace machine
 	{
 		typedef struct
 		{
 			buffer::buffer_t inst_buffer;
 			
-		} analyzer_t;
+		} machine_t;
 
-		static inline void execute(analyzer_t analyzer)
+		static inline void execute(machine_t analyzer)
 		{
 
 		}

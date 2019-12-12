@@ -37,19 +37,19 @@
     <ClInclude Include="types.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="analyzer.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="buffer.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="string.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="pxld.h">
+    <ClInclude Include="math.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="math.h">
+    <ClInclude Include="analyzer.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="pxld.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
@@ -63,5 +63,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
