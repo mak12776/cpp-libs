@@ -10,8 +10,12 @@ namespace scl
 
 		typedef enum
 		{
-			NO_ERROR,
+			NO_ERROR = 0,
+
 			ERROR_NO_MEMORY,
+
+			ERROR_INT_OVERFLOW,
+			ERROR_FLOAT_OVERFLOW,
 
 			ERROR_FOPEN,
 			ERROR_FSEEK,
@@ -21,7 +25,35 @@ namespace scl
 			ERROR_FWRITE,
 
 			ERROR_BAD_ARGUMENT,
+
+			ERROR_BAD_ALLOC,
 		} num_t;
+
+		static inline const char *get_string(num_t num)
+		{
+			switch (num)
+			{
+#define ERROR_CASE(NAME) case NAME: return #NAME;
+				ERROR_CASE(NO_ERROR);
+
+				ERROR_CASE(ERROR_NO_MEMORY);
+
+				ERROR_CASE(ERROR_INT_OVERFLOW);
+				ERROR_CASE(ERROR_FLOAT_OVERFLOW);
+
+				ERROR_CASE(ERROR_FOPEN);
+				ERROR_CASE(ERROR_FSEEK);
+				ERROR_CASE(ERROR_FTELL);
+
+				ERROR_CASE(ERROR_FREAD);
+				ERROR_CASE(ERROR_FWRITE);
+
+				ERROR_CASE(ERROR_BAD_ARGUMENT);
+
+#undef ERROR_CASE
+			default: return "UNKNOWN NUMBER";
+			}
+		}
 
 		typedef uint32_t flags_t;
 
@@ -34,7 +66,7 @@ namespace scl
 		const flags_t FLAG_FUNCTION_NAME = 0x10;
 		const flags_t FLAG_ARGUMENT_NAME = 0x20;
 
-		num_t num;
+		num_t num = NO_ERROR;
 
 		struct
 		{

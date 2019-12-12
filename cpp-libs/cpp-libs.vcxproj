@@ -155,6 +155,7 @@
     <ClInclude Include="error.h" />
     <ClInclude Include="buffer.h" />
     <ClInclude Include="analyzer.h" />
+    <ClInclude Include="math.h" />
     <ClInclude Include="pxld.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="types.h" />

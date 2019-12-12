@@ -49,6 +49,9 @@
     <ClInclude Include="pxld.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="math.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

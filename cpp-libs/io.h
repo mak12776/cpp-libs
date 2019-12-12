@@ -6,9 +6,6 @@
 #include "types.h"
 #include "buffer.h"
 
-using namespace scl::error;
-using namespace scl::buffer;
-
 namespace scl
 {
 	namespace io
@@ -19,8 +16,8 @@ namespace scl
 
 			if (file == NULL)
 			{
-				num = ERROR_FOPEN;
-				set_info_file_mode(mode);
+				error::num = error::ERROR_FOPEN;
+				error::set_info_file_mode(mode);
 			}
 			return file;
 		}
@@ -32,8 +29,8 @@ namespace scl
 			value = std::ftell(stream);
 			if (value == -1)
 			{
-				num = ERROR_FTELL;
-				set_info_stream(stream);
+				error::num = error::ERROR_FTELL;
+				error::set_info_stream(stream);
 			}
 			return value;
 		}
@@ -42,8 +39,8 @@ namespace scl
 		{
 			if (fseek(stream, offset, origin))
 			{
-				num = ERROR_FSEEK;
-				set_info_stream(stream);
+				error::num = error::ERROR_FSEEK;
+				error::set_info_stream(stream);
 			}
 		}
 
@@ -52,13 +49,13 @@ namespace scl
 			long size;
 
 			safe_fseek(stream, 0, SEEK_END);
-			if (num) return 0;
+			if (error::num) return 0;
 
 			size = safe_ftell(stream);
-			if (num) return 0;
+			if (error::num) return 0;
 
 			safe_fseek(stream, 0, SEEK_SET);
-			if (num) return 0;
+			if (error::num) return 0;
 
 			return size;
 		}
@@ -70,8 +67,8 @@ namespace scl
 			read_number = fread(pntr, 1, size, file);
 			if (read_number != size)
 			{
-				num = ERROR_FREAD;
-				set_info_stream(file);
+				error::num = error::ERROR_FREAD;
+				error::set_info_stream(file);
 			}
 			return read_number;
 		}
@@ -83,8 +80,8 @@ namespace scl
 			write_number = fwrite(pntr, 1, size, file);
 			if (write_number != size)
 			{
-				num = ERROR_FWRITE;
-				set_info_stream(file);
+				error::num = error::ERROR_FWRITE;
+				error::set_info_stream(file);
 			}
 			return write_number;
 		}
