@@ -14,9 +14,13 @@ namespace scl
 			
 		} machine_t;
 
-		static inline void execute(machine_t analyzer)
+		typedef uint8_t inst_t;
+
+		static inline void execute(machine_t &machine)
 		{
 
 		}
+
+
 	}
 }

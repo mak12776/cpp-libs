@@ -17,5 +17,23 @@ namespace scl
 			
 			return pntr;
 		}
+
+		template <typename T>
+		static inline T *new_array(size_t size)
+		{
+#ifdef SCL_CATCH_EXCEPTIONS
+			try
+			{
+				return new T[size];
+			}
+			catch (std::bad_alloc exception)
+			{
+				error::set_error_bad_alloc_exception("unknown", size);
+				return nullptr;
+			}
+#else
+			return new T[size];
+#endif
+		}
 	}
 }

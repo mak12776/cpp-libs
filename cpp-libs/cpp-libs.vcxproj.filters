@@ -46,10 +46,19 @@
     <ClInclude Include="math.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="analyzer.h">
+    <ClInclude Include="pxld.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="pxld.h">
+    <ClInclude Include="machine.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="CImg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="printf.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="exit_codes.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>

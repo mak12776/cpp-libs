@@ -12,16 +12,19 @@ namespace scl
 {
 	namespace pxld
 	{
+		typedef size_t unit_t;
+		typedef uint32_t color_t;
+
+		const bool is_unit_signed = false;
+
+		typedef enum
+		{
+			L, LA, RGB, RGBA
+		} mode_t;
+
 		namespace mode
 		{
-			typedef uint8_t mode_t;
-
-			const mode_t L = 1;
-			const mode_t LA = 2;
-			const mode_t RGB = 3;
-			const mode_t RGBA = 4;
-
-			static inline size_t get_width(mode_t mode)
+			static inline unit_t get_width(mode_t mode)
 			{
 				switch (mode)
 				{
@@ -49,34 +52,48 @@ namespace scl
 				}
 			}
 		}
+
+		typedef struct
+		{
+			unit_t x;
+			unit_t y;
+		} point_t;
+
 		namespace point
 		{
-			typedef struct
+			static inline point_t *new_point(unit_t x, unit_t y)
 			{
-				size_t x;
-				size_t y;
-			} point_t;
+				point_t *result = new point_t;
+				result->x = x;
+				result->y = y;
+				return result;
+			}
+
+			static inline void delete_point(point_t *point)
+			{
+				delete point;
+			}
 		}
+
+		typedef struct
+		{
+			byte *data;
+
+			mode_t mode;
+			point_t size;
+
+			unit_t color_width;
+			unit_t x_width;
+			unit_t y_width;
+		} image_t;
 
 		namespace image
 		{
-			typedef struct
+			static inline void initialize(image_t *image, point_t size, mode_t mode)
 			{
-				byte *data;
-
-				mode::mode_t mode;
-				point::point_t size;
-
-				size_t color_width;
-				size_t x_width;
-				size_t y_wdith;
-			} image_t;
-
-			static inline void initialize(image_t *image, point::point_t size, mode::mode_t mode)
-			{
-				size_t color_width;
-				size_t x_width;
-				size_t y_width;
+				unit_t color_width;
+				unit_t x_width;
+				unit_t y_width;
 
 				color_width = mode::get_width(mode);
 				if (error::num) return;
@@ -87,29 +104,60 @@ namespace scl
 				math::safe_mul_size(size.y, x_width, y_width);
 				if (error::num) return;
 
-#ifdef SCL_CATCH_EXCEPTIONS
-				try
-				{
-					image->data = new byte[image->y_wdith];
-				}
-				catch (std::bad_alloc &exception)
-				{
-					error::set_error_bad_alloc_exception("byte", image->y_wdith);
-					return;
-				}
-#else
-				image->data = new byte[image->y_wdith];
-#endif
 
+				image->data = memory::new_array<byte>(y_width);
+
+#ifdef SCL_CATCH_EXCEPTIONS
+				if (image->data == nullptr) return;
+#endif
 				image->mode = mode;
+				image->size = size;
+				
 				image->color_width = color_width;
 				image->x_width = x_width;
-				image->y_wdith = y_width;
+				image->y_width = y_width;
 			}
 
 			static inline void finalize(image_t *image)
 			{
 				delete[] image->data;
+			}
+
+			static inline void draw(image_t *image, color_t(*func) (point_t))
+			{
+				color_t color;
+				for (unit_t y_offset = 0, y = 0; y_offset < image->y_width; y_offset += image->x_width, y += 1)
+				{
+					for (unit_t x_offset = 0, x = 0; x_offset < image->x_width; x_offset += image->color_width, x += 1)
+					{
+						color = func(point_t{ x, y });
+
+						unit_t c_offset = image->color_width;
+						while (c_offset > 0)
+						{
+							c_offset -= 1;
+
+							image->data[y_offset + x_offset + c_offset] = (byte)(color & 0xFF);
+							color >>= 8;
+						}
+					}
+				}
+			}
+
+			static inline void map(image_t *image, color_t(*func) (point_t, color_t))
+			{
+				color_t color;
+				for (unit_t y_offset = 0, y = 0; y < image->size.y; y_offset += image->x_width, y += 1)
+				{
+					for (unit_t x_offset = 0, x = 0; x < image->size.x; x_offset += image->color_width, x += 1)
+					{
+						for (unit_t c_offset = image->color_width - 1; c_offset >= 0; c_offset -= 1)
+						{
+							image->data[y_offset + x_offset + c_offset] = color & 0xFF;
+							color >>= 8;
+						}
+					}
+				}
 			}
 		}
 	}

@@ -84,8 +84,22 @@ namespace scl
 			const char *argument_name;
 			const char *type_name;
 		} info;
+
+		const size_t messages_size = 1024;
+		size_t messages_index = 0;
+
+		char *messages[messages_size];
 		
 		// functions
+
+		static inline void check_error()
+		{
+			if (num == NO_ERROR)
+				return;
+
+			printf("error: %s", get_string(num));
+			exit(EXIT_ERROR);
+		}
 
 		static inline void clear_error()
 		{

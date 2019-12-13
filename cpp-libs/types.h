@@ -16,4 +16,17 @@ namespace scl
 	typedef s8char_t* s8string_t;
 
 	typedef uint8_t byte;				/* used for IO structures */
+
+#if SIZE_MAX == UINT8_MAX
+	typedef int8_t ssize_t;
+#elif SIZE_MAX == UINT16_MAX
+	typedef int16_t ssize_t;
+#elif SIZE_MAX == UINT32_MAX
+	typedef int32_t ssize_t;
+#elif SIZE_MAX == UINT64_MAX
+	typedef int64_t ssize_t;
+#else
+#error unknown SIZE_MAX
+#endif
+	
 }
