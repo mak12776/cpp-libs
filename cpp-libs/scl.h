@@ -13,7 +13,7 @@
 #include "types.h"
 #include "error.h"
 #include "math.h"
-
+#include "array.h"
 
 #include "io.h"
 #include "buffer.h"

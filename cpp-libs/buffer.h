@@ -2,6 +2,7 @@
 
 #include <cstdint>
 
+#include "memory.h"
 #include "error.h"
 
 #include "types.h"
@@ -9,17 +10,21 @@
 
 namespace scl
 {
+	typedef struct
+	{
+		byte *pntr;
+		size_t size;
+	} buffer_t;
+
 	namespace buffer
 	{
-		typedef struct
-		{
-			byte *pntr;
-			size_t size;
-		} buffer_t;
-
 		static inline void initialize(buffer_t *buffer, size_t size)
 		{
-			buffer->pntr = new byte[size];
+			buffer->pntr = memory::new_array<byte>(size);
+#ifdef SCL_CATCH_EXCEPTIONS
+			if (buffer->pntr == nullptr) return;
+#endif
+
 			buffer->size = size;
 		}
 
@@ -104,32 +109,23 @@ namespace scl
 		}
 	}
 
-	namespace view
+	typedef struct
 	{
-		typedef struct
-		{
-			size_t start;
-			size_t end;
-		} view_t;
-	}
+		size_t start;
+		size_t end;
+	} view_t;
 
-	namespace packed_view
+	typedef struct
 	{
-		typedef struct
-		{
-			byte *pntr;
-			view::view_t view;
-		} packed_view_t;
-	}
+		byte *pntr;
+		view_t view;
+	} packed_view_t;
 
-	namespace buffer_views
+	typedef struct
 	{
-		typedef struct
-		{
-			buffer::buffer_t buffer;
-			view::view_t *views;
-			size_t total;
-		} buffer_views_t;
-	}
+		buffer_t buffer;
+		view_t *views;
+		size_t total;
+	} buffer_views_t;
 }
 
