@@ -92,15 +92,6 @@ namespace scl
 		
 		// functions
 
-		static inline void check_error()
-		{
-			if (num == NO_ERROR)
-				return;
-
-			printf("error: %s", get_string(num));
-			exit(EXIT_ERROR);
-		}
-
 		static inline void clear_error()
 		{
 			num = NO_ERROR;
@@ -165,6 +156,23 @@ namespace scl
 			num = ERROR_BAD_ALLOC_EXCEPTION;
 			info.type_name = type_name;
 			info.size = size;
+		}
+
+		static inline void check_error()
+		{
+			if (num == NO_ERROR)
+				return;
+
+			switch (num)
+			{
+			case NO_ERROR: return;
+			case ERROR_BAD_ARGUMENT:
+				printf("error: %s: %s, %s", get_string(num), info.function_name, info.argument_name);
+				exit(EXIT_ERROR);
+			default:
+				printf("error: %s", get_string(num));
+				exit(EXIT_ERROR);
+			}
 		}
 	}
 }
