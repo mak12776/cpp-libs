@@ -19,9 +19,17 @@ namespace scl
 #define SCL_PXLD_IS_UNIT_SIGNED 0
 
 		const bool is_unit_signed = false;
-		
+		const uint8_t unit_t_width = sizeof(unit_t);
 
 		typedef uint8_t mode_t;
+
+		namespace colors
+		{
+			const color_t RGB_WHITE = 0xFFFFFF;
+			const color_t RGB_BLACK = 0x000000;
+
+
+		}
 
 		namespace mode
 		{
@@ -389,20 +397,39 @@ namespace scl
 
 				byte_number = 0;
 
-				byte_number += scl::io::safe_write("img.", 4, file);
+				byte_number += scl::io::safe_write((void *)"img.", 4, file);
 				if (error::num) return byte_number;
 
-				
+				byte_number += scl::io::safe_write((void *)&unit_t_width, 1, file);
+				if (error::num) return byte_number;
+
+				byte_number += scl::io::safe_write(&(image->color_width), sizeof(unit_t), file);
+				if (error::num) return byte_number;
+
+				byte_number += scl::io::safe_write(&(image->size.x), sizeof(unit_t), file);
+				if (error::num) return byte_number;
+
+				byte_number += scl::io::safe_write(&(image->size.y), sizeof(unit_t), file);
+				if (error::num) return byte_number;
+
+				byte_number += scl::io::safe_write(image->data, image->y_width, file);
+				if (error::num) return byte_number;
+
+				return byte_number;
 			}
 
-			static inline void save(image_t *image, const char *name)
+			static inline size_t save(image_t *image, const char *name)
 			{
 				FILE *file;
+				size_t byte_number;
 
 				file = scl::io::safe_fopen(name, "wb");
-				if (error::num) return;
+				if (error::num) return 0;
 
+				byte_number = save(image, file);
+				fclose(file);
 
+				return byte_number;
 			}
 		}
 
