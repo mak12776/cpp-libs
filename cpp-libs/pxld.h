@@ -391,28 +391,26 @@ namespace scl
 				}
 			}
 
-			static inline size_t save(image_t *image, FILE *file)
+			static inline size_t save(image_t *image, FILE *file, const bool safe_result = false)
 			{
 				size_t byte_number;
 
-				byte_number = 0;
-
-				byte_number += scl::io::safe_write((void *)"img.", 4, file);
+				byte_number = io::safe_write((void *)"img.", 4, file);
 				if (error::num) return byte_number;
 
-				byte_number += scl::io::safe_write((void *)&unit_t_width, 1, file);
+				byte_number += io::safe_write((void *)&unit_t_width, 1, file);
 				if (error::num) return byte_number;
 
-				byte_number += scl::io::safe_write(&(image->color_width), sizeof(unit_t), file);
+				byte_number += io::safe_write(&(image->color_width), sizeof(unit_t), file);
 				if (error::num) return byte_number;
 
-				byte_number += scl::io::safe_write(&(image->size.x), sizeof(unit_t), file);
+				byte_number += io::safe_write(&(image->size.x), sizeof(unit_t), file);
 				if (error::num) return byte_number;
 
-				byte_number += scl::io::safe_write(&(image->size.y), sizeof(unit_t), file);
+				byte_number += io::safe_write(&(image->size.y), sizeof(unit_t), file);
 				if (error::num) return byte_number;
 
-				byte_number += scl::io::safe_write(image->data, image->y_width, file);
+				byte_number += io::safe_write(image->data, image->y_width, file);
 				if (error::num) return byte_number;
 
 				return byte_number;

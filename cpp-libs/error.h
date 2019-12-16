@@ -83,6 +83,7 @@ namespace scl
 			const char *function_name;
 			const char *argument_name;
 			const char *type_name;
+			const char *operation;
 		} info;
 
 		const size_t messages_size = 1024;
@@ -134,14 +135,16 @@ namespace scl
 			info.stream = stream;
 		}
 
-		static inline void set_error_int_overflow()
+		static inline void set_error_int_overflow(const char *operation)
 		{
 			num = ERROR_INT_OVERFLOW;
+			info.operation = operation;
 		}
 
-		static inline void set_error_float_overflow()
+		static inline void set_error_float_overflow(const char *operation)
 		{
 			num = ERROR_FLOAT_OVERFLOW;
+			info.operation = operation;
 		}
 
 		static inline void set_error_bad_argument(const char *function_name, const char *argument_name)

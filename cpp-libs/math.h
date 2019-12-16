@@ -19,10 +19,27 @@ namespace scl
 		}
 
 		template<typename T>
-		static inline bool safe_mul(T a, T b, T &result)
+		static inline void safe_mul(T a, T b, T &result)
 		{
 			if (mul<T>(a, b, result))
-				error::set_error_int_overflow();
+				error::set_error_int_overflow("mul");
+		}
+
+		template<typename T>
+		static inline bool add(T a, T b, T &result)
+		{
+#ifdef _MSC_VER
+			return !msl::utilities::SafeAdd(a, b, result);
+#elif defined(__GNUC__)
+			return __builtin_add_overflow(a, b, &result);
+#endif
+		}
+
+		template<typename T>
+		static inline void safe_add(T a, T b, T &result)
+		{
+			if (add<T>(a, b, result))
+				error::set_error_int_overflow("add");
 		}
 
 		static inline bool mul_size(size_t a, size_t b, size_t &result)
@@ -46,7 +63,7 @@ namespace scl
 		static inline void safe_mul_size(size_t a, size_t b, size_t &result)
 		{
 			if (mul_size(a, b, result))
-				error::set_error_int_overflow();
+				error::set_error_int_overflow("mul");
 		}
 	}
 }
