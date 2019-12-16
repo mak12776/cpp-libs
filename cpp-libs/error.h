@@ -175,21 +175,22 @@ namespace scl
 			info.size = size;
 		}
 
-		static inline void check_error()
+		static inline void check_error(const bool exit_on_error = true)
 		{
-			if (num == NO_ERROR)
-				return;
-
 			switch (num)
 			{
-			case NO_ERROR: return;
+			case NO_ERROR: 
+				return;
 			case ERROR_BAD_ARGUMENT:
 				printf("error: %s: %s, %s", get_string(num), info.function_name, info.argument_name);
-				exit(EXIT_ERROR);
+				break;
 			default:
 				printf("error: %s", get_string(num));
-				exit(EXIT_ERROR);
+				break;
 			}
+
+			if (exit_on_error)
+				exit(EXIT_ERROR);
 		}
 	}
 }

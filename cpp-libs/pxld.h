@@ -19,7 +19,7 @@ namespace scl
 #define SCL_PXLD_IS_UNIT_SIGNED 0
 
 		const bool is_unit_signed = false;
-		const uint8_t unit_t_width = sizeof(unit_t);
+		const uint8_t unit_width = sizeof(unit_t);
 
 		typedef uint8_t mode_t;
 
@@ -27,14 +27,6 @@ namespace scl
 		{
 			const color_t RGB_WHITE = 0xFFFFFF;
 			const color_t RGB_BLACK = 0x000000;
-		}
-
-		namespace mode
-		{
-			const mode_t L = 0;
-			const mode_t LA = 1;
-			const mode_t RGB = 2;
-			const mode_t RGBA = 3;
 
 			static inline color_t make_L(unit_t l)
 			{
@@ -55,6 +47,14 @@ namespace scl
 			{
 				return ((color_t)r << 24) | ((color_t)g << 16) | ((color_t)b << 8) | ((color_t)a);
 			}
+		}
+
+		namespace mode
+		{
+			const mode_t L = 0;
+			const mode_t LA = 1;
+			const mode_t RGB = 2;
+			const mode_t RGBA = 3;
 
 			static inline bool is_valid(mode_t mode)
 			{
@@ -403,7 +403,7 @@ namespace scl
 				case 1: _core::map<uint8_t>(image, func); break;
 				case 2: _core::map<uint16_t>(image, func); break;
 				case 3: _core::map(image, func); break;
-				case 4: _core::map<uint64_t>(image, func); break;
+				case 4: _core::map<uint32_t>(image, func); break;
 				default: error::set_error_bad_argument("map", "image->color_width"); break;
 				}
 			}
@@ -415,7 +415,7 @@ namespace scl
 				byte_number = io::safe_write((void *)"img.", 4, file);
 				if (error::num) return byte_number;
 
-				byte_number += io::safe_write((void *)&unit_t_width, 1, file);
+				byte_number += io::safe_write((void *)&unit_width, 1, file);
 				if (error::num) return byte_number;
 
 				byte_number += io::safe_write(&(image->color_width), sizeof(unit_t), file);
@@ -451,7 +451,7 @@ namespace scl
 		typedef struct animation
 		{
 			image_t *image;
-			void(*start) (image_t **image);
+			void(*start) (image_t *image);
 			void(*step) (image_t *image);
 		} animation_t;
 	}

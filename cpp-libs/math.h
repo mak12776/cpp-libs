@@ -32,6 +32,8 @@ namespace scl
 			return !msl::utilities::SafeAdd(a, b, result);
 #elif defined(__GNUC__)
 			return __builtin_add_overflow(a, b, &result);
+#else
+#error unknown compiler
 #endif
 		}
 
@@ -45,6 +47,7 @@ namespace scl
 		static inline bool mul_size(size_t a, size_t b, size_t &result)
 		{
 #ifdef _MSC_VER
+
 #if SIZE_MAX == UINT32_MAX
 			typedef uint64_t size_overflow_t;
 			const uint32_t SIZE_BITS = 32;
@@ -54,9 +57,14 @@ namespace scl
 			return (prod >> SIZE_BITS) != 0;
 #elif SIZE_MAX == UINT64_MAX
 			return !msl::utilities::SafeMultiply(a, b, result);
+#else 
+#error incomplete function
 #endif // SIZE_MAX == UINT32_MAX
+
 #elif defined(__GNUC__)
 			return __builtin_mul_overflow(a, b, &result);
+#else
+#error unknown compiler
 #endif // _MSC_VER
 		}
 
