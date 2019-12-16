@@ -73,16 +73,30 @@ namespace scl
 
 		num_t num = NO_ERROR;
 
-		struct
+		union
 		{
 			/* usages are shown by following functions*/
-			const char *file_name;
-			const char *file_mode;
-			size_t size;
+			
+			struct
+			{
+				size_t size;
+				const char *type_name;
+			};
+
 			const FILE *stream;
-			const char *function_name;
-			const char *argument_name;
-			const char *type_name;
+
+			struct
+			{
+				const char *file_name;
+				const char *file_mode;
+			};
+
+			struct
+			{
+				const char *function_name;
+				const char *argument_name;
+			};
+			
 			const char *operation;
 		} info;
 

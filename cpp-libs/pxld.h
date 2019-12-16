@@ -27,8 +27,6 @@ namespace scl
 		{
 			const color_t RGB_WHITE = 0xFFFFFF;
 			const color_t RGB_BLACK = 0x000000;
-
-
 		}
 
 		namespace mode
@@ -38,6 +36,25 @@ namespace scl
 			const mode_t RGB = 2;
 			const mode_t RGBA = 3;
 
+			static inline color_t make_L(unit_t l)
+			{
+				return l;
+			}
+
+			static inline color_t make_LA(uint8_t l, uint8_t a)
+			{
+				return ((color_t)l << 8) | ((color_t)a);
+			}
+
+			static inline color_t make_RGB(uint8_t r, uint8_t g, uint8_t b)
+			{
+				return ((color_t)r << 16) | ((color_t)g << 8) | ((color_t)b);
+			}
+
+			static inline color_t make_RGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+			{
+				return ((color_t)r << 24) | ((color_t)g << 16) | ((color_t)b << 8) | ((color_t)a);
+			}
 
 			static inline bool is_valid(mode_t mode)
 			{
