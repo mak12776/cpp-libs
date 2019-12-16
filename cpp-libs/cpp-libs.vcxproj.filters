@@ -17,7 +17,7 @@
       <UniqueIdentifier>{36c17d08-e6fd-4ebb-82e3-ca0086e7f475}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\pxld_examples">
+    <Filter Include="Header Files\examples">
       <UniqueIdentifier>{ae5996dd-9e59-4ef9-8a0b-6337116afab1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -62,10 +62,13 @@
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="examples.h">
-      <Filter>Header Files\pxld_examples</Filter>
+      <Filter>Header Files\examples</Filter>
     </ClInclude>
     <ClInclude Include="rand.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="Person.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -38,7 +38,7 @@ namespace scl
 
 			static inline color_t make_L(unit_t l)
 			{
-				return l;
+				return (color_t)l;
 			}
 
 			static inline color_t make_LA(uint8_t l, uint8_t a)

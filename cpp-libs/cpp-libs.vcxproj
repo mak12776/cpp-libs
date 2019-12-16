@@ -156,6 +156,7 @@
     <ClInclude Include="exit_codes.h" />
     <ClInclude Include="array.h" />
     <ClInclude Include="examples.h" />
+    <ClInclude Include="Person.h" />
     <ClInclude Include="rand.h" />
     <ClInclude Include="machine.h" />
     <ClInclude Include="math.h" />
