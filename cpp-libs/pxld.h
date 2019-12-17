@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <intrin.h>
 
 #include "types.h"
 #include "math.h"
@@ -164,6 +163,13 @@ namespace scl
 			unit_t x_width;
 			unit_t y_width;
 		} image_t;
+
+		struct image_2 : image_t
+		{
+
+		};
+
+		image_2 img;
 
 		namespace _core
 		{
