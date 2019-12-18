@@ -164,13 +164,6 @@ namespace scl
 			unit_t y_width;
 		} image_t;
 
-		struct image_2 : image_t
-		{
-
-		};
-
-		image_2 img;
-
 		namespace _core
 		{
 			template <typename T>
@@ -310,7 +303,7 @@ namespace scl
 				point::random(point, point::ZERO, image->size);
 			}
 
-			static inline void initialize(image_t *image, point_t size, mode_t mode)
+			static inline void init(image_t *image, point_t size, mode_t mode)
 			{
 				unit_t area;
 				unit_t color_width;
@@ -343,7 +336,7 @@ namespace scl
 				image->y_width = y_width;
 			}
 
-			static inline void finalize(image_t *image)
+			static inline void end(image_t *image)
 			{
 				delete[] image->data;
 			}
@@ -353,7 +346,7 @@ namespace scl
 				image_t *result;
 
 				result = new image_t;
-				initialize(result, size, mode);
+				init(result, size, mode);
 				if (error::num)
 					delete result;
 
@@ -362,7 +355,7 @@ namespace scl
 
 			static inline void delete_image(image_t *image)
 			{
-				finalize(image);
+				end(image);
 				delete image;
 			}
 

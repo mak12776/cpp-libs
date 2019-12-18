@@ -24,7 +24,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cpplibs</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>cns-libs</ProjectName>
+    <ProjectName>cpp-libs</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -157,6 +157,7 @@
     <ClInclude Include="exit_codes.h" />
     <ClInclude Include="array.h" />
     <ClInclude Include="examples.h" />
+    <ClInclude Include="infint.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="rand.h" />
     <ClInclude Include="machine.h" />

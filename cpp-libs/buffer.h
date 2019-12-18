@@ -18,7 +18,7 @@ namespace scl
 
 	namespace buffer
 	{
-		static inline void initialize(buffer_t *buffer, size_t size)
+		static inline void init(buffer_t *buffer, size_t size)
 		{
 			buffer->pntr = memory::new_array<byte>(size);
 #ifdef SCL_CATCH_EXCEPTIONS
@@ -28,7 +28,7 @@ namespace scl
 			buffer->size = size;
 		}
 
-		static inline void finalize(buffer_t *buffer)
+		static inline void end(buffer_t *buffer)
 		{
 			delete[] buffer->pntr;
 			buffer->size = 0;
