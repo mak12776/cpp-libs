@@ -19,13 +19,13 @@ namespace scl
 			return pntr;
 		}
 
-		template <typename T>
-		static inline T *new_array(size_t size)
+		template <typename type>
+		static inline type *new_array(size_t size)
 		{
 #ifdef SCL_CATCH_EXCEPTIONS
 			try
 			{
-				return new T[size];
+				return new type[size];
 			}
 			catch (std::bad_alloc exception)
 			{

@@ -8,10 +8,10 @@ namespace scl
 	{
 		std::default_random_engine engine;
 
-		template <typename T>
-		static inline T next(T min, T max)
+		template <typename type>
+		static inline type next(type min, type max)
 		{
-			std::uniform_int_distribution<T> dist(min, max);
+			std::uniform_int_distribution<type> dist(min, max);
 			return dist(engine);
 		}
 	}

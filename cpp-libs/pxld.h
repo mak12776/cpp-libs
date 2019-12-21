@@ -11,47 +11,93 @@ namespace scl
 {
 	namespace pxld
 	{
-		typedef size_t unit_t;			/* this can also be signed */
-		typedef double funit_t;			/* type of fpoint_t members */
-		typedef uint32_t color_t;		/* type of image_t data pointer is unsigned */
+		namespace core
+		{
+			template <typename type>
+			struct point
+			{
+				type x;
+				type y;
+
+				inline double distance(point<type> &other)
+				{
+					return std::sqrt(std::pow(this->x - other.x, 2.0) + std::pow(this->y - other.y, 2.0));
+				}
+
+				inline double inverse_distance(point<type> &other, double max)
+				{
+					return max - std::fmin(distance(other), max);
+				}
+
+				inline double inverse_distance_fraction(point<type> other, double max)
+				{
+					return inverse_distance(other, max) / max;
+				}
+			};
+
+			template <typename new_type>
+			static inline point<new_type> point_random(point<new_type> min, point<new_type> max)
+			{
+				return point<new_type> {rand::next<new_type>(min.x, max.x), rand::next<new_type>(min.y, max.y)};
+			}
+
+			template <typename unit_type, typename data_type>
+			class image
+			{
+			private:
+				data_type* data;
+
+				point<unit_type> size;
+				unit_type area;
+
+				unit_type color_width;
+				unit_type x_width;
+				unit_type y_width;
+
+			public:
+				inline image(point<unit_type> size, unit_type color_width)
+				{
+					this->size = size;
+					this->color_width = color_width;
+
+					math::safe_mul<unit_type>(size.x, color_width, this.x_width);
+					math::safe_mul<unit_type>(size.y, this.x_width, this.y_width);
+					math::safe_mul<unit_type>(size.x, size.y, this.area);
+
+					this->data = memory::new_array<data_type>(y_width);
+				}
+			};
+
+			template <typename new_type>
+			static const point<new_type> ZERO = { 0, 0 };
+
+			template <typename new_type>
+			static const point<new_type> RIGHT = { 1, 0 };
+
+			template <typename new_type>
+			static const point<new_type> LEFT = { -1, 0 };
+
+			template <typename new_type>
+			static const point<new_type> UP = { 0, 1 };
+
+			template <typename new_type>
+			static const point<new_type> DOWN = { 0, -1 };
+		}
+
+		typedef size_t unit_t;
+		typedef double funit_t;
+		typedef uint32_t color_t;
 
 #define SCL_PXLD_IS_UNIT_SIGNED 0
 
-		const bool is_unit_signed = false;
 		const uint8_t unit_width = sizeof(unit_t);
 
 		typedef uint8_t mode_t;
 
-		namespace colors
-		{
-			const color_t RGB_WHITE = 0xFFFFFF;
-			const color_t RGB_BLACK = 0x000000;
-
-			static inline color_t make_L(unit_t l)
-			{
-				return (color_t)l;
-			}
-
-			static inline color_t make_LA(uint8_t l, uint8_t a)
-			{
-				return ((color_t)l << 8) | ((color_t)a);
-			}
-
-			static inline color_t make_RGB(uint8_t r, uint8_t g, uint8_t b)
-			{
-				return ((color_t)r << 16) | ((color_t)g << 8) | ((color_t)b);
-			}
-
-			static inline color_t make_RGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
-			{
-				return ((color_t)r << 24) | ((color_t)g << 16) | ((color_t)b << 8) | ((color_t)a);
-			}
-		}
-
 		namespace mode
 		{
-			const mode_t L = 0;
-			const mode_t LA = 1;
+			const mode_t W = 0;
+			const mode_t WA = 1;
 			const mode_t RGB = 2;
 			const mode_t RGBA = 3;
 
@@ -59,8 +105,8 @@ namespace scl
 			{
 				switch (mode)
 				{
-				case L:
-				case LA:
+				case W:
+				case WA:
 				case RGB:
 				case RGBA:
 					return true;
@@ -68,13 +114,13 @@ namespace scl
 					return false;
 				}
 			}
-			
+
 			static inline unit_t get_width(mode_t mode)
 			{
 				switch (mode)
 				{
-				case L: return 1;
-				case LA: return 2;
+				case W: return 1;
+				case WA: return 2;
 				case RGB: return 3;
 				case RGBA: return 4;
 				default:
@@ -87,8 +133,8 @@ namespace scl
 			{
 				switch (mode)
 				{
-				case L: return "L";
-				case LA: return "LA";
+				case W: return "L";
+				case WA: return "LA";
 				case RGB: return "RGB";
 				case RGBA: return "RGBA";
 				default:
@@ -98,65 +144,60 @@ namespace scl
 			}
 		}
 
-		typedef struct
+		namespace colors
 		{
-			unit_t x;
-			unit_t y;
-		} point_t;
+			const color_t RGB_WHITE = 0xFFFFFF;
+			const color_t RGB_BLACK = 0x000000;
 
-		typedef struct
-		{
-			funit_t x;
-			funit_t y;
-		} fpoint_t;
-
-		namespace point
-		{
-			const point_t ZERO = { 0, 0 };
-
-			static inline void random(point_t *point, point_t min, point_t max)
+			static inline color_t make_w(unit_t l)
 			{
-				point->x = rand::next<unit_t>(min.x, max.x);
-				point->y = rand::next<unit_t>(min.y, max.y);
+				return (color_t)l;
 			}
 
-			static inline double distance(point_t a, point_t b)
+			static inline color_t make_wa(uint8_t l, uint8_t a)
 			{
-				return std::sqrt(std::pow(a.x - b.x, 2.0) + std::pow(a.y - b.y, 2.0));
+				return ((color_t)l << 8) | ((color_t)a);
 			}
 
-			static inline double inverse_distance(point_t a, point_t b, double max)
+			static inline color_t make_rgb(uint8_t r, uint8_t g, uint8_t b)
 			{
-				return max - std::fmin(distance(a, b), max);
+				return ((color_t)r << 16) | ((color_t)g << 8) | ((color_t)b);
 			}
 
-			static inline double inverse_distance_fraction(point_t a, point_t b, double max)
+			static inline color_t make_rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 			{
-				return inverse_distance(a, b, max) / max;
-			}
-
-			static inline point_t *new_point(unit_t x, unit_t y)
-			{
-				point_t *result = new point_t;
-
-				result->x = x;
-				result->y = y;
-
-				return result;
-			}
-
-			static inline void delete_point(point_t *point)
-			{
-				delete point;
+				return ((color_t)r << 24) | ((color_t)g << 16) | ((color_t)b << 8) | ((color_t)a);
 			}
 		}
+
+		typedef struct core::point<unit_t> point;
+
+		static const point ZERO = { 0, 0 };
+		static const point RIGHT = { 1, 0 };
+		static const point LEFT = { -1, 0 };
+		static const point UP = { 0, 1 };
+		static const point DOWN = { 0, -1 };
+
+		class image
+		{
+		private:
+			mode_t mode;
+			core::image<unit_t, byte> base_image;
+
+		public:
+			image(point size, mode_t mode)
+			{
+				unit_t color_width = mode::get_width(mode);
+				
+			}
+		};
 
 		typedef struct
 		{
 			byte *data;
 
 			mode_t mode;
-			point_t size;
+			
 			size_t area;
 
 			unit_t color_width;
@@ -166,10 +207,10 @@ namespace scl
 
 		namespace _core
 		{
-			template <typename T>
+			template <typename type>
 			static inline void draw_color(image_t *image, color_t color)
 			{
-				T *data = (T *)image->data;
+				type *data = (type *)image->data;
 
 				for (unit_t index = 0; index < image->area; index += 1)
 				{
@@ -194,15 +235,15 @@ namespace scl
 				}
 			}
 
-			template <typename T>
-			static inline void draw_point(image_t *image, point_t point, color_t color)
+			template <typename type>
+			static inline void draw_point(image_t *image, point point, color_t color)
 			{
-				T *data = (T *)image->data;
+				type *data = (type *)image->data;
 
 				data[(point.y * image->size.x) + point.y] = color;
 			}
 
-			static inline void draw_point(image_t *image, point_t point, color_t color)
+			static inline void draw_point(image_t *image, point point, color_t color)
 			{
 				unit_t y_offset = point.y * image->x_width;
 				unit_t x_offset = point.x * image->color_width;
@@ -216,21 +257,21 @@ namespace scl
 				}
 			}
 
-			template <typename T>
-			static inline void draw(image_t *image, color_t(*func) (point_t))
+			template <typename type>
+			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
 			{
-				T *data = (T *)image->data;
+				type *data = (type *)image->data;
 
 				for (unit_t y = 0, y_offset = 0; y < image->size.y; y += 1, y_offset += image->size.x)
 				{
 					for (unit_t x = 0; x < image->size.x; x += 1)
 					{
-						data[y_offset + x] = func(point_t{ x, y });
+						data[y_offset + x] = func(point<unit_t>{ x, y });
 					}
 				}
 			}
 
-			static inline void draw(image_t *image, color_t(*func) (point_t))
+			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
 			{
 				color_t color;
 
@@ -238,7 +279,7 @@ namespace scl
 				{
 					for (unit_t x_offset = 0, x = 0; x_offset < image->x_width; x_offset += image->color_width, x += 1)
 					{
-						color = func(point_t{ x, y });
+						color = func(point<unit_t>{ x, y });
 
 						for (unit_t c_offset = image->color_width; c_offset > 0;)
 						{
@@ -251,21 +292,21 @@ namespace scl
 				}
 			}
 
-			template <typename T>
-			static inline void map(image_t *image, color_t(*func) (point_t, color_t))
+			template <typename type>
+			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
 			{
-				T *data = (T *)image->data;
+				type *data = (type *)image->data;
 
 				for (unit_t y = 0, y_offset = 0; y < image->size.y; y += 1, y_offset += image->size.x)
 				{
 					for (unit_t x = 0; x < image->size.x; x += 1)
 					{
-						data[y_offset + x] = func(point_t{ x, y }, (color_t)data[y_offset + x]);
+						data[y_offset + x] = func(point<unit_t>{ x, y }, (color_t)data[y_offset + x]);
 					}
 				}
 			}
 
-			static inline void map(image_t *image, color_t(*func) (point_t, color_t))
+			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
 			{
 				color_t color;
 				for (unit_t y_offset = 0, y = 0; y_offset < image->x_width; y_offset += image->x_width, y += 1)
@@ -282,7 +323,7 @@ namespace scl
 							color |= image->data[y_offset + x_offset + c_offset];
 						}
 
-						color = func(point_t{ x, y }, color);
+						color = func(point<unit_t>{ x, y }, color);
 
 						for (unit_t c_offset = image->color_width; c_offset > 0;)
 						{
@@ -298,12 +339,7 @@ namespace scl
 
 		namespace image
 		{
-			static inline void random_point(image_t *image, point_t *point)
-			{
-				point::random(point, point::ZERO, image->size);
-			}
-
-			static inline void init(image_t *image, point_t size, mode_t mode)
+			static inline void init(image_t *image, point<unit_t> size, mode_t mode)
 			{
 				unit_t area;
 				unit_t color_width;
@@ -341,7 +377,7 @@ namespace scl
 				delete[] image->data;
 			}
 
-			static inline image_t *new_image(point_t size, mode_t mode)
+			static inline image_t *new_image(point<unit_t> size, mode_t mode)
 			{
 				image_t *result;
 
@@ -371,7 +407,7 @@ namespace scl
 				}
 			}
 
-			static inline void draw_point(image_t *image, point_t point, color_t color)
+			static inline void draw_point(image_t *image, point<unit_t> point, color_t color)
 			{
 				switch (image->color_width)
 				{
@@ -383,7 +419,7 @@ namespace scl
 				}
 			}
 
-			static inline void draw(image_t *image, color_t(*func) (point_t))
+			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
 			{
 				switch (image->color_width)
 				{
@@ -395,7 +431,7 @@ namespace scl
 				}
 			}
 
-			static inline void map(image_t *image, color_t(*func) (point_t, color_t))
+			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
 			{
 				switch (image->color_width)
 				{
