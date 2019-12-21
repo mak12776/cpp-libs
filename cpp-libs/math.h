@@ -1,15 +1,17 @@
 #pragma once
 
-#include <cstdbool>
 #include <cstdint>
+#include <stdexcept>
 #include <safeint.h>
 
 namespace scl
 {
+#define SCL_THROW_EXCEPTIONS
+
 	namespace math
 	{
-		template<typename T>
-		static inline bool mul(T a, T b, T &result)
+		template<typename type>
+		static inline bool mul(type a, type b, type &result)
 		{
 #ifdef _MSC_VER
 			return !msl::utilities::SafeMultiply(a, b, result);
@@ -18,15 +20,8 @@ namespace scl
 #endif // _MSC_VER
 		}
 
-		template<typename T>
-		static inline void safe_mul(T a, T b, T &result)
-		{
-			if (mul<T>(a, b, result))
-				error::set_error_int_overflow("mul");
-		}
-
-		template<typename T>
-		static inline bool add(T a, T b, T &result)
+		template<typename type>
+		static inline bool add(type a, type b, type &result)
 		{
 #ifdef _MSC_VER
 			return !msl::utilities::SafeAdd(a, b, result);
@@ -37,12 +32,23 @@ namespace scl
 #endif
 		}
 
-		template<typename T>
-		static inline void safe_add(T a, T b, T &result)
+
+		template<typename type>
+		static inline void safe_mul(type a, type b, type &result)
 		{
-			if (add<T>(a, b, result))
-				error::set_error_int_overflow("add");
+			if (mul<type>(a, b, result))
+				throw new std::overflow_error("multiplay overflow");
 		}
+
+		template<typename type>
+		static inline void safe_add(type a, type b, type &result)
+		{
+			if (add<type>(a, b, result))
+				throw new std::overflow_error("addition overflow");
+		}
+
+
+
 
 		// specific functions
 
