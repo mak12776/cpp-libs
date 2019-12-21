@@ -44,6 +44,8 @@ namespace scl
 				error::set_error_int_overflow("add");
 		}
 
+		// specific functions
+
 		static inline bool mul_size(size_t a, size_t b, size_t &result)
 		{
 #ifdef _MSC_VER

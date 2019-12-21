@@ -4,16 +4,16 @@
 
 namespace scl
 {
-	typedef struct
+	class fixed_array
 	{
 		void *pntr;
 		size_t size;
-	} fixed_array_t;
+	};
 
-	typedef struct
+	class array
 	{
 		void *pntr;
 		size_t length;
 		size_t size;
-	} array_t;
+	};
 }

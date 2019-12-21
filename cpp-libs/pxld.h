@@ -116,8 +116,8 @@ namespace scl
 
 			static inline void random(point_t *point, point_t min, point_t max)
 			{
-				point->x = rand::next_int<unit_t>(min.x, max.x);
-				point->y = rand::next_int<unit_t>(min.y, max.y);
+				point->x = rand::next<unit_t>(min.x, max.x);
+				point->y = rand::next<unit_t>(min.y, max.y);
 			}
 
 			static inline double distance(point_t a, point_t b)
