@@ -75,6 +75,13 @@ namespace scl
 			return write_number;
 		}
 
+		static inline void print_sep(std::string sep, std::string end = "\n", uint64_t repeat = 80)
+		{
+			for (uint64_t step = 0; step < repeat; step += 1)
+				std::cout << std::string(sep);
+			std::cout << std::string(end);
+		}
+
 #if 0
 		static inline void read_file(buffer_t *buffer, FILE *file)
 		{

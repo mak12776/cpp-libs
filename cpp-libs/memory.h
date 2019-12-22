@@ -33,7 +33,7 @@ namespace scl
 				return nullptr;
 			}
 #else
-			return new T[size];
+			return new type[size];
 #endif
 		}
 	}
