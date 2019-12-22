@@ -172,12 +172,13 @@ namespace scl
 						for (unit_type x = 0, x_offset = 0; x < this->size.x; x += 1, x_offset += this->color_width)
 						{
 							color = func({ x, y });
+
 							for (unit_type c_offset = this->color_width; c_offset > 0; )
 							{
 								c_offset -= 1;
 
-								data[y_offset + x] = color & data_mask;
-								color <<= data_shift;
+								data[y_offset + x_offset + c_offset] = color & data_mask;
+								color >>= data_shift;
 							}
 						}
 					}
@@ -203,11 +204,12 @@ namespace scl
 			};
 		}
 
-		typedef size_t unit_t;
-		typedef double funit_t;
-		typedef uint32_t color_t;
+		// units
 
 #define SCL_PXLD_IS_UNIT_SIGNED 0
+
+		typedef size_t unit_t;
+		typedef double funit_t;
 
 		const uint8_t unit_width = sizeof(unit_t);
 
@@ -217,8 +219,8 @@ namespace scl
 
 		namespace mode
 		{
-			const mode_t W = 0;
-			const mode_t WA = 1;
+			const mode_t L = 0;
+			const mode_t LA = 1;
 			const mode_t RGB = 2;
 			const mode_t RGBA = 3;
 
@@ -226,8 +228,8 @@ namespace scl
 			{
 				switch (mode)
 				{
-				case W:
-				case WA:
+				case L:
+				case LA:
 				case RGB:
 				case RGBA:
 					return true;
@@ -240,8 +242,8 @@ namespace scl
 			{
 				switch (mode)
 				{
-				case W: return 1;
-				case WA: return 2;
+				case L: return 1;
+				case LA: return 2;
 				case RGB: return 3;
 				case RGBA: return 4;
 				default:
@@ -254,16 +256,20 @@ namespace scl
 			{
 				switch (mode)
 				{
-				case W: return "L";
-				case WA: return "LA";
+				case L: return "L";
+				case LA: return "LA";
 				case RGB: return "RGB";
 				case RGBA: return "RGBA";
 				default:
 					throw new_invalid_argument("get_width", "mode");
-					return 0;
+					return nullptr;
 				}
 			}
 		}
+
+		// color unit
+
+		typedef uint32_t color_t;
 
 		namespace colors
 		{
@@ -274,12 +280,12 @@ namespace scl
 			const color_t RGB_GREEN =	0x00FF00;
 			const color_t RGB_BLUE =	0x0000FF;
 
-			static inline color_t make_w(unit_t l)
+			static inline color_t make_l(unit_t l)
 			{
 				return (color_t)l;
 			}
 
-			static inline color_t make_wa(uint8_t l, uint8_t a)
+			static inline color_t make_la(uint8_t l, uint8_t a)
 			{
 				return ((color_t)l << 8) | ((color_t)a);
 			}
@@ -319,11 +325,6 @@ namespace scl
 			inline ~image()
 			{
 				delete base;
-			}
-
-			inline void fill(color_t color)
-			{
-
 			}
 		};
 
