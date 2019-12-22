@@ -7,7 +7,7 @@
  *		SCL_CATCH_EXCEPTIONS
 */
 
-#define SCL_CATCH_EXCEPTIONS
+#define SCL_THROW_EXCEPTIONS
 
 #include "exit_codes.h"
 #include "types.h"

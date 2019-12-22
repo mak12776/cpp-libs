@@ -33,10 +33,15 @@ namespace scl
 				{
 					return inverse_distance(other, max) / max;
 				}
+
+				inline bool is_natural()
+				{
+					return (this->x > 0) && (this->y > 0);
+				}
 			};
 
 			template <typename new_type>
-			static inline point<new_type> point_random(point<new_type> min, point<new_type> max)
+			static inline point<new_type> random_point(point<new_type> min, point<new_type> max)
 			{
 				return point<new_type> {rand::next<new_type>(min.x, max.x), rand::next<new_type>(min.y, max.y)};
 			}
@@ -64,7 +69,12 @@ namespace scl
 					math::safe_mul<unit_type>(size.y, this.x_width, this.y_width);
 					math::safe_mul<unit_type>(size.x, size.y, this.area);
 
-					this->data = memory::new_array<data_type>(y_width);
+					this->data = new data_type[y_width];
+				}
+
+				~image()
+				{
+					delete[] this->data;
 				}
 			};
 
@@ -124,7 +134,7 @@ namespace scl
 				case RGB: return 3;
 				case RGBA: return 4;
 				default:
-					error::set_error_bad_argument("get_width", "mode");
+					throw new_invalid_argument("get_width", "mode");
 					return 0;
 				}
 			}
@@ -138,7 +148,7 @@ namespace scl
 				case RGB: return "RGB";
 				case RGBA: return "RGBA";
 				default:
-					error::set_error_bad_argument("get_string", "mode");
+					throw new_invalid_argument("get_width", "mode");
 					return 0;
 				}
 			}
@@ -146,8 +156,12 @@ namespace scl
 
 		namespace colors
 		{
-			const color_t RGB_WHITE = 0xFFFFFF;
-			const color_t RGB_BLACK = 0x000000;
+			const color_t RGB_WHITE =	0xFFFFFF;
+			const color_t RGB_BLACK =	0x000000;
+
+			const color_t RGB_RED =		0xFF0000;
+			const color_t RGB_GREEN =	0x00FF00;
+			const color_t RGB_BLUE =	0x0000FF;
 
 			static inline color_t make_w(unit_t l)
 			{
@@ -182,13 +196,18 @@ namespace scl
 		{
 		private:
 			mode_t mode;
-			core::image<unit_t, byte> base_image;
+			core::image<unit_t, byte> *base;
 
 		public:
 			image(point size, mode_t mode)
 			{
 				unit_t color_width = mode::get_width(mode);
-				
+				base = new core::image<unit_t, byte>(size, color_width);
+			}
+
+			~image()
+			{
+				delete base;
 			}
 		};
 
@@ -204,6 +223,121 @@ namespace scl
 			unit_t x_width;
 			unit_t y_width;
 		} image_t;
+
+		namespace image
+		{
+			static inline image_t *new_image(point<unit_t> size, mode_t mode)
+			{
+				image_t *result;
+
+				result = new image_t;
+				init(result, size, mode);
+				if (error::num)
+					delete result;
+
+				return result;
+			}
+
+			static inline void delete_image(image_t *image)
+			{
+				end(image);
+				delete image;
+			}
+
+			static inline void draw_color(image_t *image, color_t color)
+			{
+				switch (image->color_width)
+				{
+				case 1: _core::draw_color<uint8_t>(image, color); break;
+				case 2: _core::draw_color<uint16_t>(image, color); break;
+				case 3: _core::draw_color(image, color); break;
+				case 4: _core::draw_color<uint32_t>(image, color); break;
+				default: error::set_error_bad_argument("draw_color", "image->color_width"); break;
+				}
+			}
+
+			static inline void draw_point(image_t *image, point<unit_t> point, color_t color)
+			{
+				switch (image->color_width)
+				{
+				case 1: _core::draw_point<uint8_t>(image, point, color); break;
+				case 2: _core::draw_point<uint16_t>(image, point, color); break;
+				case 3: _core::draw_point(image, point, color); break;
+				case 4: _core::draw_point<uint32_t>(image, point, color); break;
+				default: error::set_error_bad_argument("draw_point", "image->color_width"); break;
+				}
+			}
+
+			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
+			{
+				switch (image->color_width)
+				{
+				case 1: _core::draw<uint8_t>(image, func); break;
+				case 2: _core::draw<uint16_t>(image, func); break;
+				case 3: _core::draw(image, func); break;
+				case 4: _core::draw<uint32_t>(image, func); break;
+				default: error::set_error_bad_argument("draw", "image->color_width"); break;
+				}
+			}
+
+			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
+			{
+				switch (image->color_width)
+				{
+				case 1: _core::map<uint8_t>(image, func); break;
+				case 2: _core::map<uint16_t>(image, func); break;
+				case 3: _core::map(image, func); break;
+				case 4: _core::map<uint32_t>(image, func); break;
+				default: error::set_error_bad_argument("map", "image->color_width"); break;
+				}
+			}
+
+			static inline size_t save(image_t *image, FILE *file, const bool safe_result = false)
+			{
+				size_t byte_number;
+
+				byte_number = io::safe_write((void *)"img.", 4, file);
+				if (error::num) return byte_number;
+
+				byte_number += io::safe_write((void *)&unit_width, 1, file);
+				if (error::num) return byte_number;
+
+				byte_number += io::safe_write(&(image->color_width), sizeof(unit_t), file);
+				if (error::num) return byte_number;
+
+				byte_number += io::safe_write(&(image->size.x), sizeof(unit_t), file);
+				if (error::num) return byte_number;
+
+				byte_number += io::safe_write(&(image->size.y), sizeof(unit_t), file);
+				if (error::num) return byte_number;
+
+				byte_number += io::safe_write(image->data, image->y_width, file);
+				if (error::num) return byte_number;
+
+				return byte_number;
+			}
+
+			static inline size_t save(image_t *image, const char *name)
+			{
+				FILE *file;
+				size_t byte_number;
+
+				file = scl::io::safe_fopen(name, "wb");
+				if (error::num) return 0;
+
+				byte_number = save(image, file);
+				fclose(file);
+
+				return byte_number;
+			}
+		}
+
+		typedef struct animation
+		{
+			image_t *image;
+			void(*start) (image_t *image);
+			void(*step) (image_t *image);
+		} animation_t;
 
 		namespace _core
 		{
@@ -336,158 +470,5 @@ namespace scl
 				}
 			}
 		}
-
-		namespace image
-		{
-			static inline void init(image_t *image, point<unit_t> size, mode_t mode)
-			{
-				unit_t area;
-				unit_t color_width;
-				unit_t x_width;
-				unit_t y_width;
-
-				color_width = mode::get_width(mode);
-				if (error::num) return;
-
-				math::safe_mul_size(size.x, color_width, x_width);
-				if (error::num) return;
-
-				math::safe_mul_size(size.y, x_width, y_width);
-				if (error::num) return;
-
-				math::safe_mul_size(size.x, size.y, area);
-				if (error::num) return;
-
-				image->data = memory::new_array<byte>(y_width);
-#ifdef SCL_CATCH_EXCEPTIONS
-				if (image->data == nullptr) return;
-#endif
-
-				image->mode = mode;
-				image->size = size;
-				image->area = area;
-
-				image->color_width = color_width;
-				image->x_width = x_width;
-				image->y_width = y_width;
-			}
-
-			static inline void end(image_t *image)
-			{
-				delete[] image->data;
-			}
-
-			static inline image_t *new_image(point<unit_t> size, mode_t mode)
-			{
-				image_t *result;
-
-				result = new image_t;
-				init(result, size, mode);
-				if (error::num)
-					delete result;
-
-				return result;
-			}
-
-			static inline void delete_image(image_t *image)
-			{
-				end(image);
-				delete image;
-			}
-
-			static inline void draw_color(image_t *image, color_t color)
-			{
-				switch (image->color_width)
-				{
-				case 1: _core::draw_color<uint8_t>(image, color); break;
-				case 2: _core::draw_color<uint16_t>(image, color); break;
-				case 3: _core::draw_color(image, color); break;
-				case 4: _core::draw_color<uint32_t>(image, color); break;
-				default: error::set_error_bad_argument("draw_color", "image->color_width"); break;
-				}
-			}
-
-			static inline void draw_point(image_t *image, point<unit_t> point, color_t color)
-			{
-				switch (image->color_width)
-				{
-				case 1: _core::draw_point<uint8_t>(image, point, color); break;
-				case 2: _core::draw_point<uint16_t>(image, point, color); break;
-				case 3: _core::draw_point(image, point, color); break;
-				case 4: _core::draw_point<uint32_t>(image, point, color); break;
-				default: error::set_error_bad_argument("draw_point", "image->color_width"); break;
-				}
-			}
-
-			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
-			{
-				switch (image->color_width)
-				{
-				case 1: _core::draw<uint8_t>(image, func); break;
-				case 2: _core::draw<uint16_t>(image, func); break;
-				case 3: _core::draw(image, func); break;
-				case 4: _core::draw<uint32_t>(image, func); break;
-				default: error::set_error_bad_argument("draw", "image->color_width"); break;
-				}
-			}
-
-			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
-			{
-				switch (image->color_width)
-				{
-				case 1: _core::map<uint8_t>(image, func); break;
-				case 2: _core::map<uint16_t>(image, func); break;
-				case 3: _core::map(image, func); break;
-				case 4: _core::map<uint32_t>(image, func); break;
-				default: error::set_error_bad_argument("map", "image->color_width"); break;
-				}
-			}
-
-			static inline size_t save(image_t *image, FILE *file, const bool safe_result = false)
-			{
-				size_t byte_number;
-
-				byte_number = io::safe_write((void *)"img.", 4, file);
-				if (error::num) return byte_number;
-
-				byte_number += io::safe_write((void *)&unit_width, 1, file);
-				if (error::num) return byte_number;
-
-				byte_number += io::safe_write(&(image->color_width), sizeof(unit_t), file);
-				if (error::num) return byte_number;
-
-				byte_number += io::safe_write(&(image->size.x), sizeof(unit_t), file);
-				if (error::num) return byte_number;
-
-				byte_number += io::safe_write(&(image->size.y), sizeof(unit_t), file);
-				if (error::num) return byte_number;
-
-				byte_number += io::safe_write(image->data, image->y_width, file);
-				if (error::num) return byte_number;
-
-				return byte_number;
-			}
-
-			static inline size_t save(image_t *image, const char *name)
-			{
-				FILE *file;
-				size_t byte_number;
-
-				file = scl::io::safe_fopen(name, "wb");
-				if (error::num) return 0;
-
-				byte_number = save(image, file);
-				fclose(file);
-
-				return byte_number;
-			}
-		}
-
-		typedef struct animation
-		{
-			image_t *image;
-			void(*start) (image_t *image);
-			void(*step) (image_t *image);
-		} animation_t;
 	}
 }

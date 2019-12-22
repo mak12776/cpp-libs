@@ -4,6 +4,11 @@
 
 namespace scl
 {
+	static inline std::invalid_argument *new_invalid_argument(std::string function_name, std::string argument_name)
+	{
+		return new std::invalid_argument(std::string("function:") + function_name +std::string("argument: "));
+	}
+
 	namespace error
 	{
 		// types
@@ -114,8 +119,12 @@ namespace scl
 
 		static inline void set_error_no_memory(size_t size)
 		{
+#ifdef SCL_THROW_EXCEPTIONS
+#warning incomplete code
+#else
 			num = ERROR_NO_MEMORY;
 			info.size = size;
+#endif
 		}
 
 		static inline void set_error_fopen(const char *name, const char *mode)
@@ -163,9 +172,13 @@ namespace scl
 
 		static inline void set_error_bad_argument(const char *function_name, const char *argument_name)
 		{
+#ifdef SCL_THROW_EXCEPTIONS
+			throw std::invalid_argument("function: " + std::string(function_name) + ", argument: " + std::string(argument_name));
+#else
 			num = ERROR_BAD_ARGUMENT;
 			info.function_name = function_name;
 			info.argument_name = argument_name;
+#endif
 		}
 
 		static inline void set_error_bad_alloc_exception(const char *type_name, size_t size)

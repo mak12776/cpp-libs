@@ -8,12 +8,13 @@ using namespace std;
 class Person
 {
 private:
+	string id;
 	string name;
 	uint8_t age;
 
 	string info() const
 	{
-		return "Person(" + this->name + ", " + to_string(this->age) + "): ";
+		return "[" + this->id + "]: (" + this->name + ", " + to_string(this->age) + "): ";
 	}
 
 	void set_info(string name, uint8_t age)
@@ -23,29 +24,46 @@ private:
 	}
 
 public:
-	Person(string name, uint8_t age) : name(name), age(age)
+	Person(string id, string name, uint8_t age) : id(id), name(name), age(age)
 	{
 		cout << info() << "default constructor" << endl;
 	}
 
-	Person(const Person &other): name(other.name), age(other.age)
+	Person(const Person &other): id(other.id + " copy"), name(other.name), age(other.age)
 	{
 		cout << info() << "copy constructor" << endl;
 	}
 
-	void operator=(Person other)
+	~Person()
 	{
-		set_info(other.name, other.age);
+		cout << info() << "destructor" << endl;
+	}
+
+	void operator=(Person &other)
+	{
 		cout << info() << "assigment operator" << endl;
+		name = other.name;
+		age = other.age;
 	}
 
 	operator uint8_t() const
 	{
-		cout << info() << "cast operator" << endl;
+		cout << info() << "uint8_t() cast operator" << endl;
 		return this->age;
 	}
 
-	string get_name() const
+	operator string() const
+	{
+		cout << info() << "string() cast operator" << endl;
+		return info();
+	}
+
+	inline uint8_t get_age() const
+	{
+		return this->age;
+	}
+
+	inline string get_name() const
 	{
 		return this->name;
 	}
