@@ -206,7 +206,7 @@ namespace scl
 
 		// units
 
-#define SCL_PXLD_IS_UNIT_SIGNED 0
+constexpr bool IS_UNIT_SIGNED = false;
 
 		typedef size_t unit_t;
 		typedef double funit_t;
