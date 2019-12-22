@@ -199,15 +199,20 @@ namespace scl
 			core::image<unit_t, byte> *base;
 
 		public:
-			image(point size, mode_t mode)
+			inline image(point size, mode_t mode)
 			{
 				unit_t color_width = mode::get_width(mode);
 				base = new core::image<unit_t, byte>(size, color_width);
 			}
 
-			~image()
+			inline ~image()
 			{
 				delete base;
+			}
+
+			inline void fill(color_t color)
+			{
+
 			}
 		};
 
@@ -226,24 +231,6 @@ namespace scl
 
 		namespace image
 		{
-			static inline image_t *new_image(point<unit_t> size, mode_t mode)
-			{
-				image_t *result;
-
-				result = new image_t;
-				init(result, size, mode);
-				if (error::num)
-					delete result;
-
-				return result;
-			}
-
-			static inline void delete_image(image_t *image)
-			{
-				end(image);
-				delete image;
-			}
-
 			static inline void draw_color(image_t *image, color_t color)
 			{
 				switch (image->color_width)

@@ -4,10 +4,14 @@
 #include <iostream>
 
 /* usefull macros:
- *		SCL_CATCH_EXCEPTIONS
+ *		SCL_THROW_EXCEPTIONS
 */
 
 #define SCL_THROW_EXCEPTIONS
+
+#if CHAR_MAX != INT8_MAX
+#error invalid char size
+#endif
 
 #include "exit_codes.h"
 #include "types.h"
