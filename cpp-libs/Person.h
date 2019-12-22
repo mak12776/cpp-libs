@@ -24,7 +24,7 @@ private:
 	}
 
 public:
-	Person(string id, string name, uint8_t age) : id(id), name(name), age(age)
+	inline Person(string id, string name, uint8_t age) : id(id), name(name), age(age)
 	{
 		cout << info() << "default constructor" << endl;
 	}

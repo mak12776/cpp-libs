@@ -19,7 +19,7 @@ namespace scl
 	public:
 		inline buffer(size_t size)
 		{
-			this->pntr = memory::new_array<byte>(size);
+			this->pntr = new byte[size];
 			this->size = size;
 		}
 
@@ -35,7 +35,7 @@ namespace scl
 
 			if (this->size == 0)
 			{
-				error::set_error_bad_argument("count_lines", "buffer->size");
+				throw new_invalid_argument("count_lines", "buffer->size");
 				return 0;
 			}
 

@@ -10,6 +10,8 @@ namespace scl
 
 	namespace math
 	{
+		// generic functions
+
 		template<typename type>
 		static inline bool mul(type a, type b, type &result)
 		{
@@ -17,7 +19,9 @@ namespace scl
 			return !msl::utilities::SafeMultiply(a, b, result);
 #elif defined(__GNUC__)
 			return __builtin_mul_overflow(a, b, &result);
-#endif // _MSC_VER
+#else
+#error unknown compiler
+#endif
 		}
 
 		template<typename type>
@@ -33,6 +37,8 @@ namespace scl
 		}
 
 
+		// safe functions
+
 		template<typename type>
 		static inline void safe_mul(type a, type b, type &result)
 		{
@@ -46,8 +52,6 @@ namespace scl
 			if (add<type>(a, b, result))
 				throw new std::overflow_error("addition overflow");
 		}
-
-
 
 
 		// specific functions

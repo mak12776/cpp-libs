@@ -46,7 +46,7 @@ namespace scl
 				return point<new_type> {rand::next<new_type>(min.x, max.x), rand::next<new_type>(min.y, max.y)};
 			}
 
-			template <typename unit_type, typename data_type>
+			template <typename unit_type, typename data_type, typename color_type>
 			class image
 			{
 			private:
@@ -75,6 +75,32 @@ namespace scl
 				~image()
 				{
 					delete[] this->data;
+				}
+
+				template <typename cast_type>
+				inline void fill(color_type color)
+				{
+					cast_type *data = (cast_type *)this->data;
+
+					for (unit_type index = 0; index < this->area; index += 1)
+					{
+						data[index] = color;
+					}
+				}
+
+				inline void fill(color_type color)
+				{
+					color_type color_copy;
+					for (unit_type index = 0; index < this->y_width; index += this->color_width)
+					{
+						color_copy = color;
+						for (unit_type c_offset = this->color_width; c_offset > 0;)
+						{
+							c_offset -= 1;
+							this->data[index + c_offset] = color_copy & 0xFF;
+							temp_color >>= 8;
+						}
+					}
 				}
 			};
 
@@ -196,13 +222,13 @@ namespace scl
 		{
 		private:
 			mode_t mode;
-			core::image<unit_t, byte> *base;
+			core::image<unit_t, byte, color_t> *base;
 
 		public:
 			inline image(point size, mode_t mode)
 			{
 				unit_t color_width = mode::get_width(mode);
-				base = new core::image<unit_t, byte>(size, color_width);
+				base = new core::image<unit_t, byte, color_t>(size, color_width);
 			}
 
 			inline ~image()
@@ -215,6 +241,110 @@ namespace scl
 
 			}
 		};
+
+		namespace _core
+		{
+			template <typename type>
+			static inline void draw_point(image_t *image, point point, color_t color)
+			{
+				type *data = (type *)image->data;
+
+				data[(point.y * image->size.x) + point.y] = color;
+			}
+
+			static inline void draw_point(image_t *image, point point, color_t color)
+			{
+				unit_t y_offset = point.y * image->x_width;
+				unit_t x_offset = point.x * image->color_width;
+
+				for (unit_t c_offset = image->color_width; c_offset > 0; )
+				{
+					c_offset -= 1;
+
+					image->data[y_offset + x_offset + c_offset] = color & 0xFF;
+					color >>= 8;
+				}
+			}
+
+			template <typename type>
+			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
+			{
+				type *data = (type *)image->data;
+
+				for (unit_t y = 0, y_offset = 0; y < image->size.y; y += 1, y_offset += image->size.x)
+				{
+					for (unit_t x = 0; x < image->size.x; x += 1)
+					{
+						data[y_offset + x] = func(point<unit_t>{ x, y });
+					}
+				}
+			}
+
+			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
+			{
+				color_t color;
+
+				for (unit_t y_offset = 0, y = 0; y_offset < image->y_width; y_offset += image->x_width, y += 1)
+				{
+					for (unit_t x_offset = 0, x = 0; x_offset < image->x_width; x_offset += image->color_width, x += 1)
+					{
+						color = func(point<unit_t>{ x, y });
+
+						for (unit_t c_offset = image->color_width; c_offset > 0;)
+						{
+							c_offset -= 1;
+
+							image->data[y_offset + x_offset + c_offset] = color & 0xFF;
+							color <<= 8;
+						}
+					}
+				}
+			}
+
+			template <typename type>
+			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
+			{
+				type *data = (type *)image->data;
+
+				for (unit_t y = 0, y_offset = 0; y < image->size.y; y += 1, y_offset += image->size.x)
+				{
+					for (unit_t x = 0; x < image->size.x; x += 1)
+					{
+						data[y_offset + x] = func(point<unit_t>{ x, y }, (color_t)data[y_offset + x]);
+					}
+				}
+			}
+
+			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
+			{
+				color_t color;
+				for (unit_t y_offset = 0, y = 0; y_offset < image->x_width; y_offset += image->x_width, y += 1)
+				{
+					for (unit_t x_offset = 0, x = 0; x_offset < image->color_width; x_offset += image->color_width, x += 1)
+					{
+						color = 0;
+
+						for (unit_t c_offset = image->color_width; c_offset > 0;)
+						{
+							c_offset -= 1;
+
+							color <<= 8;
+							color |= image->data[y_offset + x_offset + c_offset];
+						}
+
+						color = func(point<unit_t>{ x, y }, color);
+
+						for (unit_t c_offset = image->color_width; c_offset > 0;)
+						{
+							c_offset -= 1;
+
+							image->data[y_offset + x_offset + c_offset] = color & 0xFF;
+							color >>= 8;
+						}
+					}
+				}
+			}
+		}
 
 		typedef struct
 		{
@@ -325,137 +455,5 @@ namespace scl
 			void(*start) (image_t *image);
 			void(*step) (image_t *image);
 		} animation_t;
-
-		namespace _core
-		{
-			template <typename type>
-			static inline void draw_color(image_t *image, color_t color)
-			{
-				type *data = (type *)image->data;
-
-				for (unit_t index = 0; index < image->area; index += 1)
-				{
-					data[index] = color;
-				}
-			}
-
-			static inline void draw_color(image_t *image, color_t color)
-			{
-				color_t temp_color;
-				for (unit_t index = 0; index < image->y_width; index += image->color_width)
-				{
-					temp_color = color;
-
-					for (unit_t c_offset = image->color_width; c_offset > 0;)
-					{
-						c_offset -= 1;
-
-						image->data[index + c_offset] = temp_color & 0xFF;
-						temp_color >>= 8;
-					}
-				}
-			}
-
-			template <typename type>
-			static inline void draw_point(image_t *image, point point, color_t color)
-			{
-				type *data = (type *)image->data;
-
-				data[(point.y * image->size.x) + point.y] = color;
-			}
-
-			static inline void draw_point(image_t *image, point point, color_t color)
-			{
-				unit_t y_offset = point.y * image->x_width;
-				unit_t x_offset = point.x * image->color_width;
-
-				for (unit_t c_offset = image->color_width; c_offset > 0; )
-				{
-					c_offset -= 1;
-
-					image->data[y_offset + x_offset + c_offset] = color & 0xFF;
-					color >>= 8;
-				}
-			}
-
-			template <typename type>
-			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
-			{
-				type *data = (type *)image->data;
-
-				for (unit_t y = 0, y_offset = 0; y < image->size.y; y += 1, y_offset += image->size.x)
-				{
-					for (unit_t x = 0; x < image->size.x; x += 1)
-					{
-						data[y_offset + x] = func(point<unit_t>{ x, y });
-					}
-				}
-			}
-
-			static inline void draw(image_t *image, color_t(*func) (point<unit_t>))
-			{
-				color_t color;
-
-				for (unit_t y_offset = 0, y = 0; y_offset < image->y_width; y_offset += image->x_width, y += 1)
-				{
-					for (unit_t x_offset = 0, x = 0; x_offset < image->x_width; x_offset += image->color_width, x += 1)
-					{
-						color = func(point<unit_t>{ x, y });
-
-						for (unit_t c_offset = image->color_width; c_offset > 0;)
-						{
-							c_offset -= 1;
-
-							image->data[y_offset + x_offset + c_offset] = color & 0xFF;
-							color <<= 8;
-						}
-					}
-				}
-			}
-
-			template <typename type>
-			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
-			{
-				type *data = (type *)image->data;
-
-				for (unit_t y = 0, y_offset = 0; y < image->size.y; y += 1, y_offset += image->size.x)
-				{
-					for (unit_t x = 0; x < image->size.x; x += 1)
-					{
-						data[y_offset + x] = func(point<unit_t>{ x, y }, (color_t)data[y_offset + x]);
-					}
-				}
-			}
-
-			static inline void map(image_t *image, color_t(*func) (point<unit_t>, color_t))
-			{
-				color_t color;
-				for (unit_t y_offset = 0, y = 0; y_offset < image->x_width; y_offset += image->x_width, y += 1)
-				{
-					for (unit_t x_offset = 0, x = 0; x_offset < image->color_width; x_offset += image->color_width, x += 1)
-					{
-						color = 0;
-
-						for (unit_t c_offset = image->color_width; c_offset > 0;)
-						{
-							c_offset -= 1;
-
-							color <<= 8;
-							color |= image->data[y_offset + x_offset + c_offset];
-						}
-
-						color = func(point<unit_t>{ x, y }, color);
-
-						for (unit_t c_offset = image->color_width; c_offset > 0;)
-						{
-							c_offset -= 1;
-
-							image->data[y_offset + x_offset + c_offset] = color & 0xFF;
-							color >>= 8;
-						}
-					}
-				}
-			}
-		}
 	}
 }

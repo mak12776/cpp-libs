@@ -120,7 +120,7 @@ namespace scl
 		static inline void set_error_no_memory(size_t size)
 		{
 #ifdef SCL_THROW_EXCEPTIONS
-#warning incomplete code
+#pragma message ( "incomplete code" )
 #else
 			num = ERROR_NO_MEMORY;
 			info.size = size;
