@@ -80,9 +80,9 @@ namespace scl
 					this->size = size;
 					this->color_width = color_width;
 
-					math::safe_mul<unit_type>(size.x, color_width, this.x_width);
-					math::safe_mul<unit_type>(size.y, this.x_width, this.y_width);
-					math::safe_mul<unit_type>(size.x, size.y, this.area);
+					math::safe_mul<unit_type>(size.x, color_width, this->x_width);
+					math::safe_mul<unit_type>(size.y, this->x_width, this->y_width);
+					math::safe_mul<unit_type>(size.x, size.y, this->area);
 
 					this->data = new data_type[y_width];
 				}
@@ -136,6 +136,7 @@ namespace scl
 				inline void fill(color_type color)
 				{
 					color_type color_copy;
+
 					for (unit_type index = 0; index < this->y_width; index += this->color_width)
 					{
 						color_copy = color;
@@ -154,7 +155,7 @@ namespace scl
 				{
 					cast_type *data = (cast_type *)this->data;
 
-					for (unit_type y = 0, y_offset = 0; y < this->size.y; y += 1, y_offset += this->x_width)
+					for (unit_type y = 0, y_offset = 0; y < this->size.y; y += 1, y_offset += this->size.x)
 					{
 						for (unit_type x = 0; x < this->size.x; x += 1)
 						{
@@ -185,9 +186,57 @@ namespace scl
 				}
 
 				template <typename cast_type>
+				inline void effect(color_type(*func) (point<unit_type> point, color_type color))
+				{
+					cast_type *data = (cast_type *)this->data;
+
+					for (unit_type y = 0, y_offset = 0; y < this->size.y; y += 1, y_offset += this->size.x)
+					{
+						for (unit_type x = 0; x < this->size.x; x += 1)
+						{
+							data[y_offset + x] = func({ x, y }, data[y_offset + x]);
+						}
+					}
+				}
+
+				inline void effect(color_type(*func) (point<unit_type> point, color_type color))
+				{
+					color_type color;
+
+					for (unit_type y = 0, y_offsett = 0; y < this->size.y; y += 1, y_offsett += this->x_width)
+					{
+						for (unit_type x = 0, x_offset = 0; x < this->size.x; x += 1, x_offset += this->color_width)
+						{
+							color = 0;
+
+							unit_type xy_offset = y_offsett + x_offset;
+
+							for (unit_type c_offset = this->color_width; c_offset > 0; )
+							{
+								c_offset -= 1;
+
+								color <<= data_shift;
+								color |= this->data[xy_offset + c_offset];
+							}
+
+							color = func({ x, y }, color);
+
+							for (unit_type c_offset = this->color_width; c_offset > 0; )
+							{
+								c_offset -= 1;
+
+								this->data[xy_offset + c_offset] = color & data_mask;
+								color >>= data_shift;
+							}
+						}
+					}
+				}
+
+				template <typename cast_type>
 				inline void draw_point(point<unit_type> point, color_type color)
 				{
-					((cast_type *)this->data)[(point.y * this->size.x) + point.x] = color;
+					cast_type *data = (cast_type *)this->data;
+					data[(point.y * this->size.x) + point.x] = color;
 				}
 
 				inline void draw_point(point<unit_type> point, color_type color)
@@ -206,7 +255,7 @@ namespace scl
 
 		// units
 
-constexpr bool IS_UNIT_SIGNED = false;
+		constexpr bool IS_UNIT_SIGNED = false;
 
 		typedef size_t unit_t;
 		typedef double funit_t;
@@ -280,6 +329,10 @@ constexpr bool IS_UNIT_SIGNED = false;
 			const color_t RGB_GREEN =	0x00FF00;
 			const color_t RGB_BLUE =	0x0000FF;
 
+			const color_t RGB_AQUA =	0x00FFFF;
+			const color_t RGB_PURPLE =	0xFF00FF;
+			const color_t RGB_YELLOW =	0xFFFF00;
+
 			static inline color_t make_l(unit_t l)
 			{
 				return (color_t)l;
@@ -301,7 +354,7 @@ constexpr bool IS_UNIT_SIGNED = false;
 			}
 		}
 
-		typedef struct core::point<unit_t> point;
+		typedef core::point<unit_t> point;
 
 		static const point ZERO = { 0, 0 };
 		static const point RIGHT = { 1, 0 };
@@ -313,13 +366,13 @@ constexpr bool IS_UNIT_SIGNED = false;
 		{
 		private:
 			mode_t mode;
-			core::image<unit_t, byte, color_t, 0xFF, 8> *base;
+			core::image<unit_t, uint8_t, color_t, 0xFF, 8> *base;
 
 		public:
 			inline image(point size, mode_t mode)
 			{
 				unit_t color_width = mode::get_width(mode);
-				base = new core::image(size, color_width);
+				base = new core::image<unit_t, uint8_t, color_t, 0xFF, 8>(size, color_width);
 			}
 
 			inline ~image()
@@ -330,9 +383,13 @@ constexpr bool IS_UNIT_SIGNED = false;
 
 		class animation
 		{
-			image *data;
-			void(*start) (image &data);
-			void(*step) (image &data);
+		private:
+			image *image_data;
+			void(*start) (image &image_data);
+			void(*step) (image &image_data);
+		public:
+			animation(image *image_data, void(*start) (image &image_data), void(*step) (image &image_data))
+				: image_data(image_data), start(start), step(step) { }
 		};
 	}
 }
