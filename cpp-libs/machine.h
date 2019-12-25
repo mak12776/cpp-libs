@@ -7,19 +7,24 @@
 
 namespace scl
 {
-	namespace machine
+	namespace machines
 	{
 		typedef uint8_t inst_t;
 
 		const inst_t INST_NOOP = 0x00;
 
-		class machine
+		template <typename data_type, size_t pointers_number, size_t buffer_number>
+		class data_machine
 		{
-			fixed_array *buffers;
-			fixed_array *dp;
+		private:
+			fixed_vector<data_type *, buffer_number> data_arrays;
+			fixed_vector<size_t, pointers_number> dp;
 
 			size_t ip;
 			size_t bip;
+
+		public:
+
 		};
 	}
 }

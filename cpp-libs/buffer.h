@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <array>
 
 #include "memory.h"
 #include "error.h"
@@ -10,20 +11,20 @@
 
 namespace scl
 {
-	typedef class buffer
+	class obuffer
 	{
 	private:
 		byte *pntr;
 		size_t size;
 
 	public:
-		inline buffer(size_t size)
+		inline obuffer(size_t size)
 		{
 			this->pntr = new byte[size];
 			this->size = size;
 		}
 
-		inline ~buffer()
+		inline ~obuffer()
 		{
 			delete[] this->pntr;
 		}
@@ -101,7 +102,7 @@ namespace scl
 
 	class buffer_views
 	{
-		buffer buffer;
+		obuffer buffer;
 		view *views;
 		size_t total;
 

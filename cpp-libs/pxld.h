@@ -387,6 +387,7 @@ namespace scl
 			image *image_data;
 			void(*start) (image &image_data);
 			void(*step) (image &image_data);
+
 		public:
 			animation(image *image_data, void(*start) (image &image_data), void(*step) (image &image_data))
 				: image_data(image_data), start(start), step(step) { }
