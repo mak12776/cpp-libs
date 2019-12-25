@@ -4,35 +4,33 @@
 
 namespace scl
 {
-	template <typename data_type>
-	struct fixed_array
-	{
-		data_type *pntr;
-		size_t size;
-	};
-
-	template <typename type, size_t size>
-	class fixed_vector : protected std::array<type, size>
+	template <typename data_type, size_t size>
+	class array_vector : protected std::array<data_type, size>
 	{
 	protected:
 		size_t _lenght;
 
 	public:
-		fixed_vector()
+		array_vector()
 		{
 			this->_lenght = 0;
 		}
 
-		fixed_vector(size_t lenght, type value)
+		array_vector(size_t lenght, data_type value)
 		{
 			if (lenght >= this->size())
-				throw new std::out_of_range("lenght is greater than array size");
+				throw new std::out_of_range("lenght is greater than array size: " + std::to_string(lenght));
 
 			for (size_t index = 0; index < lenght; index += 1)
 			{
 				this->array::_Elems[index] = value;
 			}
 			this->_lenght = lenght;
+		}
+
+		inline data_type *data() const
+		{
+			return this->_Elems;
 		}
 
 		inline constexpr size_t size() const
@@ -45,7 +43,7 @@ namespace scl
 			return this->_lenght;
 		}
 		
-		inline type at(size_t index)
+		inline data_type at(size_t index)
 		{
 			if (index >= this->_lenght)
 				throw new std::out_of_range("index is out of range: " + std::to_string(index));
@@ -53,7 +51,7 @@ namespace scl
 			return this->_Elems[index];
 		}
 
-		inline type &operator[](size_t index)
+		inline data_type &operator[](size_t index)
 		{
 			if (index >= this->_lenght)
 				throw new std::out_of_range("index is out of range: " + std::to_string(index));

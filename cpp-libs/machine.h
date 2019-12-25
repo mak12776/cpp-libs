@@ -17,8 +17,8 @@ namespace scl
 		class data_machine
 		{
 		private:
-			fixed_vector<data_type *, buffer_number> data_arrays;
-			fixed_vector<size_t, pointers_number> dp;
+			array_vector<data_type *, buffer_number> data_arrays;
+			array_vector<size_t, pointers_number> dp;
 
 			size_t ip;
 			size_t bip;
