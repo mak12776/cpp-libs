@@ -162,7 +162,7 @@
     <ClInclude Include="infint.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="rand.h" />
-    <ClInclude Include="machine.h" />
+    <ClInclude Include="machines.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="pxld.h" />
     <ClInclude Include="string.h" />

@@ -49,9 +49,6 @@
     <ClInclude Include="pxld.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="machine.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="exit_codes.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -74,6 +71,9 @@
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="vector.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="machines.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
