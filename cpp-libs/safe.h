@@ -10,13 +10,17 @@ namespace scl
 		constexpr bool check_index_out_of_range = true;
 
 		template <typename type>
-		static inline void is_index_out_of_range(type index, type max, const std::string name = "index", const std::string message = "")
+		static inline void throw_if_out_of_range(type value, type max, const std::string name = "index", std::string message = "")
 		{
-			if (message.empty())
-				message = name + std::string("is out of range: ");
+			if (value >= max)
+			{
+				if (message.empty())
+					message = name + std::string("is out of range: ") + std::to_string(value);
+				else
+					message += ": " + std::to_string(value);
 
-			if (index >= max)
 				throw new std::out_of_range(message);
+			}
 		}
 	}
 }

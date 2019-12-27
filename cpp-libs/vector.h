@@ -8,23 +8,34 @@ namespace scl
 	template <typename data_type>
 	class fixed_vector
 	{
+		typedef data_type value_type;
+
+		typedef data_type* pointer;
+		typedef const data_type* const_pointer;
+
+		typedef data_type& reference;
+		typedef const data_type& const_reference;
+
+		typedef std::size_t size_type;
+		typedef std::ptrdiff_t difference_type;
+
 	private:
-		data_type *_data;
-		size_t _capacity;
-		size_t _size;
+		pointer _data;
+		size_type _capacity;
+		size_type _size;
 
 	public:
-		fixed_vector(size_t capacity)
+		fixed_vector(size_type capacity)
 		{
-			this->_data = new data_type[capacity];
+			this->_data = new value_type[capacity];
 			this->_capacity = capacity;
 			this->_size = 0;
 		}
 
-		fixed_vector(size_t capacity, size_t size, data_type value)
+		fixed_vector(size_type capacity, size_type size, size_type value)
 		{
-			if (size >= capacity)
-				throw new std::out_of_range("size is greater than capacity: " + std::to_string(size));
+			if (safe::check_index_out_of_range)
+				safe::throw_if_out_of_range(size, capacity, nullptr, "size is greater than capacity");
 
 			this->_data = new data_type[capacity];
 			for (size_t index = 0; index < size; index += 1)

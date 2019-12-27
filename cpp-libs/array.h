@@ -71,7 +71,7 @@ namespace scl
 		inline const_reference at(size_type index)
 		{
 			if (safe::check_index_out_of_range)
-				safe::is_index_out_of_range(index, this->_capacity);
+				safe::throw_if_out_of_range(index, this->_capacity);
 
 			return this->_data[index];
 		}
@@ -79,7 +79,7 @@ namespace scl
 		inline const_reference operator[](size_type index)
 		{
 			if (safe::check_index_out_of_range)
-				safe::is_index_out_of_range(index, this->_capacity);
+				safe::throw_if_out_of_range(index, this->_capacity);
 
 			return this->_data[index];
 		}
@@ -88,58 +88,69 @@ namespace scl
 	template <typename data_type, size_t size>
 	class array_vector : protected std::array<data_type, size>
 	{
+		typedef data_type value_type;
+
+		typedef value_type* pointer;
+		typedef const value_type* const_pointer;
+
+		typedef value_type& reference;
+		typedef const value_type& const_reference;
+
+		typedef std::size_t size_type;
+		typedef std::ptrdiff_t difference;
+
 	protected:
-		size_t _size;
+		size_t _lenght;
 
 	public:
 		array_vector()
 		{
-			this->_size = 0;
+			this->_lenght = 0;
 		}
 
-		array_vector(size_t lenght, data_type value)
+		array_vector(size_type lenght, const_reference value)
 		{
-			if (lenght >= this->array::size())
-				throw new std::out_of_range("lenght is greater than array size: " + std::to_string(lenght));
+			if (safe::check_index_out_of_range())
+				safe::throw_if_out_of_range(lenght, this->array::size(), "", "lenght is greater than array size");
 
 			for (size_t index = 0; index < lenght; index += 1)
 			{
 				this->array::_Elems[index] = value;
 			}
-			this->_size = lenght;
+			this->_lenght = lenght;
 		}
 
 		// member functions
 
-		inline data_type *data() const
+		inline pointer data() const
 		{
 			return this->_Elems;
 		}
 
-		inline size_t size() const
+		inline size_type lenght() const
 		{
-			return this->_size;
+			return this->_lenght;
 		}
 
-		inline constexpr size_t capacity() const
+		inline constexpr size_type size() const
 		{
 			return this->array::size();
 		}
 
 		// access functions
 		
-		inline data_type &at(size_t index)
+		inline const_reference at(size_type index)
 		{
-			if (index >= this->_size)
-				throw new std::out_of_range("index is out of range: " + std::to_string(index));
+			if (safe::check_index_out_of_range)
+				safe::throw_if_out_of_range(index, this->_lenght);
 
 			return this->_Elems[index];
 		}
 
-		inline data_type &operator[](size_t index)
+		inline const_reference operator[](size_type index)
 		{
-			if (index >= this->_size)
-				throw new std::out_of_range("index is out of range: " + std::to_string(index));
+			if (safe::check_index_out_of_range)
+				safe::throw_if_out_of_range(index, this->_lenght);
 
 			return this->_Elems[index];
 		}

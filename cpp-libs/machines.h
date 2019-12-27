@@ -54,20 +54,7 @@ namespace scl
 
 			inline void execute()
 			{
-				if (bip >= buffers.size())
-				{
-
-				}
-
-				if (buffers[bip] == nullptr)
-				{
-
-				}
-
-				if (ip >= buffers[bip]->size())
-				{
-
-				}
+				
 			}
 		};
 	}
