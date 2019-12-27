@@ -1,5 +1,7 @@
 #pragma once
 
+#include "memory.h"
+
 namespace scl
 {
 	template <typename data_type, bool delete_on_destroy = true>
@@ -31,21 +33,22 @@ namespace scl
 
 		dynamic_array(size_type capacity)
 		{
-			this->_data = (capacity != 0) ? new value_type[capacity] : nullptr;
+			this->_data = (capacity != 0) ? new data_type[capacity] : nullptr;
 			this->_capacity = capacity;
+		}
+
+		inline void dump()
+		{
+			std::cout << "size: " << this->_capacity << std::endl;
+			for (size_type index = 0; index < this->_capacity; index += 1)
+				std::cout << std::hex << this->_data[index] << std::dec << " ";
+			std::cout << std::endl;
 		}
 
 		dynamic_array(size_type capacity, const_reference value)
 		{
-			if (capacity != 0)
-			{
-				this->_data = new data_type[capacity];
-				fill(value);
-			}
-			else
-				this->data = nullptr;
-
 			this->_capacity = capacity;
+			this->_data = (capacity != nullptr) ? memory::new_array<value_type>(capacity, value) : nullptr;
 		}
 
 		dynamic_array(pointer data, size_type capacity)
@@ -78,8 +81,6 @@ namespace scl
 			return this->_data[index];
 		}
 
-		// access functions
-
 		inline const_pointer data() const
 		{
 			return this->_data;
@@ -87,12 +88,18 @@ namespace scl
 
 		inline const_reference first() const
 		{
+			if (this->_capacity == 0)
+				throw new std::out_of_range("array is empty");
+				
 			return this->_data[0];
 		}
 
 		inline const_reference last() const
 		{
-			return this->_data[0];
+			if (this->_capacity == 0)
+				throw new std::out_of_range("array is empty");
+
+			return this->_data[this->_capacity - 1];
 		}
 
 		// size functions

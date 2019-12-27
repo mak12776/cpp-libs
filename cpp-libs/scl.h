@@ -23,6 +23,10 @@
 #include "array_view.h"
 #include "array_vector.h"
 
+#include "fixed_vector.h"
+
+#include "linked_vector_list.h"
+
 #include "io.h"
 #include "buffer.h"
 #include "string.h"

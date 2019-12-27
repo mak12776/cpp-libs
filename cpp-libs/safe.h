@@ -22,5 +22,14 @@ namespace scl
 				throw new std::out_of_range(message);
 			}
 		}
+
+		constexpr bool check_zero_size = true;
+
+		template <typename type>
+		static inline void throw_if_zero_size(type size, const std::string name = "size")
+		{
+			if (size == 0)
+				throw new std::out_of_range(name + " is zero");
+		}
 	}
 }

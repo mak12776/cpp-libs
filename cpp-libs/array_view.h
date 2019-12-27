@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdlib.h>
+#include "dynamic_array.h"
 
 namespace scl
 {
@@ -20,11 +20,21 @@ namespace scl
 		typedef std::size_t size_type;
 		typedef std::ptrdiff_t difference_type;
 
-	protected:
-		pointer _data;
+	public:
+		pointer data;
 		size_type start;
 		size_type end;
 
+		array_view(pointer data, size_type start, size_type end)
+			: data(data), start(start), end(end)
+		{ }
 
+		template <bool _delete_on_destroy>
+		array_view(dynamic_array<data_type, _delete_on_destroy> array)
+		{
+			this->data = array->data();
+			this->start = 0;
+			this->end = 0;
+		}
 	};
 }

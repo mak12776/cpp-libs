@@ -3,8 +3,8 @@
 #include <cstdint>
 #include <vector>
 
-#include "array.h"
-#include "vector.h"
+#include "dynamic_array.h"
+#include "fixed_vector.h"
 #include "buffer.h"
 
 namespace scl
