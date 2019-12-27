@@ -76,6 +76,9 @@
     <ClInclude Include="machines.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="safe.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

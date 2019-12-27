@@ -42,7 +42,7 @@ namespace scl
 		{
 		private:
 			dynamic_array<dynamic_array<uint8_t> *> buffers;
-			fixed_vector<size_t> pointers;
+			dynamic_array<size_t> pointers;
 
 			size_t ip;
 			size_t bip;
@@ -54,7 +54,17 @@ namespace scl
 
 			inline void execute()
 			{
-				while (bip < buffers.size() && ip < buffers[bip]->size())
+				if (bip >= buffers.size())
+				{
+
+				}
+
+				if (buffers[bip] == nullptr)
+				{
+
+				}
+
+				if (ip >= buffers[bip]->size())
 				{
 
 				}

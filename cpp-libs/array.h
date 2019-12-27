@@ -5,61 +5,81 @@
 namespace scl
 {
 
-	template <typename data_type>
+	template <typename data_type, bool delete_on_destroy = true>
 	class dynamic_array
 	{
-	private:
-		data_type *_data;
-		size_t _capacity;
 
 	public:
-		dynamic_array(size_t capacity)
+		typedef data_type value_type;
+
+		typedef data_type* pointer;
+		typedef const data_type* const_pointer;
+
+		typedef data_type& reference;
+		typedef const data_type& const_reference;
+
+		typedef std::size_t size_type;
+		typedef std::ptrdiff_t difference_type;
+
+	protected:
+		pointer _data;
+		size_type _capacity;
+
+	public:
+		dynamic_array(size_type capacity)
 		{
-			this->_data = new data_type[capacity];
+			this->_data = new value_type[capacity];
 			this->_capacity = capacity;
 		}
 
-		dynamic_array(size_t capacity, data_type value)
+		dynamic_array(size_type capacity, const_reference value)
 		{
 			this->_data = new data_type[capacity];
-			for (size_t index = 0; index < capacity; index += 1)
+			for (size_type index = 0; index < capacity; index += 1)
 			{
 				this->_data[index] = value;
 			}
 			this->_capacity = capacity;
 		}
 
+		dynamic_array(pointer data, size_type capacity)
+		{
+			this->_data = data;
+			this->_capacity = capacity;
+		}
+
 		~dynamic_array()
 		{
-			delete[] this->_data;
+			if (delete_on_destroy)
+				delete[] this->_data;
 		}
 
 		// member functions
 
-		inline data_type *data() const
+		inline pointer data() const
 		{
 			return this->data;
 		}
 
-		inline size_t size() const
+		inline size_type size() const
 		{
 			return this->_capacity;
 		}
 
 		// access functions
 
-		inline data_type &at(size_t index)
+		inline const_reference at(size_type index)
 		{
-			if (index >= this->_capacity)
-				throw new std::out_of_range("index is out of range: " + std::to_string(index));
+			if (safe::check_index_out_of_range)
+				safe::is_index_out_of_range(index, this->_capacity);
 
 			return this->_data[index];
 		}
 
-		inline data_type &operator[](size_t index)
+		inline const_reference operator[](size_type index)
 		{
-			if (index >= this->_capacity)
-				throw new std::out_of_range("index is out of range: " + std::to_string(index));
+			if (safe::check_index_out_of_range)
+				safe::is_index_out_of_range(index, this->_capacity);
 
 			return this->_data[index];
 		}

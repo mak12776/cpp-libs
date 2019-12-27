@@ -158,6 +158,7 @@
     <ClInclude Include="exit_codes.h" />
     <ClInclude Include="array.h" />
     <ClInclude Include="examples.h" />
+    <ClInclude Include="safe.h" />
     <ClInclude Include="vector.h" />
     <ClInclude Include="infint.h" />
     <ClInclude Include="Person.h" />

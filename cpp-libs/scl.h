@@ -17,8 +17,8 @@
 #include "types.h"
 #include "error.h"
 #include "math.h"
+#include "safe.h"
 #include "array.h"
-
 #include "io.h"
 #include "buffer.h"
 #include "string.h"
