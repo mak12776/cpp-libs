@@ -5,9 +5,7 @@
 
 namespace examples
 {
-	using namespace scl::pxld;
-	using namespace scl::error;
-
+#if 0
 	image_t *picture_1(point_t size)
 	{
 		image_t *image;
@@ -30,4 +28,5 @@ namespace examples
 
 		return image;
 	}
+#endif
 }

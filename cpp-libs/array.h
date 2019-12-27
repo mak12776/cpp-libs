@@ -28,17 +28,20 @@ namespace scl
 	public:
 		dynamic_array(size_type capacity)
 		{
-			this->_data = new value_type[capacity];
+			this->_data = (capacity != 0) ? new value_type[capacity] : nullptr;
 			this->_capacity = capacity;
 		}
 
 		dynamic_array(size_type capacity, const_reference value)
 		{
-			this->_data = new data_type[capacity];
-			for (size_type index = 0; index < capacity; index += 1)
+			if (capacity != 0)
 			{
-				this->_data[index] = value;
+				this->_data = new data_type[capacity];
+				fill(value);
 			}
+			else
+				this->data = nullptr;
+
 			this->_capacity = capacity;
 		}
 
@@ -52,18 +55,6 @@ namespace scl
 		{
 			if (delete_on_destroy)
 				delete[] this->_data;
-		}
-
-		// member functions
-
-		inline pointer data() const
-		{
-			return this->data;
-		}
-
-		inline size_type size() const
-		{
-			return this->_capacity;
 		}
 
 		// access functions
@@ -83,11 +74,54 @@ namespace scl
 
 			return this->_data[index];
 		}
+
+		// access functions
+
+		inline const_pointer data() const
+		{
+			return this->_data;
+		}
+
+		inline const_reference first() const
+		{
+			return this->_data[0];
+		}
+
+		inline const_reference last() const
+		{
+			return this->_data[0];
+		}
+
+		// size functions
+
+		inline size_type empty() const
+		{
+			return this->_capacity == 0;
+		}
+
+		inline size_type size() const
+		{
+			return this->_capacity;
+		}
+
+		// operations
+
+		inline void fill(const_reference value)
+		{
+			std::fill(this->_data, this->_data + this->_capacity, value);
+		}
+
+		inline void swap(dynamic_array<data_type> other) 
+		{
+			std::swap(this->_data, other->_data);
+			std::swap(this->_capacity, other->_capacity);
+		}
 	};
 
 	template <typename data_type, size_t size>
 	class array_vector : protected std::array<data_type, size>
 	{
+	public:
 		typedef data_type value_type;
 
 		typedef value_type* pointer;

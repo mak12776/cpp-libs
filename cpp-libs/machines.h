@@ -32,27 +32,33 @@ namespace scl
 
 	namespace buffer_machine
 	{
-		constexpr uint8_t inst_size = 1;
-
-		typedef uint8_t inst_t;
-
-		const inst_t INST_NOOP = 0x00;
 
 		class machine
 		{
-		private:
-			dynamic_array<dynamic_array<uint8_t> *> buffers;
-			dynamic_array<size_t> pointers;
+		public:
+			typedef dynamic_array<dynamic_array<uint8_t> *> buffers_type;
+			typedef dynamic_array<size_t> pointers_type;
+
+		protected:
+
+			buffers_type buffers;
+			pointers_type pointers;
 
 			size_t ip;
 			size_t bip;
 
 		public:
+
 			machine(size_t buffers_number, size_t pointers_number, size_t base_inst_pointer, size_t inst_pointer)
 				: buffers(buffers_number), pointers(pointers_number), bip(base_inst_pointer), ip(inst_pointer)
 			{ }
 
-			inline void execute()
+			static constexpr uint8_t inst_size = 1;
+			typedef uint8_t inst_t;
+
+			static constexpr inst_t INST_NOOP = 0x00;
+
+			inline void run()
 			{
 				
 			}
