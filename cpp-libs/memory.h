@@ -38,7 +38,7 @@ namespace scl
 		}
 
 		template <typename type>
-		static inline type *new_array(size_t size, type &value)
+		static inline type *new_array(size_t size, type value)
 		{
 			type *array;
 
