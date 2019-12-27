@@ -30,38 +30,56 @@ namespace scl
 		};
 	}
 
-	namespace buffer_machine
+	class buffer_machine
 	{
+	public:
+		typedef dynamic_array<dynamic_array<uint8_t> *> buffers_type;
+		typedef dynamic_array<size_t> pointers_type;
 
-		class machine
+	protected:
+
+		buffers_type buffers;
+		pointers_type pointers;
+
+		size_t ip;
+		size_t bip;
+
+		enum class error_type
 		{
-		public:
-			typedef dynamic_array<dynamic_array<uint8_t> *> buffers_type;
-			typedef dynamic_array<size_t> pointers_type;
 
-		protected:
+		};
 
-			buffers_type buffers;
-			pointers_type pointers;
-
-			size_t ip;
-			size_t bip;
+		class runtime_error : public std::exception
+		{ 
+		private:
+			error_type error;
+			std::string message;
 
 		public:
+			runtime_error(error_type error, std::string message)
+			{
+				this->error = error;
+				this->message = message;
+			}
+		};
 
-			machine(size_t buffers_number, size_t pointers_number, size_t base_inst_pointer, size_t inst_pointer)
-				: buffers(buffers_number), pointers(pointers_number), bip(base_inst_pointer), ip(inst_pointer)
-			{ }
+	public:
 
-			static constexpr uint8_t inst_size = 1;
-			typedef uint8_t inst_t;
+		buffer_machine(size_t buffers_number, size_t pointers_number, size_t base_inst_pointer, size_t inst_pointer)
+			: buffers(buffers_number), pointers(pointers_number), bip(base_inst_pointer), ip(inst_pointer)
+		{ }
 
-			static constexpr inst_t INST_NOOP = 0x00;
+		static constexpr uint8_t inst_size = 1;
+		typedef uint8_t inst_t;
 
-			inline void run()
+		static constexpr inst_t INST_NOOP = 0x00;
+
+		inline void run()
+		{
+			if (bip >= buffers.size())
 			{
 				
 			}
-		};
-	}
+		}
+	};
 }

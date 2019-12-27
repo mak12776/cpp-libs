@@ -4,7 +4,6 @@
 
 namespace scl
 {
-
 	template <typename data_type, bool delete_on_destroy = true>
 	class dynamic_array
 	{
@@ -26,6 +25,12 @@ namespace scl
 		size_type _capacity;
 
 	public:
+		dynamic_array()
+		{
+			this->_data = nullptr;
+			this->_capacity = 0;
+		}
+
 		dynamic_array(size_type capacity)
 		{
 			this->_data = (capacity != 0) ? new value_type[capacity] : nullptr;
@@ -116,6 +121,31 @@ namespace scl
 			std::swap(this->_data, other->_data);
 			std::swap(this->_capacity, other->_capacity);
 		}
+	};
+
+	template <typename data_type, bool delete_on_destroy = false>
+	class array_view
+	{
+
+	public:
+		typedef data_type value_type;
+
+		typedef data_type* pointer;
+		typedef const data_type* const_pointer;
+
+		typedef data_type& reference;
+		typedef const data_type& const_reference;
+
+		typedef std::size_t size_type;
+		typedef std::ptrdiff_t difference_type;
+
+	protected:
+		pointer _data;
+		size_type start;
+		size_type end;
+
+
+
 	};
 
 	template <typename data_type, size_t size>

@@ -11,21 +11,37 @@
 
 namespace scl
 {
+	class buffer: public dynamic_array<uint8_t>
+	{
+	public:
+		inline buffer(size_t size): dynamic_array(size)
+		{ }
 
-	class obuffer
+		inline buffer(): dynamic_array() 
+		{ }
+
+		inline size_type count_lines()
+		{
+			if (this->empty())
+				return 0;
+		}
+	};
+	
+
+	class old_buffer
 	{
 	private:
 		byte *pntr;
 		size_t size;
 
 	public:
-		inline obuffer(size_t size)
+		inline old_buffer(size_t size)
 		{
 			this->pntr = new byte[size];
 			this->size = size;
 		}
 
-		inline ~obuffer()
+		inline ~old_buffer()
 		{
 			delete[] this->pntr;
 		}
@@ -37,7 +53,6 @@ namespace scl
 
 			if (this->size == 0)
 			{
-				throw new_invalid_argument("count_lines", "buffer->size");
 				return 0;
 			}
 
@@ -103,7 +118,7 @@ namespace scl
 
 	class buffer_views
 	{
-		obuffer buffer;
+		old_buffer buffer;
 		view *views;
 		size_t total;
 
