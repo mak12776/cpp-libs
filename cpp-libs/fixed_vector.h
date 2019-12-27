@@ -85,10 +85,4 @@ namespace scl
 			return this->_data[index];
 		}
 	};
-
-	template <typename data_type>
-	class linked_vector_list
-	{
-
-	};
 }

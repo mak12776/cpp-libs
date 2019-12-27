@@ -18,7 +18,11 @@
 #include "error.h"
 #include "math.h"
 #include "safe.h"
-#include "array.h"
+
+#include "dynamic_array.h"
+#include "array_view.h"
+#include "array_vector.h"
+
 #include "io.h"
 #include "buffer.h"
 #include "string.h"
