@@ -26,10 +26,15 @@ namespace scl
 		constexpr bool check_zero_size = true;
 
 		template <typename type>
-		static inline void throw_if_zero_size(type size, const std::string name = "size")
+		static inline void throw_if_zero_size(type value, const std::string name = "size", std::string message = "")
 		{
-			if (size == 0)
-				throw new std::out_of_range(name + " is zero");
+			if (value == 0)
+			{
+				if (message.empty())
+					message = name + std::string("is out of range: ") + std::to_string(value);
+
+				throw new std::out_of_range(message);
+			}
 		}
 	}
 }

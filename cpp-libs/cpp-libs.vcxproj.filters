@@ -24,6 +24,17 @@
       <UniqueIdentifier>{c9bb51e9-7c01-4e14-8e95-26945288d7ce}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Header Files\scl\tools">
+      <UniqueIdentifier>{dccf35f8-28f4-4daf-9a60-e9f5db2e08af}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\scl\misc">
+      <UniqueIdentifier>{8765ffd8-0e24-4e66-ba8e-90b12a1d2dee}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\scl\types">
+      <UniqueIdentifier>{c959c893-7cd0-4ac3-a403-9f4a46c03e08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -32,32 +43,8 @@
     <ClInclude Include="scl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="io.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="error.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="memory.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="string.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="math.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="pxld.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="exit_codes.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="examples.h">
       <Filter>Header Files\examples</Filter>
-    </ClInclude>
-    <ClInclude Include="rand.h">
-      <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="Person.h">
       <Filter>Header Files</Filter>
@@ -66,12 +53,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="types.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="machines.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="safe.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="array_view.h">
@@ -92,8 +73,44 @@
     <ClInclude Include="other_types.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="static_array.h">
+      <Filter>Header Files\scl\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="error.h">
+      <Filter>Header Files\scl\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="io.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="exit_codes.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="memory.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="math.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="pxld.h">
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="machines.h">
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
     <ClInclude Include="buffer.h">
-      <Filter>Header Files\scl</Filter>
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="rand.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="safe.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="string.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="static_dyanamic_array.h">
+      <Filter>Header Files\scl\containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

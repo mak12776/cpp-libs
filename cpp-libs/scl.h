@@ -20,6 +20,7 @@
 #include "safe.h"
 
 #include "dynamic_array.h"
+#include "static_array.h"
 #include "array_view.h"
 #include "array_vector.h"
 

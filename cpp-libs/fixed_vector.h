@@ -50,7 +50,7 @@ namespace scl
 			delete[] this->data;
 		}
 
-		// member functions
+		// members functions
 
 		inline data_type *data() const
 		{
@@ -65,6 +65,16 @@ namespace scl
 		inline size_t size() const
 		{
 			return this->_size;
+		}
+
+		inline bool empty() const
+		{
+			return this->_size == 0;
+		}
+
+		inline bool full() const
+		{
+			return this->_size == this->_capacity;
 		}
 
 		// access functions

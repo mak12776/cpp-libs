@@ -4,10 +4,9 @@
 
 namespace scl
 {
-	template <typename data_type, bool delete_on_destroy = true>
+	template <typename data_type>
 	class dynamic_array
 	{
-
 	public:
 		typedef data_type value_type;
 
@@ -33,7 +32,7 @@ namespace scl
 
 		dynamic_array(size_type capacity)
 		{
-			this->_data = (capacity != 0) ? new data_type[capacity] : nullptr;
+			this->_data = (capacity != 0) ? new value_type[capacity] : nullptr;
 			this->_capacity = capacity;
 		}
 
@@ -43,16 +42,26 @@ namespace scl
 			this->_data = (capacity != 0) ? memory::new_array<value_type>(capacity, value) : nullptr;
 		}
 
-		dynamic_array(pointer data, size_type capacity)
-		{
-			this->_data = data;
-			this->_capacity = capacity;
-		}
-
 		~dynamic_array()
 		{
-			if (delete_on_destroy)
-				delete[] this->_data;
+			delete[] this->_data;
+		}
+
+		// members functions
+
+		inline bool empty() const
+		{
+			return this->_capacity == 0;
+		}
+
+		inline size_type size() const
+		{
+			return this->_capacity;
+		}
+
+		inline const_pointer data() const
+		{
+			return this->_data;
 		}
 
 		// access functions
@@ -73,37 +82,20 @@ namespace scl
 			return this->_data[index];
 		}
 
-		inline const_pointer data() const
-		{
-			return this->_data;
-		}
-
 		inline const_reference first() const
 		{
-			if (this->_capacity == 0)
-				throw new std::out_of_range("array is empty");
-				
+			if (safe::check_zero_size)
+				safe::check_zero_size(this->_capacity, "", "array is empty");
+
 			return this->_data[0];
 		}
 
 		inline const_reference last() const
 		{
-			if (this->_capacity == 0)
-				throw new std::out_of_range("array is empty");
+			if (safe::check_zero_size)
+				safe::check_zero_size(this->_capacity, "", "array is empty");
 
 			return this->_data[this->_capacity - 1];
-		}
-
-		// size functions
-
-		inline size_type empty() const
-		{
-			return this->_capacity == 0;
-		}
-
-		inline size_type size() const
-		{
-			return this->_capacity;
 		}
 
 		// operations
@@ -113,7 +105,7 @@ namespace scl
 			std::fill(this->_data, this->_data + this->_capacity, value);
 		}
 
-		inline void swap(dynamic_array<data_type> other)
+		inline void swap(dynamic_array<value_type> other)
 		{
 			std::swap(this->_data, other->_data);
 			std::swap(this->_capacity, other->_capacity);

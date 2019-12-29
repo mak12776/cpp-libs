@@ -156,6 +156,8 @@
     <ClInclude Include="buffer.h" />
     <ClInclude Include="dynamic_array.h" />
     <ClInclude Include="error.h" />
+    <ClInclude Include="static_dyanamic_array.h" />
+    <ClInclude Include="static_array.h" />
     <ClInclude Include="other_types.h" />
     <ClInclude Include="exit_codes.h" />
     <ClInclude Include="array_view.h" />
