@@ -4,10 +4,9 @@
 
 namespace scl
 {
-	template <typename data_type, bool delete_on_destroy = false>
+	template <typename data_type>
 	class array_view
 	{
-
 	public:
 		typedef data_type value_type;
 
@@ -29,12 +28,9 @@ namespace scl
 			: data(data), start(start), end(end)
 		{ }
 
-		template <bool _delete_on_destroy>
-		array_view(dynamic_array<data_type, _delete_on_destroy> array)
-		{
-			this->data = array->data();
-			this->start = 0;
-			this->end = 0;
-		}
+		array_view(dynamic_array<value_type> array)
+			: data(array.data()), start(0), end(array.size())
+		{ }
+
 	};
 }

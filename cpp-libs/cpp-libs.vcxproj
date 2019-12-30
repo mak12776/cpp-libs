@@ -158,7 +158,6 @@
     <ClInclude Include="error.h" />
     <ClInclude Include="static_dyanamic_array.h" />
     <ClInclude Include="static_array.h" />
-    <ClInclude Include="other_types.h" />
     <ClInclude Include="exit_codes.h" />
     <ClInclude Include="array_view.h" />
     <ClInclude Include="examples.h" />
@@ -169,7 +168,7 @@
     <ClInclude Include="infint.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="rand.h" />
-    <ClInclude Include="machines.h" />
+    <ClInclude Include="buffer_machine.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="pxld.h" />
     <ClInclude Include="string.h" />

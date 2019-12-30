@@ -70,9 +70,6 @@
     <ClInclude Include="linked_vector_list.h">
       <Filter>Header Files\scl\containers</Filter>
     </ClInclude>
-    <ClInclude Include="other_types.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="static_array.h">
       <Filter>Header Files\scl\containers</Filter>
     </ClInclude>
@@ -94,9 +91,6 @@
     <ClInclude Include="pxld.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
-    <ClInclude Include="machines.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
     <ClInclude Include="buffer.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
@@ -111,6 +105,9 @@
     </ClInclude>
     <ClInclude Include="static_dyanamic_array.h">
       <Filter>Header Files\scl\containers</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer_machine.h">
+      <Filter>Header Files\scl\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
