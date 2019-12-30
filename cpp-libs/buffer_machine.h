@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "dynamic_array.h"
+#include "static_dyanamic_array.h"
 #include "fixed_vector.h"
 #include "buffer.h"
 
@@ -14,21 +15,22 @@ namespace scl
 	public:
 		typedef std::size_t size_type;
 
-		typedef dynamic_array<dynamic_array<uint8_t> *> buffers_type;
+		typedef static_dynamic_array<uint8_t> buffer_type;
+		typedef dynamic_array<buffer_type *> buffers_type;
 		typedef dynamic_array<size_type> pointers_type;
 
 	protected:
 
 		buffers_type buffers;
 		pointers_type pointers;
-		pointers_type base_pointers;
 
 		size_type ip;
 		size_type bip;
 
 		enum class error_type
 		{
-
+			INVALID_BASE_INSTRUCTION_POINTER,
+			INVALID_INSTRUCTION_POINTER,
 		};
 	
 		class runtime_error : public std::exception
@@ -63,10 +65,34 @@ namespace scl
 
 		inline void run()
 		{
+			buffer_type *inst_buffer;
+
 			if (bip >= buffers.size())
 			{
-				
+				throw new runtime_error(
+					error_type::INVALID_BASE_INSTRUCTION_POINTER,
+					"base instruction pointer is out of range: " + std::to_string(bip)
+				);
 			}
+
+			inst_buffer = buffers[bip];
+
+			if (inst_buffer == nullptr)
+			{
+				throw new runtime_error(
+					error_type::INVALID_BASE_INSTRUCTION_POINTER,
+					"null buffer pointer: " + std::to_string(bip)
+				);
+			}
+
+			if (ip >= inst_buffer->size())
+			{
+				throw new runtime_error(
+					error_type::INVALID_INSTRUCTION_POINTER,
+					"instruction pointer is out of range: " + std::to_string(ip)
+				);
+			}
+			
 		}
 	};
 }

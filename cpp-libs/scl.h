@@ -33,4 +33,4 @@
 #include "string.h"
 #include "memory.h"
 #include "pxld.h"
-#include "machines.h"
+#include "buffer_machine.h"

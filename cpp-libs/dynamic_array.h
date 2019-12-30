@@ -111,8 +111,8 @@ namespace scl
 			std::swap(this->_capacity, other->_capacity);
 		}
 		
-		// misc
 
+		// misc
 
 		inline void dump(std::ostream &stream = std::cout)
 		{
