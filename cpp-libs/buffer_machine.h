@@ -93,6 +93,14 @@ namespace scl
 				);
 			}
 			
+			if (ip + inst_size >= inst_buffer->size())
+			{
+				throw new runtime_error(
+					error_type::INVALID_INSTRUCTION_POINTER,
+					""
+				);
+			}
+
 		}
 	};
 }

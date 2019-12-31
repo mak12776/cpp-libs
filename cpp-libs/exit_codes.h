@@ -1,5 +1,5 @@
 #pragma once
 
-#define EXIT_ERROR 1
-#define EXIT_ARGUMENT_ERROR 2
-#define EXIT_NORMAL 0
+constexpr auto EXIT_ERROR = 1;
+constexpr auto EXIT_ARGUMENT_ERROR = 2;
+constexpr auto EXIT_NORMAL = 0;
