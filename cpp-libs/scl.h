@@ -19,9 +19,12 @@
 #include "math.h"
 #include "safe.h"
 
-#include "dynamic_array.h"
 #include "static_array.h"
+#include "dynamic_array.h"
+#include "static_dyanamic_array.h"
+
 #include "array_view.h"
+
 #include "array_vector.h"
 
 #include "fixed_vector.h"
@@ -33,4 +36,4 @@
 #include "string.h"
 #include "memory.h"
 #include "pxld.h"
-#include "buffer_machine.h"
+#include "machine.h"

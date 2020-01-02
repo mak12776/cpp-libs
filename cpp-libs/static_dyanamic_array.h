@@ -54,12 +54,12 @@ namespace scl
 
 		// members functions
 
-		inline const is_dynamic() const
+		inline const bool is_dynamic() const
 		{
 			return this->_is_dynamic;
 		}
 
-		inline const is_static() const
+		inline const bool is_static() const
 		{
 			return !(this->_is_dynamic);
 		}
@@ -100,7 +100,7 @@ namespace scl
 		inline const_reference first() const
 		{
 			if (safe::check_zero_size)
-				safe::check_zero_size(this->_capacity, "", "array is empty");
+				safe::throw_if_zero_size(this->_capacity, "", "array is empty");
 
 			return this->_data[0];
 		}
@@ -108,7 +108,7 @@ namespace scl
 		inline const_reference last() const
 		{
 			if (safe::check_zero_size)
-				safe::check_zero_size(this->_capacity, "", "array is empty");
+				safe::throw_if_zero_size(this->_capacity, "", "array is empty");
 
 			return this->_data[this->_capacity - 1];
 		}
