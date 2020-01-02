@@ -153,16 +153,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="buffer.h" />
+    <ClInclude Include="dynamic_buffer.h" />
     <ClInclude Include="dynamic_array.h" />
     <ClInclude Include="error.h" />
+    <ClInclude Include="buffers.h" />
+    <ClInclude Include="arrays.h" />
+    <ClInclude Include="vectors.h" />
+    <ClInclude Include="static_dynamic_buffer.h" />
     <ClInclude Include="static_dyanamic_array.h" />
     <ClInclude Include="static_array.h" />
     <ClInclude Include="exit_codes.h" />
     <ClInclude Include="array_view.h" />
     <ClInclude Include="examples.h" />
     <ClInclude Include="array_vector.h" />
-    <ClInclude Include="linked_vector_list.h" />
+    <ClInclude Include="linked_fixed_vector.h" />
     <ClInclude Include="safe.h" />
     <ClInclude Include="fixed_vector.h" />
     <ClInclude Include="infint.h" />

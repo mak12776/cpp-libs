@@ -6,7 +6,6 @@
 #include "dynamic_array.h"
 #include "static_dyanamic_array.h"
 #include "fixed_vector.h"
-#include "buffer.h"
 
 namespace scl
 {
@@ -134,9 +133,11 @@ namespace scl
 			// COPY IM [PI]
 
 			COPY_IM8_PI8A,
+#if 0
 			COPY_IM8_PI8A,
 			COPY_IM8_PI8A,
 			COPY_IM8_PI8A,
+#endif
 
 			// COPY IM [IM]
 

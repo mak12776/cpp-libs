@@ -34,6 +34,23 @@
     </Filter>
     <Filter Include="Header Files\scl\types">
       <UniqueIdentifier>{c959c893-7cd0-4ac3-a403-9f4a46c03e08}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\scl\containers\arrays">
+      <UniqueIdentifier>{b3bc94a7-deaf-488b-ac98-aad07373e9e3}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\scl\containers\vectors">
+      <UniqueIdentifier>{e256ac4b-11a9-40af-8a94-cecd374c0a35}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\incomplete">
+      <UniqueIdentifier>{acaef4a9-d222-4fd4-a76e-b18633dcf100}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\scl\containers\buffers">
+      <UniqueIdentifier>{93b99e9e-e639-4f88-b984-579611d84832}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -55,24 +72,6 @@
     <ClInclude Include="types.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="array_view.h">
-      <Filter>Header Files\scl\containers</Filter>
-    </ClInclude>
-    <ClInclude Include="dynamic_array.h">
-      <Filter>Header Files\scl\containers</Filter>
-    </ClInclude>
-    <ClInclude Include="array_vector.h">
-      <Filter>Header Files\scl\containers</Filter>
-    </ClInclude>
-    <ClInclude Include="fixed_vector.h">
-      <Filter>Header Files\scl\containers</Filter>
-    </ClInclude>
-    <ClInclude Include="linked_vector_list.h">
-      <Filter>Header Files\scl\containers</Filter>
-    </ClInclude>
-    <ClInclude Include="static_array.h">
-      <Filter>Header Files\scl\containers</Filter>
-    </ClInclude>
     <ClInclude Include="error.h">
       <Filter>Header Files\scl\misc</Filter>
     </ClInclude>
@@ -91,9 +90,6 @@
     <ClInclude Include="pxld.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
-    <ClInclude Include="buffer.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
     <ClInclude Include="rand.h">
       <Filter>Header Files\scl\tools</Filter>
     </ClInclude>
@@ -103,11 +99,44 @@
     <ClInclude Include="string.h">
       <Filter>Header Files\scl\tools</Filter>
     </ClInclude>
-    <ClInclude Include="static_dyanamic_array.h">
-      <Filter>Header Files\scl\containers</Filter>
-    </ClInclude>
     <ClInclude Include="machine.h">
       <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="static_dynamic_buffer.h">
+      <Filter>Header Files\scl\containers\buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic_buffer.h">
+      <Filter>Header Files\scl\containers\buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="buffers.h">
+      <Filter>Header Files\scl\containers\buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="dynamic_array.h">
+      <Filter>Header Files\scl\containers\arrays</Filter>
+    </ClInclude>
+    <ClInclude Include="static_array.h">
+      <Filter>Header Files\scl\containers\arrays</Filter>
+    </ClInclude>
+    <ClInclude Include="static_dyanamic_array.h">
+      <Filter>Header Files\scl\containers\arrays</Filter>
+    </ClInclude>
+    <ClInclude Include="fixed_vector.h">
+      <Filter>Header Files\scl\containers\vectors</Filter>
+    </ClInclude>
+    <ClInclude Include="arrays.h">
+      <Filter>Header Files\scl\containers\arrays</Filter>
+    </ClInclude>
+    <ClInclude Include="array_view.h">
+      <Filter>Header Files\incomplete</Filter>
+    </ClInclude>
+    <ClInclude Include="array_vector.h">
+      <Filter>Header Files\incomplete</Filter>
+    </ClInclude>
+    <ClInclude Include="vectors.h">
+      <Filter>Header Files\scl\containers\vectors</Filter>
+    </ClInclude>
+    <ClInclude Include="linked_fixed_vector.h">
+      <Filter>Header Files\scl\containers\vectors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

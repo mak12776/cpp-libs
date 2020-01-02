@@ -4,7 +4,6 @@
 
 #include "error.h"
 #include "types.h"
-#include "buffer.h"
 
 namespace scl
 {

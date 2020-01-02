@@ -5,19 +5,19 @@
 
 namespace scl
 {
-	class buffer : public dynamic_array<uint8_t>
+	class dynamic_buffer : public dynamic_array<uint8_t>
 	{
 	public:
-		buffer() : dynamic_array()
+		dynamic_buffer() : dynamic_array()
 		{ }
 
-		buffer(size_t size) : dynamic_array(size)
+		dynamic_buffer(size_t size) : dynamic_array(size)
 		{ }
 
-		buffer(size_t size, uint8_t value) : dynamic_array(size, value)
+		dynamic_buffer(size_t size, uint8_t value) : dynamic_array(size, value)
 		{ }
 
-		~buffer()
+		~dynamic_buffer()
 		{ }
 
 		inline size_type count_lines()
