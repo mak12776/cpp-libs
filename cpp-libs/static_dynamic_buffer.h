@@ -11,13 +11,12 @@ namespace scl
 			: static_dynamic_array(capacity)
 		{ }
 
-		static_dyanmic_buffer(pointer data, size_type capacity)
-			: static_dynamic_array(data, capacity)
-		{ }
-
 		static_dyanmic_buffer(size_type capacity, const_reference value)
 			: static_dynamic_array(capacity, value)
 		{ }
 
+		static_dyanmic_buffer(pointer data, size_type capacity)
+			: static_dynamic_array(data, capacity)
+		{ }
 	};
 }

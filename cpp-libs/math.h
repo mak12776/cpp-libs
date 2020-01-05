@@ -83,7 +83,7 @@ namespace scl
 		static inline void safe_mul_size(size_t a, size_t b, size_t &result)
 		{
 			if (mul_size(a, b, result))
-				error::set_error_int_overflow("mul");
+				throw new std::overflow_error("size multiply overflow");
 		}
 	}
 }

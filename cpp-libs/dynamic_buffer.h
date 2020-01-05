@@ -17,8 +17,7 @@ namespace scl
 		dynamic_buffer(size_t size, uint8_t value) : dynamic_array(size, value)
 		{ }
 
-		~dynamic_buffer()
-		{ }
+		// others
 
 		inline size_type count_lines()
 		{

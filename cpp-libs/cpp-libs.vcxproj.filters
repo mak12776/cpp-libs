@@ -138,6 +138,9 @@
     <ClInclude Include="linked_fixed_vector.h">
       <Filter>Header Files\scl\containers\vectors</Filter>
     </ClInclude>
+    <ClInclude Include="static_buffer.h">
+      <Filter>Header Files\scl\containers\buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

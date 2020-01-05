@@ -158,6 +158,7 @@
     <ClInclude Include="error.h" />
     <ClInclude Include="buffers.h" />
     <ClInclude Include="arrays.h" />
+    <ClInclude Include="static_buffer.h" />
     <ClInclude Include="vectors.h" />
     <ClInclude Include="static_dynamic_buffer.h" />
     <ClInclude Include="static_dyanamic_array.h" />

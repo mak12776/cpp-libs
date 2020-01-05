@@ -15,7 +15,6 @@
 
 #include "exit_codes.h"
 #include "types.h"
-#include "error.h"
 #include "math.h"
 #include "safe.h"
 
