@@ -50,13 +50,16 @@
     <Filter Include="Header Files\examples\codes">
       <UniqueIdentifier>{621f3898-4830-4273-bb8f-befe8dfb6fdd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\pxld">
+    <Filter Include="Header Files\pxld">
       <UniqueIdentifier>{b4468a59-b8f2-4198-83d5-d0188bac1228}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\scl\machine">
+    <Filter Include="Header Files\machine">
       <UniqueIdentifier>{dccf35f8-28f4-4daf-9a60-e9f5db2e08af}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\cface">
+      <UniqueIdentifier>{658fd923-d64f-408c-a62a-6c01fe7816a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +112,7 @@
       <Filter>Header Files\scl\containers\vectors</Filter>
     </ClInclude>
     <ClInclude Include="machine.h">
-      <Filter>Header Files\scl\machine</Filter>
+      <Filter>Header Files\machine</Filter>
     </ClInclude>
     <ClInclude Include="string.h">
       <Filter>Header Files\scl\misc</Filter>
@@ -148,7 +151,10 @@
       <Filter>Header Files\examples\codes</Filter>
     </ClInclude>
     <ClInclude Include="pxld.h">
-      <Filter>Header Files\scl\pxld</Filter>
+      <Filter>Header Files\pxld</Filter>
+    </ClInclude>
+    <ClInclude Include="cface.h">
+      <Filter>Header Files\cface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
