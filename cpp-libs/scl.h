@@ -22,9 +22,6 @@
 #include "vectors.h"
 #include "buffers.h"
 
-#include "array_view.h"
-#include "array_vector.h"
-
 #include "io.h"
 #include "string.h"
 #include "memory.h"

@@ -68,32 +68,32 @@ namespace scl
 
 		inline const_reference at(size_type index)
 		{
-			if (safe::check_index_out_of_range)
-				safe::throw_if_out_of_range(index, this->_capacity);
+			if (safe::error_index_out_of_range)
+				safe::check_index_out_of_range(index, this->_capacity);
 
 			return this->_data[index];
 		}
 
 		inline const_reference operator[](size_type index)
 		{
-			if (safe::check_index_out_of_range)
-				safe::throw_if_out_of_range(index, this->_capacity);
+			if (safe::error_index_out_of_range)
+				safe::check_index_out_of_range(index, this->_capacity);
 
 			return this->_data[index];
 		}
 
 		inline const_reference first() const
 		{
-			if (safe::check_zero_size)
-				safe::check_zero_size(this->_capacity, "", "array is empty");
+			if (safe::error_zero_size)
+				safe::error_zero_size(this->_capacity, "", "array is empty");
 
 			return this->_data[0];
 		}
 
 		inline const_reference last() const
 		{
-			if (safe::check_zero_size)
-				safe::check_zero_size(this->_capacity, "", "array is empty");
+			if (safe::error_zero_size)
+				safe::error_zero_size(this->_capacity, "", "array is empty");
 
 			return this->_data[this->_capacity - 1];
 		}

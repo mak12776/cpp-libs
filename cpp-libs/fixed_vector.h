@@ -34,8 +34,8 @@ namespace scl
 
 		fixed_vector(size_type capacity, size_type size, size_type value)
 		{
-			if (safe::check_index_out_of_range)
-				safe::throw_if_out_of_range(size, capacity, nullptr, "size is greater than capacity");
+			if (safe::error_index_out_of_range)
+				safe::check_index_out_of_range(size, capacity, nullptr, "size is greater than capacity");
 
 			this->_data = new data_type[capacity];
 			for (size_t index = 0; index < size; index += 1)

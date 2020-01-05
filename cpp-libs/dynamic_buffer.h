@@ -11,10 +11,10 @@ namespace scl
 		dynamic_buffer() : dynamic_array()
 		{ }
 
-		dynamic_buffer(size_t size) : dynamic_array(size)
+		dynamic_buffer(size_type size) : dynamic_array(size)
 		{ }
 
-		dynamic_buffer(size_t size, uint8_t value) : dynamic_array(size, value)
+		dynamic_buffer(size_type size, const_reference value) : dynamic_array(size, value)
 		{ }
 
 		// others

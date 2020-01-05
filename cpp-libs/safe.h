@@ -7,10 +7,10 @@ namespace scl
 {
 	namespace safe
 	{
-		constexpr bool check_index_out_of_range = true;
+		constexpr bool error_index_out_of_range = true;
 
 		template <typename type>
-		static inline void throw_if_out_of_range(type value, type max, const std::string name = "index", std::string message = "")
+		static inline void check_index_out_of_range(type value, type max, const std::string name = "index", std::string message = "")
 		{
 			if (value >= max)
 			{
@@ -23,10 +23,10 @@ namespace scl
 			}
 		}
 
-		constexpr bool check_zero_size = true;
+		constexpr bool error_zero_size = true;
 
 		template <typename type>
-		static inline void throw_if_zero_size(type value, const std::string name = "size", std::string message = "")
+		static inline void check_zero_size(type value, const std::string name = "size", std::string message = "")
 		{
 			if (value == 0)
 			{

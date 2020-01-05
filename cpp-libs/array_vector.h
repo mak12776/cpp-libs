@@ -28,8 +28,8 @@ namespace scl
 
 		array_vector(size_type lenght, const_reference value)
 		{
-			if (safe::check_index_out_of_range())
-				safe::throw_if_out_of_range(lenght, this->array::size(), "", "lenght is greater than array size");
+			if (safe::error_index_out_of_range())
+				safe::check_index_out_of_range(lenght, this->array::size(), "", "lenght is greater than array size");
 
 			for (size_t index = 0; index < lenght; index += 1)
 			{
@@ -59,16 +59,16 @@ namespace scl
 
 		inline const_reference at(size_type index)
 		{
-			if (safe::check_index_out_of_range)
-				safe::throw_if_out_of_range(index, this->_lenght);
+			if (safe::error_index_out_of_range)
+				safe::check_index_out_of_range(index, this->_lenght);
 
 			return this->_Elems[index];
 		}
 
 		inline const_reference operator[](size_type index)
 		{
-			if (safe::check_index_out_of_range)
-				safe::throw_if_out_of_range(index, this->_lenght);
+			if (safe::error_index_out_of_range)
+				safe::check_index_out_of_range(index, this->_lenght);
 
 			return this->_Elems[index];
 		}
