@@ -46,6 +46,9 @@ namespace scl
 			this->_capacity = capacity;
 		}
 
+		static_dynamic_array(static_dynamic_array<data_type>& other) = delete;
+		static_dynamic_array(static_dynamic_array<data_type>&& other) = delete;
+
 		~static_dynamic_array()
 		{
 			if (this->_is_dynamic)

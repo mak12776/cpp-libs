@@ -42,7 +42,8 @@ namespace scl
 			this->_data = (capacity != 0) ? memory::new_array<value_type>(capacity, value) : nullptr;
 		}
 
-		dynamic_array(dynamic_array<data_type> &other) = delete;
+		dynamic_array(dynamic_array<data_type>& other) = delete;
+		dynamic_array(dynamic_array<data_type>&& other) = delete;
 
 		~dynamic_array()
 		{

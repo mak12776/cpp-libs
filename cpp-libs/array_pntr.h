@@ -31,11 +31,11 @@ namespace scl
 		array_pntr(const_pointer data, const_reference value)
 		{
 			this->_data = data;
-			for (size_type index = 0; index < _size; index += 1)
-			{
-				data[index] = value;
-			}
+			std::fill(data, data + _size, value);
 		}
+
+		array_pntr(array_pntr<data_type, _size>& other) = delete;
+		array_pntr(array_pntr<data_type, _size>&& other) = delete;
 
 		// members functions
 

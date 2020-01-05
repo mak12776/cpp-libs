@@ -24,7 +24,7 @@ namespace scl
 		{
 			type *array;
 
-			array = new_array<type>(size);
+			array = new type[size];
 
 			for (size_t index = 0; index < size; index += 1)
 				array[index] = value;
