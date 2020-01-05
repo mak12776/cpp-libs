@@ -5,7 +5,7 @@
 
 namespace scl
 {
-	class dynamic_buffer : public dynamic_array<uint8_t>
+	class dynamic_buffer : public dynamic_array<char>
 	{
 	public:
 		dynamic_buffer() : dynamic_array()

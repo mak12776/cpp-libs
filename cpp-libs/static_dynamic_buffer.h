@@ -4,7 +4,7 @@
 
 namespace scl
 {
-	class static_dyanmic_buffer : public static_dynamic_array<uint8_t>
+	class static_dyanmic_buffer : public static_dynamic_array<char>
 	{
 	public:
 		static_dyanmic_buffer(size_type capacity)

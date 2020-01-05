@@ -6,7 +6,7 @@
 namespace scl
 {
 	template <std::size_t _size>
-	class buffer_pntr : public array_pntr<uint8_t, _size>
+	class buffer_pntr : public array_pntr<char, _size>
 	{
 	public:
 		typedef uint8_t* reference;
