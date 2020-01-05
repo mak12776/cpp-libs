@@ -35,7 +35,7 @@ namespace scl
 		static_dynamic_array(size_type capacity, const_reference value)
 		{
 			this->_is_dynamic = true;
-			this->_data = memory::new_array(capacity, value);
+			this->_data = memory::new_array<value_type>(capacity, value);
 			this->_capacity = capacity;
 		}
 
@@ -113,17 +113,11 @@ namespace scl
 			return this->_data[this->_capacity - 1];
 		}
 
-		// operations
+		// functions
 
 		inline void fill(const_reference value)
 		{
 			std::fill(this->_data, this->_data + this->_capacity, value);
-		}
-
-		inline void swap(dynamic_array<value_type> other)
-		{
-			std::swap(this->_data, other->_data);
-			std::swap(this->_capacity, other->_capacity);
 		}
 	};
 }

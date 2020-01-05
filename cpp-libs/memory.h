@@ -20,24 +20,6 @@ namespace scl
 		}
 
 		template <typename type>
-		static inline type *new_array(size_t size)
-		{
-			return new type[size];
-
-#ifdef SCL_CATCH_EXCEPTIONS
-			try
-			{
-				return new type[size];
-			}
-			catch (std::bad_alloc exception)
-			{
-				error::set_error_bad_alloc_exception("unknown", size);
-				return nullptr;
-			}
-#endif
-		}
-
-		template <typename type>
 		static inline type *new_array(size_t size, type value)
 		{
 			type *array;
@@ -48,7 +30,6 @@ namespace scl
 				array[index] = value;
 
 			return array;
-
 		}
 	}
 }

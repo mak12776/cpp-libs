@@ -42,6 +42,8 @@ namespace scl
 			this->_data = (capacity != 0) ? memory::new_array<value_type>(capacity, value) : nullptr;
 		}
 
+		dynamic_array(dynamic_array<data_type> &other) = delete;
+
 		~dynamic_array()
 		{
 			delete[] this->_data;
@@ -98,26 +100,11 @@ namespace scl
 			return this->_data[this->_capacity - 1];
 		}
 
-		// operations
+		// functions
 
 		inline void fill(const_reference value)
 		{
 			std::fill(this->_data, this->_data + this->_capacity, value);
-		}
-
-		inline void swap(dynamic_array<value_type> other)
-		{
-			std::swap(this->_data, other->_data);
-			std::swap(this->_capacity, other->_capacity);
-		}
-
-		// misc
-
-		inline void dump(std::ostream &stream = std::cout)
-		{
-			for (size_type index = 0; index < this->_capacity; index += 1)
-				stream << std::hex << this->_data[index] << std::dec << " ";
-			stream << "\n";
 		}
 	};
 }

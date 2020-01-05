@@ -24,10 +24,6 @@
       <UniqueIdentifier>{c9bb51e9-7c01-4e14-8e95-26945288d7ce}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\scl\tools">
-      <UniqueIdentifier>{dccf35f8-28f4-4daf-9a60-e9f5db2e08af}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Header Files\scl\misc">
       <UniqueIdentifier>{8765ffd8-0e24-4e66-ba8e-90b12a1d2dee}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
@@ -50,6 +46,17 @@
     </Filter>
     <Filter Include="Header Files\scl\core">
       <UniqueIdentifier>{5c9d022f-2e5a-41eb-9a29-320c5160af43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\examples\codes">
+      <UniqueIdentifier>{621f3898-4830-4273-bb8f-befe8dfb6fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scl\pxld">
+      <UniqueIdentifier>{b4468a59-b8f2-4198-83d5-d0188bac1228}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\scl\machine">
+      <UniqueIdentifier>{dccf35f8-28f4-4daf-9a60-e9f5db2e08af}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,10 +109,7 @@
       <Filter>Header Files\scl\containers\vectors</Filter>
     </ClInclude>
     <ClInclude Include="machine.h">
-      <Filter>Header Files\scl\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="pxld.h">
-      <Filter>Header Files\scl\tools</Filter>
+      <Filter>Header Files\scl\machine</Filter>
     </ClInclude>
     <ClInclude Include="string.h">
       <Filter>Header Files\scl\misc</Filter>
@@ -139,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="array_pntr.h">
       <Filter>Header Files\scl\containers\arrays</Filter>
+    </ClInclude>
+    <ClInclude Include="matrix.h">
+      <Filter>Header Files\examples\codes</Filter>
+    </ClInclude>
+    <ClInclude Include="pxld.h">
+      <Filter>Header Files\scl\pxld</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
