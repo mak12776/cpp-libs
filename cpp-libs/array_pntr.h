@@ -5,7 +5,7 @@
 namespace scl
 {
 	template <typename data_type, size_t _size>
-	class static_array
+	class array_pntr
 	{
 	public:
 		typedef data_type value_type;
@@ -20,12 +20,21 @@ namespace scl
 		typedef std::ptrdiff_t difference_type;
 
 	protected:
-		pointer _data;
+		const_pointer _data;
 
 	public:
-		static_array(pointer data)
+		array_pntr(const_pointer data)
 		{
 			this->_data = data;
+		}
+
+		array_pntr(const_pointer data, const_reference value)
+		{
+			this->_data = data;
+			for (size_type index = 0; index < _size; index += 1)
+			{
+				data[index] = value;
+			}
 		}
 
 		// members functions

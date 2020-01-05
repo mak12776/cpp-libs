@@ -9,10 +9,6 @@
 
 #define SCL_THROW_EXCEPTIONS
 
-#if CHAR_MAX != INT8_MAX
-#error invalid char size
-#endif
-
 #include "exit_codes.h"
 #include "types.h"
 #include "math.h"

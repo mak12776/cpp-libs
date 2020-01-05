@@ -158,11 +158,12 @@
     <ClInclude Include="error.h" />
     <ClInclude Include="buffers.h" />
     <ClInclude Include="arrays.h" />
-    <ClInclude Include="static_buffer.h" />
+    <ClInclude Include="buffer.h" />
+    <ClInclude Include="buffer_pntr.h" />
     <ClInclude Include="vectors.h" />
     <ClInclude Include="static_dynamic_buffer.h" />
     <ClInclude Include="static_dyanamic_array.h" />
-    <ClInclude Include="static_array.h" />
+    <ClInclude Include="array_pntr.h" />
     <ClInclude Include="exit_codes.h" />
     <ClInclude Include="array_view.h" />
     <ClInclude Include="examples.h" />
@@ -191,7 +192,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="math-problem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

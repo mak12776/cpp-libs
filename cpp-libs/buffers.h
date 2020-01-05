@@ -1,5 +1,6 @@
 #pragma once
 
-#include "static_buffer.h"
+#include "buffer.h"
+#include "buffer_pntr.h"
 #include "dynamic_buffer.h"
 #include "static_dynamic_buffer.h"

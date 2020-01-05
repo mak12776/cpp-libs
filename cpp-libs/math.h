@@ -6,8 +6,6 @@
 
 namespace scl
 {
-#define SCL_THROW_EXCEPTIONS
-
 	namespace math
 	{
 		// generic functions
