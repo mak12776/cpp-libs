@@ -32,10 +32,6 @@
       <UniqueIdentifier>{8765ffd8-0e24-4e66-ba8e-90b12a1d2dee}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\scl\types">
-      <UniqueIdentifier>{c959c893-7cd0-4ac3-a403-9f4a46c03e08}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Header Files\scl\containers\arrays">
       <UniqueIdentifier>{b3bc94a7-deaf-488b-ac98-aad07373e9e3}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
@@ -78,17 +74,8 @@
     <ClInclude Include="io.h">
       <Filter>Header Files\scl\tools</Filter>
     </ClInclude>
-    <ClInclude Include="pxld.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
     <ClInclude Include="rand.h">
       <Filter>Header Files\scl\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="string.h">
-      <Filter>Header Files\scl\tools</Filter>
-    </ClInclude>
-    <ClInclude Include="machine.h">
-      <Filter>Header Files\scl\types</Filter>
     </ClInclude>
     <ClInclude Include="static_dynamic_buffer.h">
       <Filter>Header Files\scl\containers\buffers</Filter>
@@ -140,6 +127,15 @@
     </ClInclude>
     <ClInclude Include="memory.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="machine.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="pxld.h">
+      <Filter>Header Files\scl\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="string.h">
+      <Filter>Header Files\scl\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
