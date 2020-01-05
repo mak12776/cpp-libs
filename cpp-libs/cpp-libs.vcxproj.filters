@@ -62,9 +62,6 @@
     <ClInclude Include="examples.h">
       <Filter>Header Files\examples</Filter>
     </ClInclude>
-    <ClInclude Include="Person.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="infint.h">
       <Filter>Header Files</Filter>
     </ClInclude>

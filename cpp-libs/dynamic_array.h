@@ -110,7 +110,6 @@ namespace scl
 			std::swap(this->_data, other->_data);
 			std::swap(this->_capacity, other->_capacity);
 		}
-		
 
 		// misc
 
