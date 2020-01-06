@@ -1,29 +1,35 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace cface
 {
 	class c_type
 	{
-		
+		std::string type;
+	};
+
+	class c_variable
+	{
+		c_type type;
+
 	};
 
 	class c_struct
 	{
-	public:
-		const std::string name;
+		std::string name;
+		std::vector<std::string> members;
 	};
 
 	class c_function
 	{
-	public:
-		const c_type return_type;
+		c_type return_type;
 
-		const std::string name;
+		std::string name;
 
-		const bool is_inline;
-		const bool is_static;
+		bool is_inline;
+		bool is_static;
 
 
 	};

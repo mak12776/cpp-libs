@@ -61,6 +61,9 @@
     <Filter Include="Header Files\cface">
       <UniqueIdentifier>{658fd923-d64f-408c-a62a-6c01fe7816a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scl\mains">
+      <UniqueIdentifier>{304186c6-2ef0-437a-a8b7-6c3fcb4f33c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -155,6 +158,9 @@
     </ClInclude>
     <ClInclude Include="cface.h">
       <Filter>Header Files\cface</Filter>
+    </ClInclude>
+    <ClInclude Include="mains.h">
+      <Filter>Header Files\scl\mains</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

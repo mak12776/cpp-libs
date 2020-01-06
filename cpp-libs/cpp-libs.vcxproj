@@ -161,6 +161,7 @@
     <ClInclude Include="buffer.h" />
     <ClInclude Include="buffer_pntr.h" />
     <ClInclude Include="cface.h" />
+    <ClInclude Include="mains.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="vectors.h" />
     <ClInclude Include="static_dynamic_buffer.h" />
