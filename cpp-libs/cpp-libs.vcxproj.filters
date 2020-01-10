@@ -162,6 +162,12 @@
     <ClInclude Include="mains.h">
       <Filter>Header Files\scl\mains</Filter>
     </ClInclude>
+    <ClInclude Include="cface_macros.h">
+      <Filter>Header Files\cface</Filter>
+    </ClInclude>
+    <ClInclude Include="cface_types.h">
+      <Filter>Header Files\cface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

@@ -6,3 +6,4 @@
 #define CH (buffer->pntr[index])
 #define NOT_END (index < buffer->size)
 #define INC_INDEX_CHECK_END {index += 1; if (END) return total;}
+#define CASE(NAME)
