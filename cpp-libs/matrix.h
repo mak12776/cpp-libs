@@ -3,13 +3,13 @@
 #include <iostream>
 #include <vector>
 
-template <typename type, size_t height, size_t width>
-std::vector<type> sums_of_diameters(type matrix[height][width])
+template <typename type, size_t _height, size_t _width>
+std::vector<type> sums_of_diameters(type matrix[_height][_width])
 {
-	std::vector<type> sums(width + height - 1);
+	std::vector<type> sums(_width + _height - 1);
 	size_t x = 0, y = 0, index = 0;
 
-	while (y < height)
+	while (y < _height)
 	{
 		sums[index] = matrix[y][x];
 
@@ -29,11 +29,11 @@ std::vector<type> sums_of_diameters(type matrix[height][width])
 	y -= 1;
 	x += 1;
 
-	while (x < width)
+	while (x < _width)
 	{
 		sums[index] = matrix[y][x];
 
-		while (x != width - 1)
+		while (x != _width - 1)
 		{
 			x += 1;
 			y -= 1;
