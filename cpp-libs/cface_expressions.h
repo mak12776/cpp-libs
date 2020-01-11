@@ -2,6 +2,8 @@
 
 namespace cface
 {
+	/* unary operation */
+
 	enum class c_unary_operation_type
 	{
 		POSITIVE, NEGATIVE,
@@ -14,7 +16,15 @@ namespace cface
 	{ 
 	public:
 		c_unary_operation_type type;
+		c_expression *left;
+		c_expression *right;
+
+		c_unary_operation(c_unary_operation_type type, c_expression *left, c_expression *right)
+			: c_expression(c_expression_type::BINARY), type(type), left(left), right(right)
+		{ }
 	};
+
+	/* binary operation */
 
 	enum class c_binary_operation_type
 	{
@@ -31,5 +41,25 @@ namespace cface
 	{
 	public:
 		c_binary_operation_type type;
+		c_expression *value;
+
+		c_binary_operation(c_binary_operation_type type, c_expression *value)
+			: c_expression(c_expression_type::UNARY), type(type), value(value)
+		{ }
 	};
+
+	/* value */
+
+	enum class c_value_type : uint8_t
+	{
+		NUMBER, REAL, CHAR, STRING,
+	};
+
+	class c_value : public c_expression
+	{
+	public:
+		c_value_type type;
+	};
+
+
 }

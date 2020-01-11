@@ -165,9 +165,6 @@
     <ClInclude Include="cface_macros.h">
       <Filter>Header Files\cface</Filter>
     </ClInclude>
-    <ClInclude Include="cface_main.h">
-      <Filter>Header Files\cface</Filter>
-    </ClInclude>
     <ClInclude Include="cface_statements.h">
       <Filter>Header Files\cface</Filter>
     </ClInclude>
@@ -175,6 +172,12 @@
       <Filter>Header Files\cface</Filter>
     </ClInclude>
     <ClInclude Include="cface_keywords.h">
+      <Filter>Header Files\cface</Filter>
+    </ClInclude>
+    <ClInclude Include="cface_base_classes.h">
+      <Filter>Header Files\cface</Filter>
+    </ClInclude>
+    <ClInclude Include="cface_main.h">
       <Filter>Header Files\cface</Filter>
     </ClInclude>
   </ItemGroup>
