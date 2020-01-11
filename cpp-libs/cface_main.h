@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace cface
 {
 	enum class c_key : uint8_t
@@ -32,7 +31,7 @@ namespace cface
 	std::map<c_key, std::string> c_keywords = {
 		{c_key::MACRO_PREFIX, "#"}, {c_key::MACRO_INCLUDE, "include"}, {c_key::MACRO_DEFINE, "define"}, {c_key::MACRO_UNDEF, "undef"},
 		{c_key::MACRO_IF, "if"}, {c_key::MACRO_IFDEF, "ifdef"}, {c_key::MACRO_IFNDEF, "ifndef"},
-		{c_key::MACRO_ELIF, "elif"}, {c_key::MACRO_ELSE, "else"},
+		{c_key::MACRO_ELIF, "elif"}, {c_key::MACRO_ELSE, "else"}, {c_key::MACRO_ENDIF, "endif"},
 
 		{c_key::STRUCT, "struct"}, {c_key::UNION, "union"},
 		{c_key::IF, "if"}, {c_key::ELSE, "else"}, {c_key::FOR, "for"}, {c_key::WHILE, "while"},
@@ -55,15 +54,29 @@ namespace cface
 		switch (key)
 		{
 #define CASE(NAME) case NAME: return #NAME
+			CASE(c_key::START_INDEX);
+
 			CASE(c_key::MACRO_PREFIX); CASE(c_key::MACRO_INCLUDE); CASE(c_key::MACRO_DEFINE); CASE(c_key::MACRO_UNDEF);
 			CASE(c_key::MACRO_IF); CASE(c_key::MACRO_IFDEF); CASE(c_key::MACRO_IFNDEF);
-			CASE(c_key::MACRO_ELIF); CASE(c_key::MACRO_ENDIF);
+			CASE(c_key::MACRO_ELIF); CASE(c_key::MACRO_ELSE); CASE(c_key::MACRO_ENDIF);
 
 			CASE(c_key::STRUCT); CASE(c_key::UNION);
 			CASE(c_key::IF); CASE(c_key::ELSE); CASE(c_key::FOR); CASE(c_key::WHILE);
 			CASE(c_key::SWITCH); CASE(c_key::CASE); CASE(c_key::DEFAULT);
 
-			CASE(c_key::ADD);
+			CASE(c_key::ADD); CASE(c_key::SUB); CASE(c_key::MUL); CASE(c_key::DIV); CASE(c_key::MOD);
+			CASE(c_key::AND); CASE(c_key::OR); CASE(c_key::NOT);
+			CASE(c_key::EQ); CASE(c_key::NE); CASE(c_key::LT); CASE(c_key::LE); CASE(c_key::GT); CASE(c_key::GE);
+			CASE(c_key::BIT_AND); CASE(c_key::BIT_OR); CASE(c_key::BIT_XOR); CASE(c_key::BIT_NOT);
+			CASE(c_key::SHIFT_LEFT); CASE(c_key::SHIFT_RIGHT);
+
+			CASE(c_key::ASSIGN);
+			CASE(c_key::ADD_ASSIGN); CASE(c_key::SUB_ASSIGN); CASE(c_key::MUL_ASSIGN); CASE(c_key::DIV_ASSIGN); CASE(c_key::MOD_ASSIGN);
+			CASE(c_key::BIT_AND_ASSIGN); CASE(c_key::BIT_OR_ASSIGN); CASE(c_key::BIT_XOR_ASSIGN);
+			CASE(c_key::SHIFT_LEFT_ASSIGN); CASE(c_key::SHIFT_RIGHT_ASSIGN);
+
+			CASE(c_key::END_INDEX);
+
 #undef CASE
 		default: return "[unknown c_key]";
 		}
@@ -75,7 +88,6 @@ namespace cface
 		stream.write(string, std::strlen(string));
 		return stream;
 	}
-
 
 	class c_name
 	{
