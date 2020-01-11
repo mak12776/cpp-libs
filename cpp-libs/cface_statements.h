@@ -2,13 +2,29 @@
 
 namespace cface
 {
-	enum class c_statement_type
+	class c_macro_define : public c_statement
 	{
-		MACRO_INCLUDE, MACRO_DEFINE,
-		MACRO_IF, MACRO_IFDEF, MACRO_IFNDEF,
-		MACRO_ELSE, MACRO_ELIF, MACRO_ENDIF,
+	public:
+		std::string name;
+		std::string value;
+	};
 
-		IF, FOR, WHILE,
+	class c_macro_undef : public c_macro
+	{
+	public:
+		std::string name;
+	};
+
+	class c_macro_include : public c_macro
+	{
+	public:
+		bool is_global;
+		std::string name;
+	};
+
+	class c_macro_if : public c_macro
+	{
+
 	};
 
 	class c_variable
