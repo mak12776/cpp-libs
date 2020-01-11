@@ -162,7 +162,9 @@
     <ClInclude Include="buffer_pntr.h" />
     <ClInclude Include="cface.h" />
     <ClInclude Include="cface_macros.h" />
-    <ClInclude Include="cface_types.h" />
+    <ClInclude Include="cface_main.h" />
+    <ClInclude Include="cface_statements.h" />
+    <ClInclude Include="cface_expressions.h" />
     <ClInclude Include="mains.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="vectors.h" />

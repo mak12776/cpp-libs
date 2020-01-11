@@ -4,29 +4,30 @@
 
 namespace cface
 {
-	class c_macro
+	enum class c_macro_type
 	{
-	protected:
-		virtual ~c_macro() {};
-		virtual void parent() = 0;
+		C_DEFINE, C_UNDEF, C_INCLUDE
 	};
 
-	class c_define : public c_macro
-	{
-	private:
-		virtual void parent() override { }
+	struct c_macro
+	{ 
+		c_macro_type type; 
+		c_macro(c_macro_type type): type(type) { }
+	};
 
-	public:
+	struct c_define : public c_macro
+	{
 		std::string name;
 		std::string value;
 	};
 
-	class c_include : public c_macro
+	struct c_undef : public c_macro
 	{
-	private:
-		virtual void parent() override { }
+		std::string name;
+	};
 
-	public:
+	struct c_include : public c_macro
+	{
 		bool is_global;
 		std::string name;
 	};
