@@ -165,6 +165,7 @@
     <ClInclude Include="cface_main.h" />
     <ClInclude Include="cface_statements.h" />
     <ClInclude Include="cface_expressions.h" />
+    <ClInclude Include="cface_keywords.h" />
     <ClInclude Include="mains.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="vectors.h" />
