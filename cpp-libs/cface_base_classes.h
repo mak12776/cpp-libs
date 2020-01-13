@@ -2,6 +2,8 @@
 
 namespace cface
 {
+	/* statement */
+
 	enum class c_statement_type
 	{
 		MACRO_INCLUDE, MACRO_DEFINE,
@@ -26,6 +28,8 @@ namespace cface
 		inline const c_statement_type statement_type() { return this->type; }
 	};
 
+	/* expression */
+
 	enum class c_expression_type : uint8_t
 	{
 		BINARY, UNARY,
@@ -42,5 +46,12 @@ namespace cface
 		{ }
 	public:
 		inline const c_expression_type expression_type() { return this->type; }
+	};
+
+	/* variable */
+
+	class c_variable
+	{
+
 	};
 }

@@ -2,11 +2,6 @@
 
 namespace cface
 {
-	class c_variable
-	{
-
-	};
-
 	class c_struct
 	{
 	public:
