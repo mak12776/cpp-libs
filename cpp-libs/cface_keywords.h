@@ -10,6 +10,8 @@ namespace cface
 		MACRO_IF, MACRO_IFDEF, MACRO_IFNDEF,
 		MACRO_ELIF, MACRO_ELSE, MACRO_ENDIF,
 
+		AUTO, EXTERN, STATIC, REGISTER, CONST,
+
 		STRUCT, UNION, ENUM,
 		IF, ELSE, FOR, WHILE,
 		SWITCH, CASE, DEFAULT,
@@ -64,13 +66,17 @@ namespace cface
 			CASE(c_key::MACRO_IF); CASE(c_key::MACRO_IFDEF); CASE(c_key::MACRO_IFNDEF);
 			CASE(c_key::MACRO_ELIF); CASE(c_key::MACRO_ELSE); CASE(c_key::MACRO_ENDIF);
 
+			CASE(c_key::AUTO); CASE(c_key::EXTERN); CASE(c_key::STATIC); CASE(c_key::REGISTER); CASE(c_key::CONST);
+
 			CASE(c_key::STRUCT); CASE(c_key::UNION); CASE(c_key::ENUM);
 			CASE(c_key::IF); CASE(c_key::ELSE); CASE(c_key::FOR); CASE(c_key::WHILE);
 			CASE(c_key::SWITCH); CASE(c_key::CASE); CASE(c_key::DEFAULT);
+			CASE(c_key::BREAK); CASE(c_key::CONTINUE);
 
-			CASE(c_key::ADD); CASE(c_key::SUB); CASE(c_key::MUL); CASE(c_key::DIV); CASE(c_key::MOD);
 			CASE(c_key::AND); CASE(c_key::OR); CASE(c_key::NOT);
 			CASE(c_key::EQ); CASE(c_key::NE); CASE(c_key::LT); CASE(c_key::LE); CASE(c_key::GT); CASE(c_key::GE);
+
+			CASE(c_key::ADD); CASE(c_key::SUB); CASE(c_key::MUL); CASE(c_key::DIV); CASE(c_key::MOD);
 			CASE(c_key::BIT_AND); CASE(c_key::BIT_OR); CASE(c_key::BIT_XOR); CASE(c_key::BIT_NOT);
 			CASE(c_key::SHIFT_LEFT); CASE(c_key::SHIFT_RIGHT);
 
@@ -80,6 +86,7 @@ namespace cface
 			CASE(c_key::SHIFT_LEFT_ASSIGN); CASE(c_key::SHIFT_RIGHT_ASSIGN);
 
 			CASE(c_key::END_INDEX);
+
 #undef CASE
 		default: return "[unknown c_key]";
 		}
