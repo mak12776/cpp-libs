@@ -17,7 +17,7 @@ namespace scl
 		dynamic_buffer(size_type size, const_reference value) : dynamic_array(size, value)
 		{ }
 
-		// others
+#if 0
 
 		inline size_type count_lines()
 		{
@@ -76,5 +76,5 @@ namespace scl
 		}
 	};
 
-	// more types: view, packed view, buffer views
+#endif
 }

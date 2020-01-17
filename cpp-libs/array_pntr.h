@@ -88,7 +88,7 @@ namespace scl
 			return this->_data[_size - 1];
 		}
 
-		// operations
+		// algorithms
 
 		inline void fill(const_reference value)
 		{

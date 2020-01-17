@@ -101,7 +101,7 @@ namespace scl
 			return this->_data[this->_capacity - 1];
 		}
 
-		// functions
+		// algorithms
 
 		inline void fill(const_reference value)
 		{
