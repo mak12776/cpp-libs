@@ -1,8 +1,5 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <stdexcept>
 
 /* usefull macros:
  *		SCL_THROW_EXCEPTIONS
