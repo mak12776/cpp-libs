@@ -13,8 +13,15 @@ namespace scl
 		{
 			FILE *file = std::fopen(name, mode);
 
-			if (file == NULL)
-				error::set_error_fopen(name, mode);
+			if (file == nullptr)
+			{
+#ifdef SCL_USE_ERROR
+				error::set_fopen(name, mode);
+				error::set_file_info(__FILE__, __LINE__);
+#else
+				throw new fopen_error(name, mode);
+#endif
+			}
 
 			return file;
 		}
@@ -25,7 +32,14 @@ namespace scl
 
 			value = std::ftell(stream);
 			if (value == -1)
-				error::set_error_ftell(stream);
+			{
+#ifdef SCL_USE_ERROR
+				error::set_ftell();
+				error::set_file_info(__FILE__, __LINE__);
+#else
+				throw new ftell_error();
+#endif
+			}
 
 			return value;
 		}
@@ -33,7 +47,14 @@ namespace scl
 		static inline void safe_fseek(FILE *stream, long int offset, int origin)
 		{
 			if (fseek(stream, offset, origin))
-				error::set_error_fseek(stream);
+			{
+#ifdef SCL_USE_ERROR
+				error::set_fseek();
+				error::set_file_info(__FILE__, __LINE__);
+#else
+				throw new fseek_error();
+#endif
+			}
 		}
 
 		static inline long get_file_size(FILE *stream)
@@ -41,13 +62,22 @@ namespace scl
 			long size;
 
 			safe_fseek(stream, 0, SEEK_END);
-			if (error::num) return 0;
+
+#ifdef SCL_USE_ERROR
+			if (error::check()) return 0;
+#endif
 
 			size = safe_ftell(stream);
-			if (error::num) return 0;
+
+#ifdef SCL_USE_ERROR
+			if (error::check()) return 0;
+#endif
 
 			safe_fseek(stream, 0, SEEK_SET);
-			if (error::num) return 0;
+			
+#ifdef SCL_USE_ERROR
+			if (error::check()) return 0;
+#endif
 
 			return size;
 		}
@@ -58,7 +88,15 @@ namespace scl
 
 			read_number = fread(pntr, 1, size, stream);
 			if (read_number != size)
-				error::set_error_fread(stream);
+			{
+#ifdef SCL_USE_ERROR
+				error::set_fread(stream, size);
+				error::set_file_info(__FILE__, __LINE__);
+#else
+				throw new fread_error(stream, size);
+#endif // SCL_USE_ERROR
+
+			}
 
 			return read_number;
 		}
@@ -69,7 +107,14 @@ namespace scl
 
 			write_number = fwrite(pntr, 1, size, stream);
 			if (write_number != size)
-				error::set_error_fwrite(stream);
+			{
+#ifdef SCL_USE_ERROR
+				error::set_fwrite(stream, size);
+				error::set_file_info(__FILE__, __LINE__);
+#else
+				throw new fwrite_error(stream, size);
+#endif // SCL_USE_ERROR
+			}
 
 			return write_number;
 		}

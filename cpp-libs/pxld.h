@@ -291,8 +291,15 @@ namespace pxld
 			case LA: return 2;
 			case RGB: return 3;
 			case RGBA: return 4;
+
 			default:
-				throw scl::new_invalid_argument("get_width", "mode");
+#ifdef SCL_USE_ERROR
+				scl::error::set_invalid_arguments(__FUNCTION__, "mode");
+				scl::error::set_file_info(__FILE__, __LINE__);
+#else
+				throw scl::new_invalid_argument(__FUNCTION__, "mode");
+#endif //  SCL_USE_ERROR
+				
 				return 0;
 			}
 		}
@@ -305,8 +312,15 @@ namespace pxld
 			case LA: return "LA";
 			case RGB: return "RGB";
 			case RGBA: return "RGBA";
+
 			default:
-				throw scl::new_invalid_argument("get_width", "mode");
+#ifdef SCL_USE_ERROR
+				scl::error::set_invalid_arguments(__FUNCTION__, "mode");
+				scl::error::set_file_info(__FILE__, __LINE__);
+#else
+				throw scl::new_invalid_argument(__FUNCTION__, "mode");
+#endif //  SCL_USE_ERROR
+
 				return nullptr;
 			}
 		}

@@ -4,6 +4,7 @@
 
 namespace scl
 {
+#if 0
 	static inline std::invalid_argument *new_invalid_argument(std::string function_name, std::string argument_name)
 	{
 		return new std::invalid_argument(std::string("function:") + function_name +std::string("argument: "));
@@ -206,4 +207,5 @@ namespace scl
 				exit(EXIT_ERROR);
 		}
 	}
+#endif
 }

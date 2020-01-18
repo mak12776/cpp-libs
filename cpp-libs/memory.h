@@ -13,8 +13,16 @@ namespace scl
 			void *pntr;
 
 			pntr = malloc(size);
+
 			if (pntr == nullptr)
-				error::set_error_no_memory(size);
+			{
+#ifdef SCL_USE_ERROR
+				error::set_no_memory(size);
+				error::set_file_info(__FILE__, __LINE__);
+#else
+				throw new std::bad_alloc();
+#endif
+			}
 
 			return pntr;
 		}
@@ -24,7 +32,20 @@ namespace scl
 		{
 			type *array;
 
+#ifdef SCL_USE_ERROR
+			try
+			{
+				array = new type[size];
+			}
+			catch (std::bad_alloc &e)
+			{
+				error::set_no_memory_type(size, sizeof(type));
+				error::set_file_info(__FILE__, __LINE__);
+				return nullptr;
+			}
+#else
 			array = new type[size];
+#endif // SCL_USE_ERROR
 
 			for (size_t index = 0; index < size; index += 1)
 				array[index] = value;

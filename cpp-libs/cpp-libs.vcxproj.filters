@@ -180,7 +180,10 @@
     <ClInclude Include="old_error.h">
       <Filter>Header Files\scl\misc</Filter>
     </ClInclude>
-    <ClInclude Include="errors.h">
+    <ClInclude Include="error.h">
+      <Filter>Header Files\scl\core</Filter>
+    </ClInclude>
+    <ClInclude Include="exceptions.h">
       <Filter>Header Files\scl\core</Filter>
     </ClInclude>
   </ItemGroup>

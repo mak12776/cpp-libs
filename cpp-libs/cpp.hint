@@ -2,8 +2,5 @@
 // such as names of functions and macros.
 // For more information see https://go.microsoft.com/fwlink/?linkid=865984
 
-#define END (index == buffer->size)
-#define CH (buffer->pntr[index])
-#define NOT_END (index < buffer->size)
-#define INC_INDEX_CHECK_END {index += 1; if (END) return total;}
+#define SCL_USE_ERROR
 #define CASE(NAME)

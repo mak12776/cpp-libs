@@ -41,18 +41,34 @@ namespace scl
 		static inline void safe_mul(type a, type b, type &result)
 		{
 			if (mul<type>(a, b, result))
+			{
+#ifdef SCL_USE_ERROR
+				error::set_int_overflow("multiplay overflow");
+				error::set_file_info(__FILE__, __LINE__);
+#else
 				throw new std::overflow_error("multiplay overflow");
+#endif
+			}
 		}
 
 		template<typename type>
 		static inline void safe_add(type a, type b, type &result)
 		{
 			if (add<type>(a, b, result))
+			{
+#ifdef SCL_USE_ERROR
+				error::set_int_overflow("addition overflow");
+				error::set_file_info(__FILE__, __LINE__);
+#else
 				throw new std::overflow_error("addition overflow");
+#endif
+			}
 		}
 
 
 		// specific functions
+
+#if 0
 
 		static inline bool mul_size(size_t a, size_t b, size_t &result)
 		{
@@ -83,5 +99,8 @@ namespace scl
 			if (mul_size(a, b, result))
 				throw new std::overflow_error("size multiply overflow");
 		}
+
+#endif
+
 	}
 }
