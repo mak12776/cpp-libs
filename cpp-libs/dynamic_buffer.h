@@ -74,7 +74,7 @@ namespace scl
 #undef INC_INDEX_CHECK_END
 
 		}
-	};
-
 #endif
+
+	};
 }

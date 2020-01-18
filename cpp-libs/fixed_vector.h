@@ -45,7 +45,7 @@ namespace scl
 			this->_size = size;
 		}
 
-		fixed_vector()
+		~fixed_vector()
 		{
 			delete[] this->data;
 		}
@@ -94,5 +94,7 @@ namespace scl
 
 			return this->_data[index];
 		}
+
+		
 	};
 }

@@ -155,7 +155,7 @@
   <ItemGroup>
     <ClInclude Include="dynamic_buffer.h" />
     <ClInclude Include="dynamic_array.h" />
-    <ClInclude Include="error.h" />
+    <ClInclude Include="old_error.h" />
     <ClInclude Include="buffers.h" />
     <ClInclude Include="arrays.h" />
     <ClInclude Include="buffer.h" />
@@ -167,6 +167,7 @@
     <ClInclude Include="cface_expressions.h" />
     <ClInclude Include="cface_keywords.h" />
     <ClInclude Include="cface_main.h" />
+    <ClInclude Include="errors.h" />
     <ClInclude Include="mains.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="vectors.h" />

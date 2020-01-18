@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-#include "error.h"
+#include "old_error.h"
 
 namespace scl
 {

@@ -78,9 +78,6 @@
     <ClInclude Include="infint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="error.h">
-      <Filter>Header Files\scl\misc</Filter>
-    </ClInclude>
     <ClInclude Include="static_dynamic_buffer.h">
       <Filter>Header Files\scl\containers\buffers</Filter>
     </ClInclude>
@@ -179,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="cface_main.h">
       <Filter>Header Files\cface</Filter>
+    </ClInclude>
+    <ClInclude Include="old_error.h">
+      <Filter>Header Files\scl\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="errors.h">
+      <Filter>Header Files\scl\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
