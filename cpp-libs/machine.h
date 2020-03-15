@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <iostream>
 
 #include "dynamic_array.h"
 #include "static_dyanamic_array.h"

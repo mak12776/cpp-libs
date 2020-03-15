@@ -49,6 +49,40 @@ std::vector<type> sums_of_diameters(type matrix[_height][_width])
 	return sums;
 }
 
+template <typename type>
+class matrix
+{
+private:
+	T **_data;
+	size_t _width;
+	size_t _height;
+
+public:
+	matrix(size_t width, size_t height)
+	{
+		_data = new T[height];
+		for (size_t index = 0; index < width; index += 1)
+			_data[index] = new T[width];
+		this->_width = width;
+		this->_height = height;
+	}
+
+	matrix(matrix& ohter) = delete;
+	matrix(matrix&& ohter) = delete;
+
+	~matrix()
+	{
+		for (size_t index = 0; index < width; index += 1)
+			delete[] _data[index];
+		delete[] _data;
+	}
+
+	inline T &at(size_t x, size_t y) const
+	{
+		return _data[y][x];
+	}
+};
+
 int test()
 {
 	int matrix[4][4] = {
