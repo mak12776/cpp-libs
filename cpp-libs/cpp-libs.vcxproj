@@ -144,6 +144,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -160,7 +161,7 @@
     <ClInclude Include="buffers.h" />
     <ClInclude Include="arrays.h" />
     <ClInclude Include="buffer.h" />
-    <ClInclude Include="buffer_pntr.h" />
+    <ClInclude Include="buffer_pointer.h" />
     <ClInclude Include="cface.h" />
     <ClInclude Include="cface_macros.h" />
     <ClInclude Include="cface_base_classes.h" />
@@ -174,7 +175,7 @@
     <ClInclude Include="vectors.h" />
     <ClInclude Include="static_dynamic_buffer.h" />
     <ClInclude Include="static_dyanamic_array.h" />
-    <ClInclude Include="array_pntr.h" />
+    <ClInclude Include="array_pointer.h" />
     <ClInclude Include="exit_codes.h" />
     <ClInclude Include="array_view.h" />
     <ClInclude Include="examples.h" />

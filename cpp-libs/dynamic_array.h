@@ -32,7 +32,7 @@ namespace scl
 
 		dynamic_array(size_type capacity)
 		{
-			this->_data = (capacity != 0) ? new value_type[capacity] : nullptr;
+			this->_data = (capacity != 0) ? memory::new_array<value_type>(capacity) : nullptr;
 			this->_capacity = capacity;
 		}
 
@@ -71,7 +71,7 @@ namespace scl
 
 		inline const_reference at(size_type index)
 		{
-			if (safe::error_index_out_of_range)
+			if constexpr (safe::error_index_out_of_range)
 				safe::check_index_out_of_range(index, this->_capacity);
 
 			return this->_data[index];
@@ -79,7 +79,7 @@ namespace scl
 
 		inline const_reference operator[](size_type index)
 		{
-			if (safe::error_index_out_of_range)
+			if constexpr (safe::error_index_out_of_range)
 				safe::check_index_out_of_range(index, this->_capacity);
 
 			return this->_data[index];
@@ -87,7 +87,7 @@ namespace scl
 
 		inline const_reference first() const
 		{
-			if (safe::error_zero_size)
+			if constexpr (safe::error_zero_size)
 				safe::error_zero_size(this->_capacity, "", "array is empty");
 
 			return this->_data[0];
@@ -95,7 +95,7 @@ namespace scl
 
 		inline const_reference last() const
 		{
-			if (safe::error_zero_size)
+			if constexpr (safe::error_zero_size)
 				safe::error_zero_size(this->_capacity, "", "array is empty");
 
 			return this->_data[this->_capacity - 1];

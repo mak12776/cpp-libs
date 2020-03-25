@@ -65,7 +65,6 @@ namespace scl
 			}
 		}
 
-
 		// specific functions
 
 #if 0

@@ -5,7 +5,7 @@
 namespace scl
 {
 	template <typename data_type, size_t _size>
-	class array_pntr
+	class array_pointer
 	{
 	public:
 		typedef data_type value_type;
@@ -23,19 +23,19 @@ namespace scl
 		const_pointer _data;
 
 	public:
-		array_pntr(const_pointer data)
+		array_pointer(const_pointer data)
 		{
 			this->_data = data;
 		}
 
-		array_pntr(const_pointer data, const_reference value)
+		array_pointer(const_pointer data, const_reference value)
 		{
 			this->_data = data;
 			std::fill(data, data + _size, value);
 		}
 
-		array_pntr(array_pntr<data_type, _size>& other) = delete;
-		array_pntr(array_pntr<data_type, _size>&& other) = delete;
+		array_pointer(array_pointer<data_type, _size>& other) = delete;
+		array_pointer(array_pointer<data_type, _size>&& other) = delete;
 
 		// members functions
 

@@ -17,8 +17,9 @@ namespace scl
 		dynamic_buffer(size_type size, const_reference value) : dynamic_array(size, value)
 		{ }
 
-#if 0
 
+
+#if 0
 		inline size_type count_lines()
 		{
 			size_type index;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdlib>
+#include <string>
 
 #include "old_error.h"
 
@@ -25,6 +26,26 @@ namespace scl
 			}
 
 			return pntr;
+		}
+
+		template <typename type>
+		static inline type *new_array(size_t size)
+		{
+#ifdef SCL_USE_ERROR
+			type *array;
+			try
+			{
+				array = new type[size];
+			}
+			catch (std::bad_alloc &e)
+			{
+				error::set_no_memory_type(size, sizeof(type));
+				error::set_file_info(__FILE__, __LINE__);
+				return nullptr;
+			}
+#else
+			return new type[size];
+#endif
 		}
 
 		template <typename type>

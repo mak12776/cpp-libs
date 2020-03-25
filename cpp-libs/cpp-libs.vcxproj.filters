@@ -141,12 +141,6 @@
     <ClInclude Include="buffer.h">
       <Filter>Header Files\scl\containers\buffers</Filter>
     </ClInclude>
-    <ClInclude Include="buffer_pntr.h">
-      <Filter>Header Files\scl\containers\buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="array_pntr.h">
-      <Filter>Header Files\scl\containers\arrays</Filter>
-    </ClInclude>
     <ClInclude Include="matrix.h">
       <Filter>Header Files\examples\codes</Filter>
     </ClInclude>
@@ -185,6 +179,12 @@
     </ClInclude>
     <ClInclude Include="exceptions.h">
       <Filter>Header Files\scl\core</Filter>
+    </ClInclude>
+    <ClInclude Include="array_pointer.h">
+      <Filter>Header Files\scl\containers\arrays</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer_pointer.h">
+      <Filter>Header Files\scl\containers\buffers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
