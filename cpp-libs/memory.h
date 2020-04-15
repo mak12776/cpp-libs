@@ -33,6 +33,7 @@ namespace scl
 		{
 #ifdef SCL_USE_ERROR
 			type *array;
+
 			try
 			{
 				array = new type[size];
@@ -53,20 +54,10 @@ namespace scl
 		{
 			type *array;
 
+			array = new_array<type>(size);
 #ifdef SCL_USE_ERROR
-			try
-			{
-				array = new type[size];
-			}
-			catch (std::bad_alloc &e)
-			{
-				error::set_no_memory_type(size, sizeof(type));
-				error::set_file_info(__FILE__, __LINE__);
-				return nullptr;
-			}
-#else
-			array = new type[size];
-#endif // SCL_USE_ERROR
+			if (error::check()) return nullptr;
+#endif
 
 			for (size_t index = 0; index < size; index += 1)
 				array[index] = value;

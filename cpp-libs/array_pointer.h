@@ -34,8 +34,8 @@ namespace scl
 			std::fill(data, data + _size, value);
 		}
 
-		array_pointer(array_pointer<data_type, _size>& other) = delete;
-		array_pointer(array_pointer<data_type, _size>&& other) = delete;
+		array_pointer(array_pointer<value_type, _size>& other) = delete;
+		array_pointer(array_pointer<value_type, _size>&& other) = delete;
 
 		// members functions
 

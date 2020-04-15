@@ -51,7 +51,7 @@ namespace scl
 
 				struct
 				{
-					const char *type;
+					const char *operation_type;
 				} overflow;
 
 				struct
@@ -146,22 +146,22 @@ namespace scl
 			}
 		}
 
-		static inline void set_int_overflow(const char *type)
+		static inline void set_int_overflow(const char *operation_type)
 		{
 			if (errors_array_index != errors_array_size)
 			{
 				errors[errors_array_index].num = num_t::ERROR_INT_OVERFLOW;
-				errors[errors_array_index].info.overflow.type = type;
+				errors[errors_array_index].info.overflow.operation_type = operation_type;
 				errors_array_index += 1;
 			}
 		}
 
-		static inline void set_float_overflow(const char *type)
+		static inline void set_float_overflow(const char *operation_type)
 		{
 			if (errors_array_index != errors_array_size)
 			{
 				errors[errors_array_index].num = num_t::ERROR_FLOAT_OVERFLOW;
-				errors[errors_array_index].info.overflow.type = type;
+				errors[errors_array_index].info.overflow.operation_type = operation_type;
 				errors_array_index += 1;
 			}
 		}

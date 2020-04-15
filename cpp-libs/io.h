@@ -62,19 +62,16 @@ namespace scl
 			long size;
 
 			safe_fseek(stream, 0, SEEK_END);
-
 #ifdef SCL_USE_ERROR
 			if (error::check()) return 0;
 #endif
 
 			size = safe_ftell(stream);
-
 #ifdef SCL_USE_ERROR
 			if (error::check()) return 0;
 #endif
 
 			safe_fseek(stream, 0, SEEK_SET);
-			
 #ifdef SCL_USE_ERROR
 			if (error::check()) return 0;
 #endif
@@ -95,13 +92,12 @@ namespace scl
 #else
 				throw new fread_error(stream, size);
 #endif // SCL_USE_ERROR
-
 			}
 
 			return read_number;
 		}
 
-		static inline size_t safe_write(void *pntr, size_t size, FILE *stream)
+		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
 		{
 			size_t write_number;
 

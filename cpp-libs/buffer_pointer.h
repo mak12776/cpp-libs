@@ -9,12 +9,11 @@ namespace scl
 	class buffer_pointer : public array_pointer<char, _size>
 	{
 	public:
+		typedef char* pointer;
+		typedef const char* const_pointer;
 
-		typedef uint8_t* reference;
-		typedef const uint8_t* const_reference;
-
-		typedef uint8_t* pointer;
-		typedef const uint8_t* const_pointer;
+		typedef char& reference;
+		typedef const char& const_reference;
 
 		buffer_pointer(const_pointer data)
 			: array_pointer<uint8_t, _size>(data)
