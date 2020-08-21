@@ -10,15 +10,29 @@ namespace scl
 		enum class num_t : uint8_t
 		{
 			ERROR_NO_MEMORY, ERROR_NO_MEMORY_TYPE,
-
 			ERROR_INVALID_ARGUMENT,
-
 			ERROR_INT_OVERFLOW, ERROR_FLOAT_OVERFLOW,
-
 			ERROR_FOPEN, ERROR_FTELL, ERROR_FSEEK,
-
 			ERROR_FREAD, ERROR_FWRITE,
 		};
+
+		static inline const char *to_string(enum num_t num)
+		{
+			switch (num)
+			{
+			case scl::error::num_t::ERROR_NO_MEMORY:			return "NO_MEMORY";
+			case scl::error::num_t::ERROR_NO_MEMORY_TYPE:		return "ERROR_NO_MEMORY_TYPE";
+			case scl::error::num_t::ERROR_INVALID_ARGUMENT:		return "ERROR_INVALID_ARGUMENT";
+			case scl::error::num_t::ERROR_INT_OVERFLOW:			return "ERROR_INT_OVERFLOW";
+			case scl::error::num_t::ERROR_FLOAT_OVERFLOW:		return "ERROR_FLOAT_OVERFLOW";
+			case scl::error::num_t::ERROR_FOPEN:				return "ERROR_FOPEN";
+			case scl::error::num_t::ERROR_FTELL:				return "ERROR_FTELL";
+			case scl::error::num_t::ERROR_FSEEK:				return "ERROR_FSEEK";
+			case scl::error::num_t::ERROR_FREAD:				return "ERROR_FREAD";
+			case scl::error::num_t::ERROR_FWRITE:				return "ERROR_FWRITE";
+			default: return "UNKNOWN";
+			}
+		}
 
 		constexpr size_t errors_array_size = 1024;
 		size_t errors_array_index = 0;
@@ -72,14 +86,28 @@ namespace scl
 			return errors_array_index != 0;
 		}
 
+		static inline const char *get_last_error()
+		{
+			if (errors_array_index == 0) return "NONE";
+			return to_string(errors[errors_array_index - 1].num);
+		}
+
+		static inline void check_last_error()
+		{
+
+		}
+
 		// file name & line number
 
 		static inline void set_file_info(const char *file_name, uint64_t line_number)
 		{
+			size_t index;
+
 			if (errors_array_index != 0)
 			{
-				errors[errors_array_index].file_name = file_name;
-				errors[errors_array_index].line_number = line_number;
+				index = (errors_array_index == 0) ? errors_array_index : errors_array_index - 1;
+				errors[index].file_name = file_name;
+				errors[index].line_number = line_number;
 			}
 		}
 

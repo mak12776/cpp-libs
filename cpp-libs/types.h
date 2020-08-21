@@ -5,6 +5,11 @@
 
 namespace scl
 {
+	namespace types
+	{
+		
+	}
+
 	typedef unsigned char uchar;
 
 	typedef char* string_t;

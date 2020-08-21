@@ -16,11 +16,11 @@ namespace scl
 		typedef const char& const_reference;
 
 		buffer_pointer(const_pointer data)
-			: array_pointer<uint8_t, _size>(data)
+			: array_pointer<char, _size>(data)
 		{ }
 
 		buffer_pointer(const_pointer data, const_reference value)
-			: array_pointer<uint8_t, _size>(data, value)
+			: array_pointer<char, _size>(data, value)
 		{ }
 	};
 }

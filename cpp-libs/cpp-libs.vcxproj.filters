@@ -24,10 +24,6 @@
       <UniqueIdentifier>{c9bb51e9-7c01-4e14-8e95-26945288d7ce}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\scl\misc">
-      <UniqueIdentifier>{8765ffd8-0e24-4e66-ba8e-90b12a1d2dee}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Header Files\scl\containers\arrays">
       <UniqueIdentifier>{b3bc94a7-deaf-488b-ac98-aad07373e9e3}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
@@ -61,8 +57,12 @@
     <Filter Include="Header Files\cface">
       <UniqueIdentifier>{658fd923-d64f-408c-a62a-6c01fe7816a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\mains">
+    <Filter Include="Header Files\mains">
       <UniqueIdentifier>{304186c6-2ef0-437a-a8b7-6c3fcb4f33c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\misc">
+      <UniqueIdentifier>{8765ffd8-0e24-4e66-ba8e-90b12a1d2dee}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="examples.h">
       <Filter>Header Files\examples</Filter>
-    </ClInclude>
-    <ClInclude Include="infint.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="static_dynamic_buffer.h">
       <Filter>Header Files\scl\containers\buffers</Filter>
@@ -115,7 +112,7 @@
       <Filter>Header Files\machine</Filter>
     </ClInclude>
     <ClInclude Include="string.h">
-      <Filter>Header Files\scl\misc</Filter>
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="types.h">
       <Filter>Header Files\scl\core</Filter>
@@ -151,7 +148,7 @@
       <Filter>Header Files\cface</Filter>
     </ClInclude>
     <ClInclude Include="mains.h">
-      <Filter>Header Files\scl\mains</Filter>
+      <Filter>Header Files\mains</Filter>
     </ClInclude>
     <ClInclude Include="cface_macros.h">
       <Filter>Header Files\cface</Filter>
@@ -172,10 +169,7 @@
       <Filter>Header Files\cface</Filter>
     </ClInclude>
     <ClInclude Include="old_error.h">
-      <Filter>Header Files\scl\misc</Filter>
-    </ClInclude>
-    <ClInclude Include="error.h">
-      <Filter>Header Files\scl\core</Filter>
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="exceptions.h">
       <Filter>Header Files\scl\core</Filter>
@@ -185,6 +179,12 @@
     </ClInclude>
     <ClInclude Include="buffer_pointer.h">
       <Filter>Header Files\scl\containers\buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="error.h">
+      <Filter>Header Files\scl\core</Filter>
+    </ClInclude>
+    <ClInclude Include="structs.h">
+      <Filter>Header Files\scl\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

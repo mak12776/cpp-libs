@@ -157,6 +157,7 @@
     <ClInclude Include="dynamic_buffer.h" />
     <ClInclude Include="dynamic_array.h" />
     <ClInclude Include="exceptions.h" />
+    <ClInclude Include="structs.h" />
     <ClInclude Include="old_error.h" />
     <ClInclude Include="buffers.h" />
     <ClInclude Include="arrays.h" />
@@ -183,7 +184,6 @@
     <ClInclude Include="linked_fixed_vector.h" />
     <ClInclude Include="safe.h" />
     <ClInclude Include="fixed_vector.h" />
-    <ClInclude Include="infint.h" />
     <ClInclude Include="rand.h" />
     <ClInclude Include="machine.h" />
     <ClInclude Include="math.h" />

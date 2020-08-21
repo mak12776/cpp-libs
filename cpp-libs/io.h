@@ -2,8 +2,9 @@
 
 #include <cstdio>
 
-#include "old_error.h"
-#include "types.h"
+#include "error.h"
+#include "structs.h"
+#include "memory.h"
 
 namespace scl
 {
@@ -44,7 +45,7 @@ namespace scl
 			return value;
 		}
 
-		static inline void safe_fseek(FILE *stream, long int offset, int origin)
+		static inline void safe_fseek(FILE *stream, long offset, int origin)
 		{
 			if (fseek(stream, offset, origin))
 			{
@@ -96,7 +97,6 @@ namespace scl
 
 			return read_number;
 		}
-
 		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
 		{
 			size_t write_number;
@@ -115,24 +115,47 @@ namespace scl
 			return write_number;
 		}
 
-		static inline void print_sep(std::string sep, std::string end = "\n", uint64_t repeat = 80)
+		struct buffer
 		{
-			for (uint64_t step = 0; step < repeat; step += 1)
-				std::cout << std::string(sep);
-			std::cout << std::string(end);
-		}
+			uint8_t *pntr;
+			size_t size;
+		};
 
-#if 0
-		static inline void read_file(buffer_t *buffer, FILE *file)
+		static inline void read_file(FILE *file, void **pntr, size_t *size)
 		{
-			return;
-		}
-
-		static inline void read_file_name(buffer_t *buffer, const char *name)
-		{
-			return;
-		}
+			long file_long_size = get_file_size(file);
+			size_t file_size;
+#ifdef SCL_USE_ERROR
+			if (error::check()) return;
 #endif
 
+#if ULONG_MAX < SIZE_MAX
+			file_size = (unsigned long)file_long_size;
+#else
+#error long size is too big.
+#endif
+
+			(*pntr) = memory::safe_malloc(file_size);
+#ifdef SCL_USE_ERROR
+			if (error::check()) return;
+#endif
+
+			(*size) = safe_fread(*pntr, file_size, file);
+#ifdef SCL_USE_ERROR
+			if (error::check())
+				scl::memory::free(*pntr);
+#endif
+		}
+#if 0
+#endif
+
+		static inline void read_file_name(const char *name, void **pntr, size_t *size)
+		{
+			FILE *file = safe_fopen(name, "rb");
+			if (error::check()) return;
+
+			read_file(file, pntr, size);
+			std::fclose(file);
+		}
 	}
 }

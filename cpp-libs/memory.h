@@ -28,6 +28,12 @@ namespace scl
 			return pntr;
 		}
 
+
+		static inline void free(void *buffer)
+		{
+			std::free(buffer);
+		}
+
 		template <typename type>
 		static inline type *new_array(size_t size)
 		{

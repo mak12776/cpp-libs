@@ -44,7 +44,7 @@ namespace scl
 			return this->_size == 0;
 		}
 
-		inline constexpr size_type size() const
+		inline size_type size() const
 		{
 			return this->_size;
 		}
