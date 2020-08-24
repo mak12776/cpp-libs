@@ -6,6 +6,7 @@
 
 namespace scl
 {
+#if 0
 	namespace string
 	{
 		static inline size_t find_char(byte *pntr, size_t start, size_t end, byte ch)
@@ -64,4 +65,5 @@ namespace scl
 			return end;
 		}
 	}
+#endif
 }

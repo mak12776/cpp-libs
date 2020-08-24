@@ -3,7 +3,6 @@
 #include <cstdio>
 
 #include "error.h"
-#include "structs.h"
 #include "memory.h"
 
 namespace scl
@@ -115,6 +114,7 @@ namespace scl
 			return write_number;
 		}
 
+
 		struct buffer
 		{
 			uint8_t *pntr;
@@ -132,7 +132,7 @@ namespace scl
 #if ULONG_MAX < SIZE_MAX
 			file_size = (unsigned long)file_long_size;
 #else
-#error long size is too big.
+#error unsigned long is too big.
 #endif
 
 			(*pntr) = memory::safe_malloc(file_size);

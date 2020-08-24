@@ -5,17 +5,12 @@
 
 namespace scl
 {
-	namespace types
-	{
-		
-	}
+	typedef int8_t byte;
+	typedef uint8_t ubyte;
 
-	typedef unsigned char uchar;
-
-	typedef char* string_t;
-	typedef uchar* ustring_t;
-
-	typedef uint8_t byte;				/* used for IO structures */
+#define BYTE_MAX	INT8_MAX
+#define BYTE_MIN	INT8_MIN
+#define UBYTE_MAX	UINT8_MAX
 
 #if SIZE_MAX == UINT8_MAX
 	typedef int8_t ssize_t;

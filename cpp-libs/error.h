@@ -88,13 +88,8 @@ namespace scl
 
 		static inline const char *get_last_error()
 		{
-			if (errors_array_index == 0) return "NONE";
+			if (errors_array_index == 0) return "NO ERROR";
 			return to_string(errors[errors_array_index - 1].num);
-		}
-
-		static inline void check_last_error()
-		{
-
 		}
 
 		// file name & line number

@@ -9,7 +9,6 @@
 
 #include "exit_codes.h"
 #include "types.h"
-#include "structs.h"
 
 #ifdef SCL_USE_ERROR
 #include "error.h"
