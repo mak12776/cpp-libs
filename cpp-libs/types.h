@@ -28,4 +28,9 @@ namespace scl
 #error unknown SIZE_MAX
 #endif
 
+#if UINTPTR_MAX == UINT64_MAX
+#define UINTPTR_SIZE 8
+#else
+#error unknown SIZE_MAX
+#endif
 }

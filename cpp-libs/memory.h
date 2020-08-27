@@ -38,13 +38,11 @@ namespace scl
 		static inline type *new_array(size_t size)
 		{
 #ifdef SCL_USE_ERROR
-			type *array;
-
 			try
 			{
-				array = new type[size];
+				return new type[size];
 			}
-			catch (std::bad_alloc &e)
+			catch (std::bad_alloc &)
 			{
 				error::set_no_memory_type(size, sizeof(type));
 				error::set_file_info(__FILE__, __LINE__);
