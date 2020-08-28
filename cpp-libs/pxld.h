@@ -294,8 +294,8 @@ namespace pxld
 
 			default:
 #ifdef SCL_USE_ERROR
-				scl::error::set_invalid_arguments(__FUNCTION__, "mode");
-				scl::error::set_file_info(__FILE__, __LINE__);
+				scl::err::set_invalid_arguments(__FUNCTION__, "mode");
+				scl::err::set_file_info(__FILE__, __LINE__);
 #else
 				throw scl::new_invalid_argument(__FUNCTION__, "mode");
 #endif //  SCL_USE_ERROR
@@ -315,8 +315,8 @@ namespace pxld
 
 			default:
 #ifdef SCL_USE_ERROR
-				scl::error::set_invalid_arguments(__FUNCTION__, "mode");
-				scl::error::set_file_info(__FILE__, __LINE__);
+				scl::err::set_invalid_arguments(__FUNCTION__, "mode");
+				scl::err::set_file_info(__FILE__, __LINE__);
 #else
 				throw scl::new_invalid_argument(__FUNCTION__, "mode");
 #endif //  SCL_USE_ERROR

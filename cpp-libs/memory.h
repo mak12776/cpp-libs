@@ -18,8 +18,8 @@ namespace scl
 			if (pntr == nullptr)
 			{
 #ifdef SCL_USE_ERROR
-				error::set_no_memory(size);
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_no_memory(size);
+				err::set_file_info(__FILE__, __LINE__);
 #else
 				throw new std::bad_alloc();
 #endif
@@ -44,8 +44,8 @@ namespace scl
 			}
 			catch (std::bad_alloc &)
 			{
-				error::set_no_memory_type(size, sizeof(type));
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_no_memory_type(size, sizeof(type));
+				err::set_file_info(__FILE__, __LINE__);
 				return nullptr;
 			}
 #else
@@ -60,7 +60,7 @@ namespace scl
 
 			array = new_array<type>(size);
 #ifdef SCL_USE_ERROR
-			if (error::check()) return nullptr;
+			if (err::check()) return nullptr;
 #endif
 
 			for (size_t index = 0; index < size; index += 1)

@@ -15,9 +15,10 @@ namespace scl
 
 			if (file == nullptr)
 			{
+
 #ifdef SCL_USE_ERROR
-				error::set_fopen(name, mode);
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_file_info(__FILE__, __LINE__);
+				err::set_fopen(name, mode);
 #else
 				throw new fopen_error(name, mode);
 #endif
@@ -34,8 +35,8 @@ namespace scl
 			if (value == -1)
 			{
 #ifdef SCL_USE_ERROR
-				error::set_ftell();
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_ftell();
+				err::set_file_info(__FILE__, __LINE__);
 #else
 				throw new ftell_error();
 #endif
@@ -49,8 +50,8 @@ namespace scl
 			if (fseek(stream, offset, origin))
 			{
 #ifdef SCL_USE_ERROR
-				error::set_fseek();
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_fseek();
+				err::set_file_info(__FILE__, __LINE__);
 #else
 				throw new fseek_error();
 #endif
@@ -63,17 +64,17 @@ namespace scl
 
 			safe_fseek(stream, 0, SEEK_END);
 #ifdef SCL_USE_ERROR
-			if (error::check()) return 0;
+			if (err::check()) return 0;
 #endif
 
 			size = safe_ftell(stream);
 #ifdef SCL_USE_ERROR
-			if (error::check()) return 0;
+			if (err::check()) return 0;
 #endif
 
 			safe_fseek(stream, 0, SEEK_SET);
 #ifdef SCL_USE_ERROR
-			if (error::check()) return 0;
+			if (err::check()) return 0;
 #endif
 
 			return size;
@@ -87,8 +88,8 @@ namespace scl
 			if (read_number != size)
 			{
 #ifdef SCL_USE_ERROR
-				error::set_fread(stream, size);
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_fread(stream, size);
+				err::set_file_info(__FILE__, __LINE__);
 #else
 				throw new fread_error(stream, size);
 #endif // SCL_USE_ERROR
@@ -104,8 +105,8 @@ namespace scl
 			if (write_number != size)
 			{
 #ifdef SCL_USE_ERROR
-				error::set_fwrite(stream, size);
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_fwrite(stream, size);
+				err::set_file_info(__FILE__, __LINE__);
 #else
 				throw new fwrite_error(stream, size);
 #endif // SCL_USE_ERROR
@@ -124,8 +125,8 @@ namespace scl
 				if (ferror(stream))
 				{
 #ifdef SCL_USE_ERROR
-					error::set_fwrite(stream, size);
-					error::set_file_info(__FILE__, __LINE__);
+					err::set_fwrite(stream, size);
+					err::set_file_info(__FILE__, __LINE__);
 #else
 					throw new fwrite_error(stream, size);
 #endif //
@@ -150,7 +151,7 @@ namespace scl
 
 			file_long_size = get_file_size(file);
 #ifdef SCL_USE_ERROR
-			if (error::check()) return;
+			if (err::check()) return;
 #endif
 
 #if ULONG_MAX < SIZE_MAX
@@ -161,12 +162,12 @@ namespace scl
 
 			(*pntr) = memory::safe_malloc(file_size);
 #ifdef SCL_USE_ERROR
-			if (error::check()) return;
+			if (err::check()) return;
 #endif
 
 			(*size) = safe_fread(*pntr, file_size, file);
 #ifdef SCL_USE_ERROR
-			if (error::check())
+			if (err::check())
 				scl::memory::free(*pntr);
 #endif
 		}
@@ -174,7 +175,7 @@ namespace scl
 		static inline void read_file_name(const char *name, void **pntr, size_t *size)
 		{
 			FILE *file = safe_fopen(name, "rb");
-			if (error::check()) return;
+			if (err::check()) return;
 
 			read_file(file, pntr, size);
 			std::fclose(file);

@@ -43,8 +43,8 @@ namespace scl
 			if (mul<type>(a, b, result))
 			{
 #ifdef SCL_USE_ERROR
-				error::set_int_overflow("multiplay overflow");
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_int_overflow("multiplay overflow");
+				err::set_file_info(__FILE__, __LINE__);
 #else
 				throw new std::overflow_error("multiplay overflow");
 #endif
@@ -57,8 +57,8 @@ namespace scl
 			if (add<type>(a, b, result))
 			{
 #ifdef SCL_USE_ERROR
-				error::set_int_overflow("addition overflow");
-				error::set_file_info(__FILE__, __LINE__);
+				err::set_int_overflow("addition overflow");
+				err::set_file_info(__FILE__, __LINE__);
 #else
 				throw new std::overflow_error("addition overflow");
 #endif
