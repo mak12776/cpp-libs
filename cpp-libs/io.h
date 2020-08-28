@@ -114,17 +114,41 @@ namespace scl
 			return write_number;
 		}
 
+		static inline size_t fwrite_all(void *pntr, size_t size, FILE *stream)
+		{
+			size_t write_number;
+
+			write_number = fwrite(pntr, 1, size, stream);
+			while (write_number != size)
+			{
+				if (ferror(stream))
+				{
+#ifdef SCL_USE_ERROR
+					error::set_fwrite(stream, size);
+					error::set_file_info(__FILE__, __LINE__);
+#else
+					throw new fwrite_error(stream, size);
+#endif //
+					return write_number;
+				}
+
+				write_number += fwrite((ubyte *)pntr + write_number, 1, size - write_number, stream);
+			}
+			return write_number;
+		}
 
 		struct buffer
 		{
-			uint8_t *pntr;
+			ubyte *pntr;
 			size_t size;
 		};
 
 		static inline void read_file(FILE *file, void **pntr, size_t *size)
 		{
-			long file_long_size = get_file_size(file);
+			long file_long_size;
 			size_t file_size;
+
+			file_long_size = get_file_size(file);
 #ifdef SCL_USE_ERROR
 			if (error::check()) return;
 #endif
@@ -146,8 +170,6 @@ namespace scl
 				scl::memory::free(*pntr);
 #endif
 		}
-#if 0
-#endif
 
 		static inline void read_file_name(const char *name, void **pntr, size_t *size)
 		{
