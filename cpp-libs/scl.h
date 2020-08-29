@@ -11,7 +11,7 @@
 #include "types.h"
 
 #ifdef SCL_USE_ERROR
-#include "error.h"
+#include "err.h"
 #else
 #include "exceptions.h"
 #endif

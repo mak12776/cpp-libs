@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-#include "error.h"
+#include "err.h"
 #include "memory.h"
 
 namespace scl
@@ -15,13 +15,8 @@ namespace scl
 
 			if (file == nullptr)
 			{
-
-#ifdef SCL_USE_ERROR
-				err::set_file_info(__FILE__, __LINE__);
-				err::set_fopen(name, mode);
-#else
-				throw new fopen_error(name, mode);
-#endif
+				err::set(err::FOPEN);
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 			}
 
 			return file;
@@ -34,12 +29,8 @@ namespace scl
 			value = std::ftell(stream);
 			if (value == -1)
 			{
-#ifdef SCL_USE_ERROR
-				err::set_ftell();
-				err::set_file_info(__FILE__, __LINE__);
-#else
-				throw new ftell_error();
-#endif
+				err::set(err::FTELL);
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 			}
 
 			return value;
@@ -49,12 +40,8 @@ namespace scl
 		{
 			if (fseek(stream, offset, origin))
 			{
-#ifdef SCL_USE_ERROR
-				err::set_fseek();
-				err::set_file_info(__FILE__, __LINE__);
-#else
-				throw new fseek_error();
-#endif
+				err::set(err::FSEEK);
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 			}
 		}
 
@@ -63,19 +50,25 @@ namespace scl
 			long size;
 
 			safe_fseek(stream, 0, SEEK_END);
-#ifdef SCL_USE_ERROR
-			if (err::check()) return 0;
-#endif
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return 0;
+			}
 
 			size = safe_ftell(stream);
-#ifdef SCL_USE_ERROR
-			if (err::check()) return 0;
-#endif
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return 0;
+			}
 
 			safe_fseek(stream, 0, SEEK_SET);
-#ifdef SCL_USE_ERROR
-			if (err::check()) return 0;
-#endif
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return 0;
+			}
 
 			return size;
 		}
@@ -87,16 +80,13 @@ namespace scl
 			read_number = fread(pntr, 1, size, stream);
 			if (read_number != size)
 			{
-#ifdef SCL_USE_ERROR
-				err::set_fread(stream, size);
-				err::set_file_info(__FILE__, __LINE__);
-#else
-				throw new fread_error(stream, size);
-#endif // SCL_USE_ERROR
+				err::set(err::FREAD);
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 			}
 
 			return read_number;
 		}
+
 		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
 		{
 			size_t write_number;
@@ -104,15 +94,39 @@ namespace scl
 			write_number = fwrite(pntr, 1, size, stream);
 			if (write_number != size)
 			{
-#ifdef SCL_USE_ERROR
-				err::set_fwrite(stream, size);
-				err::set_file_info(__FILE__, __LINE__);
-#else
-				throw new fwrite_error(stream, size);
-#endif // SCL_USE_ERROR
+				err::set(err::FWRITE);
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 			}
 
 			return write_number;
+		}
+
+		static inline size_t fread_all(void *pntr, size_t size, FILE *stream)
+		{
+			size_t read_number;
+
+			read_number = fread(pntr, 1, size, stream);
+			while (read_number != size)
+			{
+				if (ferror(stream))
+				{
+					err::set(err::FERROR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				}
+				else if (feof(stream))
+				{
+					err::set(err::FEOF);
+					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				}
+				else
+				{
+					err::set(err::UNDEFINED_BEHAVIOR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				}
+
+				read_number += fread((ubyte *)pntr + read_number, 1, size - read_number, stream);
+			}
+			return read_number;
 		}
 
 		static inline size_t fwrite_all(void *pntr, size_t size, FILE *stream)
@@ -124,13 +138,13 @@ namespace scl
 			{
 				if (ferror(stream))
 				{
-#ifdef SCL_USE_ERROR
-					err::set_fwrite(stream, size);
-					err::set_file_info(__FILE__, __LINE__);
-#else
-					throw new fwrite_error(stream, size);
-#endif //
-					return write_number;
+					err::set(err::FERROR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				}
+				else
+				{
+					err::set(err::UNDEFINED_BEHAVIOR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 				}
 
 				write_number += fwrite((ubyte *)pntr + write_number, 1, size - write_number, stream);
@@ -138,21 +152,12 @@ namespace scl
 			return write_number;
 		}
 
-		struct buffer
-		{
-			ubyte *pntr;
-			size_t size;
-		};
-
 		static inline void read_file(FILE *file, void **pntr, size_t *size)
 		{
 			long file_long_size;
 			size_t file_size;
 
 			file_long_size = get_file_size(file);
-#ifdef SCL_USE_ERROR
-			if (err::check()) return;
-#endif
 
 #if ULONG_MAX < SIZE_MAX
 			file_size = (unsigned long)file_long_size;
@@ -161,21 +166,29 @@ namespace scl
 #endif
 
 			(*pntr) = memory::safe_malloc(file_size);
-#ifdef SCL_USE_ERROR
-			if (err::check()) return;
-#endif
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return;
+			}
 
 			(*size) = safe_fread(*pntr, file_size, file);
-#ifdef SCL_USE_ERROR
 			if (err::check())
-				scl::memory::free(*pntr);
-#endif
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				memory::free(*pntr);
+				return;
+			}
 		}
 
 		static inline void read_file_name(const char *name, void **pntr, size_t *size)
 		{
 			FILE *file = safe_fopen(name, "rb");
-			if (err::check()) return;
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return;
+			}
 
 			read_file(file, pntr, size);
 			std::fclose(file);

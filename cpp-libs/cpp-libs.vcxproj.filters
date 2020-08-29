@@ -168,9 +168,6 @@
     <ClInclude Include="cface_main.h">
       <Filter>Header Files\cface</Filter>
     </ClInclude>
-    <ClInclude Include="old_error.h">
-      <Filter>Header Files\misc</Filter>
-    </ClInclude>
     <ClInclude Include="exceptions.h">
       <Filter>Header Files\scl\core</Filter>
     </ClInclude>
@@ -180,8 +177,14 @@
     <ClInclude Include="buffer_pointer.h">
       <Filter>Header Files\scl\containers\buffers</Filter>
     </ClInclude>
-    <ClInclude Include="error.h">
+    <ClInclude Include="err.h">
       <Filter>Header Files\scl\core</Filter>
+    </ClInclude>
+    <ClInclude Include="very_old_error.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="old_error.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

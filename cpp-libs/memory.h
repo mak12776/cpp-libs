@@ -17,12 +17,8 @@ namespace scl
 
 			if (pntr == nullptr)
 			{
-#ifdef SCL_USE_ERROR
-				err::set_file_info(__FILE__, __LINE__);
-				err::set_no_memory(size);
-#else
-				throw new std::bad_alloc();
-#endif
+				err::set(err::MALLOC);
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 			}
 
 			return pntr;
@@ -37,20 +33,19 @@ namespace scl
 		template <typename type>
 		static inline type *new_array(size_t size)
 		{
+			type *pntr;
 #ifdef SCL_USE_ERROR
-			try
-			{
-				return new type[size];
-			}
+			try pntr = new type[size];
 			catch (std::bad_alloc &)
 			{
-				err::set_no_memory_type(size, sizeof(type));
-				err::set_file_info(__FILE__, __LINE__);
+				err::set(err::NEW);
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 				return nullptr;
 			}
 #else
-			return new type[size];
+			pntr = new type[size];
 #endif
+			return pntr;
 		}
 
 		template <typename type>
