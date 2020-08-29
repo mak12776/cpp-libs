@@ -35,7 +35,10 @@ namespace scl
 		{
 			type *pntr;
 #ifdef SCL_USE_ERROR
-			try pntr = new type[size];
+			try
+			{
+				pntr = new type[size];
+			}
 			catch (std::bad_alloc &)
 			{
 				err::set(err::NEW);

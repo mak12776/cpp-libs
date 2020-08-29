@@ -293,7 +293,7 @@ namespace pxld
 			case RGBA: return 4;
 
 			default:
-				scl::err::set(err::INVALID_ARGUMENT);
+				scl::err::set(scl::err::INVALID_ARGUMENT);
 				scl::err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 				return 0;
 			}
@@ -309,7 +309,7 @@ namespace pxld
 			case RGBA: return "RGBA";
 
 			default:
-				scl::err::set(err::INVALID_ARGUMENT);
+				scl::err::set(scl::err::INVALID_ARGUMENT);
 				scl::err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 				return nullptr;
 			}
