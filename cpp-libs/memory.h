@@ -18,8 +18,8 @@ namespace scl
 			if (pntr == nullptr)
 			{
 #ifdef SCL_USE_ERROR
-				err::set_no_memory(size);
 				err::set_file_info(__FILE__, __LINE__);
+				err::set_no_memory(size);
 #else
 				throw new std::bad_alloc();
 #endif
