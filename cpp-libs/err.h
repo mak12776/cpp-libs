@@ -57,7 +57,7 @@ namespace scl
 			num = num_t::NO_ERROR;
 			info_array_index = 0;
 		}
-		static inline const char *string() { return to_string(num); }
+		static inline const char *get_string() { return to_string(num); }
 
 		static inline void set(num_t errnum) { num = errnum; }
 
