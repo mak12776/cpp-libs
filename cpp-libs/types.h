@@ -8,6 +8,18 @@ namespace scl
 	typedef int8_t byte;
 	typedef uint8_t ubyte;
 
+	struct ubuffer_t
+	{
+		ubyte *pntr;
+		size_t size;
+	};
+
+	struct buffer_t
+	{
+		byte *pntr;
+		size_t size;
+	};
+
 #define BYTE_MAX	INT8_MAX
 #define BYTE_MIN	INT8_MIN
 #define UBYTE_MAX	UINT8_MAX
