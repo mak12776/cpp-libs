@@ -54,15 +54,14 @@ namespace scl
 
 		static inline void clear() 
 		{
-			num = num_t::NO_ERROR;
+			num = num_t::NO_ERROR; 
 			info_array_index = 0;
 		}
+		static inline void set(num_t errnum) { num = errnum; }
+		static inline bool check() { return num != num_t::NO_ERROR; }
+
 		static inline const char *get_string() { return to_string(num); }
 
-		static inline void set(num_t errnum) { num = errnum; }
-
-		static inline bool check() { return num != num_t::NO_ERROR; }
-		
 		static inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_sig)
 		{
 			if (info_array_index != info_array_size)
