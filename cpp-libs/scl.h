@@ -9,16 +9,13 @@
 
 #include "exit_codes.h"
 #include "types.h"
-
-#ifdef SCL_USE_ERROR
 #include "err.h"
-#else
-#include "exceptions.h"
-#endif
+#include "clean_up.h"
 
 #include "math.h"
 #include "safe.h"
 
+#include "string.h"
 #include "memory.h"
 #include "io.h"
 #include "pxld.h"

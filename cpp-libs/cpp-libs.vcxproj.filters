@@ -64,6 +64,9 @@
       <UniqueIdentifier>{8765ffd8-0e24-4e66-ba8e-90b12a1d2dee}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Header Files\scl\types">
+      <UniqueIdentifier>{885b14f2-818c-432c-b8d6-684358b46790}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -110,9 +113,6 @@
     </ClInclude>
     <ClInclude Include="machine.h">
       <Filter>Header Files\machine</Filter>
-    </ClInclude>
-    <ClInclude Include="string.h">
-      <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="types.h">
       <Filter>Header Files\scl\core</Filter>
@@ -185,6 +185,15 @@
     </ClInclude>
     <ClInclude Include="old_error.h">
       <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="string_algorithms.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="clean_up.h">
+      <Filter>Header Files\scl\core</Filter>
+    </ClInclude>
+    <ClInclude Include="string.h">
+      <Filter>Header Files\scl\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

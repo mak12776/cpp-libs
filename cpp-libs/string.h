@@ -1,69 +1,68 @@
 #pragma once
 
-#include <cctype>
-
-#include "types.h"
-
 namespace scl
 {
-#if 0
-	namespace string
+	struct c_string_t
 	{
-		static inline size_t find_char(byte *pntr, size_t start, size_t end, byte ch)
-		{
-			size_t index;
+		const char *const pntr;
+		const size_t len;
 
-			index = start;
-			while (index < end)
-			{
-				if (pntr[index] == ch)
-					return index;
-				index += 1;
-			}
-			return end;
+		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr))
+		{ }
+	};
+
+	struct m_string_t
+	{
+		char *pntr;
+		size_t len;
+
+		m_string_t()
+		{
+			pntr = nullptr;
+			len = 0;
 		}
 
-		static inline size_t rfind_char(byte *pntr, size_t start, size_t end, byte ch)
+		template <const char value = '\0'>
+		inline void malloc_len(size_t len)
 		{
-			size_t index;
+			size_t size;
 
-			index = end;
-			while (index > start)
+			math::safe_add(len, (size_t)1, size);
+			if (err::check())
 			{
-				index -= 1;
-				if (pntr[index] == ch)
-					return index;
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return;
 			}
-			return end;
+
+			this->pntr = (char *)memory::safe_malloc(size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return;
+			}
+
+			if constexpr (value != '\0')
+			{
+				memset(this->pntr, value, len);
+				this->pntr[len] = '\0';
+			}
+			this->len = len;
 		}
 
-		static inline size_t find_test(byte *pntr, size_t start, size_t end, int (*test) (int))
+		inline void malloc_cat(c_string_t string1, c_string_t string2)
 		{
-			size_t index;
+			size_t len;
 
-			index = start;
-			while (index < end)
+			math::safe_add(string1.len, string2.len, len);
+			if (err::check())
 			{
-				if (test(pntr[index]))
-					return index;
-				index += 1;
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return;
 			}
-			return end;
-		}
 
-		static inline size_t rfind_test(byte *pntr, size_t start, size_t end, int (*test) (int))
-		{
-			size_t index;
+			this->malloc_len(len);
 
-			index = end;
-			while (index > start)
-			{
-				index -= 1;
-				if (test(pntr[index]))
-					return index;
-			}
-			return end;
+			memcpy(this->pntr, string1.pntr, string1.len);
 		}
-	}
-#endif
+	};
 }

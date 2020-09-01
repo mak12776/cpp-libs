@@ -2,7 +2,7 @@
 
 namespace scl
 {
-	template <typename data_type, size_t size>
+	template <typename data_type, size_t _size>
 	class array_vector : protected std::array<data_type, size>
 	{
 	public:

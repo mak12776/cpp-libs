@@ -158,6 +158,8 @@
     <ClInclude Include="dynamic_array.h" />
     <ClInclude Include="err.h" />
     <ClInclude Include="exceptions.h" />
+    <ClInclude Include="clean_up.h" />
+    <ClInclude Include="string.h" />
     <ClInclude Include="very_old_error.h" />
     <ClInclude Include="buffers.h" />
     <ClInclude Include="arrays.h" />
@@ -188,7 +190,7 @@
     <ClInclude Include="machine.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="pxld.h" />
-    <ClInclude Include="string.h" />
+    <ClInclude Include="string_algorithms.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="io.h" />
