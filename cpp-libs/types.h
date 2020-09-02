@@ -20,6 +20,12 @@ namespace scl
 		size_t size;
 	};
 
+	template <data_type, size_t size>
+	struct array_t
+	{
+
+	}
+
 #define BYTE_MAX	INT8_MAX
 #define BYTE_MIN	INT8_MIN
 #define UBYTE_MAX	UINT8_MAX

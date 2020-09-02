@@ -57,12 +57,12 @@ namespace scl
 			type *array;
 
 			array = new_array<type>(size);
-#ifdef SCL_USE_ERROR
-			if (err::check()) return nullptr;
-#endif
 
-			for (size_t index = 0; index < size; index += 1)
-				array[index] = value;
+			if (err::check())
+				return nullptr;
+
+			for (type *pntr = array, *end = array + size; pntr < end; pntr += 1)
+				(*pntr) = value;
 
 			return array;
 		}

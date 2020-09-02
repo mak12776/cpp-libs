@@ -52,13 +52,14 @@ namespace scl
 			const char *function_sig;
 		} info_array[info_array_size];
 
+		static inline void set(num_t errnum) { num = errnum; }
 		static inline void clear() 
 		{
 			num = num_t::NO_ERROR; 
 			info_array_index = 0;
 		}
-		static inline void set(num_t errnum) { num = errnum; }
 		static inline bool check() { return num != num_t::NO_ERROR; }
+		static inline bool success() { return num == num_t::NO_ERROR; }
 
 		static inline const char *get_string() { return to_string(num); }
 

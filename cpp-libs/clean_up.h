@@ -25,11 +25,11 @@ namespace scl
 
 		constexpr size_t jobs_max = 1024;
 		size_t jobs_index = 0;
-		job jobs[max_clean_ups];
+		job jobs[jobs_max];
 
 		void add_fclose(FILE *file)
 		{
-			if (jobs_index != max_clean_ups)
+			if (jobs_index != jobs_max)
 			{
 				jobs[jobs_index].type = job_type::FILE_CLOSE;
 				jobs[jobs_index].file = file;
@@ -39,7 +39,7 @@ namespace scl
 
 		void add_free(void *pntr)
 		{
-			if (jobs_index != max_clean_ups)
+			if (jobs_index != jobs_max)
 			{
 				jobs[jobs_index].type = job_type::MEMORY_FREE;
 				jobs[jobs_index].pntr = pntr;
@@ -49,7 +49,7 @@ namespace scl
 
 		void add_delete(void *pntr)
 		{
-			if (jobs_index != max_clean_ups)
+			if (jobs_index != jobs_max)
 			{
 				jobs[jobs_index].type = job_type::MEMORY_DELETE;
 				jobs[jobs_index].pntr = pntr;

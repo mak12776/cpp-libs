@@ -3,3 +3,4 @@
 // For more information see https://go.microsoft.com/fwlink/?linkid=865984
 
 #define SCL_USE_ERROR
+#define SCL_INCLUDE_CLASSES

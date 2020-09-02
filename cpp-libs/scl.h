@@ -15,12 +15,17 @@
 #include "math.h"
 #include "safe.h"
 
-#include "string.h"
 #include "memory.h"
 #include "io.h"
 #include "pxld.h"
+
+#include "string.h"
+#include "linked_array.h"
+
 #include "machine.h"
 
+#ifdef SCL_INCLUDE_CLASSES
 #include "arrays.h"
 #include "vectors.h"
 #include "buffers.h"
+#endif

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 namespace scl
 {
 	struct c_string_t
@@ -8,6 +10,15 @@ namespace scl
 		const size_t len;
 
 		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr))
+		{ }
+	};
+
+	struct raw_string_t
+	{
+		const char *const pntr;
+		const size_t len;
+
+		raw_string_t(const char *pntr, const size_t len) : pntr(pntr), len(len)
 		{ }
 	};
 
@@ -22,7 +33,6 @@ namespace scl
 			len = 0;
 		}
 
-		template <const char value = '\0'>
 		inline void malloc_len(size_t len)
 		{
 			size_t size;
@@ -40,29 +50,66 @@ namespace scl
 				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 				return;
 			}
-
-			if constexpr (value != '\0')
-			{
-				memset(this->pntr, value, len);
-				this->pntr[len] = '\0';
-			}
 			this->len = len;
 		}
 
-		inline void malloc_cat(c_string_t string1, c_string_t string2)
+		inline void malloc_len_value(size_t len, const char value)
+		{
+			malloc_len(len);
+			if (err::check)
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return;
+			}
+
+			memset(this->pntr, value, len);
+			this->pntr[len] = '\0';
+		}
+
+		inline void malloc_cat(const std::initializer_list<c_string_t> &list)
 		{
 			size_t len;
 
-			math::safe_add(string1.len, string2.len, len);
+			if (list.size() == 0)
+				return;
+
+			// sum total len
+			auto iter = list.begin();
+			len = iter->len;
+
+			while ((++iter) != list.end())
+			{
+				math::safe_add(len, iter->len, len);
+				if (err::check())
+				{
+					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+					return;
+				}
+			}
+
+			// malloc
+			this->malloc_len(len);
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 				return;
 			}
 
-			this->malloc_len(len);
+			// copy the strings
+			iter = list.begin();
+			char *c_pntr = this->pntr;
 
-			memcpy(this->pntr, string1.pntr, string1.len);
+			memcpy(c_pntr, iter->pntr, iter->len);
+			c_pntr += iter->len;
+			 
+			while ((++iter) != list.end())
+			{
+				memcpy(c_pntr, iter->pntr, iter->len);
+				c_pntr += iter->len;
+			}
+			*c_pntr = '\0';
+
+			// malloc_len will set `this->len`
 		}
 	};
 }
