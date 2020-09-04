@@ -160,7 +160,7 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="clean_up.h" />
     <ClInclude Include="bitly_huffman.h" />
-    <ClInclude Include="time_test.h" />
+    <ClInclude Include="old_time_test.h" />
     <ClInclude Include="linked_array.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="very_old_error.h" />

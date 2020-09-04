@@ -12,9 +12,9 @@
 
 // test functions
 
-constexpr size_t size_of_array = 3;
-constexpr size_t repeat = SIZE_MAX;
-const size_t number_of_threads = 3;
+constexpr size_t size_of_array = 0xFFFFFFF;
+constexpr uint64_t repeat = UINT64_MAX;
+const size_t number_of_threads = 0xFFFFF;
 
 
 struct test
@@ -45,7 +45,7 @@ auto measure_time(void(*func)())
 
 // pass functions
 
-int pass_by_type_ref(test &value)
+int pass_by_type_reference(test &value)
 {
 	int result = value[0];
 	for (size_t index = 1; index < value.size(); index += 1)
@@ -55,7 +55,7 @@ int pass_by_type_ref(test &value)
 	return result;
 }
 
-int pass_by_type_pntr(test *pntr)
+int pass_by_type_pointer(test *pntr)
 {
 	int result = pntr->get(0);
 	for (size_t index = 1; index < pntr->size(); index += 1)
@@ -66,7 +66,7 @@ int pass_by_type_pntr(test *pntr)
 	return result;
 }
 
-int normal_pass_type(test value)
+int normal_type_pass(test value)
 {
 	int result = value[0];
 	for (size_t index = 1; index < value.size(); index += 1)
@@ -76,45 +76,59 @@ int normal_pass_type(test value)
 	return result;
 }
 
-int pass_by_value(int a, int b, int c)
-{
-	return a + b + c;
-}
-
-int pass_by_ref(int a, int b, int c)
-{
-	return a + b + c;
-}
-
 // test functions
 
 void test_pass_by_pointer()
 {
-	int result = pass_by_type_pntr(&data);
+	for (uint64_t step = 0; step < repeat; step += 1)
+		int result = pass_by_type_pointer(&data);
+
 }
 
 void test_normal_pass()
 {
-	int result = normal_pass_type(data);
+	for (uint64_t step = 0; step < repeat; step += 1)
+		int result = normal_type_pass(data);
 }
 
 void test_pass_by_reference()
 {
-	int result = pass_by_type_ref(data);
+	for (uint64_t step = 0; step < repeat; step += 1)
+		int result = pass_by_type_reference(data);
 }
 
+std::thread threads[number_of_threads];
 
 
 
 void time_test()
 {
+	/*
+	D:\Codes\cpp-libs\x64\Release>cpp-libs.exe
+	CPU time used: 142871.00 ms
+	Wall clock time passed: 142870.83 ms
+	CPU time used: 143784.00 ms
+	Wall clock time passed: 143783.32 ms
+	CPU time used: 141045.00 ms
+	Wall clock time passed: 141045.57 ms
+
+	D:\Codes\cpp-libs\x64\Release>cpp-libs.exe
+	CPU time used: 141762.00 ms
+	Wall clock time passed: 141761.30 ms
+	CPU time used: 139719.00 ms
+	Wall clock time passed: 139718.57 ms
+	CPU time used: 143051.00 ms
+	Wall clock time passed: 143050.92 ms
+	*/
+
 	std::function<void()> functions[]{
+		test_normal_pass,
 		test_pass_by_reference,
 		test_pass_by_pointer,
-		test_normal_pass,
+		
 	};
 	const size_t functions_size = sizeof(functions) / sizeof(functions[0]);
-	std::thread threads[number_of_threads];
+	
 
 	// start the the time
 	for (size_t index = 0; index < functions_size; index += 1)

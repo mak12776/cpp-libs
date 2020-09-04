@@ -11,7 +11,6 @@
 #include "types.h"
 #include "err.h"
 #include "clean_up.h"
-#include "timing.h"
 
 #include "math.h"
 #include "safe.h"

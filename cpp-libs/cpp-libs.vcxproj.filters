@@ -189,9 +189,6 @@
     <ClInclude Include="clean_up.h">
       <Filter>Header Files\scl\core</Filter>
     </ClInclude>
-    <ClInclude Include="time_test.h">
-      <Filter>Header Files\mains</Filter>
-    </ClInclude>
     <ClInclude Include="string.h">
       <Filter>Header Files\scl\core</Filter>
     </ClInclude>
@@ -199,6 +196,9 @@
       <Filter>Header Files\scl\core</Filter>
     </ClInclude>
     <ClInclude Include="bitly_huffman.h">
+      <Filter>Header Files\mains</Filter>
+    </ClInclude>
+    <ClInclude Include="old_time_test.h">
       <Filter>Header Files\mains</Filter>
     </ClInclude>
   </ItemGroup>
