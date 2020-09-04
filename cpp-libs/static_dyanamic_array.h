@@ -35,7 +35,7 @@ namespace scl
 		static_dynamic_array(size_type capacity, const_reference value)
 		{
 			this->_is_dynamic = true;
-			this->_data = memory::new_array<value_type>(capacity, value);
+			this->_data = mem::new_array<value_type>(capacity, value);
 			this->_capacity = capacity;
 		}
 

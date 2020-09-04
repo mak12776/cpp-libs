@@ -2,12 +2,11 @@
 
 #include <cstdlib>
 #include <string>
-
-#include "old_error.h"
+#include "err.h"
 
 namespace scl
 {
-	namespace memory
+	namespace mem
 	{
 		static inline void *safe_malloc(size_t size)
 		{

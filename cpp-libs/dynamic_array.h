@@ -32,14 +32,14 @@ namespace scl
 
 		dynamic_array(size_type capacity)
 		{
-			this->_data = (capacity != 0) ? memory::new_array<value_type>(capacity) : nullptr;
+			this->_data = (capacity != 0) ? mem::new_array<value_type>(capacity) : nullptr;
 			this->_capacity = capacity;
 		}
 
 		dynamic_array(size_type capacity, const_reference value)
 		{
 			this->_capacity = capacity;
-			this->_data = (capacity != 0) ? memory::new_array<value_type>(capacity, value) : nullptr;
+			this->_data = (capacity != 0) ? mem::new_array<value_type>(capacity, value) : nullptr;
 		}
 
 		dynamic_array(dynamic_array<data_type>& other) = delete;

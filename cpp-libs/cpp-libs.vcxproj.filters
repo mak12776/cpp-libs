@@ -189,9 +189,6 @@
     <ClInclude Include="clean_up.h">
       <Filter>Header Files\scl\core</Filter>
     </ClInclude>
-    <ClInclude Include="string.h">
-      <Filter>Header Files\scl\core</Filter>
-    </ClInclude>
     <ClInclude Include="linked_array.h">
       <Filter>Header Files\scl\core</Filter>
     </ClInclude>
@@ -200,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="old_time_test.h">
       <Filter>Header Files\mains</Filter>
+    </ClInclude>
+    <ClInclude Include="string.h">
+      <Filter>Header Files\scl\core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

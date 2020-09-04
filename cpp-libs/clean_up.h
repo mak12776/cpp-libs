@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 
 namespace scl
