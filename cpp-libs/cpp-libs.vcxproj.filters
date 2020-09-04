@@ -61,12 +61,12 @@
       <UniqueIdentifier>{b4468a59-b8f2-4198-83d5-d0188bac1228}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Header Files\wins">
+      <UniqueIdentifier>{433faa8d-8d0e-4812-a9a0-d5cf4eb1f284}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="examples.h">
@@ -186,9 +186,6 @@
     <ClInclude Include="math.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="memory.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="rand.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -197,6 +194,24 @@
     </ClInclude>
     <ClInclude Include="string.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="mem.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="string-copy.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wins.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="win_types.h">
+      <Filter>Header Files\wins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

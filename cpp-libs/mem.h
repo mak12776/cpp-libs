@@ -8,6 +8,24 @@ namespace scl
 {
 	namespace mem
 	{
+		template <typename value_type>
+		struct m_pntr
+		{
+			value_type *pntr;
+			size_t refs;
+
+			inline void alloc(size_t size)
+			{
+				this->pntr = mem::safe_malloc(size);
+				if (err::check())
+				{
+					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+					return;
+				}
+				this->refs = 1;
+			}
+		};
+
 		static inline void *safe_malloc(size_t size)
 		{
 			void *pntr;

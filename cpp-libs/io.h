@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "err.h"
-#include "memory.h"
+#include "mem.h"
 
 namespace scl
 {

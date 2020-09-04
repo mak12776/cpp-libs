@@ -15,8 +15,10 @@
 #include "math.h"
 #include "safe.h"
 
-#include "memory.h"
+#include "mem.h"
 #include "io.h"
+#include "timer.h"
+
 #include "pxld.h"
 
 #include "string.h"

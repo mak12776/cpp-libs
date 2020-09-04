@@ -160,8 +160,12 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="clean_up.h" />
     <ClInclude Include="bitly_huffman.h" />
+    <ClInclude Include="wins.h" />
+    <ClInclude Include="win_types.h" />
+    <ClInclude Include="timer.h" />
     <ClInclude Include="old_time_test.h" />
     <ClInclude Include="linked_array.h" />
+    <ClInclude Include="string-copy.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="very_old_error.h" />
     <ClInclude Include="buffers.h" />
@@ -195,7 +199,7 @@
     <ClInclude Include="pxld.h" />
     <ClInclude Include="string_algorithms.h" />
     <ClInclude Include="types.h" />
-    <ClInclude Include="memory.h" />
+    <ClInclude Include="mem.h" />
     <ClInclude Include="io.h" />
     <ClInclude Include="scl.h" />
     <ClInclude Include="pch.h" />

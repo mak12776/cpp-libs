@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
 #include <type_traits>
+
+#include "mem.h"
 
 namespace scl
 {
@@ -13,15 +16,23 @@ namespace scl
 		{ }
 	};
 
-	template <typename value_type>
-	struct refs_count
-	{
-		value_type value;
-		size_t refs_counts;
+	using mem::m_pntr;
 
-		refs_count() { }
-		refs_count(refs_count &other) = delete;
-		refs_count(refs_count &&other) = delete;
+	struct m_string_t
+	{
+		m_pntr<char> pntr;
+		size_t size;
+
+		m_string_t(size_t size)
+		{
+			pntr.alloc(size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return;
+			}
+			this->size = size;
+		}
 	};
 
 	struct string_t
@@ -29,11 +40,8 @@ namespace scl
 		bool is_const;
 		union
 		{
-			struct
-			{
-				const char *const pntr;
-				size_t size;
-			};
+			c_string_t c_string;
+
 		};
 
 		string_t(const char *pntr)
