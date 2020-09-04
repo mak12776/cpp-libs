@@ -1,6 +1,9 @@
 #pragma once
 
+#include <string>
 #include <type_traits>
+
+#include "err.h"
 
 namespace scl
 {
@@ -44,7 +47,7 @@ namespace scl
 				return;
 			}
 
-			this->pntr = (char *)memory::safe_malloc(size);
+			this->pntr = (char *)mem::safe_malloc(size);
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
@@ -56,7 +59,7 @@ namespace scl
 		inline void malloc_len_value(size_t len, const char value)
 		{
 			malloc_len(len);
-			if (err::check)
+			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 				return;
