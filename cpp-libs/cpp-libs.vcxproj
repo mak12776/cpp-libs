@@ -160,8 +160,9 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="clean_up.h" />
     <ClInclude Include="bitly_huffman.h" />
-    <ClInclude Include="wins.h" />
-    <ClInclude Include="win_types.h" />
+    <ClInclude Include="time.h" />
+    <ClInclude Include="winapi.h" />
+    <ClInclude Include="winapi_types.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="old_time_test.h" />
     <ClInclude Include="linked_array.h" />

@@ -61,7 +61,7 @@
       <UniqueIdentifier>{b4468a59-b8f2-4198-83d5-d0188bac1228}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\wins">
+    <Filter Include="Header Files\winapi">
       <UniqueIdentifier>{433faa8d-8d0e-4812-a9a0-d5cf4eb1f284}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -207,11 +207,14 @@
     <ClInclude Include="scl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wins.h">
+    <ClInclude Include="winapi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="win_types.h">
-      <Filter>Header Files\wins</Filter>
+    <ClInclude Include="winapi_types.h">
+      <Filter>Header Files\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
+      <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
