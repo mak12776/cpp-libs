@@ -2,113 +2,133 @@
 
 #include <Windows.h>
 #include <stdio.h>
-#include "winapi_tools.h"
+#include "winapi_io.h"
 
 namespace winapi
 {
-	inline void file_time_to_ularge_integer(FILETIME *ft, ULARGE_INTEGER *ul_int)
+	// file time conversation
+
+	inline void file_time_to_ularge_integer(FILETIME &ft, ULARGE_INTEGER &ul_int)
 	{
-		ul_int->HighPart = ft->dwHighDateTime;
-		ul_int->LowPart = ft->dwLowDateTime;
+		ul_int.HighPart = ft.dwHighDateTime;
+		ul_int.LowPart = ft.dwLowDateTime;
 	}
 
-	inline void ularge_integer_to_file_time(ULARGE_INTEGER *ul_int, FILETIME *ft)
+	inline void ularge_integer_to_file_time(ULARGE_INTEGER &ul_int, FILETIME &ft)
 	{
-		ft->dwHighDateTime = ul_int->HighPart;
-		ft->dwLowDateTime = ul_int->LowPart;
-	}
-	
-	inline void file_time_sub(FILETIME *t1, FILETIME *t2, FILETIME *result)
-	{
-		ULARGE_INTEGER t1_ul;
-		ULARGE_INTEGER t2_ul;
-		ULARGE_INTEGER result_ul;
-
-		file_time_to_ularge_integer(t1, &t1_ul);
-		file_time_to_ularge_integer(t2, &t2_ul);
-
-		result_ul.QuadPart = t1_ul.QuadPart - t2_ul.QuadPart;
-
-		ularge_integer_to_file_time(&result_ul, result);
+		ft.dwHighDateTime = ul_int.HighPart;
+		ft.dwLowDateTime = ul_int.LowPart;
 	}
 
-	size_t printf_system_time(SYSTEMTIME &system_time)
+	// res_ft = ft1 - ft2;
+	inline void file_time_sub(FILETIME &ft1, FILETIME &ft2, FILETIME &res_ft)
 	{
+		ULARGE_INTEGER t1_ul, t2_ul, res_ul;
 
-		// d: day, h: hour, m: minute, s: second, i: milli second
-		return printf("%02u:%02u:%02u.%03u\n", system_time.wHour, system_time.wMinute, system_time.wSecond, system_time.wMilliseconds);
+		file_time_to_ularge_integer(ft1, t1_ul);
+		file_time_to_ularge_integer(ft2, t2_ul);
+
+		res_ul.QuadPart = t1_ul.QuadPart - t2_ul.QuadPart;
+
+		ularge_integer_to_file_time(res_ul, res_ft);
 	}
 
-	size_t printf_file_time(FILETIME &ft)
+	// ft1 = ft1 - ft2;
+	inline void file_time_sub(FILETIME &ft1, FILETIME &ft2)
 	{
-		SYSTEMTIME st;
+		ULARGE_INTEGER t1_ul, t2_ul;
 
-		FileTimeToSystemTime(&ft, &st);
-		return printf_system_time(st);
+		file_time_to_ularge_integer(ft1, t1_ul);
+		file_time_to_ularge_integer(ft2, t2_ul);
+
+		t1_ul.QuadPart = t1_ul.QuadPart - t2_ul.QuadPart;
+
+		ularge_integer_to_file_time(t1_ul, ft1);
 	}
 
-	struct creation_exit_time
+
+	struct ce_time
 	{
 		FILETIME creation, exit;
+
+		inline ce_time &operator-(ce_time &sub)
+		{
+			ce_time res;
+
+			file_time_sub(creation, sub.creation, res.creation);
+			file_time_sub(exit, sub.exit, res.exit);
+
+			return res;
+		}
+
+		inline void operator-=(ce_time &sub)
+		{
+			file_time_sub(creation, sub.creation);
+			file_time_sub(exit, sub.exit);
+		}
 	};
 
-	struct kernel_user_time
+	struct ku_time
 	{
 		FILETIME kernel, user;
-	};
 
-	struct all_times
-	{
-		struct creation_exit_time;
-		struct kernel_user_time;
-	};
-
-	struct process_time_t
-	{
-		FILETIME creation_ft, exit_time, kernel_time, user_time;
-
-		inline process_time_t &operator-(process_time_t &other)
+		inline ku_time &operator-(ku_time &sub)
 		{
-			process_time_t result;
+			ku_time res;
 
-			result.creation_ft = other.creation_ft;
-			result.exit_time = other.exit_time;
+			file_time_sub(kernel, sub.kernel, res.kernel);
+			file_time_sub(user, sub.user, res.user);
 
-			winapi::file_time_sub(&this->kernel_time, &other.kernel_time, &result.kernel_time);
-			winapi::file_time_sub(&this->user_time, &other.user_time, &result.user_time);
-
-			return result;
+			return res;
 		}
 
-		size_t print(FILE *stream = stdout)
+		inline void operator-=(ku_time &sub)
 		{
-			size_t total_write = 0;
-
-			total_write += printf_file_time(this->creation_ft);
-			total_write += printf_file_time(this->kernel_time);
-			total_write += printf_file_time(this->user_time);
-
-			return total_write;
+			file_time_sub(kernel, sub.kernel);
+			file_time_sub(user, sub.user);
 		}
 	};
 
-	inline bool get_process_time(HANDLE process_handle, process_time_t &time)
+	struct ceku_time
 	{
-		return GetProcessTimes(process_handle, &time.creation_ft, &time.exit_time, &time.kernel_time, &time.user_time);
+		ce_time ce;
+		ku_time ku;
+
+		inline ceku_time &operator-(ceku_time &sub)
+		{
+			ceku_time res;
+
+			res.ce = ce;
+			res.ku = ku - sub.ku;
+
+			return res;
+		}
+
+		inline void operator-=(ceku_time &sub)
+		{
+			ku -= sub.ku;
+		}
+	};
+
+	// tools
+
+	inline bool get_process_time(HANDLE process_handle, ceku_time &time)
+	{
+		return GetProcessTimes(process_handle, &time.ce.creation, &time.ce.exit, &time.ku.kernel, &time.ku.user);
 	}
 
-	inline bool get_thread_time(HANDLE &thread_handle, process_time_t &time)
+	inline bool get_thread_time(HANDLE &thread_handle, ceku_time &time)
 	{
-		return GetThreadTimes(thread_handle, &time.creation_ft, &time.exit_time, &time.kernel_time, &time.user_time);
+		return GetThreadTimes(thread_handle, &time.ce.creation, &time.ce.exit, &time.ku.kernel, &time.ku.user);
 	}
 
-	inline bool get_current_process_time(process_time_t &time)
+	inline bool get_current_process_time(ceku_time &time)
 	{
 		HANDLE process_handle = GetCurrentProcess();
 		return get_process_time(process_handle, time);
 	}
 
-	inline bool get_current_thread_time(process_time_t &time)
+	inline bool get_current_thread_time(ceku_time &time)
 	{
 		HANDLE thread_handle = GetCurrentThread();
 		return get_thread_time(thread_handle, time);

@@ -216,7 +216,7 @@
     <ClInclude Include="winapi.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="winapi_tools.h">
+    <ClInclude Include="winapi_io.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
   </ItemGroup>
