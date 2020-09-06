@@ -2,7 +2,10 @@
 
 #include <Windows.h>
 #include <stdio.h>
-#include "winapi_io.h"
+#include <functional>
+
+#include "winapi_tools.h"
+#include "macros.h"
 
 namespace winapi
 {
@@ -51,7 +54,7 @@ namespace winapi
 	{
 		FILETIME creation, exit;
 
-		inline ce_time &operator-(ce_time &sub)
+		inline ce_time operator-(ce_time &sub)
 		{
 			ce_time res;
 
@@ -72,7 +75,7 @@ namespace winapi
 	{
 		FILETIME kernel, user;
 
-		inline ku_time &operator-(ku_time &sub)
+		inline ku_time operator-(ku_time &sub)
 		{
 			ku_time res;
 
@@ -89,28 +92,46 @@ namespace winapi
 		}
 	};
 
+	inline size_t print_system_time(SYSTEMTIME &st, const char *name = nullptr, FILE *stream = stdout)
+	{
+		if (name == nullptr) name = "unknown";
+		return fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n", 
+			name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+	}
+
+	inline size_t print_file_time(FILETIME &ft, const char *name = nullptr, FILE *stream = stdout)
+	{
+		SYSTEMTIME st;
+		FileTimeToSystemTime(&ft, &st);
+		return print_system_time(st, name, stream);
+	}
+
 	struct ceku_time
 	{
 		ce_time ce;
 		ku_time ku;
 
-		inline ceku_time &operator-(ceku_time &sub)
+		inline ceku_time operator-(ceku_time &sub)
 		{
 			ceku_time res;
-
 			res.ce = ce;
 			res.ku = ku - sub.ku;
-
 			return res;
 		}
+		inline void operator-=(ceku_time &sub) { ku -= sub.ku; }
 
-		inline void operator-=(ceku_time &sub)
+		inline size_t print(FILE *stream = stdout)
 		{
-			ku -= sub.ku;
+			size_t total_write;
+			total_write = print_file_time(ce.creation, "creation time", stream);
+			total_write += print_file_time(ce.exit,	"exit time", stream);
+			total_write += print_file_time(ku.kernel, "kernel time", stream);
+			total_write += print_file_time(ku.user,	"user time", stream);
+			return total_write;
 		}
 	};
 
-	// tools
+	// get times
 
 	inline bool get_process_time(HANDLE process_handle, ceku_time &time)
 	{
@@ -133,4 +154,41 @@ namespace winapi
 		HANDLE thread_handle = GetCurrentThread();
 		return get_thread_time(thread_handle, time);
 	}
+
+	// auto_timer
+
+	struct auto_timer
+	{
+		ceku_time start;
+		ceku_time end;
+		typedef std::function<bool(ceku_time &)> func_type;
+
+		func_type get_now;
+		bool success;
+
+		auto_timer(func_type func = winapi::get_current_process_time)
+		{
+			get_now = func;
+			if (!get_now(start))
+			{
+				printf(__FILE__ ":" STR(__LINE__) ": get start time failed.");
+				success = false;
+			}
+			success = true;
+		}
+
+		~auto_timer()
+		{
+			if (success)
+			{
+				if (!get_now(end))
+				{
+					printf(__FILE__ ":" STR(__LINE__) ": get end time failed.");
+					return;
+				}
+
+				(end - start).print();
+			}
+		}
+	};
 }

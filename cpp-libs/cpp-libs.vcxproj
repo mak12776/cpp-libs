@@ -160,12 +160,13 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="clean_up.h" />
     <ClInclude Include="bitly_huffman.h" />
-    <ClInclude Include="winapi_io.h" />
+    <ClInclude Include="macros.h" />
+    <ClInclude Include="winapi_tools.h" />
     <ClInclude Include="winapi.h" />
     <ClInclude Include="winapi_time.h" />
     <ClInclude Include="winapi_types.h" />
     <ClInclude Include="timer.h" />
-    <ClInclude Include="old_time_test.h" />
+    <ClInclude Include="time_test.h" />
     <ClInclude Include="linked_array.h" />
     <ClInclude Include="string-copy.h" />
     <ClInclude Include="string.h" />

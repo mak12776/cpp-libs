@@ -13,7 +13,7 @@
 // test functions
 
 constexpr size_t size_of_array = 0xFFF;
-constexpr uint64_t repeat = UINT32_MAX;
+constexpr uint64_t repeat = UINT32_MAX / 4;
 
 struct test_data
 {
@@ -65,4 +65,28 @@ inline void test_pass_by_reference()
 {
 	for (uint64_t step = 0; step < repeat; step += 1)
 		int result = pass_by_type_reference(data);
+}
+
+void time_test()
+{
+	printf("-- normal pass\n");
+	{
+		winapi::auto_timer _;
+		test_normal_pass();
+	}
+
+
+	printf("-- pass by pointer\n");
+
+	{
+		winapi::auto_timer _;
+		test_pass_by_pointer();
+	}
+
+	printf("-- pass by reference\n");
+
+	{
+		winapi::auto_timer _;
+		test_pass_by_reference();
+	}
 }

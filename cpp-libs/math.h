@@ -11,24 +11,36 @@ namespace scl
 		// generic functions
 
 		template<typename type>
-		static inline bool mul(type a, type b, type &result)
+		static inline bool mul(type a, type b, type &res)
 		{
 #ifdef _MSC_VER
-			return !msl::utilities::SafeMultiply(a, b, result);
+			return !msl::utilities::SafeMultiply(a, b, res);
 #elif defined(__GNUC__)
-			return __builtin_mul_overflow(a, b, &result);
+			return __builtin_mul_overflow(a, b, &res);
+#else
+#error unknown compiler
+#endif
+		}
+
+		template <typename type>
+		static inline bool sub(type a, type b, type &res)
+		{
+#ifdef _MSC_VER
+			return !msl::utilities::SafeMultiply(a, b, res);
+#elif defined(__GNUC__)
+			return __builtin_sub_overflow(a, b, &res);
 #else
 #error unknown compiler
 #endif
 		}
 
 		template<typename type>
-		static inline bool add(type a, type b, type &result)
+		static inline bool add(type a, type b, type &res)
 		{
 #ifdef _MSC_VER
-			return !msl::utilities::SafeAdd(a, b, result);
+			return !msl::utilities::SafeAdd(a, b, res);
 #elif defined(__GNUC__)
-			return __builtin_add_overflow(a, b, &result);
+			return __builtin_add_overflow(a, b, &res);
 #else
 #error unknown compiler
 #endif
@@ -51,6 +63,16 @@ namespace scl
 		static inline void safe_add(type a, type b, type &result)
 		{
 			if (add<type>(a, b, result))
+			{
+				err::set(err::INT_OVERFLOW);
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			}
+		}
+
+		template <typename type>
+		static inline void safe_sub(type a, type b, type &result)
+		{
+			if (sub<type>(a, b, result))
 			{
 				err::set(err::INT_OVERFLOW);
 				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);

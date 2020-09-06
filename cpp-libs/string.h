@@ -7,21 +7,38 @@
 
 namespace scl
 {
+	namespace tools
+	{
+		char *malloc_len(size_t len)
+		{
+			size_t size;
+			char *pntr;
+
+			math::safe_add(len, (size_t)1, size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return nullptr;
+			}
+			
+			pntr = (char *)mem::safe_malloc(size);
+
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				return nullptr;
+			}
+
+			return pntr;
+		}
+	} // namespace tools
+
 	struct c_string_t
 	{
 		const char *const pntr;
 		const size_t len;
 
 		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr))
-		{ }
-	};
-
-	struct raw_string_t
-	{
-		const char *const pntr;
-		const size_t len;
-
-		raw_string_t(const char *pntr, const size_t len) : pntr(pntr), len(len)
 		{ }
 	};
 
@@ -111,8 +128,28 @@ namespace scl
 				c_pntr += iter->len;
 			}
 			*c_pntr = '\0';
+			// malloc_len set `this->len`
+		}
+	};
 
-			// malloc_len will set `this->len`
+	struct string_t
+	{
+		bool is_const;
+		char *pntr;
+		size_t len;
+
+		string_t(const char *pntr)
+		{
+			this->is_const = true;
+			this->pntr = (char *)pntr;
+			this->len = strlen(pntr);
+		}
+
+		string_t()
+		{
+			is_const = false;
+			pntr = nullptr;
+			len = 0;
 		}
 	};
 }

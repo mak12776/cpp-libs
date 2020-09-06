@@ -159,9 +159,6 @@
     <ClInclude Include="bitly_huffman.h">
       <Filter>Header Files\mains</Filter>
     </ClInclude>
-    <ClInclude Include="old_time_test.h">
-      <Filter>Header Files\mains</Filter>
-    </ClInclude>
     <ClInclude Include="types.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -204,9 +201,6 @@
     <ClInclude Include="timer.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="winapi_types.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
@@ -216,8 +210,17 @@
     <ClInclude Include="winapi.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="winapi_io.h">
+    <ClInclude Include="winapi_tools.h">
       <Filter>Header Files\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="scl.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="macros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="time_test.h">
+      <Filter>Header Files\mains</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

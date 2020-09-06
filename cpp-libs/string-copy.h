@@ -49,27 +49,4 @@ namespace scl
 		string_t(size_t size)
 		{ }
 	};
-
-
-
-#if 0
-	struct c_string_t
-	{
-		const char *const pntr;
-		const size_t len;
-
-		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr))
-		{ }
-	};
-
-	struct raw_string_t
-	{
-		const char *const pntr;
-		const size_t len;
-
-		raw_string_t(const char *pntr, const size_t len) : pntr(pntr), len(len)
-		{ }
-	};
-
-#endif
 }
