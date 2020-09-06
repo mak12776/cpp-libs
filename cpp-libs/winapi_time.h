@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <functional>
 
-#include "winapi_tools.h"
 #include "macros.h"
 
 namespace winapi
