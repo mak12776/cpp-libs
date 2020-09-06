@@ -207,14 +207,17 @@
     <ClInclude Include="scl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="winapi.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="winapi_types.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="time.h">
-      <Filter>Header Files\scl</Filter>
+    <ClInclude Include="winapi_time.h">
+      <Filter>Header Files\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi.h">
+      <Filter>Header Files\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi_tools.h">
+      <Filter>Header Files\winapi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

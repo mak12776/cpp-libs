@@ -6,7 +6,6 @@
 
 namespace winapi
 {
-
 #if MAXDWORD == UINT32_MAX
 
 #define PRIuDWORD PRIu32

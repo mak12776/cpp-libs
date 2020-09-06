@@ -137,7 +137,7 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -160,8 +160,9 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="clean_up.h" />
     <ClInclude Include="bitly_huffman.h" />
-    <ClInclude Include="time.h" />
+    <ClInclude Include="winapi_tools.h" />
     <ClInclude Include="winapi.h" />
+    <ClInclude Include="winapi_time.h" />
     <ClInclude Include="winapi_types.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="old_time_test.h" />

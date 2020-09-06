@@ -36,12 +36,7 @@ namespace scl
 #elif SIZE_MAX == UINT64_MAX
 	typedef int64_t ssize_t;
 	constexpr uint8_t size_bytes = 8;
-#else
-#error unknown SIZE_MAX
-#endif
-
-#if UINTPTR_MAX == UINT64_MAX
-#define UINTPTR_SIZE 8
+	constexpr uint8_t size_bits = 64;
 #else
 #error unknown SIZE_MAX
 #endif

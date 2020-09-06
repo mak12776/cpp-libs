@@ -12,27 +12,26 @@
 
 // test functions
 
-constexpr size_t size_of_array = 0xFFFFFFF;
-constexpr uint64_t repeat = UINT64_MAX;
+constexpr size_t size_of_array = 0xFFF;
+constexpr uint64_t repeat = UINT32_MAX;
 const size_t number_of_threads = 0xFFFFF;
 
 
-struct test
+struct test_data
 {
-	int numbers[size_of_array];
-	test(unsigned int a)
+	int a, b, c, d, e;
+	test_data(unsigned int num)
 	{
-		srand(a);
-		for (size_t index = 0; index < size_of_array; index += 1)
-			numbers[index] = rand();
+		srand(num);
+		a = rand();
+		b = rand();
+		c = rand();
+		d = rand();
+		e = rand();
 	}
-
-	constexpr size_t size() { return size_of_array; }
-	constexpr inline int operator[](size_t index) { return numbers[index]; }
-	constexpr inline int get(size_t index) { return numbers[index]; }
 };
 
-test data(3);
+test_data data(3);
 
 template <typename cast_type>
 auto measure_time(void(*func)())
@@ -45,64 +44,49 @@ auto measure_time(void(*func)())
 
 // pass functions
 
-int pass_by_type_reference(test &value)
+int pass_by_type_reference(test_data &value)
 {
-	int result = value[0];
-	for (size_t index = 1; index < value.size(); index += 1)
-	{
-		result *= value[index];
-	}
-	return result;
+	return value.a + value.b + value.c + value.d + value.e;
 }
 
-int pass_by_type_pointer(test *pntr)
+int pass_by_type_pointer(test_data *pntr)
 {
-	int result = pntr->get(0);
-	for (size_t index = 1; index < pntr->size(); index += 1)
-	{
-		result *= pntr->get(index);
-	}
-
-	return result;
+	return pntr->a + pntr->b + pntr->c + pntr->d + pntr->e;
 }
 
-int normal_type_pass(test value)
+int normal_type_pass(test_data value)
 {
-	int result = value[0];
-	for (size_t index = 1; index < value.size(); index += 1)
-	{
-		result *= value[index];
-	}
-	return result;
+	return value.a + value.b + value.c + value.d + value.d;
 }
 
 // test functions
 
-void test_pass_by_pointer()
+inline void test_pass_by_pointer()
 {
 	for (uint64_t step = 0; step < repeat; step += 1)
 		int result = pass_by_type_pointer(&data);
 
 }
 
-void test_normal_pass()
+inline void test_normal_pass()
 {
 	for (uint64_t step = 0; step < repeat; step += 1)
 		int result = normal_type_pass(data);
 }
 
-void test_pass_by_reference()
+inline void test_pass_by_reference()
 {
 	for (uint64_t step = 0; step < repeat; step += 1)
 		int result = pass_by_type_reference(data);
 }
 
+
+// simple time test
 std::thread threads[number_of_threads];
-
-
 
 void time_test()
 {
+
 	/*
 	D:\Codes\cpp-libs\x64\Release>cpp-libs.exe
 	CPU time used: 142871.00 ms
