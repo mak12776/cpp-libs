@@ -1,8 +1,7 @@
 #pragma once
 
-
 /* usefull macros:
- *		SCL_THROW_EXCEPTIONS
+ *		SCL_CATCH_EXCEPTIONS
 */
 
 // #define SCL_USE_ERROR
