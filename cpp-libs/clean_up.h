@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <cstdio>
 #include <stdlib.h>
+#include <stdarg.h>
 
 namespace scl
 {
@@ -23,7 +24,7 @@ namespace scl
 			};
 		};
 
-		template <size_t array_size = 1024>
+		template <size_t array_size>
 		struct storage
 		{
 			job jobs_array[array_size];
@@ -84,6 +85,7 @@ namespace scl
 		constexpr size_t jobs_max = 1024;
 		size_t jobs_index = 0;
 		job jobs[jobs_max];
+
 
 		void add_fclose(FILE *file)
 		{
