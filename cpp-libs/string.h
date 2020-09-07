@@ -7,7 +7,7 @@
 
 namespace scl
 {
-	namespace tools
+	namespace str
 	{
 		char *malloc_len(size_t len)
 		{
@@ -31,6 +31,8 @@ namespace scl
 
 			return pntr;
 		}
+
+
 	} // namespace tools
 
 	struct c_string_t

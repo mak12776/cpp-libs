@@ -101,6 +101,12 @@ namespace scl
 			return write_number;
 		}
 
+		template<typename data_type>
+		static inline size_t safe_fwrite_data(data_type data, FILE *stream)
+		{
+			return safe_fwrite(&data, sizeof(data_type), stream);
+		}
+
 		static inline size_t fread_all(void *pntr, size_t size, FILE *stream)
 		{
 			size_t read_number;

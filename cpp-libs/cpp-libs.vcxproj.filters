@@ -219,6 +219,9 @@
     <ClInclude Include="time_test.h">
       <Filter>Header Files\mains</Filter>
     </ClInclude>
+    <ClInclude Include="Header.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
