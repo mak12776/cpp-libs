@@ -11,7 +11,7 @@ namespace scl
 	{
 		enum class job_type : uint8_t
 		{
-			FILE_CLOSE, MEMORY_FREE, MEMORY_DELETE,
+			FILE_CLOSE, FREE, DELETE,
 		};
 
 		struct job
@@ -44,7 +44,7 @@ namespace scl
 			{
 				if (array_index != array_size)
 				{
-					jobs_array[array_index].type = job_type::MEMORY_FREE;
+					jobs_array[array_index].type = job_type::FREE;
 					jobs_array[array_index].pntr = pntr;
 					array_index += 1;
 				}
@@ -54,7 +54,7 @@ namespace scl
 			{
 				if (array_index != array_size)
 				{
-					jobs_array[array_index].type = job_type::MEMORY_DELETE;
+					jobs_array[array_index].type = job_type::DELETE;
 					jobs_array[array_index].pntr = pntr;
 					array_index += 1;
 				}
@@ -70,11 +70,11 @@ namespace scl
 						fclose(jobs_array[index].file);
 						break;
 
-					case job_type::MEMORY_FREE:
+					case job_type::FREE:
 						free(jobs_array[index].pntr);
 						break;
 
-					case job_type::MEMORY_DELETE:
+					case job_type::DELETE:
 						delete jobs_array[index].pntr;
 						break;
 					}
@@ -85,7 +85,6 @@ namespace scl
 		constexpr size_t jobs_max = 1024;
 		size_t jobs_index = 0;
 		job jobs[jobs_max];
-
 
 		void add_fclose(FILE *file)
 		{
@@ -101,7 +100,7 @@ namespace scl
 		{
 			if (jobs_index != jobs_max)
 			{
-				jobs[jobs_index].type = job_type::MEMORY_FREE;
+				jobs[jobs_index].type = job_type::FREE;
 				jobs[jobs_index].pntr = pntr;
 				jobs_index += 1;
 			}
@@ -111,7 +110,7 @@ namespace scl
 		{
 			if (jobs_index != jobs_max)
 			{
-				jobs[jobs_index].type = job_type::MEMORY_DELETE;
+				jobs[jobs_index].type = job_type::DELETE;
 				jobs[jobs_index].pntr = pntr;
 				jobs_index += 1;
 			}
@@ -127,11 +126,11 @@ namespace scl
 					fclose(jobs[index].file);
 					break;
 
-				case job_type::MEMORY_FREE:
+				case job_type::FREE:
 					free(jobs[index].pntr);
 					break;
 
-				case job_type::MEMORY_DELETE:
+				case job_type::DELETE:
 					delete jobs[index].pntr;
 					break;
 				}
