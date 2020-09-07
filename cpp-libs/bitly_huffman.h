@@ -211,6 +211,7 @@ namespace bh
 
 		FILE *archive_file;
 		constexpr bool open_archive_file = false;
+		constexpr bool save_counts_data = false;
 
 		printf("In The Name Of God.\n");
 
@@ -287,21 +288,24 @@ namespace bh
 		std::qsort(counts.data_counts.data(), counts.data_counts.size(), sizeof counts.data_counts[0], data_count_t<uint64_t>::compare);
 		printf("done\n");
 
-		printf("saving counts: ");
-
-		save_data(file_name, counts_64bit_ext, fwrite_counts_data<uint64_t>, 
-			(void *)&counts);
-		if (err::check())
+		if (save_counts_data)
 		{
-			printf("failed\n");
-			printf("error: saving bits: %s\n", err::get_string());
-			printf("errno: %s\n", strerror(errno));
+			printf("saving counts: ");
 
-			clean_up::finish();
-			return;
+			save_data(file_name, counts_64bit_ext, fwrite_counts_data<uint64_t>,
+				(void *)&counts);
+			if (err::check())
+			{
+				printf("failed\n");
+				printf("error: saving bits: %s\n", err::get_string());
+				printf("errno: %s\n", strerror(errno));
+
+				clean_up::finish();
+				return;
+			}
+
+			printf("done");
 		}
-		
-		printf("done");
 
 		clean_up::finish();
 	}
