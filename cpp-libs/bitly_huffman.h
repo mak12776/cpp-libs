@@ -262,9 +262,9 @@ namespace bh
 			clean_up::add_fclose(archive_file);
 		}
 
-		printf("file name: %s\n", file_name.pntr);
-		printf("archive name: %s\n", archive_name.pntr);
-		printf("file size: %zu byte (%zu bit)\n", buffer.size, file_bits);
+		io::printf_ln("file name: %s", file_name.pntr);
+		io::printf_ln("archive name: %s", archive_name.pntr);
+		io::printf_ln("file size: %zu byte (%zu bit)", buffer.size, file_bits);
 
 		io::print_line();
 

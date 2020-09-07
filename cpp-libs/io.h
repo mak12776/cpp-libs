@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdio>
+#include <stdarg.h>
 
 #include "err.h"
 #include "mem.h"
@@ -213,6 +214,51 @@ namespace scl
 		{
 			if (name == nullptr) name = "...";
 			return fprintf(stream, "address of %s: %zu\n", name, value);
+		}
+
+		int vasprintf(const char **strp, const char *fmt, va_list ap)
+		{
+			char *str;
+			size_t size;
+			int len;
+			int ret;
+
+			len = _vscprintf(fmt, ap);
+			if (len == -1) 
+				return -1;
+
+			if (math::add((size_t)len, (size_t)1, size))
+				return -1;
+
+			str = (char *)malloc(size);
+			if (!str)
+				return -1;
+
+			ret = vsprintf(str, fmt, ap);
+			if (ret == -1)
+			{
+				free(str);
+				return -1;
+			}
+			*strp = str;
+
+			return ret;
+		}
+
+		size_t printf_ln(const char *fmt, ...)
+		{
+			const char *pntr;
+			size_t size;
+			va_list ap;
+
+			va_start(ap, fmt);
+			vasprintf(&pntr, fmt, ap);
+			va_end(ap);
+
+			size = printf("%s\n", pntr);
+			free((void *)pntr);
+
+			return size;
 		}
 
 		size_t DEFAULT_WIDTH = 80;
