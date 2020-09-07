@@ -11,7 +11,7 @@ namespace scl
 	{
 		enum class job_type : uint8_t
 		{
-			FILE_CLOSE, FREE, DELETE,
+			FCLOSE, FREE, DELETE,
 		};
 
 		struct job
@@ -34,7 +34,7 @@ namespace scl
 			{
 				if (array_index != array_size)
 				{
-					jobs_array[array_index].type = job_type::FILE_CLOSE;
+					jobs_array[array_index].type = job_type::FCLOSE;
 					jobs_array[array_index].file = file;
 					array_index += 1;
 				}
@@ -66,7 +66,7 @@ namespace scl
 				{
 					switch (jobs_array[index].type)
 					{
-					case job_type::FILE_CLOSE:
+					case job_type::FCLOSE:
 						fclose(jobs_array[index].file);
 						break;
 
@@ -90,7 +90,7 @@ namespace scl
 		{
 			if (jobs_index != jobs_max)
 			{
-				jobs[jobs_index].type = job_type::FILE_CLOSE;
+				jobs[jobs_index].type = job_type::FCLOSE;
 				jobs[jobs_index].file = file;
 				jobs_index += 1;
 			}
@@ -122,7 +122,7 @@ namespace scl
 			{
 				switch (jobs[index].type)
 				{
-				case job_type::FILE_CLOSE:
+				case job_type::FCLOSE:
 					fclose(jobs[index].file);
 					break;
 
