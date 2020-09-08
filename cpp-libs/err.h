@@ -16,6 +16,7 @@ namespace scl
 			FREAD, FWRITE,
 			FERROR, FEOF,
 			UNDEFINED_BEHAVIOR,
+			INVALID_FILE_STRUCTURE,
 		};
 
 		static inline const char *to_string(enum num_t num)
@@ -36,6 +37,7 @@ namespace scl
 			case FERROR: return "FERROR";
 			case FEOF: return "FEOF";
 			case UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
+			case INVALID_FILE_STRUCTURE: return "INVALID_FILE_STRUCTURE";
 			default: return "UKNOWN";
 			}
 		}

@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <stdarg.h>
 
+#include "c_tools.h"
 #include "err.h"
 #include "mem.h"
 
@@ -86,6 +87,12 @@ namespace scl
 			}
 
 			return read_number;
+		}
+
+		template <typename data_type>
+		static inline size_t safe_fread_data(data_type &data, FILE *file)
+		{
+			return safe_fread(&data, sizeof(data_type), file);
 		}
 
 		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
@@ -199,71 +206,6 @@ namespace scl
 
 			read_file(file, pntr, size);
 			std::fclose(file);
-		}
-
-		// c printf functions
-
-		int asprintf(const char **strp, const char *fmt, ...)
-		{
-			va_list ap;
-			size_t size;
-			int ret;
-			char *str;
-
-			va_start(ap, fmt);
-			ret = _vscprintf(fmt, ap); 
-			va_end(ap);
-
-			if (ret == -1)
-				return -1;
-
-			if (math::add((size_t)ret, (size_t)1, size))
-				return -1;
-
-			str = (char *)malloc(size);
-			if (!str)
-				return -1;
-
-			va_start(ap, fmt); 
-			ret = vsprintf(str, fmt, ap);
-			va_end(ap);
-
-			if (ret == -1)
-			{
-				free(str);
-				return -1;
-			}
-
-			*strp = str;
-			return ret;
-		}
-
-		int vasprintf(const char **strp, const char *fmt, va_list ap)
-		{
-			char *str;
-			size_t size;
-			int ret;
-
-			ret = _vscprintf(fmt, ap);
-			if (ret == -1)
-				return -1;
-
-			if (math::add((size_t)ret, (size_t)1, size))
-				return -1;
-
-			str = (char *)malloc(size);
-			if (!str)
-				return -1;
-
-			ret = vsprintf(str, fmt, ap);
-			if (ret == -1)
-			{
-				free(str);
-				return -1;
-			}
-
-			*strp = str;
-			return ret;
 		}
 
 		// normal print, fomrated print tools

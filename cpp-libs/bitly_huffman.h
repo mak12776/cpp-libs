@@ -57,31 +57,84 @@ namespace bh
 
 		const ubyte size_of_data_type = sizeof(data_type);
 
-		// fwrite size of size_t
+		// size of size_t
 		total_write = io::safe_fwrite_data<ubyte>(size_bytes, file);
 		if (err::check()) return total_write;
 
-		// fwrite size of data_type
+		// size of data_type
 		total_write += io::safe_fwrite_data<ubyte>(size_of_data_type, file);
 		if (err::check()) return total_write;
 
-		// fwrite data_counts.size()
+		// data_counts.size()
 		total_write += io::safe_fwrite_data(counts.data_counts.size(), file);
 		if (err::check()) return total_write;
 
-		// fwrite remaining.size()
+		// remaining.size()
 		total_write += io::safe_fwrite_data(counts.remaining.size(), file);
 		if (err::check) return total_write;
 
-		// fwrite data_counts.data()
+		// data_counts.data()
 		total_write += io::safe_fwrite(counts.data_counts.data(), 
 			sizeof(data_type) * counts.data_counts.size(), file);
 		if (err::check()) return total_write;
 
-		// fwrite remaining.data()
+		// remaining.data()
 		total_write += io::safe_fwrite(counts.remaining.data(), counts.remaining.size(), file);
 
 		return total_write;
+	}
+
+	template <typename data_type>
+	static inline size_t fread_counts(FILE *file, counts_t<data_type> &counts)
+	{
+		size_t total_read;
+		
+		const ubyte size_of_data_type = sizeof(data_type);
+
+		ubyte ubyte_data;
+		size_t vector_size;
+
+		// size of size_t
+		total_read = io::safe_fread_data(ubyte_data, file);
+		if (err::check()) return total_read;
+
+		if (ubyte_data != size_bytes)
+		{
+			err::set(err::INVALID_FILE_STRUCTURE);
+			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			return total_read;
+		}
+
+		// size of data_type
+		total_read += io::safe_fread_data(ubyte_data, file);
+		if (err::check()) return total_read;
+
+		if (ubyte_data != size_of_data_type)
+		{
+			err::set(err::INVALID_FILE_STRUCTURE);
+			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			return total_read;
+		}
+
+		// data_counts.size()
+		total_read += io::safe_fread_data(vector_size, file);
+		if (err::check()) return total_read;
+		counts.data_counts.resize(vector_size);
+
+		// remaining.size()
+		total_read += io::safe_fread_data(vector_size, file);
+		counts.remaining.resize(vector_size);
+
+		// data_counts.data()
+		total_read += io::safe_fread(counts.data_counts.data(),
+			sizeof(data_type) * counts.data_counts.size(), file);
+		if (err::check()) return total_read;
+
+		// remaining.data()
+		total_read += io::safe_fread(counts.data_counts.data(),
+			sizeof(data_type) * counts.data_counts.size(), file);
+		
+		return total_read;
 	}
 
 	template <typename data_type>
@@ -247,7 +300,7 @@ namespace bh
 			clean_up::finish();
 			return;
 		}
-
+		
 		if (open_archive_file)
 		{
 			archive_file = io::safe_fopen(archive_name.pntr, "wb");

@@ -219,8 +219,8 @@
     <ClInclude Include="time_test.h">
       <Filter>Header Files\mains</Filter>
     </ClInclude>
-    <ClInclude Include="Header.h">
-      <Filter>Header Files\scl</Filter>
+    <ClInclude Include="c_tools.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
