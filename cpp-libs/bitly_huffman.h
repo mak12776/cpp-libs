@@ -339,7 +339,7 @@ namespace bh
 		if (err::check())
 		{
 			printf("error: can't read '%s': %s\n", file_name.pntr, 
-				err::get_string());
+				err::string());
 			printf("errno: %s\n", strerror(errno));
 
 			clean_up::finish();
@@ -383,7 +383,7 @@ namespace bh
 		load_data(file_name, counts_64bit_ext, fread_counts, counts);
 		if (err::check())
 		{
-			printf("error: can't load data: %s\n", err::get_string());
+			printf("error: can't load data: %s\n", err::string());
 			printf("errno: %s\n", strerror(errno));
 			return;
 		}
@@ -397,7 +397,7 @@ namespace bh
 			if (err::check())
 			{
 				printf("failed\n");
-				printf("error: saving bits: %s\n", err::get_string());
+				printf("error: saving bits: %s\n", err::string());
 				printf("errno: %s\n", strerror(errno));
 
 				clean_up::finish();

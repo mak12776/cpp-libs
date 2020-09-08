@@ -54,6 +54,11 @@ namespace scl
 			const char *function_sig;
 		} info_array[info_array_size];
 
+		static inline int printf()
+		{
+
+		}
+
 		static inline void set(num_t errnum) { num = errnum; }
 		static inline void clear() 
 		{
@@ -63,7 +68,7 @@ namespace scl
 		static inline bool check() { return num != num_t::NO_ERROR; }
 		static inline bool success() { return num == num_t::NO_ERROR; }
 
-		static inline const char *get_string() { return to_string(num); }
+		static inline const char *string() { return to_string(num); }
 
 		static inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_sig)
 		{
