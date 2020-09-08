@@ -283,6 +283,18 @@ namespace bh
 		return total_read;
 	}
 
+	template <typename dtype>
+	static inline void data_saver(dtype &data, void(*process_data)(dtype &),
+		size_t(*load_data)(dtype &), size_t(*save_data)(dtype &))
+	{
+		load_data(data);
+		if (err::check())
+		{
+			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			return;
+		}
+	}
+
 	template <typename data_type>
 	counts_t<data_type> count_and_sort_bits(ubuffer_t &buffer)
 	{
@@ -371,12 +383,10 @@ namespace bh
 		load_data(file_name, counts_64bit_ext, fread_counts, counts);
 		if (err::check())
 		{
-
+			printf("error: can't load data: %s\n", err::get_string());
+			printf("errno: %s\n", strerror(errno));
+			return;
 		}
-
-		printf("counting & sorting %zubits: ", sizeof(dtype) * 8);
-		counts_t<dtype> counts = count_and_sort_bits<dtype>(buffer);
-		printf("done\n");
 
 		if (save_counts_data)
 		{

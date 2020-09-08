@@ -28,7 +28,7 @@ namespace scl
 		struct storage
 		{
 			job jobs_array[array_size];
-			size_t array_index;
+			size_t array_index = 0;
 
 			inline void add_fclose(FILE *file)
 			{
