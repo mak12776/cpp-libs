@@ -137,12 +137,6 @@ namespace bh
 		return total_read;
 	}
 
-	template <typename data_type>
-	static inline size_t fwrite_counts_data(FILE *file, void *pntr)
-	{
-		return fwrite_counts(file, *static_cast<counts_t<data_type> *>(pntr));
-	}
-
 	c_string_t counts_64bit_ext(".64bit.counts");
 
 	template <typename data_type>
@@ -222,13 +216,15 @@ namespace bh
 	}
 
 	// data saver
+	template <typename dtype>
 	size_t save_data(c_string_t file_name, c_string_t file_ext, 
-		size_t(*fwrite_data)(FILE *, void *), void *data)
+		size_t(*fwrite_data)(FILE *, dtype &), dtype &data)
 	{
 		m_string_t data_name;
 
 		FILE *data_file;
 		size_t total_write;
+		clean_up::storage<2> clean_ups;
 
 		data_name.malloc_cat({ file_name, file_ext });
 		if (err::check())
@@ -236,22 +232,69 @@ namespace bh
 			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 			return 0;
 		}
+		clean_ups.add_free(data_name.pntr);
 
 		data_file = io::safe_fopen(data_name.pntr, "wb");
 		if (err::check())
 		{
 			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
 
-			free(data_name.pntr);
+			clean_ups.finish();
 			return 0;
 		}
+		clean_ups.add_fclose(data_file);
 
 		total_write = fwrite_data(data_file, data);
 
-		fclose(data_file);
-		free(data_name.pntr);
-
+		clean_ups.finish();
 		return total_write;
+	}
+
+	template <typename dtype>
+	size_t load_data(c_string_t file_name, c_string_t file_ext,
+		size_t(*fread_data)(FILE *, dtype &), dtype &data)
+	{
+		m_string_t data_name;
+		FILE *data_file;
+		size_t total_read;
+		clean_up::storage<2> clean_ups;
+
+		data_name.malloc_cat({ file_name, file_ext });
+		if (err::check())
+		{
+			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			return 0;
+		}
+		clean_ups.add_free(data_name.pntr);
+
+		data_file = io::safe_fopen(data_name.pntr, "rb");
+		if (err::check())
+		{
+			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+
+			clean_ups.finish();
+			return 0;
+		}
+		clean_ups.add_fclose(data_file);
+
+		total_read = fread_data(data_file, data);
+
+		clean_ups.finish();
+		return total_read;
+	}
+
+	template <typename data_type>
+	counts_t<data_type> count_and_sort_bits(ubuffer_t &buffer)
+	{
+		counts_t<data_type> result;
+
+		result = count_bits<data_type>(buffer);
+		// count_bits will not failed.
+
+		std::qsort(result.data_counts.data(), result.data_counts.size(),
+			sizeof(data_count_t<data_type>), data_count_t<data_type>::compare);
+
+		return result;
 	}
 
 	void compress(const char *file_name_pntr)
@@ -321,32 +364,26 @@ namespace bh
 
 		io::print_line();
 
+		typedef uint64_t dtype;
 
-		printf("counting 64bits: ");
+		counts_t<dtype> counts;
 
-		counts_t<uint64_t> counts = count_bits<uint64_t>(buffer);
+		load_data(file_name, counts_64bit_ext, fread_counts, counts);
 		if (err::check())
 		{
-			printf("failed\n");
-			printf("error: counting bits failed: %s\n", err::get_string());
-			printf("errno: %s\n", strerror(errno));
 
-			clean_up::finish();
-			return;
 		}
 
-		printf("done\n");
-
-		printf("sorting counts: ");
-		std::qsort(counts.data_counts.data(), counts.data_counts.size(), sizeof counts.data_counts[0], data_count_t<uint64_t>::compare);
+		printf("counting & sorting %zubits: ", sizeof(dtype) * 8);
+		counts_t<dtype> counts = count_and_sort_bits<dtype>(buffer);
 		printf("done\n");
 
 		if (save_counts_data)
 		{
 			printf("saving counts: ");
 
-			save_data(file_name, counts_64bit_ext, fwrite_counts_data<uint64_t>,
-				(void *)&counts);
+			// save_data(file_name, counts_64bit_ext, fwrite_counts_data<uint64_t>,
+			// counts);
 			if (err::check())
 			{
 				printf("failed\n");
