@@ -161,6 +161,7 @@
     <ClInclude Include="clean_up.h" />
     <ClInclude Include="bitly_huffman.h" />
     <ClInclude Include="c_tools.h" />
+    <ClInclude Include="Header.h" />
     <ClInclude Include="macros.h" />
     <ClInclude Include="winapi.h" />
     <ClInclude Include="winapi_time.h" />

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <stdarg.h>
 
 namespace scl
 {
@@ -8,7 +9,7 @@ namespace scl
 	{
 		enum num_t : uint8_t
 		{
-			NO_ERROR,
+			NO_ERROR = 0,
 			MALLOC, NEW,
 			INVALID_ARGUMENT,
 			INT_OVERFLOW, FLOAT_OVERFLOW,
@@ -47,16 +48,37 @@ namespace scl
 		constexpr size_t info_array_size = 1024;
 		size_t info_array_index = 0;
 
-		struct
+		struct info_t
 		{
 			const char *file_name;
 			uint64_t line_number;
 			const char *function_sig;
 		} info_array[info_array_size];
 
-		static inline int printf()
+		static inline void copy_info_array(info_t array_copy[info_array_size])
 		{
+			for (size_t index = 0; index < info_array_index; index += 1)
+				array_copy[index] = info_array[index];
+		}
 
+		static inline int printf(const char *fmt, ...)
+		{
+			va_list ap;
+			int total, ret;
+			info_t info_array_copy[info_array_size];
+
+			total = 0;
+			if (fmt == nullptr)
+			{
+				ret = printf("error: %s\n");
+				if (ret == -1)
+					return -1;
+
+				if (math::add(total, ret, total))
+					return -1;
+
+				
+			}
 		}
 
 		static inline void set(num_t errnum) { num = errnum; }

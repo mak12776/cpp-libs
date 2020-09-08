@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <safeint.h>
 
+#include "math.h"
+
 namespace scl
 {
 	namespace math
