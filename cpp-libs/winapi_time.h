@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "macros.h"
+#include "clibs.h"
 
 namespace winapi
 {
@@ -49,13 +50,13 @@ namespace winapi
 	}
 
 
-	struct ce_time
+	struct ce_filetime
 	{
 		FILETIME creation, exit;
 
-		inline ce_time operator-(ce_time &sub)
+		inline ce_filetime operator-(ce_filetime &sub)
 		{
-			ce_time res;
+			ce_filetime res;
 
 			file_time_sub(creation, sub.creation, res.creation);
 			file_time_sub(exit, sub.exit, res.exit);
@@ -63,20 +64,20 @@ namespace winapi
 			return res;
 		}
 
-		inline void operator-=(ce_time &sub)
+		inline void operator-=(ce_filetime &sub)
 		{
 			file_time_sub(creation, sub.creation);
 			file_time_sub(exit, sub.exit);
 		}
 	};
 
-	struct ku_time
+	struct ku_filetime
 	{
 		FILETIME kernel, user;
 
-		inline ku_time operator-(ku_time &sub)
+		inline ku_filetime operator-(ku_filetime &sub)
 		{
-			ku_time res;
+			ku_filetime res;
 
 			file_time_sub(kernel, sub.kernel, res.kernel);
 			file_time_sub(user, sub.user, res.user);
@@ -84,40 +85,26 @@ namespace winapi
 			return res;
 		}
 
-		inline void operator-=(ku_time &sub)
+		inline void operator-=(ku_filetime &sub)
 		{
 			file_time_sub(kernel, sub.kernel);
 			file_time_sub(user, sub.user);
 		}
 	};
 
-	inline size_t print_system_time(SYSTEMTIME &st, const char *name = nullptr, FILE *stream = stdout)
+	struct ceku_filetime
 	{
-		if (name == nullptr) name = "unknown";
-		return fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n", 
-			name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
-	}
+		ce_filetime ce;
+		ku_filetime ku;
 
-	inline size_t print_file_time(FILETIME &ft, const char *name = nullptr, FILE *stream = stdout)
-	{
-		SYSTEMTIME st;
-		FileTimeToSystemTime(&ft, &st);
-		return print_system_time(st, name, stream);
-	}
-
-	struct ceku_time
-	{
-		ce_time ce;
-		ku_time ku;
-
-		inline ceku_time operator-(ceku_time &sub)
+		inline ceku_filetime operator-(ceku_filetime &sub)
 		{
-			ceku_time res;
+			ceku_filetime res;
 			res.ce = ce;
 			res.ku = ku - sub.ku;
 			return res;
 		}
-		inline void operator-=(ceku_time &sub) { ku -= sub.ku; }
+		inline void operator-=(ceku_filetime &sub) { ku -= sub.ku; }
 
 		inline size_t print(FILE *stream = stdout)
 		{
@@ -130,25 +117,101 @@ namespace winapi
 		}
 	};
 
+	// System Time
+
+	struct ce_systemtime
+	{
+		SYSTEMTIME creation, exit;
+	};
+
+	struct ku_systemtime
+	{
+		SYSTEMTIME kernel, user;
+	};
+
+	struct ceku_systemtime
+	{
+		ce_systemtime ce;
+		ku_systemtime ku;
+	};
+
+	// functions
+
+	inline int print_system_time(SYSTEMTIME &st, const char *name = nullptr, FILE *stream = stdout)
+	{
+		if (name == nullptr) name = "unknown";
+		return fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n",
+			name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+	}
+
+	inline int print_file_time(FILETIME &ft, const char *name = nullptr, FILE *stream = stdout)
+	{
+		SYSTEMTIME st;
+		FileTimeToSystemTime(&ft, &st);
+		return print_system_time(st, name, stream);
+	}
+
+	static inline char *asprint_system_time(SYSTEMTIME &st)
+	{
+		char *str;
+		int ret;
+
+		ret = cl::asprintf(&str, "%02u:%02u:%02u.%03u", 
+			st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+		if (ret == -1)
+			return nullptr;
+
+		return str;
+	}
+
+	// file time to system time
+
+	static inline bool file_time_to_system_time(FILETIME &ft, SYSTEMTIME &st)
+	{
+		return FileTimeToSystemTime(&ft, &st);
+	}
+
+	static inline bool file_time_to_system_time(ce_filetime &ft, ce_systemtime &st)
+	{
+		return 
+			FileTimeToSystemTime(&ft.creation, &st.creation) &&
+			FileTimeToSystemTime(&ft.exit, &st.exit);
+	}
+
+	static inline bool file_time_to_system_time(ku_filetime &ft, ku_systemtime &st)
+	{
+		return 
+			FileTimeToSystemTime(&ft.kernel, &st.kernel) &&
+			FileTimeToSystemTime(&ft.user, &st.user);
+	}
+
+	static inline bool file_time_to_system_time(
+		ceku_filetime &ft, ceku_systemtime &st)
+	{
+		return
+			file_time_to_system_time(ft.ce, st.ce) &&
+			file_time_to_system_time(ft.ku, st.ku);
+	}
+
 	// get times
 
-	inline bool get_process_time(HANDLE process_handle, ceku_time &time)
+	inline bool get_process_time(HANDLE process_handle, ceku_filetime &time)
 	{
 		return GetProcessTimes(process_handle, &time.ce.creation, &time.ce.exit, &time.ku.kernel, &time.ku.user);
 	}
 
-	inline bool get_thread_time(HANDLE &thread_handle, ceku_time &time)
+	inline bool get_thread_time(HANDLE &thread_handle, ceku_filetime &time)
 	{
 		return GetThreadTimes(thread_handle, &time.ce.creation, &time.ce.exit, &time.ku.kernel, &time.ku.user);
 	}
 
-	inline bool get_current_process_time(ceku_time &time)
+	inline bool get_current_process_time(ceku_filetime &time)
 	{
 		HANDLE process_handle = GetCurrentProcess();
 		return get_process_time(process_handle, time);
 	}
 
-	inline bool get_current_thread_time(ceku_time &time)
+	inline bool get_current_thread_time(ceku_filetime &time)
 	{
 		HANDLE thread_handle = GetCurrentThread();
 		return get_thread_time(thread_handle, time);
@@ -158,9 +221,9 @@ namespace winapi
 
 	struct auto_timer
 	{
-		ceku_time start;
-		ceku_time end;
-		typedef std::function<bool(ceku_time &)> func_type;
+		ceku_filetime start;
+		ceku_filetime end;
+		typedef std::function<bool(ceku_filetime &)> func_type;
 
 		func_type get_now;
 		bool success;
