@@ -54,8 +54,10 @@ namespace winapi
 		if (name == nullptr) name = "unknown";
 		size = scl::safe_fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n",
 			name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+
 		if (scl::err::check())
 			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+
 		return size;
 	}
 
