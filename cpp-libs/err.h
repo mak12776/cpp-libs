@@ -21,10 +21,10 @@ namespace scl
 
 		enum num_t : uint8_t
 		{
-			NO_ERROR = 0,
+			SUCCESS = 0,
 			INVALID_ARGUMENT,
-			PRINTF, MALLOC, NEW,
-			WIN_ERROR,
+			WIN_ERROR, PRINTF,
+			MALLOC, NEW,
 			INT_OVERFLOW, FLOAT_OVERFLOW,
 			FOPEN, FTELL, FSEEK,
 			FREAD, FWRITE,
@@ -37,12 +37,12 @@ namespace scl
 		{
 			switch (num)
 			{
-			case NO_ERROR: return "NO_ERROR";
+			case SUCCESS: return "SUCCESS";
 			case INVALID_ARGUMENT: return "INVALID_ARGUMENT";
+			case WIN_ERROR: return "WIN_ERROR";
 			case PRINTF: return "PRINTF";
 			case MALLOC: return "MALLOC";
 			case NEW: return "NEW";
-			case WIN_ERROR: return "WIN_ERROR";
 			case INT_OVERFLOW: return "INT_OVERFLOW";
 			case FLOAT_OVERFLOW: return "FLOAT_OVERFLOW";
 			case FOPEN: return "FOPEN";
@@ -58,7 +58,7 @@ namespace scl
 			}
 		}
 
-		num_t num = NO_ERROR;
+		num_t num = SUCCESS;
 		size_t info_array_index = 0; 
 		constexpr size_t info_array_size = 1024;
 
@@ -79,16 +79,9 @@ namespace scl
 		};
 #pragma pack(pop)
 
-		static inline bool print()
+		static inline int print()
 		{
-			int ret;
-
-			switch (num)
-			{
-			case NO_ERROR:
-
-				ret = std::printf("error: %s\n", to_string(num));
-			}
+			return std::printf("error: %s: %s\n", to_string(num), strerror(errno));
 		}
 
 		static inline int printf(const char *fmt, ...)
@@ -154,11 +147,11 @@ namespace scl
 		static inline void set(num_t errnum) { num = errnum; }
 		static inline void clear()
 		{
-			num = num_t::NO_ERROR;
+			num = num_t::SUCCESS;
 			info_array_index = 0;
 		}
-		static inline bool check() { return num != num_t::NO_ERROR; }
-		static inline bool success() { return num == num_t::NO_ERROR; }
+		static inline bool check() { return num != num_t::SUCCESS; }
+		static inline bool success() { return num == num_t::SUCCESS; }
 
 		inline const char *string() { return to_string(num); }
 
