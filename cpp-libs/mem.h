@@ -8,6 +8,19 @@ namespace scl
 {
 	namespace mem
 	{
+		struct manager
+		{
+			void *(&malloc)(size_t);
+			void *(&realloc)(void *, size_t);
+			void(&free)(void *);
+
+			manager(void *(&malloc)(size_t), void *(&realloc)(void *, size_t), void(&free)(void *))
+				: malloc(malloc), realloc(realloc), free(free)
+			{ }
+		};
+
+		manager default_manager(malloc, realloc, free);
+
 		template <typename value_type>
 		struct m_pntr
 		{

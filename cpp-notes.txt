@@ -21,5 +21,7 @@ and a better string library.
 
 log library needs more modifications.
 
-
 write code as you needs.
+
+I wrote a lot of codes.
+
