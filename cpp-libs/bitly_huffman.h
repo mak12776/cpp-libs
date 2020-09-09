@@ -2,6 +2,7 @@
 
 #include "err.h"
 #include "clibs.h"
+#include "log.h"
 
 namespace bh
 {
@@ -310,6 +311,24 @@ namespace bh
 		return result;
 	}
 
+	int call_for_each(int argc, const char **argv, void(*func)(const char *argv))
+	{
+		if (argc == 1)
+		{
+			printf("usage: %s [FILENAME]...\n", argv[0]);
+			return 0;
+		}
+
+		func(argv[1]);
+		for (int index = 2; index < argc; index += 1)
+		{
+			io::print_line(0, '=');
+			func(argv[index]);
+		}
+
+		return 0;
+	}
+
 	void compress(const char *file_name_pntr)
 	{
 		scl::c_string_t file_name(file_name_pntr);
@@ -377,37 +396,19 @@ namespace bh
 
 		io::print_line();
 
+		log::start_process("count & sort bits");
+
 		typedef uint64_t dtype;
+		counts_t<dtype> counts = count_and_sort_bits<dtype>(buffer);
 
-		counts_t<dtype> counts;
+		log::end_process(true);
 
-		load_data(file_name, counts_64bit_ext, fread_counts, counts);
-		if (err::check())
-		{
-			printf("error: can't load data: %s\n", err::string());
-			printf("errno: %s\n", strerror(errno));
-			return;
-		}
-
-		if (save_counts_data)
-		{
-			printf("saving counts: ");
-
-			// save_data(file_name, counts_64bit_ext, fwrite_counts_data<uint64_t>,
-			// counts);
-			if (err::check())
-			{
-				printf("failed\n");
-				printf("error: saving bits: %s\n", err::string());
-				printf("errno: %s\n", strerror(errno));
-
-				clean_up::finish();
-				return;
-			}
-
-			printf("done");
-		}
 
 		clean_up::finish();
+	}
+
+	int compress_main(int argc, const char **argv)
+	{
+		return call_for_each(argc, argv, compress);
 	}
 }

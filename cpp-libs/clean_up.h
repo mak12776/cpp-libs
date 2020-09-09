@@ -135,6 +135,7 @@ namespace scl
 					break;
 				}
 			}
+			jobs_index = 0;
 		}
 	}
 }

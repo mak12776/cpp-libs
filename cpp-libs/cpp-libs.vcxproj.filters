@@ -216,17 +216,20 @@
     <ClInclude Include="macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="time_test.h">
-      <Filter>Header Files\mains</Filter>
-    </ClInclude>
-    <ClInclude Include="Header.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="clibs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="log.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="fmt.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="error_handling_test.h">
+      <Filter>Header Files\mains</Filter>
+    </ClInclude>
+    <ClInclude Include="argument_passing_test.h">
+      <Filter>Header Files\mains</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

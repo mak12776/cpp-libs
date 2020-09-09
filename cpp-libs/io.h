@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <stdarg.h>
 
-#include "c_tools.h"
+#include "clibs.h"
 #include "err.h"
 #include "mem.h"
 

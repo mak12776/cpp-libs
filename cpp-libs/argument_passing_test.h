@@ -1,5 +1,7 @@
 #pragma once
 
+#include "winapi.h"
+
 #include <cstdio>
 #include <iomanip>
 #include <iostream>

@@ -92,6 +92,20 @@ namespace winapi
 		}
 	};
 
+	inline int print_system_time(SYSTEMTIME &st, const char *name = nullptr, FILE *stream = stdout)
+	{
+		if (name == nullptr) name = "unknown";
+		return fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n",
+			name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+	}
+
+	inline int print_file_time(FILETIME &ft, const char *name = nullptr, FILE *stream = stdout)
+	{
+		SYSTEMTIME st;
+		FileTimeToSystemTime(&ft, &st);
+		return print_system_time(st, name, stream);
+	}
+
 	struct ceku_filetime
 	{
 		ce_filetime ce;
@@ -137,23 +151,9 @@ namespace winapi
 
 	// functions
 
-	inline int print_system_time(SYSTEMTIME &st, const char *name = nullptr, FILE *stream = stdout)
+	static inline const char *asprint_system_time(SYSTEMTIME &st)
 	{
-		if (name == nullptr) name = "unknown";
-		return fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n",
-			name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
-	}
-
-	inline int print_file_time(FILETIME &ft, const char *name = nullptr, FILE *stream = stdout)
-	{
-		SYSTEMTIME st;
-		FileTimeToSystemTime(&ft, &st);
-		return print_system_time(st, name, stream);
-	}
-
-	static inline char *asprint_system_time(SYSTEMTIME &st)
-	{
-		char *str;
+		const char *str;
 		int ret;
 
 		ret = cl::asprintf(&str, "%02u:%02u:%02u.%03u", 

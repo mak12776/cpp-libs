@@ -1,0 +1,4 @@
+
+errno handling is faster than exception handling.
+
+

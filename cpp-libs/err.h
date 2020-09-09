@@ -10,6 +10,10 @@ namespace scl
 {
 	namespace err
 	{
+
+#define PRIuLINE PRIu64
+		typedef uint64_t line_t;
+
 		enum num_t : uint8_t
 		{
 			NO_ERROR = 0,
@@ -54,12 +58,20 @@ namespace scl
 		struct info_t
 		{
 			const char *file_name;
-			uint64_t line_number;
-			const char *function_sig;
+			line_t line_number;
 			const char *function_name;
+			const char *function_sig;
 		} info_array[info_array_size];
 
-#define PRIuLINE PRIu64
+#pragma pack(push, 1)
+		struct error_t
+		{
+			num_t num;
+
+			size_t array_index;
+			info_t info_array[info_array_size];
+		};
+#pragma pack(pop)
 
 		static inline int printf(const char *fmt, ...)
 		{
@@ -131,6 +143,8 @@ namespace scl
 		static inline bool success() { return num == num_t::NO_ERROR; }
 
 		static inline const char *string() { return to_string(num); }
+
+#define err_push_file_info() err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__)
 
 		static inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_name, const char *function_sig)
 		{
