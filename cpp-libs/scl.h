@@ -17,7 +17,6 @@
 
 #include "mem.h"
 #include "io.h"
-#include "timer.h"
 
 #include "pxld.h"
 

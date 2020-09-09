@@ -2,8 +2,5 @@
 
 namespace scl
 {
-	namespace fmt
-	{
-
-	}
+	
 }

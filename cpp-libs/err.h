@@ -1,15 +1,13 @@
 #pragma once
 
-#include <cstdint>
-#include <stdarg.h>
-#include <inttypes.h>
-
-#include "clibs.h"
+#include <cinttypes>
 
 namespace scl
 {
 	namespace err
 	{
+
+		// types, enumarations
 
 #define PRIuLINE PRIu64
 		typedef uint64_t line_t;
@@ -17,8 +15,9 @@ namespace scl
 		enum num_t : uint8_t
 		{
 			NO_ERROR = 0,
-			MALLOC, NEW,
 			INVALID_ARGUMENT,
+			PRINTF, MALLOC, NEW,
+			WIN_ERROR,
 			INT_OVERFLOW, FLOAT_OVERFLOW,
 			FOPEN, FTELL, FSEEK,
 			FREAD, FWRITE,
@@ -32,9 +31,11 @@ namespace scl
 			switch (num)
 			{
 			case NO_ERROR: return "NO_ERROR";
+			case INVALID_ARGUMENT: return "INVALID_ARGUMENT";
+			case PRINTF: return "PRINTF";
 			case MALLOC: return "MALLOC";
 			case NEW: return "NEW";
-			case INVALID_ARGUMENT: return "INVALID_ARGUMENT";
+			case WIN_ERROR: return "WIN_ERROR";
 			case INT_OVERFLOW: return "INT_OVERFLOW";
 			case FLOAT_OVERFLOW: return "FLOAT_OVERFLOW";
 			case FOPEN: return "FOPEN";
@@ -50,20 +51,17 @@ namespace scl
 			}
 		}
 
-		num_t num;
-
 		constexpr size_t info_array_size = 1024;
-		size_t info_array_index = 0;
 
+#pragma pack(push, 1)
 		struct info_t
 		{
 			const char *file_name;
 			line_t line_number;
 			const char *function_name;
 			const char *function_sig;
-		} info_array[info_array_size];
+		};
 
-#pragma pack(push, 1)
 		struct error_t
 		{
 			num_t num;
@@ -73,90 +71,22 @@ namespace scl
 		};
 #pragma pack(pop)
 
-		static inline int printf(const char *fmt, ...)
-		{
-			const char *str;
-			va_list ap;
-			int total, ret;
+		extern num_t num;
+		extern size_t info_array_index;
+		extern info_t info_array[info_array_size];
 
-			total = 0;
-			if (fmt == nullptr)
-			{
-				ret = std::printf("error: %s\n", to_string(num));
-				if (ret == -1)
-					return -1;
+		// functions
 
-				if (math::add(total, ret, total))
-					return -1;
-			}
-			else
-			{
-				va_start(ap, fmt);
-				ret = cl::vasprintf(&str, fmt, ap);
-				va_end(ap);
+		extern inline int printf(const char *fmt, ...);
 
-				if (ret == -1)
-					return -1;
+		extern inline void set(num_t errnum);
+		extern inline void clear();
+		extern inline bool check();
+		extern inline bool success();
 
-				ret = std::printf("error: %s: %s\n", to_string(num), str);
-				if (ret == -1)
-					return -1;
+		extern inline const char *string();
 
-				if (math::add(total, ret, total))
-					return -1;
-			}
-
-			// printf strerror if necessary
-			if (num == FOPEN)
-			{
-				ret = std::printf("errno: %s\n", strerror(errno));
-				if (ret == -1)
-					return -1;
-			}
-
-			// printf file info array
-			ret = std::printf("call trace back:\n");
-			if (ret == -1)
-				return -1;
-
-			for (size_t index = 0; index < info_array_index; index += 1)
-			{
-				ret = std::printf("  %s:%" PRIuLINE ": %s\n", 
-					info_array[index].file_name, 
-					info_array[index].line_number, 
-					info_array[index].function_name);
-				if (ret == -1)
-					return -1;
-
-				if (math::add(total, ret, total))
-					return -1;
-			}
-		}
-
-		static inline void set(num_t errnum) { num = errnum; }
-		static inline void clear() 
-		{
-			num = num_t::NO_ERROR; 
-			info_array_index = 0;
-		}
-		static inline bool check() { return num != num_t::NO_ERROR; }
-		static inline bool success() { return num == num_t::NO_ERROR; }
-
-		static inline const char *string() { return to_string(num); }
-
-#define err_push_file_info() err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__)
-
-		static inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_name, const char *function_sig)
-		{
-			if (info_array_index != info_array_size)
-			{
-				info_array[info_array_index].file_name = file_name;
-				info_array[info_array_index].line_number = line_number;
-				info_array[info_array_index].function_sig = function_sig;
-				info_array[info_array_index].function_name = function_name;
-				info_array_index += 1;
-			}
-		}
+		extern inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_name, const char *function_sig);
 	}
 }
 

@@ -322,7 +322,7 @@ namespace bh
 		func(argv[1]);
 		for (int index = 2; index < argc; index += 1)
 		{
-			io::print_line(0, '=');
+			io::print_separator(0, '=');
 			func(argv[index]);
 		}
 
@@ -344,7 +344,7 @@ namespace bh
 		printf("In The Name Of God.\n");
 
 		io::set_default_width(20);
-		io::print_line();
+		io::print_separator();
 
 		// malloc for archive_name
 		archive_name.malloc_cat({ file_name, archive_ext });
@@ -394,7 +394,7 @@ namespace bh
 		cl::printf_ln("archive name: %s", archive_name.pntr);
 		cl::printf_ln("file size: %zu byte (%zu bit)", buffer.size, file_bits);
 
-		io::print_line();
+		io::print_separator();
 
 		log::start_process("count & sort bits");
 
@@ -402,7 +402,6 @@ namespace bh
 		counts_t<dtype> counts = count_and_sort_bits<dtype>(buffer);
 
 		log::end_process(true);
-
 
 		clean_up::finish();
 	}

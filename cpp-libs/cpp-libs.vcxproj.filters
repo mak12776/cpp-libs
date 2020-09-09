@@ -198,9 +198,6 @@
     <ClInclude Include="string-copy.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="timer.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="winapi_types.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
@@ -237,6 +234,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp-libs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="clibs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="err.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

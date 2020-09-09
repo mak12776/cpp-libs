@@ -210,13 +210,11 @@ namespace scl
 
 		// normal print, fomrated print tools
 
-		
-
 		size_t DEFAULT_WIDTH = 80;
 		void set_default_width(size_t width) { DEFAULT_WIDTH = width; }
 		void reset_default_width() { DEFAULT_WIDTH = 80; }
 
-		size_t print_line(size_t width = 0, ubyte character = '-', FILE *stream = stdout)
+		size_t print_separator(size_t width = 0, ubyte character = '-', FILE *stream = stdout)
 		{
 			ubyte *buffer;
 			size_t write_number;
@@ -237,6 +235,5 @@ namespace scl
 
 			return write_number;
 		}
-
 	}
 }

@@ -32,7 +32,6 @@ namespace scl
 			return pntr;
 		}
 
-
 	} // namespace tools
 
 	struct c_string_t
