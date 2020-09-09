@@ -79,27 +79,19 @@ namespace scl
 		};
 #pragma pack(pop)
 
-		static inline int print()
+		static inline int print(FILE *stream = stderr)
 		{
-			return std::printf("error: %s: %s\n", to_string(num), strerror(errno));
+			return std::fprintf(stream, "%s: %s\n", to_string(num), strerror(errno));
 		}
 
-		static inline int printf(const char *fmt, ...)
+		static inline int fprintf(FILE *stream, const char *fmt, ...)
 		{
-			const char *str;
 			int total, ret;
 			va_list ap;
+			char *str;
 
-			total = 0;
 			if (fmt == nullptr)
-			{
-				ret = std::printf("error: %s\n", to_string(num));
-				if (ret < 0)
-					return cl::PRINTF_ERROR;
-
-				if (math::add(total, ret, total))
-					return cl::PRINTF_ERROR;
-			}
+				ret = err::print(stream);
 			else
 			{
 				va_start(ap, fmt);
@@ -109,39 +101,38 @@ namespace scl
 				if (ret < 0)
 					return cl::PRINTF_ERROR;
 
-				ret = std::printf("error: %s: %s\n", to_string(num), str);
-				if (ret < 0)
-					return cl::PRINTF_ERROR;
-
-				if (math::add(total, ret, total))
-					return cl::PRINTF_ERROR;
+				ret = std::fprintf(stream, "%s: %s: %s\n", to_string(num), str, strerror(errno));
+				free(str);
 			}
 
-			// printf strerror if necessary
-			if (num == FOPEN)
-			{
-				ret = std::printf("errno: %s\n", strerror(errno));
-				if (ret < 0)
-					return cl::PRINTF_ERROR;
-			}
+			if (ret < 0)
+				return cl::PRINTF_ERROR;
+
+			total = ret;
 
 			// printf file info array
-			ret = std::printf("call trace back:\n");
+			ret = std::printf("function call trace back:\n");
 			if (ret < 0)
+				return cl::PRINTF_ERROR;
+
+			if (math::add(total, ret, total))
 				return cl::PRINTF_ERROR;
 
 			for (size_t index = 0; index < info_array_index; index += 1)
 			{
-				ret = std::printf("  %s:%" PRIuLINE ": %s\n",
-					info_array[index].file_name,
-					info_array[index].line_number,
+				ret = std::printf("  %s:%" PRIuLINE ": %s\n", 
+					info_array[index].file_name, 
+					info_array[index].line_number, 
 					info_array[index].function_name);
+
 				if (ret < 0)
 					return cl::PRINTF_ERROR;
 
 				if (math::add(total, ret, total))
 					return cl::PRINTF_ERROR;
 			}
+
+			return total;
 		}
 
 		static inline void set(num_t errnum) { num = errnum; }

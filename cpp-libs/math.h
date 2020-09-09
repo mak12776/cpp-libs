@@ -10,8 +10,6 @@ namespace scl
 {
 	namespace math
 	{
-		// generic functions
-
 		template<typename type>
 		static inline bool mul(type a, type b, type &res)
 		{

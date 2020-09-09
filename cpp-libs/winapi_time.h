@@ -83,7 +83,7 @@ namespace winapi
 
 	static inline const char *asprint_system_time(SYSTEMTIME &st)
 	{
-		const char *str;
+		char *str;
 		int ret;
 
 		ret = cl::asprintf(&str, "%02u:%02u:%02u.%03u",

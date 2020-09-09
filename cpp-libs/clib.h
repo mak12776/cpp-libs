@@ -10,7 +10,7 @@ namespace cl
 	const int PRINTF_ERROR = -1;
 
 #ifdef _MSC_VER
-	static inline int vasprintf(const char **strp, const char *fmt, va_list ap)
+	static inline int vasprintf(char **strp, const char *fmt, va_list ap)
 	{
 		using namespace scl;
 
@@ -27,7 +27,7 @@ namespace cl
 			return PRINTF_ERROR;
 
 		str = (char *)malloc(size);
-		if (!str)
+		if (str == nullptr)
 			return PRINTF_ERROR;
 
 		ret = vsprintf(str, fmt, ap);
@@ -41,7 +41,7 @@ namespace cl
 		return ret;
 	}
 
-	static inline int asprintf(const char **strp, const char *fmt, ...)
+	static inline int asprintf(char **strp, const char *fmt, ...)
 	{
 		using namespace scl;
 
@@ -58,7 +58,7 @@ namespace cl
 
 	static inline int vfprintf_ln(FILE *stream, const char *fmt, va_list ap)
 	{
-		const char *str;
+		char *str;
 		int ret;
 
 		ret = vasprintf(&str, fmt, ap);
