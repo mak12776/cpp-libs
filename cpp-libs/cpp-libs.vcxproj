@@ -170,7 +170,6 @@
     <ClInclude Include="winapi_types.h" />
     <ClInclude Include="argument_passing_test.h" />
     <ClInclude Include="linked_array.h" />
-    <ClInclude Include="string-copy.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="very_old_error.h" />
     <ClInclude Include="buffers.h" />

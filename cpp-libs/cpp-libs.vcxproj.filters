@@ -195,9 +195,6 @@
     <ClInclude Include="mem.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="string-copy.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="winapi_types.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
