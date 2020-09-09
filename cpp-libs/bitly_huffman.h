@@ -103,7 +103,7 @@ namespace bh
 		if (ubyte_data != size_bytes)
 		{
 			err::set(err::INVALID_FILE_STRUCTURE);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return total_read;
 		}
 
@@ -114,7 +114,7 @@ namespace bh
 		if (ubyte_data != size_of_data_type)
 		{
 			err::set(err::INVALID_FILE_STRUCTURE);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return total_read;
 		}
 
@@ -231,7 +231,7 @@ namespace bh
 		data_name.malloc_cat({ file_name, file_ext });
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return 0;
 		}
 		clean_ups.add_free(data_name.pntr);
@@ -239,7 +239,7 @@ namespace bh
 		data_file = io::safe_fopen(data_name.pntr, "wb");
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 			clean_ups.finish();
 			return 0;
@@ -264,7 +264,7 @@ namespace bh
 		data_name.malloc_cat({ file_name, file_ext });
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return 0;
 		}
 		clean_ups.add_free(data_name.pntr);
@@ -272,7 +272,7 @@ namespace bh
 		data_file = io::safe_fopen(data_name.pntr, "rb");
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 			clean_ups.finish();
 			return 0;
@@ -292,7 +292,7 @@ namespace bh
 		load_data(data);
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return;
 		}
 	}

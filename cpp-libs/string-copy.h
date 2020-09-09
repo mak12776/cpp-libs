@@ -28,7 +28,7 @@ namespace scl
 			pntr.alloc(size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 			this->size = size;

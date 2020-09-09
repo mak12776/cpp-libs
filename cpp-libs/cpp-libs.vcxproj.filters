@@ -24,22 +24,6 @@
       <UniqueIdentifier>{36c17d08-e6fd-4ebb-82e3-ca0086e7f475}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\containers">
-      <UniqueIdentifier>{c9bb51e9-7c01-4e14-8e95-26945288d7ce}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files\containers\arrays">
-      <UniqueIdentifier>{b3bc94a7-deaf-488b-ac98-aad07373e9e3}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files\containers\vectors">
-      <UniqueIdentifier>{e256ac4b-11a9-40af-8a94-cecd374c0a35}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files\containers\buffers">
-      <UniqueIdentifier>{93b99e9e-e639-4f88-b984-579611d84832}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Header Files\incomplete\machine">
       <UniqueIdentifier>{dccf35f8-28f4-4daf-9a60-e9f5db2e08af}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
@@ -64,6 +48,22 @@
     <Filter Include="Header Files\winapi">
       <UniqueIdentifier>{433faa8d-8d0e-4812-a9a0-d5cf4eb1f284}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\incomplete\containers">
+      <UniqueIdentifier>{c9bb51e9-7c01-4e14-8e95-26945288d7ce}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\incomplete\containers\arrays">
+      <UniqueIdentifier>{b3bc94a7-deaf-488b-ac98-aad07373e9e3}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\incomplete\containers\vectors">
+      <UniqueIdentifier>{e256ac4b-11a9-40af-8a94-cecd374c0a35}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\incomplete\containers\buffers">
+      <UniqueIdentifier>{93b99e9e-e639-4f88-b984-579611d84832}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -73,25 +73,25 @@
       <Filter>Header Files\incomplete\examples</Filter>
     </ClInclude>
     <ClInclude Include="static_dynamic_buffer.h">
-      <Filter>Header Files\containers\buffers</Filter>
+      <Filter>Header Files\incomplete\containers\buffers</Filter>
     </ClInclude>
     <ClInclude Include="dynamic_buffer.h">
-      <Filter>Header Files\containers\buffers</Filter>
+      <Filter>Header Files\incomplete\containers\buffers</Filter>
     </ClInclude>
     <ClInclude Include="buffers.h">
-      <Filter>Header Files\containers\buffers</Filter>
+      <Filter>Header Files\incomplete\containers\buffers</Filter>
     </ClInclude>
     <ClInclude Include="dynamic_array.h">
-      <Filter>Header Files\containers\arrays</Filter>
+      <Filter>Header Files\incomplete\containers\arrays</Filter>
     </ClInclude>
     <ClInclude Include="static_dyanamic_array.h">
-      <Filter>Header Files\containers\arrays</Filter>
+      <Filter>Header Files\incomplete\containers\arrays</Filter>
     </ClInclude>
     <ClInclude Include="fixed_vector.h">
-      <Filter>Header Files\containers\vectors</Filter>
+      <Filter>Header Files\incomplete\containers\vectors</Filter>
     </ClInclude>
     <ClInclude Include="arrays.h">
-      <Filter>Header Files\containers\arrays</Filter>
+      <Filter>Header Files\incomplete\containers\arrays</Filter>
     </ClInclude>
     <ClInclude Include="array_view.h">
       <Filter>Header Files\incomplete</Filter>
@@ -100,16 +100,16 @@
       <Filter>Header Files\incomplete</Filter>
     </ClInclude>
     <ClInclude Include="vectors.h">
-      <Filter>Header Files\containers\vectors</Filter>
+      <Filter>Header Files\incomplete\containers\vectors</Filter>
     </ClInclude>
     <ClInclude Include="linked_fixed_vector.h">
-      <Filter>Header Files\containers\vectors</Filter>
+      <Filter>Header Files\incomplete\containers\vectors</Filter>
     </ClInclude>
     <ClInclude Include="machine.h">
       <Filter>Header Files\incomplete\machine</Filter>
     </ClInclude>
     <ClInclude Include="buffer.h">
-      <Filter>Header Files\containers\buffers</Filter>
+      <Filter>Header Files\incomplete\containers\buffers</Filter>
     </ClInclude>
     <ClInclude Include="matrix.h">
       <Filter>Header Files\incomplete\examples\codes</Filter>
@@ -142,10 +142,10 @@
       <Filter>Header Files\incomplete\cface</Filter>
     </ClInclude>
     <ClInclude Include="array_pointer.h">
-      <Filter>Header Files\containers\arrays</Filter>
+      <Filter>Header Files\incomplete\containers\arrays</Filter>
     </ClInclude>
     <ClInclude Include="buffer_pointer.h">
-      <Filter>Header Files\containers\buffers</Filter>
+      <Filter>Header Files\incomplete\containers\buffers</Filter>
     </ClInclude>
     <ClInclude Include="very_old_error.h">
       <Filter>Header Files\incomplete\olds</Filter>

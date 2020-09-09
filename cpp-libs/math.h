@@ -57,7 +57,7 @@ namespace scl
 			if (mul<type>(a, b, result))
 			{
 				err::set(err::INT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -67,7 +67,7 @@ namespace scl
 			if (add<type>(a, b, result))
 			{
 				err::set(err::INT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace scl
 			if (sub<type>(a, b, result))
 			{
 				err::set(err::INT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 

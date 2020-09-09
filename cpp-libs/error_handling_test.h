@@ -24,7 +24,7 @@ void test_exception_func3()
 void test_err_func1()
 {
 	err::set(err::MALLOC);
-	err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+	err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 }
 
 void test_err_func2()
@@ -32,7 +32,7 @@ void test_err_func2()
 	test_err_func1();
 
 	if (err::check())
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 }
 
 void test_err_func3()
@@ -40,7 +40,7 @@ void test_err_func3()
 	test_err_func2();
 
 	if (err::check())
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 }
 
 void test_main()

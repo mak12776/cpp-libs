@@ -32,7 +32,7 @@ namespace winapi
 		if (!FileTimeToSystemTime(&ft, &st))
 		{
 			scl::err::set(scl::err::WIN_ERROR);
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 	}
 
@@ -41,7 +41,7 @@ namespace winapi
 		if (!SystemTimeToFileTime(&st, &ft))
 		{
 			scl::err::set(scl::err::WIN_ERROR);
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 	}
 
@@ -55,7 +55,7 @@ namespace winapi
 		size = scl::safe_fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n",
 			name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 		if (scl::err::check())
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		return size;
 	}
 
@@ -67,14 +67,14 @@ namespace winapi
 		safe_ft_to_st(ft, st);
 		if (scl::err::check())
 		{
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return 0;
 		}
 
 		size = print_system_time(st, name, stream);
 
 		if (scl::err::check())
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 		return size;
 	}

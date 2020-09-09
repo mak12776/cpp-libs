@@ -19,7 +19,7 @@ namespace scl
 				this->pntr = mem::safe_malloc(size);
 				if (err::check())
 				{
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 					return;
 				}
 				this->refs = 1;
@@ -35,7 +35,7 @@ namespace scl
 			if (pntr == nullptr)
 			{
 				err::set(err::MALLOC);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 
 			return pntr;
@@ -59,7 +59,7 @@ namespace scl
 			catch (std::bad_alloc &)
 			{
 				err::set(err::NEW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return nullptr;
 			}
 #else

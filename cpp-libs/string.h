@@ -7,32 +7,29 @@
 
 namespace scl
 {
-	namespace str
+	namespace string_tools
 	{
-		char *malloc_len(size_t len)
+		inline const char *malloc_len(size_t len)
 		{
+			const char *pntr;
 			size_t size;
-			char *pntr;
 
 			math::safe_add(len, (size_t)1, size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return nullptr;
 			}
-			
-			pntr = (char *)mem::safe_malloc(size);
 
+			pntr = (const char *)mem::safe_malloc(size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
-				return nullptr;
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 
-			return pntr;
-		}
 
-	} // namespace tools
+		}
+	}
 
 	struct c_string_t
 	{
@@ -48,12 +45,6 @@ namespace scl
 		char *pntr;
 		size_t len;
 
-		m_string_t()
-		{
-			pntr = nullptr;
-			len = 0;
-		}
-
 		inline void malloc_len(size_t len)
 		{
 			size_t size;
@@ -61,14 +52,14 @@ namespace scl
 			math::safe_add(len, (size_t)1, size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 
 			this->pntr = (char *)mem::safe_malloc(size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 			this->len = len;
@@ -79,7 +70,7 @@ namespace scl
 			malloc_len(len);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 
@@ -103,7 +94,7 @@ namespace scl
 				math::safe_add(len, iter->len, len);
 				if (err::check())
 				{
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 					return;
 				}
 			}
@@ -112,7 +103,7 @@ namespace scl
 			this->malloc_len(len);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 
@@ -143,7 +134,7 @@ namespace scl
 		{
 			this->is_const = true;
 			this->pntr = (char *)pntr;
-			this->len = strlen(pntr);
+			this->len = strlen(pntr) + 1; // it's safe to add 1
 		}
 
 		string_t()
@@ -152,5 +143,11 @@ namespace scl
 			pntr = nullptr;
 			len = 0;
 		}
+
+		string_t(size_t len)
+		{
+
+		}
 	};
+
 }

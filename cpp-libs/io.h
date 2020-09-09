@@ -18,7 +18,7 @@ namespace scl
 			if (file == nullptr)
 			{
 				err::set(err::FOPEN);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 
 			return file;
@@ -32,7 +32,7 @@ namespace scl
 			if (value == -1)
 			{
 				err::set(err::FTELL);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 
 			return value;
@@ -43,7 +43,7 @@ namespace scl
 			if (fseek(stream, offset, origin))
 			{
 				err::set(err::FSEEK);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -54,21 +54,21 @@ namespace scl
 			safe_fseek(stream, 0, SEEK_END);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return 0;
 			}
 
 			size = safe_ftell(stream);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return 0;
 			}
 
 			safe_fseek(stream, 0, SEEK_SET);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return 0;
 			}
 
@@ -83,7 +83,7 @@ namespace scl
 			if (read_number != size)
 			{
 				err::set(err::FREAD);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 
 			return read_number;
@@ -103,7 +103,7 @@ namespace scl
 			if (write_number != size)
 			{
 				err::set(err::FWRITE);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 
 			return write_number;
@@ -125,17 +125,17 @@ namespace scl
 				if (ferror(stream))
 				{
 					err::set(err::FERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				}
 				else if (feof(stream))
 				{
 					err::set(err::FEOF);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				}
 				else
 				{
 					err::set(err::UNDEFINED_BEHAVIOR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				}
 
 				read_number += fread((ubyte *)pntr + read_number, 1, size - read_number, stream);
@@ -153,12 +153,12 @@ namespace scl
 				if (ferror(stream))
 				{
 					err::set(err::FERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				}
 				else
 				{
 					err::set(err::UNDEFINED_BEHAVIOR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				}
 
 				write_number += fwrite((ubyte *)pntr + write_number, 1, size - write_number, stream);
@@ -182,14 +182,14 @@ namespace scl
 			(*pntr) = mem::safe_malloc(file_size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 
 			(*size) = safe_fread(*pntr, file_size, file);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				mem::free(*pntr);
 				return;
 			}
@@ -200,7 +200,7 @@ namespace scl
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 

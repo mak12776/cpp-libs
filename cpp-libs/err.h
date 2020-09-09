@@ -16,9 +16,6 @@ namespace scl
 {
 	namespace err
 	{
-
-		// types, enumarations
-
 #define PRIuLINE PRIu64
 		typedef uint64_t line_t;
 
@@ -61,8 +58,8 @@ namespace scl
 			}
 		}
 
-		// type definitions
-
+		num_t num = err::NO_ERROR;
+		size_t info_array_index = 0; 
 		constexpr size_t info_array_size = 1024;
 
 #pragma pack(push, 1)
@@ -71,7 +68,6 @@ namespace scl
 			const char *file_name;
 			line_t line_number;
 			const char *function_name;
-			const char *function_sig;
 		};
 
 		struct error_t
@@ -83,13 +79,7 @@ namespace scl
 		};
 #pragma pack(pop)
 
-		// variables
-
-		num_t num = err::NO_ERROR;
-		size_t info_array_index = 0;
 		info_t info_array[info_array_size];
-
-		// function definitions
 
 		static inline int printf(const char *fmt, ...)
 		{
@@ -162,13 +152,12 @@ namespace scl
 
 		inline const char *string() { return to_string(num); }
 
-		inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_name, const char *function_sig)
+		inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_name)
 		{
 			if (info_array_index != info_array_size)
 			{
 				info_array[info_array_index].file_name = file_name;
 				info_array[info_array_index].line_number = line_number;
-				info_array[info_array_index].function_sig = function_sig;
 				info_array[info_array_index].function_name = function_name;
 				info_array_index += 1;
 			}
