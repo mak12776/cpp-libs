@@ -151,6 +151,11 @@ namespace scl
 			pntr = nullptr;
 			len = 0;
 		}
+
+		string_t(size_t len)
+		{
+
+		}
 	};
 
 }

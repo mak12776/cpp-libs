@@ -58,7 +58,7 @@ namespace scl
 			}
 		}
 
-		num_t num = err::NO_ERROR;
+		num_t num = NO_ERROR;
 		size_t info_array_index = 0; 
 		constexpr size_t info_array_size = 1024;
 
@@ -79,11 +79,23 @@ namespace scl
 		};
 #pragma pack(pop)
 
+		static inline bool print()
+		{
+			int ret;
+
+			switch (num)
+			{
+			case NO_ERROR:
+
+				ret = std::printf("error: %s\n", to_string(num));
+			}
+		}
+
 		static inline int printf(const char *fmt, ...)
 		{
 			const char *str;
-			va_list ap;
 			int total, ret;
+			va_list ap;
 
 			total = 0;
 			if (fmt == nullptr)

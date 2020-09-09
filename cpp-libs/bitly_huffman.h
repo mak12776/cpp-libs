@@ -381,6 +381,7 @@ namespace bh
 			archive_file = io::safe_fopen(archive_name.pntr, "wb");
 			if (err::check())
 			{
+				
 				printf("error: can't fopen '%s' for writing.\n", archive_name.pntr);
 				printf("errno: %s\n", strerror(errno));
 
