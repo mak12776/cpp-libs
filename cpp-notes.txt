@@ -14,3 +14,5 @@ A standard-compliant alternative for some cases may be sprintf:
     sprintf(str,"%x",value) converts to hexadecimal base.
     sprintf(str,"%o",value) converts to octal base.
 
+
+you can write a fmt library for use in other apps.

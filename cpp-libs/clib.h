@@ -9,9 +9,6 @@ namespace cl
 {
 	const int INT_ERROR = -1;
 
-	extern inline size_t safe_printf(const char *fmt, ...);
-	extern inline size_t safe_fprintf(FILE *stream, const char *fmt, ...);
-
 #ifdef _MSC_VER
 	extern int vasprintf(const char **strp, const char *fmt, va_list ap);
 	extern int asprintf(const char **strp, const char *fmt, ...);

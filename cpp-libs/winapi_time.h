@@ -6,7 +6,8 @@
 
 #include "macros.h"
 #include "err.h"
-#include "clibs.h"
+#include "clib.h"
+#include "fmt.h"
 
 namespace winapi
 {
@@ -51,7 +52,7 @@ namespace winapi
 		size_t size;
 
 		if (name == nullptr) name = "unknown";
-		size = cl::safe_fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n",
+		size = scl::safe_fprintf(stream, "% 20s: %02u:%02u:%02u.%03u\n",
 			name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 		if (scl::err::check())
 			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);

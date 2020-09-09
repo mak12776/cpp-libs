@@ -160,7 +160,7 @@
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="clean_up.h" />
     <ClInclude Include="bitly_huffman.h" />
-    <ClInclude Include="clibs.h" />
+    <ClInclude Include="clib.h" />
     <ClInclude Include="fmt.h" />
     <ClInclude Include="error_handling_test.h" />
     <ClInclude Include="log.h" />

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "err.h"
-#include "clibs.h"
+#include "clib.h"
 #include "log.h"
 
 namespace bh
