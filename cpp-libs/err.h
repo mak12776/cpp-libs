@@ -68,7 +68,7 @@ namespace scl
 			const char *file_name;
 			line_t line_number;
 			const char *function_name;
-		};
+		} info_array[info_array_size];
 
 		struct error_t
 		{
@@ -78,8 +78,6 @@ namespace scl
 			info_t info_array[info_array_size];
 		};
 #pragma pack(pop)
-
-		info_t info_array[info_array_size];
 
 		static inline int printf(const char *fmt, ...)
 		{
@@ -91,11 +89,11 @@ namespace scl
 			if (fmt == nullptr)
 			{
 				ret = std::printf("error: %s\n", to_string(num));
-				if (ret == -1)
-					return -1;
+				if (ret < 0)
+					return cl::PRINTF_ERROR;
 
 				if (math::add(total, ret, total))
-					return -1;
+					return cl::PRINTF_ERROR;
 			}
 			else
 			{
@@ -103,29 +101,29 @@ namespace scl
 				ret = cl::vasprintf(&str, fmt, ap);
 				va_end(ap);
 
-				if (ret == -1)
-					return -1;
+				if (ret < 0)
+					return cl::PRINTF_ERROR;
 
 				ret = std::printf("error: %s: %s\n", to_string(num), str);
-				if (ret == -1)
-					return -1;
+				if (ret < 0)
+					return cl::PRINTF_ERROR;
 
 				if (math::add(total, ret, total))
-					return -1;
+					return cl::PRINTF_ERROR;
 			}
 
 			// printf strerror if necessary
 			if (num == FOPEN)
 			{
 				ret = std::printf("errno: %s\n", strerror(errno));
-				if (ret == -1)
-					return -1;
+				if (ret < 0)
+					return cl::PRINTF_ERROR;
 			}
 
 			// printf file info array
 			ret = std::printf("call trace back:\n");
-			if (ret == -1)
-				return -1;
+			if (ret < 0)
+				return cl::PRINTF_ERROR;
 
 			for (size_t index = 0; index < info_array_index; index += 1)
 			{
@@ -133,11 +131,11 @@ namespace scl
 					info_array[index].file_name,
 					info_array[index].line_number,
 					info_array[index].function_name);
-				if (ret == -1)
-					return -1;
+				if (ret < 0)
+					return cl::PRINTF_ERROR;
 
 				if (math::add(total, ret, total))
-					return -1;
+					return cl::PRINTF_ERROR;
 			}
 		}
 

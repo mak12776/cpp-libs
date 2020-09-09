@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdio>
-#include <stdarg.h>
+#include <cstdarg>
 
 #include "clib.h"
 #include "err.h"
