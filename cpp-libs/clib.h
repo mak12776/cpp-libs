@@ -71,6 +71,24 @@ namespace cl
 		return ret;
 	}
 
+#if 0
+	static inline int vfprintff(FILE *stream, const char *line, char *fmt, va_list ap)
+	{
+		va_list ap_copy;
+		char *str;
+		int ret;
+
+		ret = vasprintf(&str, fmt, ap);
+		if (ret < 0)
+			return PRINTF_ERROR;
+
+		ret = printf(line, str);
+		free(str);
+
+		return ret;
+	}
+#endif
+
 	static inline int fprintf_ln(FILE *stream,const char *fmt, ...)
 	{
 		int ret;

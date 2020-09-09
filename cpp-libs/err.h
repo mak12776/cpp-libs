@@ -79,19 +79,67 @@ namespace scl
 		};
 #pragma pack(pop)
 
-		static inline int print(FILE *stream = stderr)
+		FILE *log_file = stderr;
+
+		static inline int print_status()
 		{
-			return std::fprintf(stream, "%s: %s\n", to_string(num), strerror(errno));
+			return std::fprintf(log_file, "%s: %s\n", to_string(num), strerror(errno));
 		}
 
-		static inline int fprintf(FILE *stream, const char *fmt, ...)
+		static inline int printf_status(const char *fmt, ...)
+		{
+			va_list ap;
+			char *str;
+			int ret;
+
+			va_start(ap, fmt);
+			ret = cl::vasprintf(&str, fmt, ap);
+			va_end(ap);
+
+			if (ret < 0)
+				return cl::PRINTF_ERROR;
+
+			ret = std::fprintf(log_file, "%s: %s: %s\n", to_string(num), str, strerror(errno));
+			free(str);
+
+			return ret;
+		}
+
+		static inline int print_traceback()
+		{
+			int ret, total;
+
+			// printf file info array
+			ret = std::fprintf(log_file, "Traceback (most recent call last):\n");
+			if (ret < 0)
+				return cl::PRINTF_ERROR;
+
+			total = ret;
+			for (size_t index = info_array_index - 1; index != SIZE_MAX; index -= 1)
+			{
+				ret = std::fprintf(log_file, "  %s:%" PRIuLINE ": %s\n",
+					info_array[index].file_name,
+					info_array[index].line_number,
+					info_array[index].function_name);
+
+				if (ret < 0)
+					return cl::PRINTF_ERROR;
+
+				if (math::add(total, ret, total))
+					return cl::PRINTF_ERROR;
+			}
+
+			return total;
+		}
+
+		static inline int printf(const char *fmt, ...)
 		{
 			int total, ret;
 			va_list ap;
 			char *str;
 
 			if (fmt == nullptr)
-				ret = err::print(stream);
+				ret = err::print_status();
 			else
 			{
 				va_start(ap, fmt);
@@ -101,36 +149,19 @@ namespace scl
 				if (ret < 0)
 					return cl::PRINTF_ERROR;
 
-				ret = std::fprintf(stream, "%s: %s: %s\n", to_string(num), str, strerror(errno));
+				ret = std::fprintf(log_file, "%s: %s: %s\n", to_string(num), str, strerror(errno));
 				free(str);
 			}
 
 			if (ret < 0)
 				return cl::PRINTF_ERROR;
 
-			total = ret;
-
-			// printf file info array
-			ret = std::printf("function call trace back:\n");
-			if (ret < 0)
+			total = print_traceback();
+			if (total < 0)
 				return cl::PRINTF_ERROR;
 
 			if (math::add(total, ret, total))
 				return cl::PRINTF_ERROR;
-
-			for (size_t index = 0; index < info_array_index; index += 1)
-			{
-				ret = std::printf("  %s:%" PRIuLINE ": %s\n", 
-					info_array[index].file_name, 
-					info_array[index].line_number, 
-					info_array[index].function_name);
-
-				if (ret < 0)
-					return cl::PRINTF_ERROR;
-
-				if (math::add(total, ret, total))
-					return cl::PRINTF_ERROR;
-			}
 
 			return total;
 		}
