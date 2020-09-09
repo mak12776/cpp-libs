@@ -1,6 +1,7 @@
 #pragma once
 
 #include "err.h"
+#include "clibs.h"
 
 namespace bh
 {
@@ -101,7 +102,7 @@ namespace bh
 		if (ubyte_data != size_bytes)
 		{
 			err::set(err::INVALID_FILE_STRUCTURE);
-			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			return total_read;
 		}
 
@@ -112,7 +113,7 @@ namespace bh
 		if (ubyte_data != size_of_data_type)
 		{
 			err::set(err::INVALID_FILE_STRUCTURE);
-			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			return total_read;
 		}
 
@@ -229,7 +230,7 @@ namespace bh
 		data_name.malloc_cat({ file_name, file_ext });
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			return 0;
 		}
 		clean_ups.add_free(data_name.pntr);
@@ -237,7 +238,7 @@ namespace bh
 		data_file = io::safe_fopen(data_name.pntr, "wb");
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 
 			clean_ups.finish();
 			return 0;
@@ -262,7 +263,7 @@ namespace bh
 		data_name.malloc_cat({ file_name, file_ext });
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			return 0;
 		}
 		clean_ups.add_free(data_name.pntr);
@@ -270,7 +271,7 @@ namespace bh
 		data_file = io::safe_fopen(data_name.pntr, "rb");
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 
 			clean_ups.finish();
 			return 0;
@@ -290,7 +291,7 @@ namespace bh
 		load_data(data);
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			return;
 		}
 	}
@@ -370,9 +371,9 @@ namespace bh
 			clean_up::add_fclose(archive_file);
 		}
 
-		io::printf_ln("file name: %s", file_name.pntr);
-		io::printf_ln("archive name: %s", archive_name.pntr);
-		io::printf_ln("file size: %zu byte (%zu bit)", buffer.size, file_bits);
+		cl::printf_ln("file name: %s", file_name.pntr);
+		cl::printf_ln("archive name: %s", archive_name.pntr);
+		cl::printf_ln("file size: %zu byte (%zu bit)", buffer.size, file_bits);
 
 		io::print_line();
 

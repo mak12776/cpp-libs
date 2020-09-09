@@ -219,10 +219,13 @@
     <ClInclude Include="time_test.h">
       <Filter>Header Files\mains</Filter>
     </ClInclude>
-    <ClInclude Include="c_tools.h">
+    <ClInclude Include="Header.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="clibs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header.h">
+    <ClInclude Include="log.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>

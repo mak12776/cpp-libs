@@ -294,7 +294,7 @@ namespace pxld
 
 			default:
 				scl::err::set(scl::err::INVALID_ARGUMENT);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return 0;
 			}
 		}
@@ -310,7 +310,7 @@ namespace pxld
 
 			default:
 				scl::err::set(scl::err::INVALID_ARGUMENT);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return nullptr;
 			}
 		}

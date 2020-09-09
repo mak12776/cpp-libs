@@ -17,7 +17,7 @@ namespace scl
 			math::safe_add(len, (size_t)1, size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return nullptr;
 			}
 			
@@ -25,7 +25,7 @@ namespace scl
 
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return nullptr;
 			}
 
@@ -62,14 +62,14 @@ namespace scl
 			math::safe_add(len, (size_t)1, size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return;
 			}
 
 			this->pntr = (char *)mem::safe_malloc(size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return;
 			}
 			this->len = len;
@@ -80,7 +80,7 @@ namespace scl
 			malloc_len(len);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return;
 			}
 
@@ -104,7 +104,7 @@ namespace scl
 				math::safe_add(len, iter->len, len);
 				if (err::check())
 				{
-					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 					return;
 				}
 			}
@@ -113,7 +113,7 @@ namespace scl
 			this->malloc_len(len);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return;
 			}
 

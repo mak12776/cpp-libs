@@ -2,6 +2,9 @@
 
 #include <cstdint>
 #include <stdarg.h>
+#include <inttypes.h>
+
+#include "clibs.h"
 
 namespace scl
 {
@@ -53,31 +56,68 @@ namespace scl
 			const char *file_name;
 			uint64_t line_number;
 			const char *function_sig;
+			const char *function_name;
 		} info_array[info_array_size];
 
-		static inline void copy_info_array(info_t array_copy[info_array_size])
-		{
-			for (size_t index = 0; index < info_array_index; index += 1)
-				array_copy[index] = info_array[index];
-		}
+#define PRIuLINE PRIu64
 
 		static inline int printf(const char *fmt, ...)
 		{
+			const char *str;
 			va_list ap;
 			int total, ret;
-			info_t info_array_copy[info_array_size];
 
 			total = 0;
 			if (fmt == nullptr)
 			{
-				ret = printf("error: %s\n");
+				ret = std::printf("error: %s\n", to_string(num));
 				if (ret == -1)
 					return -1;
 
 				if (math::add(total, ret, total))
 					return -1;
+			}
+			else
+			{
+				va_start(ap, fmt);
+				ret = cl::vasprintf(&str, fmt, ap);
+				va_end(ap);
 
-				
+				if (ret == -1)
+					return -1;
+
+				ret = std::printf("error: %s: %s\n", to_string(num), str);
+				if (ret == -1)
+					return -1;
+
+				if (math::add(total, ret, total))
+					return -1;
+			}
+
+			// printf strerror if necessary
+			if (num == FOPEN)
+			{
+				ret = std::printf("errno: %s\n", strerror(errno));
+				if (ret == -1)
+					return -1;
+			}
+
+			// printf file info array
+			ret = std::printf("call trace back:\n");
+			if (ret == -1)
+				return -1;
+
+			for (size_t index = 0; index < info_array_index; index += 1)
+			{
+				ret = std::printf("  %s:%" PRIuLINE ": %s\n", 
+					info_array[index].file_name, 
+					info_array[index].line_number, 
+					info_array[index].function_name);
+				if (ret == -1)
+					return -1;
+
+				if (math::add(total, ret, total))
+					return -1;
 			}
 		}
 
@@ -92,13 +132,14 @@ namespace scl
 
 		static inline const char *string() { return to_string(num); }
 
-		static inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_sig)
+		static inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_name, const char *function_sig)
 		{
 			if (info_array_index != info_array_size)
 			{
 				info_array[info_array_index].file_name = file_name;
 				info_array[info_array_index].line_number = line_number;
 				info_array[info_array_index].function_sig = function_sig;
+				info_array[info_array_index].function_name = function_name;
 				info_array_index += 1;
 			}
 		}

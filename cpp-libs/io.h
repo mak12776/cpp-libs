@@ -18,7 +18,7 @@ namespace scl
 			if (file == nullptr)
 			{
 				err::set(err::FOPEN);
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			}
 
 			return file;
@@ -32,7 +32,7 @@ namespace scl
 			if (value == -1)
 			{
 				err::set(err::FTELL);
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			}
 
 			return value;
@@ -43,7 +43,7 @@ namespace scl
 			if (fseek(stream, offset, origin))
 			{
 				err::set(err::FSEEK);
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			}
 		}
 
@@ -54,21 +54,21 @@ namespace scl
 			safe_fseek(stream, 0, SEEK_END);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return 0;
 			}
 
 			size = safe_ftell(stream);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return 0;
 			}
 
 			safe_fseek(stream, 0, SEEK_SET);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return 0;
 			}
 
@@ -83,7 +83,7 @@ namespace scl
 			if (read_number != size)
 			{
 				err::set(err::FREAD);
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			}
 
 			return read_number;
@@ -103,7 +103,7 @@ namespace scl
 			if (write_number != size)
 			{
 				err::set(err::FWRITE);
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 			}
 
 			return write_number;
@@ -125,17 +125,17 @@ namespace scl
 				if (ferror(stream))
 				{
 					err::set(err::FERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				}
 				else if (feof(stream))
 				{
 					err::set(err::FEOF);
-					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				}
 				else
 				{
 					err::set(err::UNDEFINED_BEHAVIOR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				}
 
 				read_number += fread((ubyte *)pntr + read_number, 1, size - read_number, stream);
@@ -153,12 +153,12 @@ namespace scl
 				if (ferror(stream))
 				{
 					err::set(err::FERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				}
 				else
 				{
 					err::set(err::UNDEFINED_BEHAVIOR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				}
 
 				write_number += fwrite((ubyte *)pntr + write_number, 1, size - write_number, stream);
@@ -182,14 +182,14 @@ namespace scl
 			(*pntr) = mem::safe_malloc(file_size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return;
 			}
 
 			(*size) = safe_fread(*pntr, file_size, file);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				mem::free(*pntr);
 				return;
 			}
@@ -200,7 +200,7 @@ namespace scl
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__, __FUNCSIG__);
 				return;
 			}
 
@@ -210,34 +210,7 @@ namespace scl
 
 		// normal print, fomrated print tools
 
-		template <typename value_type>
-		size_t print_size_of(FILE *stream = stdout)
-		{
-			return fprintf(stream, "sizeof %s: %zu\n", typeid(value_type).name(), sizeof(value_type));
-		}
-
-		template <typename value_type>
-		size_t print_address_of(value_type *value, const char *name = nullptr, FILE *stream = stdout)
-		{
-			if (name == nullptr) name = "...";
-			return fprintf(stream, "address of %s: %zu\n", name, value);
-		}
-
-		size_t printf_ln(const char *fmt, ...)
-		{
-			const char *pntr;
-			size_t size;
-			va_list ap;
-
-			va_start(ap, fmt);
-			vasprintf(&pntr, fmt, ap);
-			va_end(ap);
-
-			size = printf("%s\n", pntr);
-			free((void *)pntr);
-
-			return size;
-		}
+		
 
 		size_t DEFAULT_WIDTH = 80;
 		void set_default_width(size_t width) { DEFAULT_WIDTH = width; }
