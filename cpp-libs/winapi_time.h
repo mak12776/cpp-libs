@@ -88,6 +88,7 @@ namespace winapi
 
 		ret = cl::asprintf(&str, "%02u:%02u:%02u.%03u",
 			st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+
 		if (ret < 0)
 			return nullptr;
 

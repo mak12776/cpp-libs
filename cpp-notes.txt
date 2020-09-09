@@ -15,3 +15,11 @@ A standard-compliant alternative for some cases may be sprintf:
 
 
 you can write a fmt library for use in other apps.
+
+we need a more comfortable formatter library.
+and a better string library.
+
+log library needs more modifications.
+
+
+write code as you needs.
