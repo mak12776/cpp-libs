@@ -53,8 +53,10 @@ namespace scl
 		};
 
 		manager_t default_manager{ malloc, realloc, free };
-		manager_t logger_manager{ 
-			malloc_logger<default_logger>, realloc_logger<default_logger>, free};
+
+		template <logger_t &logger>
+		manager_t logger_manager{
+			malloc_logger<logger>, realloc_logger<logger>, free};
 
 #ifdef SCL_EXPERIMENTAL
 		template <typename value_type, intptr_t manager = default_manager_pntr>
