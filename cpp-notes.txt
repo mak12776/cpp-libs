@@ -14,6 +14,11 @@ A standard-compliant alternative for some cases may be sprintf:
     sprintf(str,"%o",value) converts to octal base.
 -- from cpp reference
 
+// parts of program that allocate memory
+// string header: m_string_t
+
+
+vector & string types using exception throwing mechanism. we need some thing with simple error handling mechanism.
 
 we need a more comfortable formatter library. and a better string library.
 log library needs more modifications.

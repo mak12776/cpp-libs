@@ -60,7 +60,7 @@ namespace scl
 
 		num_t num = SUCCESS;
 		size_t info_array_index = 0; 
-		constexpr size_t info_array_size = 1024;
+		constexpr size_t info_array_size = 4096;
 
 #pragma pack(push, 1)
 		struct info_t

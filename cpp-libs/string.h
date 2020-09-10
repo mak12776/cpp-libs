@@ -7,6 +7,7 @@
 
 namespace scl
 {
+#ifdef SCL_EXPERIMENTAL
 	namespace string_tools
 	{
 		static inline char *malloc_len(size_t len)
@@ -47,6 +48,7 @@ namespace scl
 			return pntr;
 		}
 	}
+#endif
 
 	struct c_string_t
 	{
@@ -57,14 +59,30 @@ namespace scl
 		{ }
 	};
 
+	template <mem::manager_t &manager = mem::default_manager>
 	struct m_string_t
 	{
 		char *pntr;
 		size_t len;
 
+		m_string_t()
+		{
+			this->pntr = nullptr;
+			this->len = 0;
+		}
+
 		inline void malloc_len(size_t len)
 		{
-			this->pntr = string_tools::malloc_len(len);
+			size_t size;
+
+			math::safe_add(len, (size_t)1, size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			this->pntr = (char *)manager.safe_malloc(size);
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
@@ -132,6 +150,7 @@ namespace scl
 		}
 	};
 
+#ifdef SCL_EXPERIMENTAL
 	struct string_t
 	{
 		bool is_const;
@@ -157,5 +176,6 @@ namespace scl
 
 		}
 	};
+#endif
 
 }

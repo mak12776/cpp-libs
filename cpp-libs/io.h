@@ -47,6 +47,11 @@ namespace scl
 			}
 		}
 
+		static inline size_t get_file_name_size(const char *pntr)
+		{
+
+		}
+
 		static inline long get_file_size(FILE *stream)
 		{
 			long size;

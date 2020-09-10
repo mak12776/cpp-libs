@@ -259,9 +259,9 @@ namespace winapi
 		func_type get_now;
 		bool success;
 
-		auto_timer(func_type func = winapi::get_current_process_time)
+		auto_timer(func_type func_pntr = winapi::get_current_process_time)
 		{
-			get_now = func;
+			get_now = func_pntr;
 			if (!get_now(start))
 			{
 				printf(__FILE__ ":" STR(__LINE__) ": get start time failed.");

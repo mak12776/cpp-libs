@@ -8,11 +8,64 @@ namespace bh
 {
 	using namespace scl;
 
+#ifdef BH_INCLUDE_COUNT_64BIT
+#pragma pack(push, 1)
+	struct data_64bit_count_t
+	{
+		uint64_t data;
+		size_t count;
+	};
+
+	struct counts_64bit_t
+	{
+		std::vector<data_64bit_count_t> data_counts;
+		std::vector<uint8_t> remaining;
+
+		counts_64bit_t(size_t size) : data_counts(size)
+		{ }
+
+		inline void inc_data_count(uint64_t data)
+		{
+			for (size_t index = 0; index < data_counts.size(); index += 1)
+			{
+				if (data_counts[index].data = data)
+				{
+					data_counts[index].count += 1;
+					return;
+				}
+			}
+			data_counts.push_back({ data, 1 });
+		}
+	};
+#pragma pack(pop)
+
+	counts_64bit_t counts_64bit(ubuffer_t &buffer)
+	{
+		uint64_t *pntr = (uint64_t *)buffer.pntr;
+		uint64_t *end = pntr + (buffer.size / sizeof(uint64_t));
+
+		counts_64bit_t result(1024);
+
+		while (pntr != end)
+			result.inc_data_count(*(pntr++));
+
+		uint8_t *pntr8 = (uint8_t *)end;
+		uint8_t *end8 = pntr8 + (buffer.size % sizeof(uint64_t));
+
+		while (pntr8 != end8)
+			result.remaining.push_back(*(pntr8++));
+
+		return result;
+	}
+#endif
+
 	scl::c_string_t archive_ext(".64bh");
 	const char magic[] = { '\x64' };
+	c_string_t counts_64bit_ext(".64bit.counts");
+	c_string_t log_file_ext(".log");
+	FILE *log_file;
 
 #pragma pack(push, 1)
-
 	template <typename data_type>
 	struct data_count_t
 	{
@@ -36,21 +89,48 @@ namespace bh
 		std::vector<data_count_t<data_type>> data_counts;
 		std::vector<ubyte> remaining;
 
-		inline void inc_data_count(data_type value)
+		inline void inc_data_count(data_type data)
 		{
 			for (size_t index = 0; index < data_counts.size(); index += 1)
 			{
-				if (data_counts[index].data = value)
+				if (data_counts[index].data == data)
 				{
 					data_counts[index].count += 1;
 					return;
 				}
 			}
-			data_counts.push_back({ value, 1 });
+			data_counts.push_back(data_count_t<data_type>{ data, 1 });
 		}
 	};
-
 #pragma pack(pop)
+
+	template <typename data_type>
+	counts_t<data_type> count_bits(ubuffer_t &buffer)
+	{
+		data_type *pntr = (data_type *)buffer.pntr;
+		data_type *end = pntr + (buffer.size / sizeof(data_type));
+
+		counts_t<data_type> result;
+
+		while (pntr != end)
+			result.inc_data_count(*(pntr++));
+
+		size_t remaining_size = buffer.size % sizeof(data_type);
+		if (remaining_size)
+		{
+			result.remaining.reserve(remaining_size);
+
+			ubyte *ub_pntr = (ubyte *)end;
+			ubyte *ub_end = ub_pntr + remaining_size;
+
+			while (ub_pntr != ub_end)
+				result.remaining.push_back(*(ub_pntr++));
+		}
+
+		return result;
+	}
+
+	// fread, fwrite counts
 
 	template <typename data_type>
 	static inline size_t fwrite_counts(FILE *file, counts_t<data_type> &counts)
@@ -137,84 +217,6 @@ namespace bh
 			sizeof(data_type) * counts.data_counts.size(), file);
 		
 		return total_read;
-	}
-
-	c_string_t counts_64bit_ext(".64bit.counts");
-
-	template <typename data_type>
-	counts_t<data_type> count_bits(ubuffer_t &buffer)
-	{
-		data_type *pntr = (data_type *)buffer.pntr;
-		data_type *end = pntr + (buffer.size / sizeof(data_type));
-
-		counts_t<data_type> result;
-
-		while (pntr != end)
-			result.inc_data_count(*(pntr++));
-
-		size_t remaining_size = buffer.size % sizeof(data_type);
-
-		if (remaining_size)
-		{
-			result.remaining.reserve(remaining_size);
-
-			ubyte *ub_pntr = (ubyte *)end;
-			ubyte *ub_end = ub_pntr + remaining_size;
-
-			while (ub_pntr != ub_end)
-				result.remaining.push_back(*(ub_pntr++));
-		}
-
-		return result;
-	}
-
-#pragma pack(push, 1)
-	struct data_64bit_count_t
-	{
-		uint64_t data;
-		size_t count;
-	};
-
-	struct counts_64bit_t
-	{
-		std::vector<data_64bit_count_t> data_counts;
-		std::vector<uint8_t> remaining;
-
-		counts_64bit_t(size_t size) : data_counts(size)
-		{ }
-
-		inline void inc_data_count(uint64_t data)
-		{
-			for (size_t index = 0; index < data_counts.size(); index += 1)
-			{
-				if (data_counts[index].data = data)
-				{
-					data_counts[index].count += 1;
-					return;
-				}
-			}
-			data_counts.push_back({ data, 1 });
-		}
-	};
-#pragma pack(pop)
-
-	counts_64bit_t counts_64bit(ubuffer_t &buffer)
-	{
-		uint64_t *pntr = (uint64_t *)buffer.pntr;
-		uint64_t *end = pntr + (buffer.size / sizeof(uint64_t));
-
-		counts_64bit_t result(1024);
-
-		while (pntr != end)
-			result.inc_data_count(*(pntr++));
-
-		uint8_t *pntr8 = (uint8_t *)end;
-		uint8_t *end8 = pntr8 + (buffer.size % sizeof(uint64_t));
-
-		while (pntr8 != end8)
-			result.remaining.push_back(*(pntr8++));
-
-		return result;
 	}
 
 	// data saver
@@ -311,7 +313,7 @@ namespace bh
 		return result;
 	}
 
-	int call_for_each(int argc, const char **argv, void(*func)(const char *argv))
+	int call_for_each(int argc, const char **argv, void(*func_pntr)(const char *argv))
 	{
 		if (argc == 1)
 		{
@@ -319,11 +321,14 @@ namespace bh
 			return 0;
 		}
 
-		func(argv[1]);
+		func_pntr(argv[1]);
 		for (int index = 2; index < argc; index += 1)
 		{
+			if (err::check())
+				return -1;
+
 			io::print_separator(0, '=');
-			func(argv[index]);
+			func_pntr(argv[index]);
 		}
 
 		return 0;
@@ -331,30 +336,52 @@ namespace bh
 
 	void compress(const char *file_name_pntr)
 	{
-		scl::c_string_t file_name(file_name_pntr);
+		scl::c_string_t file_name(file_name_pntr); 
 		scl::m_string_t archive_name;
+		scl::m_string_t log_file_name;
 
 		ubuffer_t buffer;
 		size_t file_bits;
 
-		FILE *archive_file;
-		constexpr bool open_archive_file = false;
-		constexpr bool save_counts_data = false;
+		// malloc log_file_name
+		log_file_name.malloc_cat({ file_name, log_file_ext });
+		if (err::check())
+		{
+			printf("error: can't malloc memory for log file name.");
 
-		printf("In The Name Of God.\n");
+			clean_up::finish();
+			return;
+		}
+		clean_up::add_free(log_file_name.pntr);
 
-		io::set_default_width(20);
-		io::print_separator();
-
-		// malloc for archive_name
+		// malloc archive_name
 		archive_name.malloc_cat({ file_name, archive_ext });
 		if (err::check())
 		{
-			printf("error: can't malloc memory for archive file name.");
+			printf("error: can't malloc memory for archive file name.\n");
+
+			clean_up::finish();
 			return;
 		}
 		clean_up::add_free(archive_name.pntr);
 
+		// fopen log_file
+		log_file = io::safe_fopen(log_file_name.pntr, "wb");
+		if (err::check())
+		{
+			printf("error: can't open log file '%s': %s\n", log_file_name.pntr, strerror(errno));
+
+			clean_up::finish();
+			return;
+		}
+		clean_up::add_fclose(log_file);
+
+		// printf file names
+		cl::printf_ln("file name: %s", file_name.pntr);
+		cl::printf_ln("archive name: %s", archive_name.pntr);
+		cl::printf_ln("log file name: %s", log_file_name.pntr);
+
+		// read file_name into buffer
 		io::read_file_name(file_name.pntr, (void **)&buffer.pntr, &buffer.size);
 		if (err::check())
 		{
@@ -367,6 +394,7 @@ namespace bh
 		}
 		clean_up::add_free(buffer.pntr);
 
+		// multiply bytes number by 8
 		math::safe_mul(buffer.size, (size_t)8, file_bits);
 		if (err::check())
 		{
@@ -375,34 +403,24 @@ namespace bh
 			clean_up::finish();
 			return;
 		}
-		
-		if (open_archive_file)
-		{
-			archive_file = io::safe_fopen(archive_name.pntr, "wb");
-			if (err::check())
-			{
-				
-				printf("error: can't fopen '%s' for writing.\n", archive_name.pntr);
-				printf("errno: %s\n", strerror(errno));
 
-				clean_up::finish();
-				return;
-			}
-			clean_up::add_fclose(archive_file);
-		}
-
-		cl::printf_ln("file name: %s", file_name.pntr);
-		cl::printf_ln("archive name: %s", archive_name.pntr);
+		// printf some informations. TODO: we need faster and more comfortable printf functions
 		cl::printf_ln("file size: %zu byte (%zu bit)", buffer.size, file_bits);
 
 		io::print_separator();
 
-		log::start_process("count & sort bits");
-
+		// counting and sorting 64 bits
 		typedef uint64_t dtype;
-		counts_t<dtype> counts = count_and_sort_bits<dtype>(buffer);
+		counts_t<dtype> counts;
 
-		log::end_process(true);
+		printf("counting & sorting %zu bits: ", sizeof(dtype) * 8);
+		counts = count_and_sort_bits<dtype>(buffer);
+		printf("done\n");
+
+#if 0
+		for (auto iter = counts.data_counts.cbegin(); iter < counts.data_counts.cend(); iter++)
+			printf("%016llx: %zu\n", iter->data, iter->count);
+#endif
 
 		clean_up::finish();
 	}

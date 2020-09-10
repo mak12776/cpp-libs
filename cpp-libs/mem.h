@@ -4,24 +4,60 @@
 #include <string>
 #include "err.h"
 
+#include "log.h"
+
 namespace scl
 {
 	namespace mem
 	{
-		struct manager
-		{
-			void *(&malloc)(size_t);
-			void *(&realloc)(void *, size_t);
-			void(&free)(void *);
+		typedef void *(&malloc_t)(size_t);
+		typedef void *(&realloc_t)(void *, size_t);
+		typedef void (&free_t)(void *);
 
-			manager(void *(&malloc)(size_t), void *(&realloc)(void *, size_t), void(&free)(void *))
-				: malloc(malloc), realloc(realloc), free(free)
-			{ }
+		template <logger_t &logger>
+		void *malloc_logger(size_t size)
+		{
+			void *pntr = malloc(size);
+			logger.printf("% 10s: %zu (%s)\n", "malloc", 
+				size, (pntr == nullptr) ? "failed" : "success");
+			return pntr;
+		}
+
+		template <logger_t &logger>
+		void *realloc_logger(void *pntr, size_t size)
+		{
+			void *new_pntr = realloc(pntr, size);
+			logger.printf("% 10s: %zu (%s)\n", "realloc",
+				size, (new_pntr == nullptr) ? "failed" : "success");
+			return new_pntr;
+		}
+
+		struct manager_t
+		{
+			malloc_t malloc;
+			realloc_t realloc;
+			free_t free;
+
+			inline void *safe_malloc(size_t size)
+			{
+				void *pntr = this->malloc(size);
+
+				if (pntr == nullptr)
+				{
+					err::set(err::MALLOC);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+
+				return pntr;
+			}
 		};
 
-		manager default_manager(malloc, realloc, free);
+		manager_t default_manager{ malloc, realloc, free };
+		manager_t logger_manager{ 
+			malloc_logger<default_logger>, realloc_logger<default_logger>, free};
 
-		template <typename value_type>
+#ifdef SCL_EXPERIMENTAL
+		template <typename value_type, intptr_t manager = default_manager_pntr>
 		struct m_pntr
 		{
 			value_type *pntr;
@@ -38,6 +74,7 @@ namespace scl
 				this->refs = 1;
 			}
 		};
+#endif
 
 		static inline void *safe_malloc(size_t size)
 		{

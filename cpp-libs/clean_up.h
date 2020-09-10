@@ -24,118 +24,72 @@ namespace scl
 			};
 		};
 
+		constexpr size_t local_jobs_size = 4096;
+
+
 		template <size_t array_size>
 		struct storage
 		{
-			job jobs_array[array_size];
-			size_t array_index = 0;
+			size_t index = 0;
+			job jobs[array_size];
 
 			inline void add_fclose(FILE *file)
 			{
-				if (array_index != array_size)
+				if (index != array_size)
 				{
-					jobs_array[array_index].type = job_type::FCLOSE;
-					jobs_array[array_index].file = file;
-					array_index += 1;
+					jobs[index].type = job_type::FCLOSE;
+					jobs[index].file = file;
+					index += 1;
 				}
 			}
 
 			inline void add_free(void *pntr)
 			{
-				if (array_index != array_size)
+				if (index != array_size)
 				{
-					jobs_array[array_index].type = job_type::FREE;
-					jobs_array[array_index].pntr = pntr;
-					array_index += 1;
+					jobs[index].type = job_type::FREE;
+					jobs[index].pntr = pntr;
+					index += 1;
 				}
 			}
 
 			inline void add_delete(void *pntr)
 			{
-				if (array_index != array_size)
+				if (index != array_size)
 				{
-					jobs_array[array_index].type = job_type::DELETE;
-					jobs_array[array_index].pntr = pntr;
-					array_index += 1;
+					jobs[index].type = job_type::DELETE;
+					jobs[index].pntr = pntr;
+					index += 1;
 				}
 			}
 
 			inline void finish()
 			{
-				for (size_t index = 0; index < array_index; index += 1)
+				for (size_t index = 0; index < index; index += 1)
 				{
-					switch (jobs_array[index].type)
+					switch (jobs[index].type)
 					{
 					case job_type::FCLOSE:
-						fclose(jobs_array[index].file);
+						fclose(jobs[index].file);
 						break;
 
 					case job_type::FREE:
-						free(jobs_array[index].pntr);
+						free(jobs[index].pntr);
 						break;
 
 					case job_type::DELETE:
-						delete jobs_array[index].pntr;
+						delete jobs[index].pntr;
 						break;
 					}
 				}
 			}
 		};
 
-		constexpr size_t jobs_max = 1024;
-		size_t jobs_index = 0;
-		job jobs[jobs_max];
+		storage<local_jobs_size> local_storage;
 
-		void add_fclose(FILE *file)
-		{
-			if (jobs_index != jobs_max)
-			{
-				jobs[jobs_index].type = job_type::FCLOSE;
-				jobs[jobs_index].file = file;
-				jobs_index += 1;
-			}
-		}
-
-		void add_free(void *pntr)
-		{
-			if (jobs_index != jobs_max)
-			{
-				jobs[jobs_index].type = job_type::FREE;
-				jobs[jobs_index].pntr = pntr;
-				jobs_index += 1;
-			}
-		}
-
-		void add_delete(void *pntr)
-		{
-			if (jobs_index != jobs_max)
-			{
-				jobs[jobs_index].type = job_type::DELETE;
-				jobs[jobs_index].pntr = pntr;
-				jobs_index += 1;
-			}
-		}
-
-		void finish()
-		{
-			for (size_t index = 0; index < jobs_index; index += 1)
-			{
-				switch (jobs[index].type)
-				{
-				case job_type::FCLOSE:
-					fclose(jobs[index].file);
-					break;
-
-				case job_type::FREE:
-					free(jobs[index].pntr);
-					break;
-
-				case job_type::DELETE:
-					delete jobs[index].pntr;
-					break;
-				}
-			}
-			jobs_index = 0;
-		}
+		void add_fclose(FILE *file) { local_storage.add_fclose(file); }
+		void add_free(void *pntr) { local_storage.add_free(pntr); }
+		void add_delete(void *pntr) { local_storage.add_delete(pntr); }
+		void finish() { local_storage.finish(); }
 	}
 }

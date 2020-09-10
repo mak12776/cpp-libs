@@ -147,7 +147,7 @@ namespace pxld
 			}
 
 			template <typename cast_type>
-			inline void map(color_type(*func) (point<unit_type> point))
+			inline void map(color_type(*func_pntr) (point<unit_type> point))
 			{
 				cast_type *data = (cast_type *)this->data;
 
@@ -155,12 +155,12 @@ namespace pxld
 				{
 					for (unit_type x = 0; x < this->size.x; x += 1)
 					{
-						data[y_offset + x] = func({ x, y });
+						data[y_offset + x] = func_pntr({ x, y });
 					}
 				}
 			}
 
-			inline void map(color_type(*func) (point<unit_type> point))
+			inline void map(color_type(*func_pntr) (point<unit_type> point))
 			{
 				color_type color;
 
@@ -168,7 +168,7 @@ namespace pxld
 				{
 					for (unit_type x = 0, x_offset = 0; x < this->size.x; x += 1, x_offset += this->color_width)
 					{
-						color = func({ x, y });
+						color = func_pntr({ x, y });
 
 						for (unit_type c_offset = this->color_width; c_offset > 0; )
 						{
@@ -182,7 +182,7 @@ namespace pxld
 			}
 
 			template <typename cast_type>
-			inline void effect(color_type(*func) (point<unit_type> point, color_type color))
+			inline void effect(color_type(*func_pntr) (point<unit_type> point, color_type color))
 			{
 				cast_type *data = (cast_type *)this->data;
 
@@ -190,12 +190,12 @@ namespace pxld
 				{
 					for (unit_type x = 0; x < this->size.x; x += 1)
 					{
-						data[y_offset + x] = func({ x, y }, data[y_offset + x]);
+						data[y_offset + x] = func_pntr({ x, y }, data[y_offset + x]);
 					}
 				}
 			}
 
-			inline void effect(color_type(*func) (point<unit_type> point, color_type color))
+			inline void effect(color_type(*func_pntr) (point<unit_type> point, color_type color))
 			{
 				color_type color;
 
@@ -215,7 +215,7 @@ namespace pxld
 							color |= this->data[xy_offset + c_offset];
 						}
 
-						color = func({ x, y }, color);
+						color = func_pntr({ x, y }, color);
 
 						for (unit_type c_offset = this->color_width; c_offset > 0; )
 						{
