@@ -1,0 +1,70 @@
+
+== variadic functions ==
+
+- variable-number-of-arguments-in-c
+    https://stackoverflow.com/questions/1657883/variable-number-of-arguments-in-c
+
+- variadic functions    
+    https://en.cppreference.com/w/cpp/utility/variadic
+
+- variadic arguments 
+    https://en.cppreference.com/w/cpp/language/variadic_arguments
+    
+- parameter pack
+    https://en.cppreference.com/w/cpp/language/parameter_pack
+    
+    
+== threading ==
+
+- hyper-threading-intel-definition
+    https://www.tomshardware.com/reviews/hyper-threading-intel-definition,5746.html
+    
+== set priority class ==
+
+- change-process-priority-windows-10/
+https://winaero.com/blog/change-process-priority-windows-10/
+
+- how-to-see-logical-processor-usage-in-task-manager
+    https://www.technipages.com/how-to-see-logical-processor-usage-in-task-manager
+    
+- cpu-analysis
+    https://docs.microsoft.com/en-us/windows-hardware/test/wpt/cpu-analysis
+    
+- how-many-threads-can-a-c-application-create
+    https://stackoverflow.com/questions/17345647/how-many-threads-can-a-c-application-create
+    
+- What-is-the-number-of-child-process-created-by-fork-fork-fork
+    https://www.quora.com/What-is-the-number-of-child-process-created-by-fork-fork-fork
+
+- determine-number-cores-cpu/
+    https://helpdeskgeek.com/how-to/determine-number-cores-cpu/
+
+- optimal-number-of-threads-per-core
+    https://stackoverflow.com/questions/1718465/optimal-number-of-threads-per-core
+
+- Task_Manager (search logical procees here!)
+    https://en.wikipedia.org/wiki/Task_Manager_(Windows)
+
+- cores-vs-threads-how-many-threads-should-i-run-on-this-machine
+    https://askubuntu.com/questions/668538/cores-vs-threads-how-many-threads-should-i-run-on-this-machine
+
+- 3_Processes
+    https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/3_Processes.html
+
+- how-many-processes-can-i-create-in-one-cpu-core/21153/2
+    https://elixirforum.com/t/how-many-processes-can-i-create-in-one-cpu-core/21153/2
+
+- how-to-set-the-process-priority-in-c
+    https://stackoverflow.com/questions/5216347/how-to-set-the-process-priority-in-c
+    
+- creating-multiple-process-using-fork/
+    https://www.geeksforgeeks.org/creating-multiple-process-using-fork/
+    
+- create-n-child-process-parent-process-using-fork-c/
+    https://www.geeksforgeeks.org/create-n-child-process-parent-process-using-fork-c/
+    
+    
+== GPT vs MBR file system partions ==
+
+- How to install Windows 10 on GPT disk using UEFI bootable USB | Using Rufus
+    https://www.youtube.com/watch?v=UeEWnXmgyO4
