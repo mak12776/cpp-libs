@@ -35,7 +35,6 @@ namespace scl
 		};
 
 		// default manager
-
 		manager_t default_manager{ malloc, realloc, free };
 
 		// text logger manager
