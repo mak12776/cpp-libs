@@ -14,31 +14,6 @@ namespace scl
 		typedef void *(&realloc_t)(void *, size_t);
 		typedef void (&free_t)(void *);
 
-		template <log::logger_t &logger>
-		void *malloc_logger(size_t size)
-		{
-			void *pntr = malloc(size);
-			logger.printf("% 10s: %zu (%s)\n", "malloc", size
-				(pntr == nullptr) ? "failed" : "success");
-			return pntr;
-		}
-
-		template <log::logger_t &logger>
-		void *realloc_logger(void *pntr, size_t size)
-		{
-			void *new_pntr = realloc(pntr, size);
-			logger.printf("% 10s: %p %zu (%s)\n", "realloc", pntr, size,
-				(new_pntr == nullptr) ? "failed" : "success");
-			return new_pntr;
-		}
-		
-		template <log::logger_t &logger>
-		void free_logger(void *pntr)
-		{
-			printf("% 10s: %p\n", "free", pntr);
-			free(pntr);
-		}
-
 		struct manager_t
 		{
 			malloc_t malloc;
@@ -59,13 +34,43 @@ namespace scl
 			}
 		};
 
+		// default manager
+
 		manager_t default_manager{ malloc, realloc, free };
+
+		// text logger manager
+		template <log::logger_t &logger>
+		void *malloc_logger(size_t size)
+		{
+			void *pntr = malloc(size);
+			logger.printf("% 10s: %zu (%s)\n", "malloc", size
+			(pntr == nullptr) ? "failed" : "success");
+			return pntr;
+		}
+
+		template <log::logger_t &logger>
+		void *realloc_logger(void *pntr, size_t size)
+		{
+			void *new_pntr = realloc(pntr, size);
+			logger.printf("% 10s: %p %zu (%s)\n", "realloc", pntr, size,
+				(new_pntr == nullptr) ? "failed" : "success");
+			return new_pntr;
+		}
+
+		template <log::logger_t &logger>
+		void free_logger(void *pntr)
+		{
+			printf("% 10s: %p\n", "free", pntr);
+			free(pntr);
+		}
 
 		template <log::logger_t &logger>
 		manager_t logger_manager{
 			malloc_logger<logger>, realloc_logger<logger>, free};
 
 #ifdef SCL_EXPERIMENTAL
+		// memory pointer
+
 		template <typename value_type, intptr_t manager = default_manager_pntr>
 		struct m_pntr
 		{
