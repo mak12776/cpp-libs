@@ -21,6 +21,35 @@ namespace scl
 		size_t size;
 	};
 
+	template <size_t _size>
+	struct bitset_t
+	{
+		ubyte pntr[_size];
+
+		inline constexpr size_t size() { return _size; }
+
+		inline void set_all(const bool value)
+		{ memset(pntr, value ? 0xFF : 0, _size); }
+
+		inline bool get(size_t index)
+		{
+			constexpr size_t uintmax_size = sizeof(uintmax_t);
+			size_t reminder = uintmax_size - 1 - (index % uintmax_size);
+
+			return *((uintmax_t *)pntr + (index / uintmax_size))
+				& ((uintmax_t)1 << reminder);
+		}
+
+		inline void set(size_t index, bool value)
+		{
+			constexpr size_t uintmax_size = sizeof(uintmax_t);
+			size_t reminder = uintmax_size - 1 - (index % uintmax_size);
+
+			*((uintmax_t *)pntr + (index / uintmax_size))
+				|= ((uintmax_t)1 << reminder);
+		}
+	};
+
 #define BYTE_MAX	INT8_MAX
 #define BYTE_MIN	INT8_MIN
 #define UBYTE_MAX	UINT8_MAX

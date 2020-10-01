@@ -9,8 +9,12 @@ namespace scl
 {
 	namespace fmt
 	{
+		static inline size_t printf(const char *fmt, ...)
+		{
 
+		}
 	}
+
 	static inline size_t safe_fprintf(FILE *stream, const char *fmt, ...)
 	{
 		va_list ap;

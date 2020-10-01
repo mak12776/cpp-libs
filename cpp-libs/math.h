@@ -10,6 +10,10 @@ namespace scl
 {
 	namespace math
 	{
+		// simple primes finder
+
+		// safe arithmetic operations
+
 		template<typename type>
 		static inline bool mul(type a, type b, type &res)
 		{
