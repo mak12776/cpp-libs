@@ -1,5 +1,8 @@
 #pragma once
 
+#include "types.h"
+#include "clean_up.h"
+#include "string.h"
 #include "err.h"
 #include "clib.h"
 #include "log.h"
@@ -87,7 +90,7 @@ namespace bh
 	struct counts_t
 	{
 		std::vector<data_count_t<data_type>> data_counts;
-		std::vector<ubyte> remaining;
+		data_type remaining;
 
 		inline void inc_data_count(data_type data)
 		{

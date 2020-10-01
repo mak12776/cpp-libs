@@ -34,19 +34,19 @@ namespace scl
 		inline bool get(size_t index)
 		{
 			constexpr size_t uintmax_size = sizeof(uintmax_t);
-			size_t reminder = uintmax_size - 1 - (index % uintmax_size);
+			size_t remaining = uintmax_size - 1 - (index % uintmax_size);
 
 			return *((uintmax_t *)pntr + (index / uintmax_size))
-				& ((uintmax_t)1 << reminder);
+				& ((uintmax_t)1 << remaining);
 		}
 
 		inline void set(size_t index, bool value)
 		{
 			constexpr size_t uintmax_size = sizeof(uintmax_t);
-			size_t reminder = uintmax_size - 1 - (index % uintmax_size);
+			size_t remaining = uintmax_size - 1 - (index % uintmax_size);
 
 			*((uintmax_t *)pntr + (index / uintmax_size))
-				|= ((uintmax_t)1 << reminder);
+				|= ((uintmax_t)1 << remaining);
 		}
 	};
 
