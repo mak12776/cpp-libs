@@ -68,6 +68,12 @@ namespace bh
 	c_string_t log_file_ext(".log");
 	FILE *log_file;
 
+	template <size_t size>
+	using get_data_type =
+		std::conditional_t<(size <= 8), uint8_t,
+		std::conditional_t<(size <= 16), uint16_t,
+		std::conditional_t<(size <= 32), uint32_t, uint64_t>>>;
+
 #pragma pack(push, 1)
 	template <typename data_type>
 	struct data_count_t
@@ -75,48 +81,77 @@ namespace bh
 		data_type data;
 		size_t count;
 
-		static int compare(const void *a, const void *b)
-		{
-			const data_count_t<data_type> *pntr_a = static_cast<const data_count_t<data_type> *>(a);
-			const data_count_t<data_type> *pntr_b = static_cast<const data_count_t<data_type> *>(b);
-
-			if (pntr_a->count < pntr_b->count) return -1;
-			if (pntr_a->count > pntr_b->count) return 1;
-			return 0;
-		}
+		static int compare(const void *a, const void *b);
 	};
 
 	template <typename data_type>
+	struct remaining_t
+	{
+		data_type value;
+		ubyte size;
+	};
+
+	template <size_t size, typename data_type = get_data_type<size>>
 	struct counts_t
 	{
 		std::vector<data_count_t<data_type>> data_counts;
-		data_type remaining;
+		remaining_t<data_type> remaining;
 
-		inline void inc_data_count(data_type data)
-		{
-			for (size_t index = 0; index < data_counts.size(); index += 1)
-			{
-				if (data_counts[index].data == data)
-				{
-					data_counts[index].count += 1;
-					return;
-				}
-			}
-			data_counts.push_back(data_count_t<data_type>{ data, 1 });
-		}
+		inline void inc_data_count(data_type data);
 	};
 #pragma pack(pop)
 
-	template <typename data_type>
-	counts_t<data_type> count_bits(ubuffer_t &buffer)
+	template<typename data_type>
+	inline int data_count_t<data_type>::compare(const void * a, const void * b)
 	{
-		data_type *pntr = (data_type *)buffer.pntr;
-		data_type *end = pntr + (buffer.size / sizeof(data_type));
+		const data_count_t<data_type> *pntr_a =
+			static_cast<const data_count_t<data_type> *>(a);
+		const data_count_t<data_type> *pntr_b =
+			static_cast<const data_count_t<data_type> *>(b);
 
-		counts_t<data_type> result;
+		if (pntr_a->count < pntr_b->count) return -1;
+		if (pntr_a->count > pntr_b->count) return 1;
+		return 0;
+	}
 
-		while (pntr != end)
-			result.inc_data_count(*(pntr++));
+	template <size_t size, typename data_type>
+	inline void counts_t<size, data_type>::inc_data_count(data_type data)
+	{
+		for (size_t index = 0; index < data_counts.size(); index += 1)
+		{
+			if (data_counts[index].data == data)
+			{
+				data_counts[index].count += 1;
+				return;
+			}
+		}
+		data_counts.push_back(data_count_t<data_type>{data, 1});
+	}
+
+	template <size_t size, typename data_type = get_data_type<size>>
+	counts_t<size> count_bits(ubuffer_t &buffer)
+	{
+		counts_t<size> count;
+
+		if ((size == 8) ||
+			(size == 16) ||
+			(size == 32) ||
+			(size == 64))
+		{
+			data_type *pntr = (data_type *)buffer.pntr;
+			data_type *end = pntr + (buffer.size / sizeof(data_type));
+
+			while (pntr != end)
+				count.inc_data_count(*(pntr++));
+
+			count.remaining.size = buffer.size % sizeof(data_type);
+			if (count.remaining.size)
+			{
+				count.remaining.value = 0;
+			}
+		}
+
+#if 0
 
 		size_t remaining_size = buffer.size % sizeof(data_type);
 		if (remaining_size)
@@ -131,8 +166,11 @@ namespace bh
 		}
 
 		return result;
+#endif
 	}
 
+
+#ifdef BH_INCLUDE_OLD_DATA_COUNT
 	// fread, fwrite counts
 
 	template <typename data_type>
@@ -221,6 +259,7 @@ namespace bh
 		
 		return total_read;
 	}
+#endif
 
 	// data saver
 	template <typename dtype>
@@ -302,12 +341,13 @@ namespace bh
 		}
 	}
 
-	template <typename data_type>
-	counts_t<data_type> count_and_sort_bits(ubuffer_t &buffer)
+	template <size_t size>
+	counts_t<size> count_and_sort_bits(ubuffer_t &buffer)
 	{
-		counts_t<data_type> result;
+		counts_t<size> result;
+		typedef get_data_type<size> data_type;
 
-		result = count_bits<data_type>(buffer);
+		result = count_bits<size>(buffer);
 		// count_bits will not failed.
 
 		std::qsort(result.data_counts.data(), result.data_counts.size(),
@@ -414,10 +454,10 @@ namespace bh
 
 		// counting and sorting 64 bits
 		typedef uint64_t dtype;
-		counts_t<dtype> counts;
+		counts_t<64> counts;
 
 		printf("counting & sorting %zu bits: ", sizeof(dtype) * 8);
-		counts = count_and_sort_bits<dtype>(buffer);
+		counts = count_and_sort_bits<64>(buffer);
 		printf("done\n");
 
 #if 0
@@ -432,4 +472,5 @@ namespace bh
 	{
 		return call_for_each(argc, argv, compress);
 	}
+	
 }

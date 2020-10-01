@@ -228,6 +228,9 @@
     <ClInclude Include="winpi_functions.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
+    <ClInclude Include="type_traits.h">
+      <Filter>Header Files\incomplete</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
