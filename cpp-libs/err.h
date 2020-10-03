@@ -22,12 +22,19 @@ namespace scl
 		enum num_t : uint8_t
 		{
 			SUCCESS = 0,
+
+			// invalid argument
 			INVALID_ARGUMENT,
-			WIN_ERROR, PRINTF,
+			
+			// malloc, new operator
 			MALLOC, NEW,
+
 			INT_OVERFLOW, FLOAT_OVERFLOW,
-			FOPEN, STAT,
-			FTELL, FSEEK,
+
+			OPEN, STAT,
+			READ, WRITE,
+
+			FOPEN, FTELL, FSEEK,
 			FREAD, FWRITE,
 			FERROR, FEOF,
 			UNDEFINED_BEHAVIOR,

@@ -130,6 +130,14 @@ namespace scl
 			return read_number;
 		}
 
+		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
+		{
+			size_t write_number;
+
+			write_number = fwrite(pntr, 1, size, stream);
+			if ()
+		}
+
 		template <typename data_type>
 		static inline size_t safe_fread_data(data_type &data, FILE *file)
 		{
