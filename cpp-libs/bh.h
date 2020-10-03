@@ -146,10 +146,10 @@ namespace bh
 
 			count.remaining.size = buffer.size % sizeof(data_type);
 			if (count.remaining.size)
-			{
-				count.remaining.value = 0;
-			}
+				memcpy(&count.remaining.value, end, count.remaining.size);
 		}
+
+		return count;
 
 #if 0
 

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include <cstdio>
 #include <cstdarg>
 
@@ -47,9 +50,42 @@ namespace scl
 			}
 		}
 
-		static inline size_t get_file_name_size(const char *pntr)
+		static inline void safe_stat32(const char *pntr, struct _stat32 *stat_p)
 		{
+			if (_stat32(pntr, stat_p))
+			{
+				err::set(err::STAT);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
 
+		static inline void safe_stat64(const char *pntr, struct _stat64 *stat_p)
+		{
+			if (_stat64(pntr, stat_p))
+			{
+				err::set(err::STAT);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
+
+		static inline size_t get_file_name_size(const char *name)
+		{
+#if SIZE_MAX == UINT64_MAX
+			struct __stat64 file_stat;
+			safe_stat64(name, &file_stat);
+#elif SIZE_MAX == UINT32_MAX
+			struct __stat32 file_stat;
+			safe_stat32(name, &file_stat);
+#else
+#error unknown SIZE_MAX.
+#endif
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return 0;
+			}
+
+			return file_stat.st_size;
 		}
 
 		static inline long get_file_size(FILE *stream)

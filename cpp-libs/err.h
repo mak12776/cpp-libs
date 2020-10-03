@@ -26,7 +26,8 @@ namespace scl
 			WIN_ERROR, PRINTF,
 			MALLOC, NEW,
 			INT_OVERFLOW, FLOAT_OVERFLOW,
-			FOPEN, FTELL, FSEEK,
+			FOPEN, STAT,
+			FTELL, FSEEK,
 			FREAD, FWRITE,
 			FERROR, FEOF,
 			UNDEFINED_BEHAVIOR,
@@ -46,6 +47,7 @@ namespace scl
 			case INT_OVERFLOW: return "INT_OVERFLOW";
 			case FLOAT_OVERFLOW: return "FLOAT_OVERFLOW";
 			case FOPEN: return "FOPEN";
+			case STAT: return "STAT";
 			case FTELL: return "FTELL";
 			case FSEEK: return "FSEEK";
 			case FREAD: return "FREAD";
