@@ -232,15 +232,12 @@ namespace scl
 
 		// other functions
 
-		static inline void read_file(FILE *file, void **pntr, size_t *size)
+		static inline void fread_all(FILE *file, void **pntr, size_t *size)
 		{
-			long file_long_size;
 			size_t file_size;
 
-			file_long_size = get_file_size(file);
-
 #if ULONG_MAX < SIZE_MAX
-			file_size = (unsigned long)file_long_size;
+			file_size = (size_t)get_file_size(file);
 #else
 #error unsigned long is too big.
 #endif
@@ -261,7 +258,7 @@ namespace scl
 			}
 		}
 
-		static inline void read_file_name(const char *name, void **pntr, size_t *size)
+		static inline void fopen_fread_all(const char *name, void **pntr, size_t *size)
 		{
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check())
@@ -270,8 +267,28 @@ namespace scl
 				return;
 			}
 
-			read_file(file, pntr, size);
+			fread_all(file, pntr, size);
+			if (err::check())
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+
 			std::fclose(file);
+		}
+
+		static inline size_t fopen_fwrite_all(const char *name, void *pntr, size_t size)
+		{
+			FILE *file = safe_fopen(name, "wb");
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			size_t write_number = safe_fwrite(pntr, size, file);
+			if (err::check())
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+
+			std::fclose(file);
+			return write_number;
 		}
 
 		// normal print, fomrated print tools
