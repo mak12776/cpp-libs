@@ -128,7 +128,7 @@ namespace scl
 
 		constexpr size_t default_array_size = 4096;
 
-		typedef handler_t<4096> default_handler_t;
+		typedef handler_t<default_array_size> default_handler_t;
 		default_handler_t default_handler{SUCCESS, 0, {0}, stderr};
 
 

@@ -33,7 +33,7 @@ namespace counter
 	template <
 		default_handler_t &handler = default_handler,
 		manager_t<handler> &manager = default_manager,
-		default_cleaner_t &cleaner = default_cleaner> // 4KB
+		default_cleaner_t &cleaner = default_cleaner>
 	static inline void count_file(FILE *file, count_t &count)
 	{
 		ubuffer_t buffer;
