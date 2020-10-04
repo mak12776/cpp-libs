@@ -207,9 +207,6 @@
     <ClInclude Include="bh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="winpi_functions.h">
-      <Filter>Header Files\winapi</Filter>
-    </ClInclude>
     <ClInclude Include="type_traits.h">
       <Filter>Header Files\incomplete</Filter>
     </ClInclude>
@@ -237,8 +234,11 @@
     <ClInclude Include="cleaner.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="winapi_functions.h">
+      <Filter>Header Files\winapi</Filter>
+    </ClInclude>
     <ClInclude Include="counter.h">
-      <Filter>Header Files\scl</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

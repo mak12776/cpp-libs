@@ -175,61 +175,6 @@ namespace scl
 			return safe_fwrite(&data, sizeof(data_type), stream);
 		}
 
-		// fread all, fwrite all
-
-#if 0
-		static inline size_t fread_all(void *pntr, size_t size, FILE *stream)
-		{
-			size_t read_number;
-
-			read_number = fread(pntr, 1, size, stream);
-			while (read_number != size)
-			{
-				if (ferror(stream))
-				{
-					err::set(err::FERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-				else if (feof(stream))
-				{
-					err::set(err::FEOF);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-				else
-				{
-					err::set(err::UNDEFINED_BEHAVIOR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-
-				read_number += fread((ubyte *)pntr + read_number, 1, size - read_number, stream);
-			}
-			return read_number;
-		}
-
-		static inline size_t fwrite_all(void *pntr, size_t size, FILE *stream)
-		{
-			size_t write_number;
-
-			write_number = fwrite(pntr, 1, size, stream);
-			while (write_number != size)
-			{
-				if (ferror(stream))
-				{
-					err::set(err::FERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-				else
-				{
-					err::set(err::UNDEFINED_BEHAVIOR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-
-				write_number += fwrite((ubyte *)pntr + write_number, 1, size - write_number, stream);
-			}
-			return write_number;
-		}
-#endif
-
 		// other functions
 
 		static inline void fread_all(FILE *file, void **pntr, size_t *size)
@@ -318,5 +263,60 @@ namespace scl
 
 			return write_number;
 		}
+
+
+		// deprecated functions
+#if 0
+		static inline size_t fread_all(void *pntr, size_t size, FILE *stream)
+		{
+			size_t read_number;
+
+			read_number = fread(pntr, 1, size, stream);
+			while (read_number != size)
+			{
+				if (ferror(stream))
+				{
+					err::set(err::FERROR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				else if (feof(stream))
+				{
+					err::set(err::FEOF);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				else
+				{
+					err::set(err::UNDEFINED_BEHAVIOR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+
+				read_number += fread((ubyte *)pntr + read_number, 1, size - read_number, stream);
+			}
+			return read_number;
+		}
+
+		static inline size_t fwrite_all(void *pntr, size_t size, FILE *stream)
+		{
+			size_t write_number;
+
+			write_number = fwrite(pntr, 1, size, stream);
+			while (write_number != size)
+			{
+				if (ferror(stream))
+				{
+					err::set(err::FERROR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				else
+				{
+					err::set(err::UNDEFINED_BEHAVIOR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+
+				write_number += fwrite((ubyte *)pntr + write_number, 1, size - write_number, stream);
+			}
+			return write_number;
+		}
+#endif
 	}
 }

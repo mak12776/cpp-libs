@@ -165,7 +165,7 @@
     <ClInclude Include="fmt.h" />
     <ClInclude Include="error_handling_test.h" />
     <ClInclude Include="type_traits.h" />
-    <ClInclude Include="winpi_functions.h" />
+    <ClInclude Include="winapi_functions.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="macros.h" />
     <ClInclude Include="winapi.h" />
