@@ -23,6 +23,6 @@ namespace counter
 		using namespace scl;
 		ubuffer_t buffer;
 
-		// io::fread_all(file, buffer.pntr, buffer.size);
+		
 	}
 }

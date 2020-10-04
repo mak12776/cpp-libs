@@ -9,17 +9,17 @@ namespace scl
 	typedef int8_t byte;
 	typedef uint8_t ubyte;
 
-	struct ubuffer_t
+	template <typename byte_type>
+	struct base_buffer_t
 	{
-		ubyte *pntr;
+		byte_type *pntr;
 		size_t size;
 	};
 
-	struct buffer_t
-	{
-		byte *pntr;
-		size_t size;
-	};
+	typedef base_buffer_t<void> vbuffer_t;
+	typedef base_buffer_t<ubyte> ubuffer_t;
+	typedef base_buffer_t<byte> buffer_t;
+	
 
 	template <size_t _size>
 	struct bitset_t

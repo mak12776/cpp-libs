@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include <io.h>
+#include <variant>
 
 #include "clib.h"
 #include "err.h"
@@ -177,7 +178,7 @@ namespace scl
 
 		// other functions
 
-		static inline void fread_all(FILE *file, void **pntr, size_t *size)
+		static inline void fread_all(FILE *file, void **pntr, size_t &size)
 		{
 			size_t file_size;
 
@@ -194,7 +195,7 @@ namespace scl
 				return;
 			}
 
-			(*size) = safe_fread(*pntr, file_size, file);
+			size = safe_fread(*pntr, file_size, file);
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
@@ -203,7 +204,8 @@ namespace scl
 			}
 		}
 
-		static inline void fopen_fread_all(const char *name, void **pntr, size_t *size)
+		static inline void fopen_fread_all(const char *name, void **pntr, 
+			size_t &size)
 		{
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check())
@@ -235,6 +237,30 @@ namespace scl
 			std::fclose(file);
 			return write_number;
 		}
+
+		// fread, fwrite all with base_buffer_t
+
+		template <typename byte_type>
+		static inline void fread_all(FILE *file, 
+			base_buffer_t<byte_type> &buffer)
+		{
+			fread_all(file, (void **)&buffer.pntr, buffer.size);
+		}
+
+		template <typename byte_type>
+		static inline void fopen_fread_all(FILE *file, 
+			base_buffer_t<byte_type> &buffer)
+		{
+			fopen_fread_all(file, (void **)&buffer.pntr, buffer.size);
+		}
+
+		template <typename byte_type>
+		static inline void fopen_fwrite_all(FILE *file, 
+			base_buffer_t<byte_type> &buffer)
+		{
+			fopen_fwrite_all(file, buffer.pntr, buffer.size);
+		}
+
 
 		// normal print, fomrated print tools
 
