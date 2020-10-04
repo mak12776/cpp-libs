@@ -24,15 +24,15 @@ namespace scl
 			};
 		};
 
-		template <size_t array_size>
+		template <size_t size>
 		struct cleaner_t
 		{
 			size_t index = 0;
-			job jobs[array_size];
+			job jobs[size];
 
 			inline void add_fclose(FILE *file)
 			{
-				if (index != array_size)
+				if (index != size)
 				{
 					jobs[index].type = job_type::FCLOSE;
 					jobs[index].file = file;
@@ -42,7 +42,7 @@ namespace scl
 
 			inline void add_free(void *pntr)
 			{
-				if (index != array_size)
+				if (index != size)
 				{
 					jobs[index].type = job_type::FREE;
 					jobs[index].pntr = pntr;
@@ -52,7 +52,7 @@ namespace scl
 
 			inline void add_delete(void *pntr)
 			{
-				if (index != array_size)
+				if (index != size)
 				{
 					jobs[index].type = job_type::DELETE;
 					jobs[index].pntr = pntr;
@@ -83,7 +83,7 @@ namespace scl
 		};
 
 		constexpr size_t default_jobs_size = 4096;
-		cleaner_t<local_jobs_size> default_cleaner;
+		cleaner_t<default_jobs_size> default_cleaner;
 
 		void add_fclose(FILE *file) { default_cleaner.add_fclose(file); }
 		void add_free(void *pntr) { default_cleaner.add_free(pntr); }

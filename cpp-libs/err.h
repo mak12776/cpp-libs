@@ -86,28 +86,49 @@ namespace scl
 			}
 		}
 
-		num_t num = SUCCESS;
-		size_t info_array_index = 0; 
-		constexpr size_t info_array_size = 4096;
-		FILE *log_file = stderr;
-
 #pragma pack(push, 1)
+
 		struct info_t
 		{
 			const char *file_name;
 			line_t line_number;
 			const char *function_name;
-		} info_array[info_array_size];
+		};
 
-		struct error_t
+		template <size_t size>
+		struct handler_t
 		{
 			num_t num;
+			size_t index;
+			info_t info_array[size];
+			FILE *log_file;
 
-			size_t array_index;
-			info_t info_array[info_array_size];
+			constexpr size_t array_size() const { return size; }
+
+			inline bool check() { return num != num_t::SUCCESS; }
+			inline void set(num_t errnum) { num = errnum; }
+			inline void clear() { num = num_t::SUCCESS; index = 0; }
+			inline const char *string() { return to_string(num); }
+
+			inline void push_file_info(const char *file_name, uint64_t line_number,
+				const char *function_name)
+			{
+				if (index != size)
+				{
+					info_array[index].file_name = file_name;
+					info_array[index].line_number = line_number;
+					info_array[index].function_name = function_name;
+					index += 1;
+				}
+			}
 		};
+
 #pragma pack(pop)
 
+		constexpr size_t default_array_size = 4096;
+		handler_t<default_array_size> default_handler{SUCCESS, 0, {0}, stderr};
+
+#if SCL_ERR_PRINT
 		static inline int print_status()
 		{
 			return std::fprintf(log_file, "%s: %s\n", to_string(num), strerror(errno));
@@ -192,28 +213,17 @@ namespace scl
 
 			return total;
 		}
+#endif
 
-		static inline void set(num_t errnum) { num = errnum; }
-		static inline void clear()
-		{
-			num = num_t::SUCCESS;
-			info_array_index = 0;
-		}
-		static inline bool check() { return num != num_t::SUCCESS; }
-		static inline bool success() { return num == num_t::SUCCESS; }
+		static inline void set(num_t errnum) { default_handler.set(errnum); }
+		static inline void clear() { default_handler.clear(); }
 
-		inline const char *string() { return to_string(num); }
+		static inline bool check()  { return default_handler.check(); }
+		inline const char *string() { return  default_handler.string(); }
 
-		inline void push_file_info(const char *file_name, uint64_t line_number, const char *function_name)
-		{
-			if (info_array_index != info_array_size)
-			{
-				info_array[info_array_index].file_name = file_name;
-				info_array[info_array_index].line_number = line_number;
-				info_array[info_array_index].function_name = function_name;
-				info_array_index += 1;
-			}
-		}
+		inline void push_file_info(const char *file_name, uint64_t line_number, 
+			const char *function_name)
+		{ default_handler.push_file_info(file_name, line_number, function_name); }
 	}
 }
 
