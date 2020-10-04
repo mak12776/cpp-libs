@@ -85,7 +85,7 @@ namespace scl
 
 		// specific functions
 
-#if 0
+#if SCL_DEPRECATED
 
 		static inline bool mul_size(size_t a, size_t b, size_t &result)
 		{

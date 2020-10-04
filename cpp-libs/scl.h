@@ -13,7 +13,6 @@
 #include "time.h"
 
 #include "math.h"
-#include "safe.h"
 
 #include "mem.h"
 #include "io.h"
