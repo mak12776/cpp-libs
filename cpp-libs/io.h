@@ -177,7 +177,7 @@ namespace scl
 
 		// fread all, fwrite all
 
-#ifdef SCL_EXPERIMENTAL
+#if 0
 		static inline size_t fread_all(void *pntr, size_t size, FILE *stream)
 		{
 			size_t read_number;

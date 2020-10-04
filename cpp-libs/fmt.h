@@ -9,10 +9,6 @@ namespace scl
 {
 	namespace fmt
 	{
-		static inline size_t printf(const char *fmt, ...)
-		{
-
-		}
 	}
 
 	static inline size_t safe_fprintf(FILE *stream, const char *fmt, ...)
@@ -47,7 +43,6 @@ namespace scl
 
 		if (ret < 0)
 		{
-
 			scl::err::set(scl::err::PRINTF);
 			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
