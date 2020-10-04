@@ -14,7 +14,7 @@ namespace scl
 		typedef void *(&realloc_t)(void *, size_t);
 		typedef void (&free_t)(void *);
 
-		template <err::default_handler_t &handler = err::default_handler>
+		template <err::default_handler_t &handler>
 		struct manager_t
 		{
 			malloc_t malloc;
