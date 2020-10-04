@@ -101,7 +101,6 @@ namespace scl
 			num_t num;
 			size_t index;
 			info_t info_array[size];
-			FILE *log_file;
 
 			constexpr size_t array_size() const { return size; }
 
