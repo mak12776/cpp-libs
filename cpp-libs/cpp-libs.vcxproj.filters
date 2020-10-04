@@ -237,6 +237,9 @@
     <ClInclude Include="cleaner.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="counter.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
