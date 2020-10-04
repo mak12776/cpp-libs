@@ -28,7 +28,7 @@ namespace scl
 
 
 		template <size_t array_size>
-		struct storage
+		struct cleaner_t
 		{
 			size_t index = 0;
 			job jobs[array_size];
@@ -85,7 +85,7 @@ namespace scl
 			}
 		};
 
-		storage<local_jobs_size> local_storage;
+		cleaner_t<local_jobs_size> local_storage;
 
 		void add_fclose(FILE *file) { local_storage.add_fclose(file); }
 		void add_free(void *pntr) { local_storage.add_free(pntr); }

@@ -270,7 +270,7 @@ namespace bh
 
 		FILE *data_file;
 		size_t total_write;
-		clean_up::storage<2> clean_ups;
+		clean_up::cleaner_t<2> clean_ups;
 
 		data_name.malloc_cat({ file_name, file_ext });
 		if (err::check())

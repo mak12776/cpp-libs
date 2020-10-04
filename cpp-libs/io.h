@@ -236,7 +236,7 @@ namespace scl
 		{
 			size_t file_size;
 
-#if ULONG_MAX < SIZE_MAX
+#if ULONG_MAX <= SIZE_MAX
 			file_size = (size_t)get_file_size(file);
 #else
 #error unsigned long is too big.

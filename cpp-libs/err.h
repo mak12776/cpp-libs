@@ -26,22 +26,29 @@ namespace scl
 			INVALID_ARGUMENT,
 
 			// malloc, new operator
-			MALLOC, NEW,
+			MALLOC, 
+			NEW,
 
 			// overflows
-			INT_OVERFLOW, FLOAT_OVERFLOW,
+			INT_OVERFLOW, 
+			FLOAT_OVERFLOW,
 
 			// normal function
-			OPEN, STAT,
-			READ, WRITE,
+			OPEN, 
+			STAT,
+			READ, 
+			WRITE,
 
 			// file functions
-			FOPEN, FTELL, FSEEK,
-			FREAD, FWRITE,
-			FERROR, FEOF,
+			FOPEN, 
+			FTELL, 
+			FSEEK,
+			FREAD, 
+			FWRITE,
 
 			// other errors
-			WIN_ERROR, PRINTF,
+			WIN_ERROR, 
+			PRINTF,
 			UNDEFINED_BEHAVIOR,
 			INVALID_FILE_STRUCTURE,
 		};
@@ -52,20 +59,27 @@ namespace scl
 			{
 			case SUCCESS: return "SUCCESS";
 			case INVALID_ARGUMENT: return "INVALID_ARGUMENT";
-			case WIN_ERROR: return "WIN_ERROR";
-			case PRINTF: return "PRINTF";
+
 			case MALLOC: return "MALLOC";
-			case NEW: return "NEW";
+			case NEW: return "NEW"; 
+
 			case INT_OVERFLOW: return "INT_OVERFLOW";
 			case FLOAT_OVERFLOW: return "FLOAT_OVERFLOW";
-			case FOPEN: return "FOPEN";
+
 			case STAT: return "STAT";
+			case OPEN: return "OPEN";
+			case READ: return "READ";
+			case WRITE: return "WRITE";
+
+			case FOPEN: return "FOPEN";
 			case FTELL: return "FTELL";
 			case FSEEK: return "FSEEK";
 			case FREAD: return "FREAD";
 			case FWRITE: return "FWRITE";
-			case FERROR: return "FERROR";
-			case FEOF: return "FEOF";
+
+			case WIN_ERROR: return "WIN_ERROR";
+			case PRINTF: return "PRINTF";
+
 			case UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
 			case INVALID_FILE_STRUCTURE: return "INVALID_FILE_STRUCTURE";
 			default: return "UKNOWN";
@@ -75,6 +89,7 @@ namespace scl
 		num_t num = SUCCESS;
 		size_t info_array_index = 0; 
 		constexpr size_t info_array_size = 4096;
+		FILE *log_file = stderr;
 
 #pragma pack(push, 1)
 		struct info_t
@@ -92,8 +107,6 @@ namespace scl
 			info_t info_array[info_array_size];
 		};
 #pragma pack(pop)
-
-		FILE *log_file = stderr;
 
 		static inline int print_status()
 		{
