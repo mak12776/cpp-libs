@@ -33,29 +33,9 @@ namespace scl
 			}
 		}
 
-		static inline size_t get_file_name_size(const char *name)
+		static inline int safe_open(const char *name, int flags, int mode = 0)
 		{
-#if SIZE_MAX == UINT64_MAX
-			struct __stat64 file_stat;
-			safe_stat64(name, &file_stat);
-#elif SIZE_MAX == UINT32_MAX
-			struct __stat32 file_stat;
-			safe_stat32(name, &file_stat);
-#else
-#error unknown SIZE_MAX.
-#endif
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return 0;
-			}
-
-			return file_stat.st_size;
-		}
-
-		static inline int safe_open(const char *name, int flags)
-		{
-			int fd = open(name, flags);
+			int fd = _open(name, flags, mode);
 			if (fd == -1)
 			{
 				err::set(err::OPEN);
@@ -64,11 +44,12 @@ namespace scl
 			return fd;
 		}
 
-		static inline size_t safe_read(int fd, void *pntr, size_t size)
-		{
-			ssize_t total = read(fd, pntr, size);
 
-			if (total == -1)
+		static inline int safe_read(int fd, void *pntr, unsigned int size)
+		{
+			int total = _read(fd, pntr, size);
+
+			if (total != size)
 			{
 				err::set(err::READ);
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
@@ -77,12 +58,20 @@ namespace scl
 			return total;
 		}
 
-		static inline size_t safe_write(int fd, void *pntr, size_t size)
+		static inline int safe_write(int fd, void *pntr, unsigned int size)
 		{
-			ssize_t total = write(fd, pntr, size);
+			size_t total = _write(fd, pntr, size);
 
-			
+			if (total != size)
+			{
+				err::set(err::WRITE);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+
+			return total;
 		}
+
+		// safe file operations functions
 
 		static inline FILE *safe_fopen(const char *name, const char *mode)
 		{
@@ -148,6 +137,28 @@ namespace scl
 			return size;
 		}
 
+		static inline size_t get_file_name_size(const char *name)
+		{
+#if SIZE_MAX == UINT64_MAX
+			struct __stat64 file_stat;
+			safe_stat64(name, &file_stat);
+#elif SIZE_MAX == UINT32_MAX
+			struct __stat32 file_stat;
+			safe_stat32(name, &file_stat);
+#else
+#error unknown SIZE_MAX.
+#endif
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return 0;
+			}
+
+			return file_stat.st_size;
+		}
+
+		// safe fread
+
 		static inline size_t safe_fread(void *pntr, size_t size, FILE *stream)
 		{
 			size_t read_number;
@@ -167,6 +178,8 @@ namespace scl
 		{
 			return safe_fread(&data, sizeof(data_type), file);
 		}
+		
+		// safe fwrite
 
 		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
 		{
@@ -188,6 +201,9 @@ namespace scl
 			return safe_fwrite(&data, sizeof(data_type), stream);
 		}
 
+		// fread all, fwrite all
+
+#ifdef SCL_EXPERIMENTAL
 		static inline size_t fread_all(void *pntr, size_t size, FILE *stream)
 		{
 			size_t read_number;
@@ -238,6 +254,9 @@ namespace scl
 			}
 			return write_number;
 		}
+#endif
+
+		// other functions
 
 		static inline void read_file(FILE *file, void **pntr, size_t *size)
 		{
