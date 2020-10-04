@@ -164,6 +164,7 @@
     <ClInclude Include="clib.h" />
     <ClInclude Include="fmt.h" />
     <ClInclude Include="error_handling_test.h" />
+    <ClInclude Include="storage.h" />
     <ClInclude Include="type_traits.h" />
     <ClInclude Include="winapi_functions.h" />
     <ClInclude Include="log.h" />

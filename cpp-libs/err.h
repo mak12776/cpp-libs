@@ -122,11 +122,14 @@ namespace scl
 				}
 			}
 		};
+		
 
 #pragma pack(pop)
 
 		constexpr size_t default_array_size = 4096;
-		handler_t<default_array_size> default_handler{SUCCESS, 0, {0}, stderr};
+
+		typedef handler_t<4096> default_handler_t;
+		default_handler_t default_handler{SUCCESS, 0, {0}, stderr};
 
 
 		static inline void set(num_t errnum) { default_handler.set(errnum); }

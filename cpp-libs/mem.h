@@ -14,6 +14,7 @@ namespace scl
 		typedef void *(&realloc_t)(void *, size_t);
 		typedef void (&free_t)(void *);
 
+		template <err::default_handler_t &handler = err::default_handler>
 		struct manager_t
 		{
 			malloc_t malloc;
@@ -35,7 +36,8 @@ namespace scl
 		};
 
 		// default manager
-		manager_t default_manager{ malloc, realloc, free };
+		typedef manager_t<err::default_handler> default_manager_t;
+		default_manager_t default_manager{ malloc, realloc, free };
 
 		// text logger manager
 		template <log::logger_t &logger>
@@ -64,7 +66,7 @@ namespace scl
 		}
 
 		template <log::logger_t &logger>
-		manager_t logger_manager{
+		default_manager_t logger_manager{
 			malloc_logger<logger>, realloc_logger<logger>, free};
 
 #ifdef SCL_EXPERIMENTAL

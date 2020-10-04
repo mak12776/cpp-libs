@@ -4,6 +4,8 @@
 #include <climits>
 #include <cinttypes>
 
+#include "mem.h"
+
 namespace scl
 {
 	typedef int8_t byte;
@@ -14,12 +16,18 @@ namespace scl
 	{
 		byte_type *pntr;
 		size_t size;
+
+		inline void safe_malloc(size_t size)
+		{
+			pntr = mem::safe_malloc(size);
+			if (err::check())
+				err::push_file_info()
+		}
 	};
 
 	typedef base_buffer_t<void> vbuffer_t;
 	typedef base_buffer_t<ubyte> ubuffer_t;
 	typedef base_buffer_t<byte> buffer_t;
-	
 
 	template <size_t _size>
 	struct bitset_t
