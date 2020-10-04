@@ -24,9 +24,6 @@ namespace scl
 			};
 		};
 
-		constexpr size_t local_jobs_size = 4096;
-
-
 		template <size_t array_size>
 		struct cleaner_t
 		{
@@ -85,11 +82,12 @@ namespace scl
 			}
 		};
 
-		cleaner_t<local_jobs_size> local_storage;
+		constexpr size_t default_jobs_size = 4096;
+		cleaner_t<local_jobs_size> default_cleaner;
 
-		void add_fclose(FILE *file) { local_storage.add_fclose(file); }
-		void add_free(void *pntr) { local_storage.add_free(pntr); }
-		void add_delete(void *pntr) { local_storage.add_delete(pntr); }
-		void finish() { local_storage.finish(); }
+		void add_fclose(FILE *file) { default_cleaner.add_fclose(file); }
+		void add_free(void *pntr) { default_cleaner.add_free(pntr); }
+		void add_delete(void *pntr) { default_cleaner.add_delete(pntr); }
+		void finish() { default_cleaner.finish(); }
 	}
 }
