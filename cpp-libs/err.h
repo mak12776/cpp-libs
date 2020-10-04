@@ -8,7 +8,6 @@
 #include <inttypes.h>
 #include <errno.h>
 
-#include "err.h"
 #include "math.h"
 #include "clib.h"
 

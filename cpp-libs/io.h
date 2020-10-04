@@ -5,6 +5,7 @@
 
 #include <cstdio>
 #include <cstdarg>
+#include <io.h>
 
 #include "clib.h"
 #include "err.h"
@@ -14,7 +15,7 @@ namespace scl
 {
 	namespace io
 	{
-
+		// system level io functions
 		static inline void safe_stat32(const char *pntr, struct _stat32 *stat_p)
 		{
 			if (_stat32(pntr, stat_p))
@@ -42,33 +43,6 @@ namespace scl
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 			return fd;
-		}
-
-
-		static inline int safe_read(int fd, void *pntr, unsigned int size)
-		{
-			int total = _read(fd, pntr, size);
-
-			if (total != size)
-			{
-				err::set(err::READ);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-
-			return total;
-		}
-
-		static inline int safe_write(int fd, void *pntr, unsigned int size)
-		{
-			size_t total = _write(fd, pntr, size);
-
-			if (total != size)
-			{
-				err::set(err::WRITE);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-
-			return total;
 		}
 
 		// safe file operations functions

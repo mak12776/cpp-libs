@@ -5,3 +5,4 @@
 #define SCL_USE_ERROR
 #define SCL_INCLUDE_CLASSES
 #define SCL_EXPERIMENTAL
+#define PRIxDWORD

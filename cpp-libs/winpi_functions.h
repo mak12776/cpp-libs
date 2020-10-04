@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <processthreadsapi.h>
+#include <io.h>
 
 #include "err.h"
 
@@ -13,8 +14,8 @@ namespace winapi
 
 		if (!SetPriorityClass(process_handle, Priority))
 		{
-			err::set(err::WIN_ERROR);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			scl::err::set(err::WIN_ERROR);
+			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 	}
 
@@ -24,4 +25,29 @@ namespace winapi
 		safe_set_priority_class(proces_handle, periority);
 	}
 
+	static inline int safe_read(int fd, void *pntr, unsigned int size)
+	{
+		int total = _read(fd, pntr, size);
+
+		if (total != size)
+		{
+			scl::err::set(scl::err::READ);
+			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
+
+		return total;
+	}
+
+	static inline int safe_write(int fd, void *pntr, unsigned int size)
+	{
+		int total = _write(fd, pntr, size);
+
+		if (total != size)
+		{
+			scl::err::set(scl::err::WRITE);
+			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
+
+		return total;
+	}
 }
