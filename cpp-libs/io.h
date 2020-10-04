@@ -280,7 +280,7 @@ namespace scl
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
+				return 0;
 			}
 
 			size_t write_number = safe_fwrite(pntr, size, file);

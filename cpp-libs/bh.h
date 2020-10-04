@@ -1,7 +1,7 @@
 #pragma once
 
 #include "types.h"
-#include "clean_up.h"
+#include "cleaner.h"
 #include "string.h"
 #include "err.h"
 #include "clib.h"
@@ -270,7 +270,7 @@ namespace bh
 
 		FILE *data_file;
 		size_t total_write;
-		clean_up::cleaner_t<2> clean_ups;
+		cleaner::cleaner_t<2> clean_ups;
 
 		data_name.malloc_cat({ file_name, file_ext });
 		if (err::check())
@@ -303,7 +303,7 @@ namespace bh
 		m_string_t data_name;
 		FILE *data_file;
 		size_t total_read;
-		clean_up::storage<2> clean_ups;
+		cleaner::cleaner_t<2> clean_ups;
 
 		data_name.malloc_cat({ file_name, file_ext });
 		if (err::check())
@@ -392,10 +392,10 @@ namespace bh
 		{
 			printf("error: can't malloc memory for log file name.");
 
-			clean_up::finish();
+			cleaner::finish();
 			return;
 		}
-		clean_up::add_free(log_file_name.pntr);
+		cleaner::add_free(log_file_name.pntr);
 
 		// malloc archive_name
 		archive_name.malloc_cat({ file_name, archive_ext });
@@ -403,10 +403,10 @@ namespace bh
 		{
 			printf("error: can't malloc memory for archive file name.\n");
 
-			clean_up::finish();
+			cleaner::finish();
 			return;
 		}
-		clean_up::add_free(archive_name.pntr);
+		cleaner::add_free(archive_name.pntr);
 
 		// fopen log_file
 		log_file = io::safe_fopen(log_file_name.pntr, "wb");
@@ -414,10 +414,10 @@ namespace bh
 		{
 			printf("error: can't open log file '%s': %s\n", log_file_name.pntr, strerror(errno));
 
-			clean_up::finish();
+			cleaner::finish();
 			return;
 		}
-		clean_up::add_fclose(log_file);
+		cleaner::add_fclose(log_file);
 
 		// printf file names
 		cl::printf_ln("file name: %s", file_name.pntr);
@@ -432,10 +432,10 @@ namespace bh
 				err::string());
 			printf("errno: %s\n", strerror(errno));
 
-			clean_up::finish();
+			cleaner::finish();
 			return;
 		}
-		clean_up::add_free(buffer.pntr);
+		cleaner::add_free(buffer.pntr);
 
 		// multiply bytes number by 8
 		math::safe_mul(buffer.size, (size_t)8, file_bits);
@@ -443,7 +443,7 @@ namespace bh
 		{
 			printf("error: can't multiply bytes number by 8.\n");
 
-			clean_up::finish();
+			cleaner::finish();
 			return;
 		}
 
@@ -465,7 +465,7 @@ namespace bh
 			printf("%016llx: %zu\n", iter->data, iter->count);
 #endif
 
-		clean_up::finish();
+		cleaner::finish();
 	}
 
 	int compress_main(int argc, const char **argv)

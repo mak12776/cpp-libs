@@ -162,9 +162,6 @@
     <ClInclude Include="string_algorithms.h">
       <Filter>Header Files\incomplete\olds</Filter>
     </ClInclude>
-    <ClInclude Include="clean_up.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="err.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -207,12 +204,6 @@
     <ClInclude Include="clib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="winapi.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="bh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -236,6 +227,15 @@
     </ClInclude>
     <ClInclude Include="types.h">
       <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="scl.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi.h">
+      <Filter>Header Files\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="cleaner.h">
+      <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
