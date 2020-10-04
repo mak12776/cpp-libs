@@ -11,6 +11,9 @@ namespace scl
 		{
 			FILE *log_file;
 
+			inline size_t write(void *pntr, size_t size)
+			{ return fwrite(pntr, 1, size, log_file); }
+
 			inline int printf(const char *fmt, ...)
 			{
 				va_list ap;
@@ -26,13 +29,7 @@ namespace scl
 
 		logger_t default_logger{ stdout };
 
-		FILE *log_file;
-
-		static inline bool init_log_file()
-		{
-			// TODO: write this function
-		}
-
+		// functions
 
 		static inline int printf(const char *fmt, ...)
 		{
@@ -40,7 +37,7 @@ namespace scl
 			int ret;
 
 			va_start(ap, fmt);
-			ret = std::vfprintf(log_file, fmt, ap);
+			ret = std::vfprintf(default_logger.log_file, fmt, ap);
 			va_end(ap);
 
 			return ret;

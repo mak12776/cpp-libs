@@ -30,6 +30,8 @@ namespace scl
 			size_t index = 0;
 			job jobs[size];
 
+			constexpr size_t array_size() { return size; }
+
 			inline void add_fclose(FILE *file)
 			{
 				if (index != size)

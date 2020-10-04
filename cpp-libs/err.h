@@ -128,6 +128,19 @@ namespace scl
 		constexpr size_t default_array_size = 4096;
 		handler_t<default_array_size> default_handler{SUCCESS, 0, {0}, stderr};
 
+
+		static inline void set(num_t errnum) { default_handler.set(errnum); }
+		static inline void clear() { default_handler.clear(); }
+
+		static inline bool check() { return default_handler.check(); }
+		inline const char *string() { return  default_handler.string(); }
+
+		inline void push_file_info(const char *file_name, uint64_t line_number,
+			const char *function_name)
+		{
+			default_handler.push_file_info(file_name, line_number, function_name);
+		}
+
 #if SCL_ERR_PRINT
 		static inline int print_status()
 		{
@@ -214,16 +227,6 @@ namespace scl
 			return total;
 		}
 #endif
-
-		static inline void set(num_t errnum) { default_handler.set(errnum); }
-		static inline void clear() { default_handler.clear(); }
-
-		static inline bool check()  { return default_handler.check(); }
-		inline const char *string() { return  default_handler.string(); }
-
-		inline void push_file_info(const char *file_name, uint64_t line_number, 
-			const char *function_name)
-		{ default_handler.push_file_info(file_name, line_number, function_name); }
 	}
 }
 
