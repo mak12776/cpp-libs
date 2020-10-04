@@ -33,6 +33,26 @@ namespace scl
 			}
 		}
 
+		static inline size_t get_file_name_size(const char *name)
+		{
+#if SIZE_MAX == UINT64_MAX
+			struct __stat64 file_stat;
+			safe_stat64(name, &file_stat);
+#elif SIZE_MAX == UINT32_MAX
+			struct __stat32 file_stat;
+			safe_stat32(name, &file_stat);
+#else
+#error unknown SIZE_MAX.
+#endif
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return 0;
+			}
+
+			return file_stat.st_size;
+		}
+
 		static inline int safe_open(const char *name, int flags)
 		{
 			int fd = open(name, flags);
@@ -42,6 +62,26 @@ namespace scl
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 			return fd;
+		}
+
+		static inline size_t safe_read(int fd, void *pntr, size_t size)
+		{
+			ssize_t total = read(fd, pntr, size);
+
+			if (total == -1)
+			{
+				err::set(err::READ);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+
+			return total;
+		}
+
+		static inline size_t safe_write(int fd, void *pntr, size_t size)
+		{
+			ssize_t total = write(fd, pntr, size);
+
+			
 		}
 
 		static inline FILE *safe_fopen(const char *name, const char *mode)
@@ -78,26 +118,6 @@ namespace scl
 				err::set(err::FSEEK);
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
-		}
-
-		static inline size_t get_file_name_size(const char *name)
-		{
-#if SIZE_MAX == UINT64_MAX
-			struct __stat64 file_stat;
-			safe_stat64(name, &file_stat);
-#elif SIZE_MAX == UINT32_MAX
-			struct __stat32 file_stat;
-			safe_stat32(name, &file_stat);
-#else
-#error unknown SIZE_MAX.
-#endif
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return 0;
-			}
-
-			return file_stat.st_size;
 		}
 
 		static inline long get_file_size(FILE *stream)
