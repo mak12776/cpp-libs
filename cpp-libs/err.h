@@ -25,18 +25,24 @@ namespace scl
 
 			// invalid argument
 			INVALID_ARGUMENT,
-			
+
 			// malloc, new operator
 			MALLOC, NEW,
 
+			// overflows
 			INT_OVERFLOW, FLOAT_OVERFLOW,
 
+			// normal function
 			OPEN, STAT,
 			READ, WRITE,
 
+			// file functions
 			FOPEN, FTELL, FSEEK,
 			FREAD, FWRITE,
 			FERROR, FEOF,
+
+			// other errors
+			WIN_ERROR, PRINTF,
 			UNDEFINED_BEHAVIOR,
 			INVALID_FILE_STRUCTURE,
 		};

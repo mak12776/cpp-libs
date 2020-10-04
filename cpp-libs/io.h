@@ -14,6 +14,36 @@ namespace scl
 {
 	namespace io
 	{
+
+		static inline void safe_stat32(const char *pntr, struct _stat32 *stat_p)
+		{
+			if (_stat32(pntr, stat_p))
+			{
+				err::set(err::STAT);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
+
+		static inline void safe_stat64(const char *pntr, struct _stat64 *stat_p)
+		{
+			if (_stat64(pntr, stat_p))
+			{
+				err::set(err::STAT);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
+
+		static inline int safe_open(const char *name, int flags)
+		{
+			int fd = open(name, flags);
+			if (fd == -1)
+			{
+				err::set(err::OPEN);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+			return fd;
+		}
+
 		static inline FILE *safe_fopen(const char *name, const char *mode)
 		{
 			FILE *file = std::fopen(name, mode);
@@ -46,24 +76,6 @@ namespace scl
 			if (fseek(stream, offset, origin))
 			{
 				err::set(err::FSEEK);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-		}
-
-		static inline void safe_stat32(const char *pntr, struct _stat32 *stat_p)
-		{
-			if (_stat32(pntr, stat_p))
-			{
-				err::set(err::STAT);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-		}
-
-		static inline void safe_stat64(const char *pntr, struct _stat64 *stat_p)
-		{
-			if (_stat64(pntr, stat_p))
-			{
-				err::set(err::STAT);
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
@@ -128,14 +140,6 @@ namespace scl
 			}
 
 			return read_number;
-		}
-
-		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
-		{
-			size_t write_number;
-
-			write_number = fwrite(pntr, 1, size, stream);
-			if ()
 		}
 
 		template <typename data_type>
