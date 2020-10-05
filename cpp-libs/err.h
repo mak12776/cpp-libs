@@ -97,10 +97,10 @@ namespace scl
 		};
 
 		template <size_t _size>
-		struct handler_t
+		struct err_t
 		{
 			num_t num;
-			size_t index;
+			size_t array_index;
 			info_t info_array[_size];
 
 			constexpr size_t array_size() const { return _size; }
@@ -108,7 +108,7 @@ namespace scl
 			
 			inline void set(num_t errnum) { num = errnum; }
 			inline bool test(num_t errnum) { return num == errnum; }
-			inline void clear() { num = num_t::SUCCESS; index = 0; }
+			inline void clear() { num = num_t::SUCCESS; array_index = 0; }
 			inline void test_clear(num_t errnum) { if (num == errnum) clear(); }
 
 			inline bool check() { return num != num_t::SUCCESS; }
@@ -117,12 +117,12 @@ namespace scl
 			inline void push_file_info(const char *file_name, uint64_t line_number,
 				const char *function_name)
 			{
-				if (index != _size)
+				if (array_index != _size)
 				{
-					info_array[index].file_name = file_name;
-					info_array[index].line_number = line_number;
-					info_array[index].function_name = function_name;
-					index += 1;
+					info_array[array_index].file_name = file_name;
+					info_array[array_index].line_number = line_number;
+					info_array[array_index].function_name = function_name;
+					array_index += 1;
 				}
 			}
 		};
@@ -136,8 +136,8 @@ namespace scl
 
 		constexpr size_t default_array_size = 4096;
 
-		typedef handler_t<default_array_size> default_handler_t;
-		default_handler_t default_handler{SUCCESS, 0, {0}};
+		typedef err_t<default_array_size> default_err_t;
+		default_err_t default_handler{SUCCESS, 0, {0}};
 
 		// global functions
 

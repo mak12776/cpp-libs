@@ -20,9 +20,9 @@ namespace scl
 			free_t _free,
 
 			size_t _err_size,
-			err::handler_t<_err_size> &_err
+			err::err_t<_err_size> &_err
 		>
-		struct manager_t
+		struct mem_t
 		{
 			constexpr void *malloc(size_t size) 
 			{ return _malloc(size); }
@@ -48,10 +48,10 @@ namespace scl
 		};
 
 		// default manager
-		typedef manager_t<
+		typedef mem_t<
 			malloc, realloc, free, err::default_array_size, err::default_handler> 
-			default_manager_t;
-		default_manager_t default_manager;
+			default_mem_t;
+		default_mem_t default_mem;
 
 		// text logger manager
 		template <log::logger_t &logger>
@@ -80,7 +80,7 @@ namespace scl
 		}
 
 		template <log::logger_t &logger>
-		default_manager_t logger_manager{
+		default_mem_t logger_manager{
 			malloc_logger<logger>, realloc_logger<logger>, free};
 
 #ifdef SCL_EXPERIMENTAL
