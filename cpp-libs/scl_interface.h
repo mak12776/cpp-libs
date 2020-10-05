@@ -19,6 +19,8 @@ namespace scl
 	\
 	mem::mem_t<_malloc, _realloc, _free, _err_size, _err> &_mem
 
+
+
 	template <
 		size_t _err_size,
 		err::err_t<_err_size> &_err,
