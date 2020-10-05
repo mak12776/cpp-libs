@@ -35,7 +35,7 @@ namespace scl
 		fixed_vector(size_type capacity, size_type size, size_type value)
 		{
 			if constexpr (safe::error_index_out_of_range)
-				safe::check_index_out_of_range(size, capacity, nullptr, "size is greater than capacity");
+				safe::check_index_out_of_range(size, capacity, nullptr, "size test greater than capacity");
 
 			this->_data = new data_type[capacity];
 			for (size_t index = 0; index < size; index += 1)
@@ -82,7 +82,7 @@ namespace scl
 		inline const_reference at(size_t index)
 		{
 			if (index >= this->_size)
-				throw new std::out_of_range("index is out of range: " + std::to_string(index));
+				throw new std::out_of_range("index test out of range: " + std::to_string(index));
 
 			return this->_data[index];
 		}
@@ -90,7 +90,7 @@ namespace scl
 		inline const_reference operator[](size_t index)
 		{
 			if (index >= this->_size)
-				throw new std::out_of_range("index is out of range: " + std::to_string(index));
+				throw new std::out_of_range("index test out of range: " + std::to_string(index));
 
 			return this->_data[index];
 		}

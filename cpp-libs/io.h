@@ -8,6 +8,7 @@
 #include <io.h>
 #include <variant>
 
+#include "types.h"
 #include "clib.h"
 #include "err.h"
 #include "mem.h"
@@ -240,25 +241,25 @@ namespace scl
 
 		// fread, fwrite all with base_buffer_t
 
-		template <typename byte_type>
+		template <typename byte_t>
 		static inline void fread_all(FILE *file, 
-			base_buffer_t<byte_type> &buffer)
-		{
+			base_buffer_t<byte_t> &buffer)
+		{ 
 			fread_all(file, (void **)&buffer.pntr, buffer.size);
 		}
 
-		template <typename byte_type>
-		static inline void fopen_fread_all(FILE *file, 
-			base_buffer_t<byte_type> &buffer)
+		template <typename byte_t>
+		static inline void fopen_fread_all(const char *file,
+			base_buffer_t<byte_t> &buffer)
 		{
 			fopen_fread_all(file, (void **)&buffer.pntr, buffer.size);
 		}
 
-		template <typename byte_type>
-		static inline void fopen_fwrite_all(FILE *file, 
-			base_buffer_t<byte_type> &buffer)
+		template <typename byte_t>
+		static inline void fopen_fwrite_all(const char *file,
+			base_buffer_t<byte_t> &buffer)
 		{
-			fopen_fwrite_all(file, buffer.pntr, buffer.size);
+			fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
 		}
 
 

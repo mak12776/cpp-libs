@@ -59,7 +59,7 @@ namespace scl
 		{ }
 	};
 
-	template <mem::manager_t &manager = mem::default_manager>
+	template <mem::default_manager_t &manager = mem::default_manager>
 	struct m_string_t
 	{
 		char *pntr;

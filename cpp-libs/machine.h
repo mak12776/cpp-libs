@@ -157,7 +157,7 @@ namespace scl
 			{
 				throw new runtime_error(
 					type,
-					"instruction pointer is out of range for " + name + ": " + std::to_string(ip)
+					"instruction pointer test out of range for " + name + ": " + std::to_string(ip)
 				);
 			}
 
@@ -185,7 +185,7 @@ namespace scl
 			{
 				throw new runtime_error(
 					error_type::INVALID_BASE_INSTRUCTION_POINTER,
-					"base instruction pointer is out of range: " + std::to_string(bip)
+					"base instruction pointer test out of range: " + std::to_string(bip)
 				);
 			}
 

@@ -15,7 +15,7 @@ namespace scl
 			if (value >= max)
 			{
 				if (message.empty())
-					message = name + std::string("is out of range: ") + std::to_string(value);
+					message = name + std::string("test out of range: ") + std::to_string(value);
 				else
 					message += ": " + std::to_string(value);
 
@@ -31,7 +31,7 @@ namespace scl
 			if (value == 0)
 			{
 				if (message.empty())
-					message = name + std::string("is out of range: ") + std::to_string(value);
+					message = name + std::string("test out of range: ") + std::to_string(value);
 
 				throw new std::out_of_range(message);
 			}

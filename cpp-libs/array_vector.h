@@ -29,7 +29,7 @@ namespace scl
 		array_vector(size_type lenght, const_reference value)
 		{
 			if (safe::error_index_out_of_range())
-				safe::check_index_out_of_range(lenght, this->array::size(), "", "lenght is greater than array size");
+				safe::check_index_out_of_range(lenght, this->array::size(), "", "lenght test greater than array size");
 
 			for (size_t index = 0; index < lenght; index += 1)
 			{

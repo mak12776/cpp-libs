@@ -14,7 +14,7 @@ namespace scl
 		typedef void *(&realloc_t)(void *, size_t);
 		typedef void (&free_t)(void *);
 
-		template <err::default_handler_t &handler>
+		template <size_t handler_size, err::handler_t<handler_size> &handler>
 		struct manager_t
 		{
 			malloc_t malloc;
@@ -27,8 +27,8 @@ namespace scl
 
 				if (pntr == nullptr)
 				{
-					err::set(err::MALLOC);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					handler.set(err::MALLOC);
+					handler.push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				}
 
 				return pntr;
@@ -36,7 +36,8 @@ namespace scl
 		};
 
 		// default manager
-		typedef manager_t<err::default_handler> default_manager_t;
+		typedef manager_t<err::default_array_size, err::default_handler> 
+			default_manager_t;
 		default_manager_t default_manager{ malloc, realloc, free };
 
 		// text logger manager

@@ -84,10 +84,10 @@ namespace scl
 			}
 		};
 
-		constexpr size_t default_jobs_size = 4096;
+		constexpr size_t default_array_size = 4096;
 		
 		// cleaner_t
-		typedef cleaner_t<default_jobs_size> default_cleaner_t;
+		typedef cleaner_t<default_array_size> default_cleaner_t;
 		default_cleaner_t default_cleaner;
 
 		void add_fclose(FILE *file) { default_cleaner.add_fclose(file); }

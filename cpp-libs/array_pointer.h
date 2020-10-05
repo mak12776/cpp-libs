@@ -75,7 +75,7 @@ namespace scl
 		inline const_reference first() const
 		{
 			if (safe::error_zero_size)
-				safe::error_zero_size(_size, "", "array is empty");
+				safe::error_zero_size(_size, "", "array test empty");
 
 			return this->_data[0];
 		}
@@ -83,7 +83,7 @@ namespace scl
 		inline const_reference last() const
 		{
 			if (safe::error_zero_size)
-				safe::error_zero_size(_size, "", "array is empty");
+				safe::error_zero_size(_size, "", "array test empty");
 
 			return this->_data[_size - 1];
 		}

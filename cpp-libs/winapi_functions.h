@@ -45,7 +45,7 @@ namespace winapi
 		if (total != size)
 		{
 			scl::err::set(scl::err::WRITE);
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			rscl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
 		return total;

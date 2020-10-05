@@ -5,6 +5,7 @@
 #include "io.h"
 #include "types.h"
 #include "cleaner.h"
+#include "storage.h"
 
 namespace counter
 {
@@ -21,19 +22,31 @@ namespace counter
 	// there is two types of file readers.
 	// buffered readers & full buffered readers
 
+	template <size_t buffer_size = 4096>
 	static inline void count_file(FILE *file, count_t &count)
 	{
-		constexpr size_t buffer_size = 4096;
 		ubuffer_t buffer;
 
-		buffer.pntr = (ubyte *)mem::safe_malloc(buffer_size);
+		io::fread_all(file, buffer);
 		if (err::check())
 		{
+			if (err::test_clear(err::MALLOC))
+			{
+				buffer.pntr = mem::safe_malloc(buffer_size);
+				if (err::check())
+				{
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					return;
+				}
+				cleaner::add_free(buffer.pntr);
+
+				// more codes there
+			}
+
 			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return;
 		}
-		cleaner::add_free(buffer.pntr);
-		
+
 
 	}
 }

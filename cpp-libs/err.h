@@ -104,9 +104,13 @@ namespace scl
 
 			constexpr size_t array_size() const { return size; }
 
-			inline bool check() { return num != num_t::SUCCESS; }
+			
 			inline void set(num_t errnum) { num = errnum; }
+			inline bool test(num_t errnum) { return num == errnum; }
 			inline void clear() { num = num_t::SUCCESS; index = 0; }
+			inline void test_clear(num_t errnum) { if (num == errnum) clear(); }
+
+			inline bool check() { return num != num_t::SUCCESS; }
 			inline const char *string() { return to_string(num); }
 
 			inline void push_file_info(const char *file_name, uint64_t line_number,
@@ -125,14 +129,22 @@ namespace scl
 
 #pragma pack(pop)
 
+		
+
+		// default handler
+
 		constexpr size_t default_array_size = 4096;
 
 		typedef handler_t<default_array_size> default_handler_t;
-		default_handler_t default_handler{SUCCESS, 0, {0}, stderr};
+		default_handler_t default_handler{SUCCESS, 0, {0}};
 
+		// global functions
 
 		static inline void set(num_t errnum) { default_handler.set(errnum); }
+		static inline void test(num_t errnum) { default_handler.test(errnum); }
 		static inline void clear() { default_handler.clear(); }
+		static inline void test_clear(num_t num) 
+		{ default_handler.test_clear(num); }
 
 		static inline bool check() { return default_handler.check(); }
 		inline const char *string() { return  default_handler.string(); }
