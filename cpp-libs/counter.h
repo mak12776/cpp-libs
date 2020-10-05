@@ -5,7 +5,7 @@
 #include "io.h"
 #include "types.h"
 #include "cleaner.h"
-#include "storage.h"
+#include "scl_interface.h"
 
 namespace counter
 {
@@ -22,23 +22,23 @@ namespace counter
 	// there is two types of file readers.
 	// buffered readers & full buffered readers
 
-	template <size_t buffer_size = 4096>
+	template <size_t buffer_size = 4096, default_scl_t &ncl = default_scl>
 	static inline void count_file(FILE *file, count_t &count)
 	{
 		ubuffer_t buffer;
 
 		io::fread_all(file, buffer);
-		if (err::check())
+		if (ncl.err.check())
 		{
-			if (err::test_clear(err::MALLOC))
+			if (ncl.err.test_clear(err::MALLOC))
 			{
-				buffer.pntr = mem::safe_malloc(buffer_size);
-				if (err::check())
+				buffer.pntr = ncl.mem.safe_malloc(buffer_size);
+				if (ncl.err.check())
 				{
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					ncl.err.push_file_info(__FILE__, __LINE__, __FUNCTION__);
 					return;
 				}
-				cleaner::add_free(buffer.pntr);
+				ncl.cleaner.add_free(buffer.pntr);
 
 				// more codes there
 			}

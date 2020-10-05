@@ -1,1 +1,7 @@
 I can write my plans here.
+
+
+cpp compiers:
+    gcc, clang, msvc
+    
+

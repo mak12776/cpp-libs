@@ -49,7 +49,7 @@ namespace scl
 
 		// default manager
 		typedef mem_t<
-			malloc, realloc, free, err::default_array_size, err::default_handler> 
+			malloc, realloc, free, err::default_array_size, err::default_err> 
 			default_mem_t;
 		default_mem_t default_mem;
 

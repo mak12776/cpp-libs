@@ -137,23 +137,23 @@ namespace scl
 		constexpr size_t default_array_size = 4096;
 
 		typedef err_t<default_array_size> default_err_t;
-		default_err_t default_handler{SUCCESS, 0, {0}};
+		default_err_t default_err{SUCCESS, 0, {0}};
 
 		// global functions
 
-		static inline void set(num_t errnum) { default_handler.set(errnum); }
-		static inline void test(num_t errnum) { default_handler.test(errnum); }
-		static inline void clear() { default_handler.clear(); }
+		static inline void set(num_t errnum) { default_err.set(errnum); }
+		static inline void test(num_t errnum) { default_err.test(errnum); }
+		static inline void clear() { default_err.clear(); }
 		static inline void test_clear(num_t num) 
-		{ default_handler.test_clear(num); }
+		{ default_err.test_clear(num); }
 
-		static inline bool check() { return default_handler.check(); }
-		inline const char *string() { return  default_handler.string(); }
+		static inline bool check() { return default_err.check(); }
+		inline const char *string() { return  default_err.string(); }
 
 		inline void push_file_info(const char *file_name, line_t line_number,
 			const char *function_name)
 		{
-			default_handler.push_file_info(file_name, line_number, function_name);
+			default_err.push_file_info(file_name, line_number, function_name);
 		}
 
 #if SCL_ERR_PRINT

@@ -8,6 +8,7 @@
 #include <io.h>
 #include <variant>
 
+#include "scl_interface.h"
 #include "types.h"
 #include "clib.h"
 #include "err.h"

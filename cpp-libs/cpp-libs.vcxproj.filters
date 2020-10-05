@@ -240,7 +240,7 @@
     <ClInclude Include="counter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="storage.h">
+    <ClInclude Include="scl_interface.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
