@@ -50,7 +50,7 @@ void test_main()
 	{
 		winapi::auto_timer _;
 
-		for (size_t index = 0; index < repeat; index += 1)
+		for (size_t len = 0; len < repeat; len += 1)
 		{
 			test_err_func3();
 
@@ -62,7 +62,7 @@ void test_main()
 	{
 		winapi::auto_timer _;
 
-		for (size_t index = 0; index < repeat; index += 1)
+		for (size_t len = 0; len < repeat; len += 1)
 		{
 			try
 			{

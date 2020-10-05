@@ -281,8 +281,8 @@ namespace scl
 			if (scl::err::check())
 				return 0;
 
-			for (size_t index = 0; index < width; index += 1)
-				buffer[index] = character;
+			for (size_t length = 0; length < width; length += 1)
+				buffer[length] = character;
 			buffer[width++] = '\n';
 
 			write_number = fwrite(buffer, 1, width, stream);

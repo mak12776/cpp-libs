@@ -84,20 +84,20 @@ namespace scl
 
 		// access functions
 
-		inline const_reference at(size_type index)
+		inline const_reference at(size_type len)
 		{
 			if constexpr (safe::error_index_out_of_range)
-				safe::check_index_out_of_range(index, this->_capacity);
+				safe::check_index_out_of_range(len, this->_capacity);
 
-			return this->_data[index];
+			return this->_data[len];
 		}
 
-		inline const_reference operator[](size_type index)
+		inline const_reference operator[](size_type len)
 		{
 			if constexpr (safe::error_index_out_of_range)
-				safe::check_index_out_of_range(index, this->_capacity);
+				safe::check_index_out_of_range(len, this->_capacity);
 
-			return this->_data[index];
+			return this->_data[len];
 		}
 
 		inline const_reference first() const

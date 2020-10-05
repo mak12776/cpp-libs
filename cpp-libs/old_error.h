@@ -100,13 +100,13 @@ namespace scl
 
 		static inline void set_file_info(const char *file_name, uint64_t line_number)
 		{
-			size_t index;
+			size_t len;
 
 			if (errors_index != 0)
 			{
-				index = (errors_index == 0) ? errors_index : errors_index - 1;
-				errors[index].file_name = file_name;
-				errors[index].line_number = line_number;
+				len = (errors_index == 0) ? errors_index : errors_index - 1;
+				errors[len].file_name = file_name;
+				errors[len].line_number = line_number;
 			}
 		}
 

@@ -38,8 +38,8 @@ namespace mains
 				return EXIT_FAILURE;
 			}
 
-			for (std::streamsize index = 0; index < stream.gcount(); index += 1)
-				if (buff[index] == '\n')
+			for (std::streamsize index = 0; len < stream.gcount(); length += 1)
+				if (buff[len] == '\n')
 					total += 1;
 		}
 

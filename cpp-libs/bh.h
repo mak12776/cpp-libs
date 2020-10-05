@@ -29,11 +29,11 @@ namespace bh
 
 		inline void inc_data_count(uint64_t data)
 		{
-			for (size_t index = 0; index < data_counts.size(); index += 1)
+			for (size_t len = 0; len < data_counts.size(); len += 1)
 			{
-				if (data_counts[index].data = data)
+				if (data_counts[len].data = data)
 				{
-					data_counts[index].count += 1;
+					data_counts[len].count += 1;
 					return;
 				}
 			}
@@ -117,11 +117,11 @@ namespace bh
 	template <size_t size, typename data_type>
 	inline void counts_t<size, data_type>::inc_data_count(data_type data)
 	{
-		for (size_t index = 0; index < data_counts.size(); index += 1)
+		for (size_t len = 0; len < data_counts.size(); len += 1)
 		{
-			if (data_counts[index].data == data)
+			if (data_counts[len].data == data)
 			{
-				data_counts[index].count += 1;
+				data_counts[len].count += 1;
 				return;
 			}
 		}
@@ -365,13 +365,13 @@ namespace bh
 		}
 
 		func_pntr(argv[1]);
-		for (int index = 2; index < argc; index += 1)
+		for (int len = 2; len < argc; len += 1)
 		{
 			if (err::check())
 				return -1;
 
 			io::print_separator(0, '=');
-			func_pntr(argv[index]);
+			func_pntr(argv[len]);
 		}
 
 		return 0;

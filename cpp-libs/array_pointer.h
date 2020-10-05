@@ -56,20 +56,20 @@ namespace scl
 
 		// access functions
 
-		inline const_reference at(size_type index)
+		inline const_reference at(size_type length)
 		{
 			if (safe::error_index_out_of_range)
-				safe::check_index_out_of_range(index, _size);
+				safe::check_index_out_of_range(length, _size);
 
-			return this->_data[index];
+			return this->_data[length];
 		}
 
-		inline const_reference operator[](size_type index)
+		inline const_reference operator[](size_type length)
 		{
 			if (safe::error_index_out_of_range)
-				safe::check_index_out_of_range(index, _size);
+				safe::check_index_out_of_range(length, _size);
 
-			return this->_data[index];
+			return this->_data[length];
 		}
 
 		inline const_reference first() const

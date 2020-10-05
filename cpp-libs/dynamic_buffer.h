@@ -28,7 +28,7 @@ namespace scl
 			if (this->empty())
 				return 0;
 
-			index = 0;
+			len = 0;
 			total = 0;
 
 #define CH (this->_data[index])

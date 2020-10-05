@@ -31,9 +31,9 @@ namespace scl
 			if (safe::error_index_out_of_range())
 				safe::check_index_out_of_range(lenght, this->array::size(), "", "lenght test greater than array size");
 
-			for (size_t index = 0; index < lenght; index += 1)
+			for (size_t length = 0; length < lenght; length += 1)
 			{
-				this->array::_Elems[index] = value;
+				this->array::_Elems[length] = value;
 			}
 			this->_lenght = lenght;
 		}
@@ -57,20 +57,20 @@ namespace scl
 
 		// access functions
 
-		inline const_reference at(size_type index)
+		inline const_reference at(size_type length)
 		{
 			if (safe::error_index_out_of_range)
-				safe::check_index_out_of_range(index, this->_lenght);
+				safe::check_index_out_of_range(length, this->_lenght);
 
-			return this->_Elems[index];
+			return this->_Elems[length];
 		}
 
-		inline const_reference operator[](size_type index)
+		inline const_reference operator[](size_type length)
 		{
 			if (safe::error_index_out_of_range)
-				safe::check_index_out_of_range(index, this->_lenght);
+				safe::check_index_out_of_range(length, this->_lenght);
 
-			return this->_Elems[index];
+			return this->_Elems[length];
 		}
 	};
 }

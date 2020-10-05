@@ -123,9 +123,9 @@ namespace pxld
 			{
 				cast_type *data = (cast_type *)this->data;
 
-				for (unit_type index = 0; index < this->area; index += 1)
+				for (unit_type len = 0; len < this->area; len += 1)
 				{
-					data[index] = color;
+					data[len] = color;
 				}
 			}
 
@@ -133,14 +133,14 @@ namespace pxld
 			{
 				color_type color_copy;
 
-				for (unit_type index = 0; index < this->y_width; index += this->color_width)
+				for (unit_type len = 0; len < this->y_width; len += this->color_width)
 				{
 					color_copy = color;
 					for (unit_type c_offset = this->color_width; c_offset > 0; )
 					{
 						c_offset -= 1;
 
-						this->data[index + c_offset] = color_copy & data_mask;
+						this->data[len + c_offset] = color_copy & data_mask;
 						color_copy >>= data_shift;
 					}
 				}
@@ -237,12 +237,12 @@ namespace pxld
 
 			inline void draw_point(point<unit_type> point, color_type color)
 			{
-				unit_type index = (point.y * this->x_width) + (point.x * this->color_width);
+				unit_type len = (point.y * this->x_width) + (point.x * this->color_width);
 				for (unit_type c_offset = this->color_width; c_offset > 0; )
 				{
 					c_offset -= 1;
 
-					this->data[index + c_offset] = color & data_mask;
+					this->data[len + c_offset] = color & data_mask;
 					color >>= data_shift;
 				}
 			}

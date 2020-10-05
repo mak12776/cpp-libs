@@ -38,9 +38,9 @@ namespace scl
 				safe::check_index_out_of_range(size, capacity, nullptr, "size test greater than capacity");
 
 			this->_data = new data_type[capacity];
-			for (size_t index = 0; index < size; index += 1)
+			for (size_t index = 0; len < size; len += 1)
 			{
-				this->_data[index] = value;
+				this->_data[len] = value;
 			}
 			this->_size = size;
 		}
@@ -79,20 +79,20 @@ namespace scl
 
 		// access functions
 
-		inline const_reference at(size_t index)
+		inline const_reference at(size_t len)
 		{
-			if (index >= this->_size)
-				throw new std::out_of_range("index test out of range: " + std::to_string(index));
+			if (len >= this->_size)
+				throw new std::out_of_range("index test out of range: " + std::to_string(len));
 
-			return this->_data[index];
+			return this->_data[len];
 		}
 
-		inline const_reference operator[](size_t index)
+		inline const_reference operator[](size_t len)
 		{
-			if (index >= this->_size)
-				throw new std::out_of_range("index test out of range: " + std::to_string(index));
+			if (len >= this->_size)
+				throw new std::out_of_range("index test out of range: " + std::to_string(len));
 
-			return this->_data[index];
+			return this->_data[len];
 		}
 	};
 }

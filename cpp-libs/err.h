@@ -15,9 +15,6 @@ namespace scl
 {
 	namespace err
 	{
-#define PRIuLINE PRIu64
-		typedef uint64_t line_t;
-
 		enum num_t : uint8_t
 		{
 			SUCCESS = 0,
@@ -88,6 +85,10 @@ namespace scl
 
 #pragma pack(push, 1)
 
+
+#define PRIuLINE PRIu64
+		typedef uint64_t line_t;
+
 		struct info_t
 		{
 			const char *file_name;
@@ -95,14 +96,14 @@ namespace scl
 			const char *function_name;
 		};
 
-		template <size_t size>
+		template <size_t _size>
 		struct handler_t
 		{
 			num_t num;
 			size_t index;
-			info_t info_array[size];
+			info_t info_array[_size];
 
-			constexpr size_t array_size() const { return size; }
+			constexpr size_t array_size() const { return _size; }
 
 			
 			inline void set(num_t errnum) { num = errnum; }
@@ -116,7 +117,7 @@ namespace scl
 			inline void push_file_info(const char *file_name, uint64_t line_number,
 				const char *function_name)
 			{
-				if (index != size)
+				if (index != _size)
 				{
 					info_array[index].file_name = file_name;
 					info_array[index].line_number = line_number;
@@ -149,7 +150,7 @@ namespace scl
 		static inline bool check() { return default_handler.check(); }
 		inline const char *string() { return  default_handler.string(); }
 
-		inline void push_file_info(const char *file_name, uint64_t line_number,
+		inline void push_file_info(const char *file_name, line_t line_number,
 			const char *function_name)
 		{
 			default_handler.push_file_info(file_name, line_number, function_name);

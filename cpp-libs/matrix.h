@@ -7,23 +7,23 @@ template <typename type, size_t _height, size_t _width>
 std::vector<type> sums_of_diameters(type matrix[_height][_width])
 {
 	std::vector<type> sums(_width + _height - 1);
-	size_t x = 0, y = 0, index = 0;
+	size_t x = 0, y = 0, length = 0;
 
 	while (y < _height)
 	{
-		sums[index] = matrix[y][x];
+		sums[len] = matrix[y][x];
 
 		while (y != 0)
 		{
 			x += 1;
 			y -= 1;
 
-			sums[index] += matrix[y][x];
+			sums[len] += matrix[y][x];
 		}
 
 		std::swap(x, y);
 		y += 1;
-		index += 1;
+		len += 1;
 	}
 
 	y -= 1;
@@ -31,19 +31,19 @@ std::vector<type> sums_of_diameters(type matrix[_height][_width])
 
 	while (x < _width)
 	{
-		sums[index] = matrix[y][x];
+		sums[len] = matrix[y][x];
 
 		while (x != _width - 1)
 		{
 			x += 1;
 			y -= 1;
 
-			sums[index] += matrix[y][x];
+			sums[len] += matrix[y][x];
 		}
 
 		std::swap(x, y);
 		x += 1;
-		index += 1;
+		len += 1;
 	}
 
 	return sums;
@@ -61,8 +61,8 @@ public:
 	matrix(size_t width, size_t height)
 	{
 		_data = new T[height];
-		for (size_t index = 0; index < width; index += 1)
-			_data[index] = new T[width];
+		for (size_t len = 0; len < width; len += 1)
+			_data[len] = new T[width];
 		this->_width = width;
 		this->_height = height;
 	}
@@ -72,8 +72,8 @@ public:
 
 	~matrix()
 	{
-		for (size_t index = 0; index < width; index += 1)
-			delete[] _data[index];
+		for (size_t len = 0; len < width; len += 1)
+			delete[] _data[len];
 		delete[] _data;
 	}
 

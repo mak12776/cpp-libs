@@ -14,21 +14,33 @@ namespace scl
 		typedef void *(&realloc_t)(void *, size_t);
 		typedef void (&free_t)(void *);
 
-		template <size_t handler_size, err::handler_t<handler_size> &handler>
+		template <
+			malloc_t _malloc,
+			realloc_t _realloc,
+			free_t _free,
+
+			size_t _err_size,
+			err::handler_t<_err_size> &_err
+		>
 		struct manager_t
 		{
-			malloc_t malloc;
-			realloc_t realloc;
-			free_t free;
+			constexpr void *malloc(size_t size) 
+			{ return _malloc(size); }
 
-			inline void *safe_malloc(size_t size)
+			constexpr void *realloc(void *pntr, size_t size) 
+			{ return _realloc(pntr, size); }
+
+			constexpr void free(void *pntr)
+			{ return _free; }
+
+			constexpr void *safe_malloc(size_t size)
 			{
 				void *pntr = this->malloc(size);
 
 				if (pntr == nullptr)
 				{
-					handler.set(err::MALLOC);
-					handler.push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					_err.set(err::MALLOC);
+					_err.push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				}
 
 				return pntr;
@@ -36,9 +48,10 @@ namespace scl
 		};
 
 		// default manager
-		typedef manager_t<err::default_array_size, err::default_handler> 
+		typedef manager_t<
+			malloc, realloc, free, err::default_array_size, err::default_handler> 
 			default_manager_t;
-		default_manager_t default_manager{ malloc, realloc, free };
+		default_manager_t default_manager;
 
 		// text logger manager
 		template <log::logger_t &logger>

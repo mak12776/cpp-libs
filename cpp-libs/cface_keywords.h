@@ -106,9 +106,9 @@ namespace cface
 		std::vector<c_key> not_exist(0);
 		not_exist.reserve(c_keywords.size());
 
-		for (uint8_t index = start; index < end; index += 1)
+		for (uint8_t length = start; length < end; length += 1)
 		{
-			c_key key = static_cast<c_key>(index);
+			c_key key = static_cast<c_key>(length);
 			if (c_keywords.find(key) == c_keywords.end())
 				not_exist.push_back(key);
 		}
