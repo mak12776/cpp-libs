@@ -1,7 +1,20 @@
-I can write my plans here.
+if you want better scl interface type,
+then place template parameters inside the structures,
+like this one:
 
+```c++
+typedef void *(&malloc_t)(size_t);
+typedef void *(&realloc_t)(void *, size_t);
+typedef void (&free_t)(void *);
 
-cpp compiers:
-    gcc, clang, msvc
-    
+struct mem_t
+{
+    malloc_t malloc;
+    realloc_t realloc;
+    free_t free;
+};
+
+mem_t default_mem{malloc, realloc, free};
+
+```
 
