@@ -31,11 +31,24 @@ namespace scl
 			{ return _realloc(pntr, size); }
 
 			constexpr void free(void *pntr)
-			{ return _free; }
+			{ return _free(pntr); }
 
 			constexpr void *safe_malloc(size_t size)
 			{
 				void *pntr = this->malloc(size);
+
+				if (pntr == nullptr)
+				{
+					_err.set(err::MALLOC);
+					_err.push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+
+				return pntr;
+			}
+
+			constexpr void *safe_realloc(void *pntr, size_t size)
+			{
+				void *pntr = this->realloc(pntr, size);
 
 				if (pntr == nullptr)
 				{
@@ -52,7 +65,7 @@ namespace scl
 			malloc, realloc, free, err::default_array_size, err::default_err> 
 			default_mem_t;
 		default_mem_t default_mem;
-
+		
 		// text logger manager
 		template <log::logger_t &logger>
 		void *malloc_logger(size_t size)
@@ -83,6 +96,29 @@ namespace scl
 		default_mem_t logger_manager{
 			malloc_logger<logger>, realloc_logger<logger>, free};
 
+
+		// functions
+
+		static inline void *malloc(size_t size) 
+		{
+			default_mem.malloc(size);
+		}
+
+		static inline void *realloc(void *pntr, size_t size)
+		{
+			default_mem.realloc(pntr, size);
+		}
+
+		static inline void free(void *pntr)
+		{
+			default_mem.free(pntr);
+		}
+
+		static inline void *safe_malloc(size_t size)
+		{
+			default_mem.safe_malloc(size);
+		}
+
 #ifdef SCL_EXPERIMENTAL
 		// memory pointer
 
@@ -104,28 +140,6 @@ namespace scl
 			}
 		};
 #endif
-
-		static inline void *safe_malloc(size_t size)
-		{
-			void *pntr;
-
-			pntr = malloc(size);
-
-			if (pntr == nullptr)
-			{
-				err::set(err::MALLOC);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-
-			return pntr;
-		}
-
-
-		static inline void free(void *buffer)
-		{
-			std::free(buffer);
-		}
-
 		template <typename type>
 		static inline type *new_array(size_t size)
 		{

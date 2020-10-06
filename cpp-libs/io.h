@@ -201,7 +201,7 @@ namespace scl
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				mem::free(*pntr);
+				free(*pntr);
 				return;
 			}
 		}
@@ -287,7 +287,7 @@ namespace scl
 			buffer[width++] = '\n';
 
 			write_number = fwrite(buffer, 1, width, stream);
-			mem::free(buffer);
+			free(buffer);
 
 			return write_number;
 		}
