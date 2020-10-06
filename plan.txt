@@ -18,6 +18,22 @@ mem_t default_mem{malloc, realloc, free};
 
 ```
 
-otherwise you can't the whole template parameter and value
+otherwise you can't pass the whole template parameter and value
 as a template parameter.
+
+
+if you want pass "err_t", "mem_t" & "cleaner_t" to a function, and 
+use a simple template name for it (like following code), store 
+everything inside of structures.
+
 ```
+template <scl_t ncl>
+void high_performance_operations()
+{
+}
+```
+
+you can't write very high performance programs in c++.
+
+c++ compilers aren't high performance compilers: 
+    gcc, clang, msvc
