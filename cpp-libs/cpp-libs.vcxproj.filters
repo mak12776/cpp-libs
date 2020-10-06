@@ -70,7 +70,7 @@
     <Filter Include="Header Files\scl\types">
       <UniqueIdentifier>{d3537811-67ec-40fb-aadc-00c946e0e1d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\NewFilter1">
+    <Filter Include="Header Files\scl\features">
       <UniqueIdentifier>{9b0f6a06-aab6-4705-9830-c337d8090e8d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -165,9 +165,6 @@
     <ClInclude Include="string_algorithms.h">
       <Filter>Header Files\incomplete\olds</Filter>
     </ClInclude>
-    <ClInclude Include="err.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="exit_codes.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -175,9 +172,6 @@
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="rand.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="mem.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="winapi_types.h">
@@ -188,12 +182,6 @@
     </ClInclude>
     <ClInclude Include="macros.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="log.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="fmt.h">
-      <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="error_handling_test.h">
       <Filter>Header Files\tests</Filter>
@@ -231,9 +219,6 @@
     <ClInclude Include="winapi.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="cleaner.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="winapi_functions.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
@@ -245,6 +230,21 @@
     </ClInclude>
     <ClInclude Include="io.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="cleaner.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="err.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="mem.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="fmt.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
