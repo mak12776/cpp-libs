@@ -136,6 +136,24 @@ namespace scl
 
 		// safe fread
 
+		template <
+			size_t _err_size = scl::err::default_array_size,
+			scl::err::err_t<_err_size> &_err = scl::err::default_err,
+
+			size_t _cleaner_size = scl::cleaner::default_array_size,
+			scl::cleaner::cleaner_t<_cleaner_size> &_cleaner =
+			scl::cleaner::default_cleaner,
+
+			scl::mem::malloc_t _malloc = malloc,
+			scl::mem::realloc_t _realloc = realloc,
+			scl::mem::free_t _free = free,
+			scl::mem::mem_t<_malloc, _realloc, _free, _err_size, _err> &_mem =
+			scl::mem::default_mem,
+
+			scl::scl_t<
+			_err_size, _err, _cleaner_size, _cleaner,
+			_malloc, _realloc, _free, _mem> &ncl = scl::default_scl
+		>
 		static inline size_t safe_fread(void *pntr, size_t size, FILE *stream)
 		{
 			size_t read_number;
@@ -180,6 +198,7 @@ namespace scl
 
 		// other functions
 
+		template <SCL_TEMPLATE_ARGS(ncl) >
 		static inline void fread_all(FILE *file, void **pntr, size_t &size)
 		{
 			size_t file_size;
@@ -190,15 +209,15 @@ namespace scl
 #error unsigned long is too big.
 #endif
 
-			(*pntr) = mem::safe_malloc(file_size);
-			if (err::check())
+			(*pntr) = ncl.mem.safe_malloc(file_size);
+			if (ncl.err.check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				ncl.err.push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 
 			size = safe_fread(*pntr, file_size, file);
-			if (err::check())
+			if (ncl.err.check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				free(*pntr);

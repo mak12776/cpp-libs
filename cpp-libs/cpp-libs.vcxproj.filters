@@ -70,6 +70,9 @@
     <Filter Include="Header Files\scl\types">
       <UniqueIdentifier>{d3537811-67ec-40fb-aadc-00c946e0e1d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scl\NewFilter1">
+      <UniqueIdentifier>{9b0f6a06-aab6-4705-9830-c337d8090e8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -168,9 +171,6 @@
     <ClInclude Include="exit_codes.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="io.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="math.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -241,6 +241,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scl_interface.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="io.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
