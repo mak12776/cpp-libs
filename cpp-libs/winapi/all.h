@@ -10,8 +10,6 @@
 #include <cstdio>
 #include <functional>
 
-
-
 #include "types.h"
 #include "time.h"
 #include "functions.h"
