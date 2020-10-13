@@ -157,7 +157,6 @@
     <ClInclude Include="counter.h" />
     <ClInclude Include="bh.h" />
     <ClInclude Include="clib.h" />
-    <ClInclude Include="old_codes.h" />
     <ClInclude Include="scl\all.h" />
     <ClInclude Include="scl\builtins.h" />
     <ClInclude Include="scl\cleaner.h" />

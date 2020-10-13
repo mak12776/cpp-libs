@@ -48,9 +48,6 @@
     <ClInclude Include="scl\rand.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="old_codes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scl\all.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
