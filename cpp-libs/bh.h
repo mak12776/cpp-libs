@@ -1,6 +1,5 @@
 #pragma once
 
-#include "types.h"
 #include "cleaner.h"
 #include "string.h"
 #include "err.h"
@@ -9,8 +8,6 @@
 
 namespace bh
 {
-	using namespace scl;
-
 #ifdef BH_INCLUDE_COUNT_64BIT
 #pragma pack(push, 1)
 	struct data_64bit_count_t

@@ -25,6 +25,13 @@
 	"features/err.h"
 */
 
+#include "features/cleaner.h"
+/*	<cinttypes>
+	<cstdio>
+
+	"features/mem.h"
+*/
+
 #include "io.h"
 /*	<sys/types.h>
 	<sys/stat.h>
