@@ -14,18 +14,17 @@
 
 #endif
 
-#include "features/err.h"		// <cinttypes>
-#include "features/log.h"		// <cstdio> <cstdarg>
-#include "features/mem.h"		// "features/log.h", "features/err.h"
-#include "features/cleaner.h"	// "features/mem.h"
+#include "err.h"		// <cinttypes>
+#include "log.h"		// <cstdio> <cstdarg>
+#include "mem.h"		// "log.h" "err.h"
+#include "cleaner.h"	// "mem.h"
 
-#include "types/builtins.h"
-#include "types/string.h"		// <string>, "features/mem.h"
-#include "types/linked_array.h"
+#include "builtins.h"
+#include "string.h"		// <string> "mem.h"
+#include "linked_array.h"
 
 #include "exit_codes.h"
-#include "io.h"	/*	<sys/types.h>, <sys/stat.h>, <io.h>
-					"features/err.h", "features/mem.h", 
-					"types/builtins.h" */
+#include "io.h"			/* <sys/types.h> <sys/stat.h> <io.h>
+						// "err.h" "mem.h" "builtins.h" */
 #include "math.h" 
 #include "rand.h"
