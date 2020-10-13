@@ -553,13 +553,6 @@ void func()
 
 //int main(int argc, const char **argv)
 //{
-//	printf("In The Name Of God.\n");
-//
-//	io::set_default_width(20);
-//	io::print_separator();
-//
-//	func<default_base_mem_t>();
-
 	/*winapi::safe_set_current_priority_class(REALTIME_PRIORITY_CLASS);
 	if (err::check())
 	{

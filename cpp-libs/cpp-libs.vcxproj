@@ -173,6 +173,10 @@
     <ClInclude Include="macros.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="scl\string.h" />
+    <ClInclude Include="winapi\winapi.h" />
+    <ClInclude Include="winapi\winapi_functions.h" />
+    <ClInclude Include="winapi\winapi_time.h" />
+    <ClInclude Include="winapi\winapi_types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cpp-libs.cpp" />
