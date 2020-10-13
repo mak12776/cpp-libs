@@ -1,9 +1,5 @@
 #pragma once
 
-#include <Windows.h>
-#include <cstdint>
-#include <inttypes.h>
-
 namespace winapi
 {
 #if MAXDWORD == UINT32_MAX

@@ -1,5 +1,17 @@
 #pragma once
 
-#include "winapi_types.h"
-#include "winapi_time.h"
-#include "winapi_functions.h"
+
+#include <Windows.h>
+#include <processthreadsapi.h>
+#include <io.h>
+
+#include <cinttypes>
+#include <cstdint>
+#include <cstdio>
+#include <functional>
+
+
+
+#include "types.h"
+#include "time.h"
+#include "functions.h"

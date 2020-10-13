@@ -1,10 +1,5 @@
 #pragma once
 
-#include <Windows.h>
-#include <stdio.h>
-#include <functional>
-
-
 namespace winapi
 {
 	// file time conversation

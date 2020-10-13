@@ -75,16 +75,16 @@
     <ClInclude Include="scl\string.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\winapi\all.h">
+    <ClInclude Include="winapi\all.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\winapi\functions.h">
+    <ClInclude Include="winapi\functions.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\winapi\time.h">
+    <ClInclude Include="winapi\time.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\winapi\types.h">
+    <ClInclude Include="winapi\types.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
   </ItemGroup>

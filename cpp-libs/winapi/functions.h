@@ -1,10 +1,5 @@
 #pragma once
 
-#include <Windows.h>
-#include <processthreadsapi.h>
-#include <io.h>
-
-#include "err.h"
 
 namespace winapi
 {
