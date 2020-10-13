@@ -1,9 +1,6 @@
 #pragma once
 
-#include <cstdlib>
-#include <string>
 #include "err.h"
-
 #include "log.h"
 
 namespace scl

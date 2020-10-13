@@ -5,13 +5,27 @@
 */
 
 #include "exit_codes.h" 
-
-
 #include "math.h" 
 
-/*	<random> */
 #include "rand.h"
+/*	<random> */
 
+
+#include "features/err.h"
+/*	<cinttypes> */
+
+#include "features/log.h"
+/*	<cstdio>
+	<cstdarg>
+*/
+
+#include "features/mem.h"
+/*
+	"features/log.h"
+	"features/err.h"
+*/
+
+#include "io.h"
 /*	<sys/types.h>
 	<sys/stat.h>
 	<io.h>
@@ -20,11 +34,5 @@
 	"features/mem.h"
 	"types/builtins.h"
 */
-#include "io.h"
-
-/*	<cinttypes>
-*/
-#include "features/err.h"
-
 
 

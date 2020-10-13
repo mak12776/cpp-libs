@@ -1,9 +1,5 @@
 #pragma once
 
-//#include <cstdint>
-//#include <stdexcept>
-//#include <safeint.h>
-
 namespace scl
 {
 	namespace math

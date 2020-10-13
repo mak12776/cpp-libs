@@ -1,7 +1,11 @@
 #pragma once
 
-#include <stdio.h>
-#include <stdarg.h>
+#ifndef SCL_NOT_INC_GLOBAL_HEADERS
+
+#include <cstdio>
+#include <cstdarg>
+
+#endif
 
 namespace scl
 {

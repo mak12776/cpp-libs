@@ -1,10 +1,5 @@
 #pragma once
 
-#include <stdint.h>
-#include <cstdio>
-#include <stdlib.h>
-#include <stdarg.h>
-
 namespace scl
 {
 	namespace cleaner
