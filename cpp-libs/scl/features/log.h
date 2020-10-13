@@ -1,12 +1,5 @@
 #pragma once
 
-#ifndef SCL_NOT_INC_GLOBAL_HEADERS
-
-#include <cstdio>
-#include <cstdarg>
-
-#endif
-
 namespace scl
 {
 	namespace log

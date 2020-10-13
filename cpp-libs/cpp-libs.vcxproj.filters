@@ -57,9 +57,6 @@
     <ClInclude Include="old_codes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scl\all.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\linked_array.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
@@ -89,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="scl\safe.h">
       <Filter>Header Files\scl_incomplete</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\scl.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,5 @@
 #pragma once
 
-#ifndef SCL_NOT_INC_GLOBAL_HEADERS
-
-#include <cinttypes>
-#include <cstdio>
-
-#endif
-
 namespace scl
 {
 	namespace cleaner

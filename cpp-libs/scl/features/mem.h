@@ -1,8 +1,5 @@
 #pragma once
 
-#include "err.h"
-#include "log.h"
-
 namespace scl
 {
 	namespace mem

@@ -1,9 +1,5 @@
 #pragma once
 
-#ifndef SCL_NOT_INC_GLOBAL_HEADERS
-#include <random>
-#endif
-
 namespace scl
 {
 	namespace rand
