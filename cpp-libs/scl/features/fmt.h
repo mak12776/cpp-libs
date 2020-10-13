@@ -1,10 +1,5 @@
 #pragma once
 
-#include <cstdarg>
-#include <cstdio>
-
-#include "err.h"
-
 namespace scl
 {
 	namespace fmt

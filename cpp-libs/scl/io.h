@@ -1,16 +1,5 @@
 #pragma once
 
-#ifndef SCL_NOT_INC_GLOBAL_HEADERS
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <io.h>
-
-#endif
-
-#include "features/err.h"
-#include "features/mem.h"
-#include "types/builtins.h"
 
 namespace scl
 {

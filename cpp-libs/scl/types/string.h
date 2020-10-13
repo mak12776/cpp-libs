@@ -1,9 +1,5 @@
 #pragma once
 
-#include <string>
-#include <type_traits>
-
-#include "err.h"
 
 namespace scl
 {

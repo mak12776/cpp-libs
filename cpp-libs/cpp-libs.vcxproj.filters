@@ -87,8 +87,8 @@
     <ClInclude Include="scl\safe.h">
       <Filter>Header Files\scl_incomplete</Filter>
     </ClInclude>
-    <ClInclude Include="scl\scl.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="scl\all.h">
+      <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
