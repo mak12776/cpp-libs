@@ -16,15 +16,6 @@
     <Filter Include="Header Files\scl">
       <UniqueIdentifier>{87c036fa-ed9f-4d79-8675-d9b2f1cac38f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\types">
-      <UniqueIdentifier>{6e8db4c9-8e25-4c47-919f-595a91278293}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scl\features">
-      <UniqueIdentifier>{b8c246a4-da1a-4ef1-abea-3876dc3273a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scl_incomplete">
-      <UniqueIdentifier>{0c0aadef-0206-431a-91a6-a66350f9ea6c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -57,37 +48,31 @@
     <ClInclude Include="old_codes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="scl\types\linked_array.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\types\string.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\types\builtins.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\cleaner.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\err.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\fmt.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\log.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\mem.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\scl_interface.h">
-      <Filter>Header Files\scl_incomplete</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\safe.h">
-      <Filter>Header Files\scl_incomplete</Filter>
-    </ClInclude>
     <ClInclude Include="scl\all.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\builtins.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\cleaner.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\err.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\fmt.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\linked_array.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\log.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\mem.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\string.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
