@@ -1,15 +1,10 @@
 #pragma once
 
-#include <cinttypes>
-#include <cstdio>
-#include <cstdint>
-#include <cstring>
-#include <stdarg.h>
-#include <inttypes.h>
-#include <errno.h>
+#ifndef SCL_NOT_INC_GLOBAL_HEADERS
 
-#include "math.h"
-#include "clib.h"
+#include <cinttypes>
+
+#endif
 
 namespace scl
 {

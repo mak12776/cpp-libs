@@ -9,7 +9,7 @@
 
 #include "math.h" 
 
-/* <random> */
+/*	<random> */
 #include "rand.h"
 
 /*	<sys/types.h>
@@ -21,6 +21,10 @@
 	"types/builtins.h"
 */
 #include "io.h"
+
+/*	<cinttypes>
+*/
+#include "features/err.h"
 
 
 
