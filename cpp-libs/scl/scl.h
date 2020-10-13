@@ -4,8 +4,6 @@
  *		SCL_CATCH_EXCEPTIONS
 */
 
-// #define SCL_USE_ERROR
-
 #include "exit_codes.h"
 #include "types.h"
 #include "err.h"

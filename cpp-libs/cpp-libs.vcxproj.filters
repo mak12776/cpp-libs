@@ -203,6 +203,9 @@
     <ClInclude Include="scl\scl_interface.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="old_codes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

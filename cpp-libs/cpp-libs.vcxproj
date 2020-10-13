@@ -161,6 +161,7 @@
     <ClInclude Include="bh.h" />
     <ClInclude Include="clib.h" />
     <ClInclude Include="error_handling_test.h" />
+    <ClInclude Include="old_codes.h" />
     <ClInclude Include="scl\exit_codes.h" />
     <ClInclude Include="scl\io.h" />
     <ClInclude Include="scl\math.h" />
