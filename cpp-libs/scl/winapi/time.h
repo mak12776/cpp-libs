@@ -4,10 +4,6 @@
 #include <stdio.h>
 #include <functional>
 
-#include "macros.h"
-#include "err.h"
-#include "clib.h"
-#include "fmt.h"
 
 namespace winapi
 {
