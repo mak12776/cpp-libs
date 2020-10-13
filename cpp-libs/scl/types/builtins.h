@@ -1,11 +1,5 @@
 #pragma once
 
-#include <cstdint>
-#include <climits>
-#include <cinttypes>
-
-#include "mem.h"
-
 namespace scl
 {
 	typedef int8_t byte;

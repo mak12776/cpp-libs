@@ -2,6 +2,9 @@
 // such as names of functions and macros.
 // For more information see https://go.microsoft.com/fwlink/?linkid=865984
 
+#define SCL_NOT_INC_GLOBAL_HEADERS
+
 #define SCL_INCLUDE_CLASSES
 #define SCL_EXPERIMENTAL
 #define PRIxDWORD
+
