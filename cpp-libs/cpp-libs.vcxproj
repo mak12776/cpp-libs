@@ -155,12 +155,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="counter.h" />
-    <ClInclude Include="dynamic_buffer.h" />
-    <ClInclude Include="dynamic_array.h" />
-    <ClInclude Include="exceptions.h" />
     <ClInclude Include="bh.h" />
     <ClInclude Include="clib.h" />
-    <ClInclude Include="error_handling_test.h" />
     <ClInclude Include="old_codes.h" />
     <ClInclude Include="scl\all.h" />
     <ClInclude Include="scl\exit_codes.h" />
@@ -177,37 +173,7 @@
     <ClInclude Include="scl\types\linked_array.h" />
     <ClInclude Include="scl\types\string.h" />
     <ClInclude Include="scl\types\builtins.h" />
-    <ClInclude Include="type_traits.h" />
     <ClInclude Include="macros.h" />
-    <ClInclude Include="argument_passing_test.h" />
-    <ClInclude Include="very_old_error.h" />
-    <ClInclude Include="buffers.h" />
-    <ClInclude Include="arrays.h" />
-    <ClInclude Include="buffer.h" />
-    <ClInclude Include="buffer_pointer.h" />
-    <ClInclude Include="cface.h" />
-    <ClInclude Include="cface_macros.h" />
-    <ClInclude Include="cface_base_classes.h" />
-    <ClInclude Include="cface_statements.h" />
-    <ClInclude Include="cface_expressions.h" />
-    <ClInclude Include="cface_keywords.h" />
-    <ClInclude Include="cface_main.h" />
-    <ClInclude Include="old_error.h" />
-    <ClInclude Include="mains.h" />
-    <ClInclude Include="matrix.h" />
-    <ClInclude Include="vectors.h" />
-    <ClInclude Include="static_dynamic_buffer.h" />
-    <ClInclude Include="static_dyanamic_array.h" />
-    <ClInclude Include="array_pointer.h" />
-    <ClInclude Include="array_view.h" />
-    <ClInclude Include="examples.h" />
-    <ClInclude Include="array_vector.h" />
-    <ClInclude Include="linked_fixed_vector.h" />
-    <ClInclude Include="safe.h" />
-    <ClInclude Include="fixed_vector.h" />
-    <ClInclude Include="machine.h" />
-    <ClInclude Include="pxld.h" />
-    <ClInclude Include="string_algorithms.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
