@@ -19,18 +19,15 @@
     <Filter Include="Header Files\winapi">
       <UniqueIdentifier>{5ce34039-881b-4ead-a732-b30dbf478f6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\programs">
+      <UniqueIdentifier>{134fe2ca-de08-4792-b645-e6336848e710}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="clib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="counter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scl\exit_codes.h">
@@ -86,6 +83,12 @@
     </ClInclude>
     <ClInclude Include="macros.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="counter.h">
+      <Filter>Header Files\programs</Filter>
+    </ClInclude>
+    <ClInclude Include="bh.h">
+      <Filter>Header Files\programs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
