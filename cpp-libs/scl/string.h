@@ -3,6 +3,7 @@
 
 namespace scl
 {
+
 #ifdef SCL_EXPERIMENTAL
 	namespace string_tools
 	{
