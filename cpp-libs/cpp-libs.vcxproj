@@ -162,12 +162,12 @@
     <ClInclude Include="clib.h" />
     <ClInclude Include="error_handling_test.h" />
     <ClInclude Include="old_codes.h" />
+    <ClInclude Include="scl\all.h" />
     <ClInclude Include="scl\exit_codes.h" />
     <ClInclude Include="scl\io.h" />
     <ClInclude Include="scl\math.h" />
     <ClInclude Include="scl\rand.h" />
     <ClInclude Include="scl\safe.h" />
-    <ClInclude Include="scl\scl.h" />
     <ClInclude Include="scl\scl_interface.h" />
     <ClInclude Include="type_traits.h" />
     <ClInclude Include="macros.h" />
