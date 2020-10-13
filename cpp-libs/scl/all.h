@@ -14,10 +14,13 @@
 
 #endif
 
+#include "macros.h"
+
 #include "err.h"		// <cinttypes>
 #include "log.h"		// <cstdio> <cstdarg>
 #include "mem.h"		// "log.h" "err.h"
 #include "cleaner.h"	// "mem.h"
+#include "fmt.h"
 
 #include "builtins.h"
 #include "string.h"		// <string> "mem.h"

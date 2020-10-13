@@ -2,8 +2,9 @@
 
 #include <cstdarg>
 #include <cstdio>
+#include <cstdlib>
 
-#include "math.h"
+#include "scl/all.h"
 
 namespace cl
 {
