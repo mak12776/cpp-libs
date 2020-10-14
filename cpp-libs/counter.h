@@ -2,10 +2,7 @@
 
 #include <cstdio>
 
-#include "io.h"
-#include "types.h"
-#include "cleaner.h"
-#include "scl_interface.h"
+#include "scl/all.h"
 
 namespace counter
 {
