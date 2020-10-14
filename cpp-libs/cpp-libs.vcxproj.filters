@@ -63,9 +63,6 @@
     <ClInclude Include="winapi\types.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="macros.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="counter.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
@@ -101,6 +98,9 @@
     </ClInclude>
     <ClInclude Include="scl\features\mem.h">
       <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\macros.h">
+      <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -25,25 +25,23 @@ namespace counter
 		ubuffer_t buffer;
 
 		io::fread_all(file, buffer);
-		if (ncl.err.check())
+
+		if (err::test_clear(err::MALLOC))
 		{
-			if (ncl.err.test_clear(err::MALLOC))
+			buffer.pntr = mem::safe_malloc(buffer_size);
+			if (err::check())
 			{
-				buffer.pntr = ncl.mem.safe_malloc(buffer_size);
-				if (ncl.err.check())
-				{
-					ncl.err.push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					return;
-				}
-				ncl.cleaner.add_free(buffer.pntr);
-
-				// more codes there
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
 			}
+			cleaner::add_free(buffer.pntr);
 
+			// more codes here
+		}
+		else if (err::check())
+		{
 			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return;
 		}
-
-
 	}
 }

@@ -12,30 +12,19 @@ namespace scl
 			INVALID_ARGUMENT,
 
 			// malloc, new operator
-			MALLOC, 
-			NEW,
+			MALLOC, NEW,
 
 			// overflows
-			INT_OVERFLOW, 
-			FLOAT_OVERFLOW,
+			INT_OVERFLOW, FLOAT_OVERFLOW,
 
 			// normal function
-			OPEN, 
-			STAT,
-			READ, 
-			WRITE,
+			OPEN, STAT, READ, WRITE,
 
 			// file functions
-			FOPEN, 
-			FTELL, 
-			FSEEK,
-			FREAD, 
-			FWRITE,
+			FOPEN, FTELL, FSEEK, FREAD, FWRITE,
 
 			// other errors
-			WIN_ERROR, 
-			PRINTF,
-			UNDEFINED_BEHAVIOR,
+			WIN_ERROR, PRINTF, UNDEFINED_BEHAVIOR,
 			INVALID_FILE_STRUCTURE,
 		};
 
@@ -65,9 +54,9 @@ namespace scl
 
 			case WIN_ERROR: return "WIN_ERROR";
 			case PRINTF: return "PRINTF";
-
 			case UNDEFINED_BEHAVIOR: return "UNDEFINED_BEHAVIOR";
 			case INVALID_FILE_STRUCTURE: return "INVALID_FILE_STRUCTURE";
+
 			default: return "UKNOWN";
 			}
 		}
