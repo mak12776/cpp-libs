@@ -19,7 +19,7 @@ namespace counter
 	// there is two types of file readers.
 	// buffered readers & full buffered readers
 
-	template <size_t buffer_size = 4096, default_scl_t &ncl = default_scl>
+	template <size_t buffer_size = 4096>
 	static inline void count_file(FILE *file, count_t &count)
 	{
 		ubuffer_t buffer;

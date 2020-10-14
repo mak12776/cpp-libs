@@ -22,6 +22,9 @@
     <Filter Include="Header Files\programs">
       <UniqueIdentifier>{134fe2ca-de08-4792-b645-e6336848e710}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scl\types">
+      <UniqueIdentifier>{2860705e-3e8a-4e9e-95d5-27be0faccc09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -45,9 +48,6 @@
     <ClInclude Include="scl\all.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\builtins.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="scl\cleaner.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -57,16 +57,10 @@
     <ClInclude Include="scl\fmt.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\linked_array.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="scl\log.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="scl\mem.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\string.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="winapi\all.h">
@@ -89,6 +83,18 @@
     </ClInclude>
     <ClInclude Include="bh.h">
       <Filter>Header Files\programs</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\all.h">
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\builtins.h">
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\linked_array.h">
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\string.h">
+      <Filter>Header Files\scl\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

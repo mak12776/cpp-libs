@@ -15,19 +15,14 @@
 #endif
 
 #include "macros.h"
-
-#include "err.h"		// <cinttypes>
-#include "log.h"		// <cstdio> <cstdarg>
-#include "mem.h"		// "log.h" "err.h"
-#include "cleaner.h"	// "mem.h"
-#include "fmt.h"
-
-#include "builtins.h"
-#include "string.h"		// <string> "mem.h"
-#include "linked_array.h"
-
 #include "exit_codes.h"
-#include "io.h"			/* <sys/types.h> <sys/stat.h> <io.h>
-						// "err.h" "mem.h" "builtins.h" */
+
+#include "features/all.h"	// <cinttypes> <cstdio> cstdarg>
+#include "types/all.h"
+
+#include "io.h"			// <sys/types.h> <sys/stat.h> <io.h>
+						// "features/all.h"
 #include "math.h" 
 #include "rand.h"
+
+
