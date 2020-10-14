@@ -22,7 +22,7 @@
 
 #include "io.h"			// <sys/types.h> <sys/stat.h> <io.h>
 						// "features/all.h"
-#include "math.h" 
+#include "math.h"
 #include "rand.h"
 
 

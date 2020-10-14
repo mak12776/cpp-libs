@@ -25,6 +25,9 @@
     <Filter Include="Header Files\scl\types">
       <UniqueIdentifier>{2860705e-3e8a-4e9e-95d5-27be0faccc09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scl\features">
+      <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -46,21 +49,6 @@
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="scl\all.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\cleaner.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\err.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\fmt.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\log.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\mem.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
     <ClInclude Include="winapi\all.h">
@@ -95,6 +83,24 @@
     </ClInclude>
     <ClInclude Include="scl\types\string.h">
       <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\all.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\cleaner.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\err.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\fmt.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\log.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\mem.h">
+      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
