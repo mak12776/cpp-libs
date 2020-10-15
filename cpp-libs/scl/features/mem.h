@@ -8,7 +8,6 @@ namespace scl
 		typedef void *(&calloc_t)(size_t, size_t);
 		typedef void *(&realloc_t)(void *, size_t);
 		typedef void (&free_t)(void *);
-		
 
 		struct mem_t
 		{
@@ -87,27 +86,6 @@ namespace scl
 		static inline constexpr void *safe_realloc(void *pntr, size_t size)
 		{ return safe_call<realloc_t, global_mem.realloc>(pntr, size); }
 
-#ifdef SCL_EXPERIMENTAL
-		// memory pointer
-
-		template <typename value_type, intptr_t manager = default_manager_pntr>
-		struct m_pntr
-		{
-			value_type *pntr;
-			size_t refs;
-
-			inline void alloc(size_t size)
-			{
-				this->pntr = mem::safe_malloc(size);
-				if (err::check())
-				{
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					return;
-				}
-				this->refs = 1;
-			}
-		};
-#endif
 		template <typename type>
 		static inline type *new_array(size_t size)
 		{
@@ -144,5 +122,27 @@ namespace scl
 
 			return array;
 		}
+
+#ifdef SCL_EXPERIMENTAL
+		// memory pointer
+
+		template <typename value_type, intptr_t manager = default_manager_pntr>
+		struct m_pntr
+		{
+			value_type *pntr;
+			size_t refs;
+
+			inline void alloc(size_t size)
+			{
+				this->pntr = mem::safe_malloc(size);
+				if (err::check())
+				{
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					return;
+				}
+				this->refs = 1;
+			}
+		};
+#endif
 	}
 }
