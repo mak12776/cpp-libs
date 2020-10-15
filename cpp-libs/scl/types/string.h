@@ -55,7 +55,6 @@ namespace scl
 		{ }
 	};
 
-	template <mem::default_mem_t &manager = mem::default_mem>
 	struct m_string_t
 	{
 		char *pntr;
@@ -78,7 +77,7 @@ namespace scl
 				return;
 			}
 
-			this->pntr = (char *)manager.safe_malloc(size);
+			this->pntr = (char *)mem::safe_malloc(size);
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);

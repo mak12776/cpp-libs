@@ -26,7 +26,7 @@ namespace counter
 
 		io::fread_all(file, buffer);
 
-		if (err::test_clear(err::MALLOC))
+		if (err::clear_if(err::NO_MEMORY))
 		{
 			buffer.pntr = mem::safe_malloc(buffer_size);
 			if (err::check())

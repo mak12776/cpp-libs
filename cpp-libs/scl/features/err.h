@@ -12,7 +12,7 @@ namespace scl
 			INVALID_ARGUMENT,
 
 			// malloc, new operator
-			MALLOC, NEW,
+			NO_MEMORY, NEW,
 
 			// overflows
 			INT_OVERFLOW, FLOAT_OVERFLOW,
@@ -35,7 +35,7 @@ namespace scl
 			case SUCCESS: return "SUCCESS";
 			case INVALID_ARGUMENT: return "INVALID_ARGUMENT";
 
-			case MALLOC: return "MALLOC";
+			case NO_MEMORY: return "NO_MEMORY";
 			case NEW: return "NEW"; 
 
 			case INT_OVERFLOW: return "INT_OVERFLOW";
@@ -87,7 +87,7 @@ namespace scl
 			inline void set(num_t errnum) { num = errnum; }
 			inline bool test(num_t errnum) { return num == errnum; }
 			inline void clear() { num = num_t::SUCCESS; array_index = 0; }
-			inline void test_clear(num_t errnum) { if (num == errnum) clear(); }
+			inline void clear_if(num_t errnum) { if (num == errnum) clear(); }
 
 			inline bool check() { return num != num_t::SUCCESS; }
 			inline const char *string() { return to_string(num); }
@@ -104,11 +104,7 @@ namespace scl
 				}
 			}
 		};
-		
-
 #pragma pack(pop)
-
-		
 
 		// default handler
 
@@ -122,8 +118,7 @@ namespace scl
 		static inline void set(num_t errnum) { default_err.set(errnum); }
 		static inline void test(num_t errnum) { default_err.test(errnum); }
 		static inline void clear() { default_err.clear(); }
-		static inline void test_clear(num_t num) 
-		{ default_err.test_clear(num); }
+		static inline void clear_if(num_t num) { default_err.clear_if(num); }
 
 		static inline bool check() { return default_err.check(); }
 		inline const char *string() { return  default_err.string(); }

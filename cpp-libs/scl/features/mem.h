@@ -5,61 +5,20 @@ namespace scl
 	namespace mem
 	{
 		typedef void *(&malloc_t)(size_t);
+		typedef void *(&calloc_t)(size_t, size_t);
 		typedef void *(&realloc_t)(void *, size_t);
 		typedef void (&free_t)(void *);
+		
 
-		template <
-			malloc_t _malloc,
-			realloc_t _realloc,
-			free_t _free,
-
-			size_t _err_size,
-			err::err_t<_err_size> &_err
-		>
 		struct mem_t
 		{
-			constexpr void *malloc(size_t size) 
-			{ return _malloc(size); }
-
-			constexpr void *realloc(void *pntr, size_t size) 
-			{ return _realloc(pntr, size); }
-
-			constexpr void free(void *pntr)
-			{ return _free(pntr); }
-
-			constexpr void *safe_malloc(size_t size)
-			{
-				void *pntr = this->malloc(size);
-
-				if (pntr == nullptr)
-				{
-					_err.set(err::MALLOC);
-					_err.push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-
-				return pntr;
-			}
-
-			constexpr void *safe_realloc(void *pntr, size_t size)
-			{
-				void *pntr = this->realloc(pntr, size);
-
-				if (pntr == nullptr)
-				{
-					_err.set(err::MALLOC);
-					_err.push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-
-				return pntr;
-			}
+			malloc_t malloc;
+			calloc_t calloc;
+			realloc_t realloc;
+			free_t free;
 		};
 
-		// default manager
-		typedef mem_t<
-			malloc, realloc, free, err::default_array_size, err::default_err> 
-			default_mem_t;
-		default_mem_t default_mem;
-		
+#ifdef SCL_EXPREMENTAL
 		// text logger manager
 		template <log::logger_t &logger>
 		void *malloc_logger(size_t size)
@@ -85,32 +44,68 @@ namespace scl
 			printf("% 10s: %p\n", "free", pntr);
 			free(pntr);
 		}
+#endif
 
-		template <log::logger_t &logger>
-		default_mem_t logger_manager{
-			malloc_logger<logger>, realloc_logger<logger>, free_logger<logger>};
-
+		// default manager
+		constexpr mem_t default_mem{ malloc, calloc, realloc, free };
+		constexpr mem_t global_mem = default_mem;
 
 		// functions
 
 		static inline void *malloc(size_t size) 
-		{
-			default_mem.malloc(size);
-		}
+		{ global_mem.malloc(size); }
 
 		static inline void *realloc(void *pntr, size_t size)
-		{
-			default_mem.realloc(pntr, size);
-		}
+		{ global_mem.realloc(pntr, size); }
 
 		static inline void free(void *pntr)
+		{ global_mem.free(pntr); }
+
+		template <typename functype, typename... argtypes>
+		static inline constexpr void *safe_call(functype func, argtypes... args)
 		{
-			default_mem.free(pntr);
+			void *pntr = func(args...);
+
+			if (pntr == nullptr)
+			{
+				err::set(err::NO_MEMORY);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+
+			return pntr;
 		}
 
 		static inline void *safe_malloc(size_t size)
 		{
-			default_mem.safe_malloc(size);
+			void *pntr = global_mem.malloc(size);
+
+			return pntr;
+		}
+
+		constexpr void *safe_calloc(size_t nelem, size_t size)
+		{
+			void *pntr = global_mem.calloc(nelem, size);
+
+			if (pntr == nullptr)
+			{
+				err::set(err::NO_MEMORY);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+
+			return pntr;
+		}
+
+		constexpr void *safe_realloc(void *pntr, size_t size)
+		{
+			void *pntr = global_mem.realloc(pntr, size);
+
+			if (pntr == nullptr)
+			{
+				err::set(err::NO_MEMORY);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+
+			return pntr;
 		}
 
 #ifdef SCL_EXPERIMENTAL
