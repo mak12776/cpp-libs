@@ -88,7 +88,7 @@ namespace scl
 
 		template <log::logger_t &logger>
 		default_mem_t logger_manager{
-			malloc_logger<logger>, realloc_logger<logger>, free};
+			malloc_logger<logger>, realloc_logger<logger>, free_logger<logger>};
 
 
 		// functions
