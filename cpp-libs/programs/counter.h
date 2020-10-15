@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-#include "scl/all.h"
+#include "../scl/all.h"
 
 namespace counter
 {
