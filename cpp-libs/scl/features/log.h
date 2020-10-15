@@ -4,7 +4,7 @@ namespace scl
 {
 	namespace log
 	{
-		struct logger_t
+		struct log_t
 		{
 			FILE *log_file;
 
@@ -24,7 +24,9 @@ namespace scl
 			}
 		};
 
-		logger_t default_logger{ stdout };
+		log_t default_log{ stdout };
+		log_t global_log = default_log;
+
 
 		// functions
 
@@ -34,7 +36,7 @@ namespace scl
 			int ret;
 
 			va_start(ap, fmt);
-			ret = std::vfprintf(default_logger.log_file, fmt, ap);
+			ret = std::vfprintf(default_log.log_file, fmt, ap);
 			va_end(ap);
 
 			return ret;

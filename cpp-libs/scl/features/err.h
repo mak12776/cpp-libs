@@ -78,6 +78,7 @@ namespace scl
 		struct err_t
 		{
 			num_t num;
+			size_t array_size;
 			size_t array_index;
 			info_t info_array[_size];
 
