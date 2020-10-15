@@ -2,6 +2,8 @@
 
 #ifndef SCL_NOT_INC_GLOBAL_HEADERS
 
+#include <safeint.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <io.h>
@@ -16,13 +18,14 @@
 
 #include "macros.h"
 #include "exit_codes.h"
-
-#include "features/all.h"	// <cinttypes> <cstdio> cstdarg>
-#include "types/all.h"
-
-#include "io.h"			// <sys/types.h> <sys/stat.h> <io.h>
-						// "features/all.h"
-#include "math.h"
+#include "math.h"			// <safeint.h>
 #include "rand.h"
+
+#include "features/all_features.h"	
+							// <cinttypes> <cstdio> cstdarg>
+#include "types/all_types.h"// <string> "features/all.h"
+#include "io.h"				// <sys/types.h> <sys/stat.h> <io.h>
+							// "features/all.h"
+
 
 

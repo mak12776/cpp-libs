@@ -53,16 +53,19 @@ namespace scl
 		// functions
 
 		static inline void *malloc(size_t size) 
-		{ global_mem.malloc(size); }
+		{ return global_mem.malloc(size); }
+
+		static inline void *calloc(size_t nelem, size_t size)
+		{ return global_mem.calloc(nelem, size); }
 
 		static inline void *realloc(void *pntr, size_t size)
-		{ global_mem.realloc(pntr, size); }
+		{ return global_mem.realloc(pntr, size); }
 
 		static inline void free(void *pntr)
-		{ global_mem.free(pntr); }
+		{ return global_mem.free(pntr); }
 
-		template <typename functype, typename... argtypes>
-		static inline constexpr void *safe_call(functype func, argtypes... args)
+		template <typename functype, functype &func, typename... argtypes>
+		static inline constexpr void *safe_call(argtypes... args)
 		{
 			void *pntr = func(args...);
 
@@ -75,38 +78,14 @@ namespace scl
 			return pntr;
 		}
 
-		static inline void *safe_malloc(size_t size)
-		{
-			void *pntr = global_mem.malloc(size);
+		static inline constexpr void *safe_malloc(size_t size)
+		{ return safe_call<malloc_t, global_mem.malloc>(size); }
 
-			return pntr;
-		}
+		static inline constexpr void *safe_calloc(size_t nelem, size_t size)
+		{ return safe_call<calloc_t, global_mem.calloc>(nelem, size); }
 
-		constexpr void *safe_calloc(size_t nelem, size_t size)
-		{
-			void *pntr = global_mem.calloc(nelem, size);
-
-			if (pntr == nullptr)
-			{
-				err::set(err::NO_MEMORY);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-
-			return pntr;
-		}
-
-		constexpr void *safe_realloc(void *pntr, size_t size)
-		{
-			void *pntr = global_mem.realloc(pntr, size);
-
-			if (pntr == nullptr)
-			{
-				err::set(err::NO_MEMORY);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-
-			return pntr;
-		}
+		static inline constexpr void *safe_realloc(void *pntr, size_t size)
+		{ return safe_call<realloc_t, global_mem.realloc>(pntr, size); }
 
 #ifdef SCL_EXPERIMENTAL
 		// memory pointer

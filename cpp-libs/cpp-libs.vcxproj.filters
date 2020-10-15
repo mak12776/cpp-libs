@@ -69,9 +69,6 @@
     <ClInclude Include="bh.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
-    <ClInclude Include="scl\types\all.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\builtins.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
@@ -80,9 +77,6 @@
     </ClInclude>
     <ClInclude Include="scl\types\string.h">
       <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\all.h">
-      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
     <ClInclude Include="scl\features\cleaner.h">
       <Filter>Header Files\scl\features</Filter>
@@ -101,6 +95,12 @@
     </ClInclude>
     <ClInclude Include="scl\macros.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\all_types.h">
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\all_features.h">
+      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
