@@ -63,12 +63,6 @@
     <ClInclude Include="winapi\types.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="counter.h">
-      <Filter>Header Files\programs</Filter>
-    </ClInclude>
-    <ClInclude Include="bh.h">
-      <Filter>Header Files\programs</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\builtins.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
@@ -101,6 +95,15 @@
     </ClInclude>
     <ClInclude Include="scl\features\all_features.h">
       <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="programs\bh.h">
+      <Filter>Header Files\programs</Filter>
+    </ClInclude>
+    <ClInclude Include="programs\counter.h">
+      <Filter>Header Files\programs</Filter>
+    </ClInclude>
+    <ClInclude Include="programs\old_codes.h">
+      <Filter>Header Files\programs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -27,6 +27,7 @@ namespace scl
 		size_t array_size;
 		size_t array_length;
 		size_t length;
+
 		linked_array_node<data_type> *first;
 		linked_array_node<data_type> *last;
 
