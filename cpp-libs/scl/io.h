@@ -5,36 +5,40 @@ namespace scl
 {
 	namespace io
 	{
-		// system level io functions
-		static inline void safe_stat32(const char *pntr, struct _stat32 *stat_p)
+		namespace kernel
 		{
-			if (_stat32(pntr, stat_p))
+			// system level io functions
+
+			static inline void safe_stat32(const char *pntr, struct _stat32 *stat_p)
 			{
-				err::set(err::STAT);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				if (_stat32(pntr, stat_p))
+				{
+					err::set(err::STAT);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+			}
+
+			static inline void safe_stat64(const char *pntr, struct _stat64 *stat_p)
+			{
+				if (_stat64(pntr, stat_p))
+				{
+					err::set(err::STAT);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+			}
+
+			static inline int safe_open(const char *name, int flags, int mode = 0)
+			{
+				int fd = _open(name, flags, mode);
+				if (fd == -1)
+				{
+					err::set(err::OPEN);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				return fd;
 			}
 		}
-
-		static inline void safe_stat64(const char *pntr, struct _stat64 *stat_p)
-		{
-			if (_stat64(pntr, stat_p))
-			{
-				err::set(err::STAT);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-		}
-
-		static inline int safe_open(const char *name, int flags, int mode = 0)
-		{
-			int fd = _open(name, flags, mode);
-			if (fd == -1)
-			{
-				err::set(err::OPEN);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-			return fd;
-		}
-
+		
 		// safe file operations functions
 
 		static inline FILE *safe_fopen(const char *name, const char *mode)
@@ -105,10 +109,10 @@ namespace scl
 		{
 #if SIZE_MAX == UINT64_MAX
 			struct __stat64 file_stat;
-			safe_stat64(name, &file_stat);
+			kernel::safe_stat64(name, &file_stat);
 #elif SIZE_MAX == UINT32_MAX
 			struct __stat32 file_stat;
-			safe_stat32(name, &file_stat);
+			kernel::safe_stat32(name, &file_stat);
 #else
 #error unknown SIZE_MAX.
 #endif
