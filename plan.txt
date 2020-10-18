@@ -37,3 +37,65 @@ you can't write very high performance programs in c++.
 
 c++ compilers aren't high performance compilers: 
     gcc, clang, msvc
+
+=================================================================================================
+----------------------------------------- [ cpp notes ] -----------------------------------------
+=================================================================================================
+
+errno handling is faster than exception handling.
+
+there is no primitive-types to string in C (instead of depreacted itaa), use sprintf functions family.
+
+-- from cpp reference
+char *  itoa ( int value, char * str, int base );
+This function is not defined in ANSI-C and is not part of C++, but is supported by some compilers.
+
+A standard-compliant alternative for some cases may be sprintf:
+
+    sprintf(str,"%d",value) converts to decimal base.
+    sprintf(str,"%x",value) converts to hexadecimal base.
+    sprintf(str,"%o",value) converts to octal base.
+-- from cpp reference
+
+// parts of program that allocate memory
+// string header: m_string_t
+
+
+vector & string types using exception throwing mechanism. we need some thing with simple error handling mechanism.
+
+we need a more comfortable formatter library. and a better string library.
+log library needs more modifications.
+
+urls:
+    https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm
+    https://www.youtube.com/watch?v=3Ft3HMizsCk
+    https://www.google.com/search?client=firefox-b-d&q=Boyer-Moore+search
+    https://stackoverflow.com/questions/8310039/why-do-stdstring-operations-perform-poorly
+    
+type conversion/lexical_cast
+    https://stackoverflow.com/questions/2125880/convert-float-to-stdstring-in-c
+    https://www.boost.org/doc/libs/1_41_0/libs/conversion/lexical_cast.htm
+    
+overload new, delete, malloc    
+    Can we overload malloc()?
+    https://stackoverflow.com/questions/16270891/can-we-overload-malloc#:~:text=You%20can%20certainly%20overload%20%3A%3A,happens%20to%20be%20called%20malloc%20.
+
+    Overloading New and Delete operator in c++
+    https://www.geeksforgeeks.org/overloading-new-delete-operator-c/
+
+    mi-malloc: Overriding Malloc
+    https://microsoft.github.io/mimalloc/overrides.html
+    
+practices for exceptions
+    true way of catching exceptions in c++
+    https://www.google.com/search?q=true+way+of+catching+exceptions+in+c%2B%2B&oq=true+way+of+catching+exceptions+in+c%2B%2B&aqs=chrome..69i57j33.11135j0j7&sourceid=chrome&ie=UTF-8
+
+    Modern C++ best practices for exceptions and error handling | Microsoft Docs
+    https://docs.microsoft.com/en-us/cpp/cpp/errors-and-exception-handling-modern-cpp?view=vs-2019#:~:text=Exceptions%20in%20C%2B%2B%20resemble%20ones,statement%20to%20the%20catch%20statement.
+
+    Top 15 C++ Exception handling mistakes and how to avoid them. - A CODER'S JOURNEY
+    https://www.acodersjourney.com/top-15-c-exception-handling-mistakes-avoid/
+
+    isocpp.org
+    https://isocpp.org/wiki/faq/exceptions
+
