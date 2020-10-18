@@ -48,7 +48,7 @@ namespace counter
 
 	inline constexpr bool is_letter(ubyte ch)
 	{
-		return isalpha(ch) || (ch == '_');
+		return is_alpha(ch) || (ch == '_');
 	}
 
 	inline constexpr bool is_symbol(ubyte ch)
@@ -66,29 +66,7 @@ namespace counter
 
 		virtual bool read_first_buffer(ubyte *pntr, size_t size)
 		{
-			size_t index = 0;
-			while (index < size)
-			{
-				if (is_letter(pntr[index]))
-				{
-					this->chars += 1;
-					this->words += 1;
-
-					index += 1;
-					while (index < size)
-					{
-						
-					}
-				}
-				else if (isdigit(pntr[index]))
-				{
-					
-				}
-				else if (is_symbol(pntr[index]))
-				{
-
-				}
-			}
+			
 		}
 	};
 
