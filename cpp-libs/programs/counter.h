@@ -6,7 +6,7 @@
 
 namespace counter
 {
-
+	using namespace scl;
 
 	template <typename byte_t>
 	struct buffer_reader_t
@@ -16,19 +16,55 @@ namespace counter
 		virtual bool read_last_buffer(byte_t *pntr, size_t size) = 0;
 	};
 
-	inline constexpr bool is_letter(scl::ubyte ch)
+	inline constexpr bool is_lower(ubyte ch)
+	{
+		return (('a' <= ch) && (ch <= 'z'));
+	}
+
+	inline constexpr bool is_upper(ubyte ch)
+	{
+		return (('A' <= ch) && (ch <= 'Z'));
+	}
+
+	inline constexpr bool is_alpha(ubyte ch)
+	{
+		return is_lower(ch) || is_upper(ch);
+	}
+
+	inline constexpr bool is_digit(ubyte ch)
+	{
+		return ('0' <= ch) && (ch <= '9');
+	}
+
+	inline constexpr bool is_printable(ubyte ch)
+	{
+		return (' ' <= ch) && (ch <= '~');
+	}
+
+	inline constexpr bool is_alpha_digit(ubyte ch)
+	{
+		return is_alpha(ch) || is_digit(ch);
+	}
+
+	inline constexpr bool is_letter(ubyte ch)
 	{
 		return isalpha(ch) || (ch == '_');
 	}
 
-	struct count_t : buffer_reader_t<scl::ubyte>
+	inline constexpr bool is_symbol(ubyte ch)
+	{
+		return ('!' <= ch) && (ch <= '~')
+			& (!is_alpha_digit(ch));
+	}
+
+	struct count_t : buffer_reader_t<ubyte>
 	{
 		size_t chars;
 		size_t lines;
 		size_t numbers;
 		size_t words;
 
-		virtual bool read_first_buffer(scl::ubyte *pntr, size_t size)
+		virtual bool read_first_buffer(ubyte *pntr, size_t size)
 		{
 			size_t index = 0;
 			while (index < size)
@@ -41,10 +77,16 @@ namespace counter
 					index += 1;
 					while (index < size)
 					{
-						if (!is_letter(pntr[index]))
-							this->chars += 1;
-						 
+						
 					}
+				}
+				else if (isdigit(pntr[index]))
+				{
+					
+				}
+				else if (is_symbol(pntr[index]))
+				{
+
 				}
 			}
 		}
