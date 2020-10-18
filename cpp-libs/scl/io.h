@@ -253,6 +253,8 @@ namespace scl
 			fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
 		}
 
+		// file reader
+
 
 		// normal print, fomrated print tools
 
