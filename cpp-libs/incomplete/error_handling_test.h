@@ -23,7 +23,7 @@ void test_exception_func3()
 
 void test_err_func1()
 {
-	err::set(err::MALLOC);
+	err::set(err::NO_MEMORY);
 	err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 }
 
