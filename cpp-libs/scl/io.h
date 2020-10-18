@@ -77,7 +77,7 @@ namespace scl
 			}
 		}
 
-		static inline long get_file_size(FILE *stream)
+		static inline long get_file_size_long(FILE *stream)
 		{
 			long size;
 
@@ -103,6 +103,22 @@ namespace scl
 			}
 
 			return size;
+		}
+
+		static inline size_t get_file_size(FILE *stream)
+		{
+#if ULONG_MAX <= SIZE_MAX
+			size_t file_size = (size_t)get_file_size_long(stream);
+#else
+#error unsigned long is too big.
+#endif
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return 0;
+			}
+
+			return file_size;
 		}
 
 		static inline size_t get_file_name_size(const char *name)
@@ -174,11 +190,12 @@ namespace scl
 		{
 			size_t file_size;
 
-#if ULONG_MAX <= SIZE_MAX
-			file_size = (size_t)get_file_size(file);
-#else
-#error unsigned long is too big.
-#endif
+			file_size = get_file_size(file);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
 
 			(*pntr) = mem::safe_malloc(file_size);
 			if (err::check())
@@ -230,6 +247,30 @@ namespace scl
 			return write_number;
 		}
 
+		// buffered reader
+
+		template <typename byte_t>
+		struct buffer_reader_t
+		{
+			virtual bool read_buffer(byte_t *pntr, size_t size) = 0;
+			virtual bool finish() = 0;
+		};
+
+		template <typename byte_t, size_t buffer_size = 8192>
+		static inline void fread_buffered(FILE *file, buffer_reader_t<byte_t> &buffer_reader)
+		{
+			byte_t *pntr;
+
+			pntr = (ubyte *)mem::safe_malloc(buffer_size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			safe_fread()
+		}
+
 		// fread, fwrite all with base_buffer_t
 
 		template <typename byte_t>
@@ -252,8 +293,6 @@ namespace scl
 		{
 			fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
 		}
-
-		// file reader
 
 
 		// normal print, fomrated print tools

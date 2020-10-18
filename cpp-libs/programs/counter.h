@@ -8,14 +8,6 @@ namespace counter
 {
 	using namespace scl;
 
-	template <typename byte_t>
-	struct buffer_reader_t
-	{
-		virtual bool read_first_buffer(byte_t *pntr, size_t size) = 0;
-		virtual bool read_buffer(byte_t *pntr, size_t size) = 0;
-		virtual bool read_last_buffer(byte_t *pntr, size_t size) = 0;
-	};
-
 	inline constexpr bool is_lower(ubyte ch)
 	{
 		return (('a' <= ch) && (ch <= 'z'));
@@ -24,11 +16,6 @@ namespace counter
 	inline constexpr bool is_upper(ubyte ch)
 	{
 		return (('A' <= ch) && (ch <= 'Z'));
-	}
-
-	inline constexpr bool is_alpha(ubyte ch)
-	{
-		return is_lower(ch) || is_upper(ch);
 	}
 
 	inline constexpr bool is_digit(ubyte ch)
@@ -41,6 +28,13 @@ namespace counter
 		return (' ' <= ch) && (ch <= '~');
 	}
 
+	// combination functions
+
+	inline constexpr bool is_alpha(ubyte ch)
+	{
+		return is_lower(ch) || is_upper(ch);
+	}
+
 	inline constexpr bool is_alpha_digit(ubyte ch)
 	{
 		return is_alpha(ch) || is_digit(ch);
@@ -51,31 +45,70 @@ namespace counter
 		return is_alpha(ch) || (ch == '_');
 	}
 
-	inline constexpr bool is_symbol(ubyte ch)
+	enum class stat_t
 	{
-		return ('!' <= ch) && (ch <= '~')
-			& (!is_alpha_digit(ch));
-	}
+		WORD, DIGIT, CR, NORMAL
+	};
 
-	struct count_t : buffer_reader_t<ubyte>
+	struct counter_t : buffer_reader_t<ubyte>
 	{
-		size_t chars;
-		size_t lines;
-		size_t numbers;
-		size_t words;
+		size_t lines = 1;
 
-		virtual bool read_first_buffer(ubyte *pntr, size_t size)
+		size_t digits = 0;
+		size_t words = 0;
+		size_t symbols = 0;
+
+		stat_t stat;
+
+		virtual bool read_buffer(ubyte *pntr, size_t size)
 		{
-			
+			for (size_t index = 0; index < size; index += 1)
+			{
+				ubyte ch = pntr[index];
+
+				if (is_letter(ch))
+				{
+					if (stat != stat_t::WORD)
+					{
+						words += 1;
+						stat = stat_t::WORD;
+					}
+				}
+				else if (is_digit(ch))
+				{
+					if (stat != stat_t::DIGIT)
+					{
+						digits += 1;
+						stat = stat_t::DIGIT;
+					}
+				}
+				else if (('!' <= ch) || (ch <= '~'))
+				{
+					symbols += 1;
+					stat = stat_t::NORMAL;
+				}
+				else if (ch == '\r')
+				{
+					lines += 1;
+					stat = stat_t::CR;
+				}
+				else if (ch == '\n')
+				{
+					if (stat != stat_t::CR) lines += 1;
+					stat = stat_t::NORMAL;
+				}
+			}
 		}
 	};
+
+
 
 	// there is two types of file readers.
 	// buffered readers & full buffered readers
 
 #if 0
 	template <size_t buffer_size = 4096>
-	static inline void count_file(FILE *file, count_t &count)
+	static inline void count_file(FILE *file, counter_t &count)
 	{
 		ubuffer_t buffer;
 
