@@ -260,6 +260,15 @@ namespace scl
 		static inline void fread_buffered(FILE *file, buffer_reader_t<byte_t> &buffer_reader)
 		{
 			byte_t *pntr;
+			size_t file_size;
+			cleaner::cleaner_t<2> cleaner;
+
+			file_size = get_file_size(file);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
 
 			pntr = (ubyte *)mem::safe_malloc(buffer_size);
 			if (err::check())
@@ -267,8 +276,27 @@ namespace scl
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
+			cleaner.add_free(pntr);
 
-			safe_fread()
+			while (file_size >= buffer_size)
+			{
+				safe_fread(pntr, buffer_size, file);
+				if (err::check())
+				{
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					cleaner.finish();
+					return;
+				}
+				file_size -= buffer_size;
+
+				if (!buffer_reader.read_buffer(pntr, buffer_size))
+				{
+					free(pntr);
+					return;
+				}
+			}
+
+
 		}
 
 		// fread, fwrite all with base_buffer_t
