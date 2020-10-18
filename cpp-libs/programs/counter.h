@@ -43,6 +43,7 @@ namespace counter
 					{
 						if (!is_letter(pntr[index]))
 							this->chars += 1;
+						 
 					}
 				}
 			}
