@@ -253,7 +253,7 @@ namespace scl
 		struct buffer_reader_t
 		{
 			virtual bool read_buffer(byte_t *pntr, size_t size) = 0;
-			virtual bool finish() = 0;
+			virtual void finish() = 0;
 		};
 
 		template <typename byte_t, size_t buffer_size = 8192>
@@ -291,13 +291,45 @@ namespace scl
 
 				if (!buffer_reader.read_buffer(pntr, buffer_size))
 				{
-					free(pntr);
+					cleaner.finish();
 					return;
 				}
 			}
 
+			if (file_size)
+			{
+				safe_fread(pntr, file_size, file);
+				if (err::check())
+				{
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					cleaner.finish();
+					return;
+				}
 
+				buffer_reader.read_buffer(pntr, file_size);
+				buffer_reader.finish();
+
+				cleaner.finish();
+			}
 		}
+
+		template <typename byte_t, size_t size = 8192>
+		static inline void fopen_fread_buffered(const char *file_name, buffer_reader_t<byte_t> &buffered_reader)
+		{
+			FILE *file = safe_fopen(file_name, "rb");
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			fread_buffered(file, buffer_reader);
+			if (err::check())
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+
+			fclose(file);
+		}
+
 
 		// fread, fwrite all with base_buffer_t
 

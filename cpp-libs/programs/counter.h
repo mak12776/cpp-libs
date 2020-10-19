@@ -50,7 +50,7 @@ namespace counter
 		WORD, DIGIT, CR, NORMAL
 	};
 
-	struct counter_t : buffer_reader_t<ubyte>
+	struct counter_t : io::buffer_reader_t<ubyte>
 	{
 		size_t lines = 1;
 
@@ -98,7 +98,10 @@ namespace counter
 					stat = stat_t::NORMAL;
 				}
 			}
+			return true;
 		}
+
+		virtual void finish() { }
 	};
 
 
