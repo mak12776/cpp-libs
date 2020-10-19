@@ -116,7 +116,7 @@ namespace scl
 		// global functions
 
 		static inline void set(num_t errnum) { default_err.set(errnum); }
-		static inline void test(num_t errnum) { default_err.test(errnum); }
+		static inline bool test(num_t errnum) { return default_err.test(errnum); }
 		static inline void clear() { default_err.clear(); }
 		static inline void clear_if(num_t num) { default_err.clear_if(num); }
 

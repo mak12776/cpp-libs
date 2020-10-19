@@ -314,7 +314,7 @@ namespace scl
 		}
 
 		template <typename byte_t, size_t size = 8192>
-		static inline void fopen_fread_buffered(const char *file_name, buffer_reader_t<byte_t> &buffered_reader)
+		static inline void fopen_fread_buffered(const char *file_name, buffer_reader_t<byte_t> &buffer_reader)
 		{
 			FILE *file = safe_fopen(file_name, "rb");
 			if (err::check())

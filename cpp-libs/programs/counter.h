@@ -82,7 +82,7 @@ namespace counter
 						stat = stat_t::DIGIT;
 					}
 				}
-				else if (('!' <= ch) || (ch <= '~'))
+				else if (('!' <= ch) && (ch <= '~'))
 				{
 					symbols += 1;
 					stat = stat_t::NORMAL;
@@ -97,6 +97,8 @@ namespace counter
 					if (stat != stat_t::CR) lines += 1;
 					stat = stat_t::NORMAL;
 				}
+				else
+					stat = stat_t::NORMAL;
 			}
 			return true;
 		}
