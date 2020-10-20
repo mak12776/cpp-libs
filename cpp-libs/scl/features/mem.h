@@ -17,6 +17,10 @@ namespace scl
 			free_t free;
 		};
 
+		// default manager
+		constexpr mem_t default_mem{ malloc, calloc, realloc, free };
+		constexpr mem_t global_mem = default_mem;
+
 #ifdef SCL_EXPREMENTAL
 		// text logger manager
 		template <log::logger_t &logger>
@@ -45,12 +49,9 @@ namespace scl
 		}
 #endif
 
-		// default manager
-		constexpr mem_t default_mem{ malloc, calloc, realloc, free };
-		constexpr mem_t global_mem = default_mem;
-
 		// functions
 
+#ifdef SCL_EXPERIMENTAL
 		static inline void *malloc(size_t size) 
 		{ return global_mem.malloc(size); }
 
@@ -62,6 +63,7 @@ namespace scl
 
 		static inline void free(void *pntr)
 		{ return global_mem.free(pntr); }
+#endif
 
 		template <typename functype, functype &func, typename... argtypes>
 		static inline constexpr void *safe_call(argtypes... args)

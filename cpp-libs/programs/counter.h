@@ -52,7 +52,8 @@ namespace counter
 
 	struct counter_t : io::buffer_reader_t<ubyte>
 	{
-		size_t lines = 1;
+		size_t chars = 0;
+		size_t lines = 0;
 
 		size_t digits = 0;
 		size_t words = 0;
@@ -66,7 +67,8 @@ namespace counter
 			{
 				ubyte ch = pntr[index];
 
-				if (is_letter(ch))
+				chars += 1;
+				if (is_letter(ch)) // a-z A-Z _
 				{
 					if (stat != stat_t::WORD)
 					{
@@ -74,7 +76,7 @@ namespace counter
 						stat = stat_t::WORD;
 					}
 				}
-				else if (is_digit(ch))
+				else if (is_digit(ch)) // 0-9
 				{
 					if (stat != stat_t::DIGIT)
 					{
@@ -82,7 +84,7 @@ namespace counter
 						stat = stat_t::DIGIT;
 					}
 				}
-				else if (('!' <= ch) && (ch <= '~'))
+				else if (('!' <= ch) && (ch <= '~')) // symbols
 				{
 					symbols += 1;
 					stat = stat_t::NORMAL;
@@ -94,7 +96,8 @@ namespace counter
 				}
 				else if (ch == '\n')
 				{
-					if (stat != stat_t::CR) lines += 1;
+					if (stat != stat_t::CR) 
+						lines += 1;
 					stat = stat_t::NORMAL;
 				}
 				else
@@ -102,11 +105,8 @@ namespace counter
 			}
 			return true;
 		}
-
-		virtual void finish() { }
+		virtual void finish() { lines += 1; }
 	};
-
-
 
 	// there is two types of file readers.
 	// buffered readers & full buffered readers

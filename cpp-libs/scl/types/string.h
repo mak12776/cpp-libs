@@ -45,6 +45,38 @@ namespace scl
 		}
 	}
 #endif
+	namespace tools
+	{
+		static inline bool malloc_len(char **pntr, size_t len)
+		{
+			size_t size;
+
+			math::safe_add(len, (size_t)1, len);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return true;
+			}
+
+			(*pntr) = (char *)mem::safe_malloc(size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return true;
+			}
+
+			return false;
+		}
+
+		static inline bool malloc_len_value(char **pntr, size_t len, char value)
+		{
+			if (malloc_len(pntr, len))
+				return true;
+
+			memset(*pntr, value, len);
+			(*pntr)[len] = '\0';
+		}
+	}
 
 	struct c_string_t
 	{
@@ -68,35 +100,14 @@ namespace scl
 
 		inline void malloc_len(size_t len)
 		{
-			size_t size;
-
-			math::safe_add(len, (size_t)1, size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (tools::malloc_len(&(this->pntr), len))
 				return;
-			}
-
-			this->pntr = (char *)mem::safe_malloc(size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
-			}
 			this->len = len;
 		}
 
 		inline void malloc_len_value(size_t len, const char value)
 		{
-			malloc_len(len);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
-			}
-
-			memset(this->pntr, value, len);
-			this->pntr[len] = '\0';
+			tools::malloc_len_value(&(this->pntr), len, v)
 		}
 
 		inline void malloc_cat(const std::initializer_list<c_string_t> &list)

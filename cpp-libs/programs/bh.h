@@ -1,10 +1,7 @@
 #pragma once
 
-#include "cleaner.h"
-#include "string.h"
-#include "err.h"
-#include "clib.h"
-#include "log.h"
+#include "../scl/all.h"
+#include "../clib.h"
 
 namespace bh
 {
@@ -59,10 +56,14 @@ namespace bh
 	}
 #endif
 
-	scl::c_string_t archive_ext(".64bh");
+	using namespace scl;
+
+	c_string_t archive_ext(".64bh");
 	const char magic[] = { '\x64' };
+
 	c_string_t counts_64bit_ext(".64bit.counts");
 	c_string_t log_file_ext(".log");
+
 	FILE *log_file;
 
 	template <size_t size>
