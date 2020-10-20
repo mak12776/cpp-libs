@@ -68,7 +68,7 @@ namespace scl
 			return false;
 		}
 
-		static inline bool malloc_len_value(char **pntr, size_t len, char value)
+		static inline bool malloc_len_value(char **pntr, size_t len, const char value)
 		{
 			if (malloc_len(pntr, len))
 				return true;
@@ -107,7 +107,9 @@ namespace scl
 
 		inline void malloc_len_value(size_t len, const char value)
 		{
-			tools::malloc_len_value(&(this->pntr), len, v)
+			if (tools::malloc_len_value(&(this->pntr), len, value))
+				return;
+			this->len = len;
 		}
 
 		inline void malloc_cat(const std::initializer_list<c_string_t> &list)
