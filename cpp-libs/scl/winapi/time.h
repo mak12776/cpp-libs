@@ -3,7 +3,7 @@
 namespace winapi
 {
 	// file time conversation
-
+	
 	inline void ft_to_ul(FILETIME &ft, ULARGE_INTEGER &ul_int)
 	{
 		ul_int.HighPart = ft.dwHighDateTime;
