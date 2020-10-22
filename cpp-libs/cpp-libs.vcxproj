@@ -155,7 +155,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="clib.h" />
-    <ClInclude Include="conv.h" />
     <ClInclude Include="programs\bh.h" />
     <ClInclude Include="programs\counter.h" />
     <ClInclude Include="programs\old_codes.h" />
@@ -179,6 +178,7 @@
     <ClInclude Include="winapi\all_winapi.h" />
     <ClInclude Include="winapi\functions.h" />
     <ClInclude Include="winapi\time.h" />
+    <ClInclude Include="winapi\tools.h" />
     <ClInclude Include="winapi\types.h" />
   </ItemGroup>
   <ItemGroup>
