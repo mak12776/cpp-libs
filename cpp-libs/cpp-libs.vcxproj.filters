@@ -93,9 +93,6 @@
     <ClInclude Include="programs\old_codes.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
-    <ClInclude Include="scl\winapi\all.h">
-      <Filter>Header Files\scl\winapi</Filter>
-    </ClInclude>
     <ClInclude Include="scl\winapi\functions.h">
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
@@ -103,6 +100,9 @@
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
     <ClInclude Include="scl\winapi\types.h">
+      <Filter>Header Files\scl\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\winapi\all_winapi.h">
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
   </ItemGroup>
