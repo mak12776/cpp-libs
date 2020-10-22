@@ -1,6 +1,5 @@
 #pragma once
-
-#include "../scl/all.h"
+// "scl/winapi/all_winapi.h"
 
 #include <Windows.h>
 #include <processthreadsapi.h>

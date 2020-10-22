@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace scl
 {
 	namespace io
