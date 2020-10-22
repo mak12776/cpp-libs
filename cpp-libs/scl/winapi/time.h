@@ -72,6 +72,7 @@ namespace winapi
 		return size;
 	}
 
+#ifdef SCL_EXPERIMENTAL
 	static inline const char *asprint_system_time(SYSTEMTIME &st)
 	{
 		char *str;
@@ -85,6 +86,7 @@ namespace winapi
 
 		return str;
 	}
+#endif
 
 	// ULARGE_INTEGER overload functions
 
