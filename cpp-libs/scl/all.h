@@ -13,9 +13,6 @@
 #include <cstdio>
 #include <cstdarg>
 #include <string>
-#include <functional>
-
-#include <Windows.h>
 
 #endif
 
@@ -26,11 +23,8 @@
 
 #include "features/all_features.h"	// <cinttypes> <cstdio> cstdarg>
 
-#include "winapi/all_winapi.h"		// <Windows.h> "features/all_features.h" <functional>
-
 #include "types/all_types.h"		// <string> "features/all_features.h"
-									// "math.h" 
-
+									// "math.h"
 
 #include "io.h"						// <sys/types.h> <sys/stat.h> <io.h>
 									// "features/all_features.h"

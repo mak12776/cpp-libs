@@ -105,6 +105,9 @@
     <ClInclude Include="winapi\types.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
+    <ClInclude Include="conv.h">
+      <Filter>Header Files\winapi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

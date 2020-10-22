@@ -2,37 +2,40 @@
 
 namespace winapi
 {
-	// file timem unsigned large integer conversation
-	
-	inline void ft_to_ul(FILETIME &ft, ULARGE_INTEGER &ul_int)
+	namespace tools
 	{
-		ul_int.HighPart = ft.dwHighDateTime;
-		ul_int.LowPart = ft.dwLowDateTime;
-	}
+		// file timem unsigned large integer conversation
 
-	inline void ul_to_ft(ULARGE_INTEGER &ul_int, FILETIME &ft)
-	{
-		ft.dwHighDateTime = ul_int.HighPart;
-		ft.dwLowDateTime = ul_int.LowPart;
-	}
-
-	// safe FileTime, SystemTime conversations
-
-	inline void safe_ft_to_st(FILETIME &ft, SYSTEMTIME &st)
-	{
-		if (!FileTimeToSystemTime(&ft, &st))
+		inline void ft_to_ul(FILETIME &ft, ULARGE_INTEGER &ul_int)
 		{
-			scl::err::set(scl::err::WIN_ERROR);
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			ul_int.HighPart = ft.dwHighDateTime;
+			ul_int.LowPart = ft.dwLowDateTime;
 		}
-	}
 
-	inline void safe_st_to_ft(SYSTEMTIME &st, FILETIME &ft)
-	{
-		if (!SystemTimeToFileTime(&st, &ft))
+		inline void ul_to_ft(ULARGE_INTEGER &ul_int, FILETIME &ft)
 		{
-			scl::err::set(scl::err::WIN_ERROR);
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			ft.dwHighDateTime = ul_int.HighPart;
+			ft.dwLowDateTime = ul_int.LowPart;
+		}
+
+		// safe FileTime, SystemTime conversations
+
+		inline void safe_ft_to_st(FILETIME &ft, SYSTEMTIME &st)
+		{
+			if (!FileTimeToSystemTime(&ft, &st))
+			{
+				scl::err::set(scl::err::WIN_ERROR);
+				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
+
+		inline void safe_st_to_ft(SYSTEMTIME &st, FILETIME &ft)
+		{
+			if (!SystemTimeToFileTime(&st, &ft))
+			{
+				scl::err::set(scl::err::WIN_ERROR);
+				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
 		}
 	}
 
@@ -57,7 +60,7 @@ namespace winapi
 		SYSTEMTIME st;
 		size_t size;
 
-		safe_ft_to_st(ft, st);
+		tools::safe_ft_to_st(ft, st);
 		if (scl::err::check())
 		{
 			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
@@ -110,12 +113,12 @@ namespace winapi
 		ULARGE_INTEGER t1_ul, t2_ul, res_ul;
 		FILETIME res_ft;
 
-		ft_to_ul(ft1, t1_ul);
-		ft_to_ul(ft2, t2_ul);
+		tools::ft_to_ul(ft1, t1_ul);
+		tools::ft_to_ul(ft2, t2_ul);
 
 		res_ul = t1_ul - t2_ul;
 
-		ul_to_ft(res_ul, res_ft);
+		tools::ul_to_ft(res_ul, res_ft);
 
 		return res_ft;
 	}
@@ -124,12 +127,12 @@ namespace winapi
 	{
 		ULARGE_INTEGER t1_ul, t2_ul;
 
-		ft_to_ul(ft1, t1_ul);
-		ft_to_ul(ft2, t2_ul);
+		tools::ft_to_ul(ft1, t1_ul);
+		tools::ft_to_ul(ft2, t2_ul);
 
 		t1_ul = t1_ul - t2_ul;
 
-		ul_to_ft(t1_ul, ft1);
+		tools::ul_to_ft(t1_ul, ft1);
 	}
 
 	// time types

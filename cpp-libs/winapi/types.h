@@ -2,6 +2,8 @@
 
 namespace winapi
 {
+#ifdef WINAPI_EXPERIMENTAL
+
 #if MAXDWORD == UINT32_MAX
 
 #define PRIuDWORD PRIu32
@@ -17,5 +19,7 @@ namespace winapi
 #else
 #error DWORD size is unknown.
 #endif
+
+#endif // #ifdef WINAPI_EXPERIMENTAL
 
 }

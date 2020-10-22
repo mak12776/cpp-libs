@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="clib.h" />
+    <ClInclude Include="conv.h" />
     <ClInclude Include="programs\bh.h" />
     <ClInclude Include="programs\counter.h" />
     <ClInclude Include="programs\old_codes.h" />

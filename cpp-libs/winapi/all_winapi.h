@@ -3,7 +3,6 @@
 #include "../scl/all.h"
 
 #include <Windows.h>
-#include <processthreadsapi.h>
 
 #include <cstdint>
 #include <cstdio>
@@ -11,4 +10,4 @@
 
 #include "types.h"
 #include "time.h"		// <Windows.h> "scl/all.h"
-#include "functions.h"	// <funtional>		
+#include "functions.h"	// <funtional>
