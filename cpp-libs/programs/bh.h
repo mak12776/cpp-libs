@@ -6,11 +6,12 @@
 namespace bh
 {
 #ifdef BH_INCLUDE_COUNT_64BIT
+
 #pragma pack(push, 1)
 	struct data_64bit_count_t
 	{
 		uint64_t data;
-		size_t count;
+		size_t result;
 	};
 
 	struct counts_64bit_t
@@ -21,13 +22,13 @@ namespace bh
 		counts_64bit_t(size_t size) : data_counts(size)
 		{ }
 
-		inline void inc_data_count(uint64_t data)
+		inline void append_data_count(uint64_t data)
 		{
 			for (size_t len = 0; len < data_counts.size(); len += 1)
 			{
 				if (data_counts[len].data = data)
 				{
-					data_counts[len].count += 1;
+					data_counts[len].result += 1;
 					return;
 				}
 			}
@@ -44,7 +45,7 @@ namespace bh
 		counts_64bit_t result(1024);
 
 		while (pntr != end)
-			result.inc_data_count(*(pntr++));
+			result.append_data_count(*(pntr++));
 
 		uint8_t *pntr8 = (uint8_t *)end;
 		uint8_t *end8 = pntr8 + (buffer.size % sizeof(uint64_t));
@@ -57,14 +58,6 @@ namespace bh
 #endif
 
 	using namespace scl;
-
-	c_string_t archive_ext(".64bh");
-	const char magic[] = { '\x64' };
-
-	c_string_t counts_64bit_ext(".64bit.counts");
-	c_string_t log_file_ext(".log");
-
-	FILE *log_file;
 
 	template <size_t size>
 	using get_data_type =
@@ -90,14 +83,16 @@ namespace bh
 	};
 
 	template <size_t size, typename data_type = get_data_type<size>>
-	struct counts_t
+	struct count_t
 	{
 		std::vector<data_count_t<data_type>> data_counts;
 		remaining_t<data_type> remaining;
 
-		inline void inc_data_count(data_type data);
+		inline void append_data_count(data_type data);
 	};
 #pragma pack(pop)
+
+	// functions
 
 	template<typename data_type>
 	inline int data_count_t<data_type>::compare(const void * a, const void * b)
@@ -113,7 +108,7 @@ namespace bh
 	}
 
 	template <size_t size, typename data_type>
-	inline void counts_t<size, data_type>::inc_data_count(data_type data)
+	inline void count_t<size, data_type>::append_data_count(data_type data)
 	{
 		for (size_t len = 0; len < data_counts.size(); len += 1)
 		{
@@ -126,45 +121,35 @@ namespace bh
 		data_counts.push_back(data_count_t<data_type>{data, 1});
 	}
 
+	// main functions
+
 	template <size_t size, typename data_type = get_data_type<size>>
-	counts_t<size> count_bits(ubuffer_t &buffer)
+	void count_primary_size(ubuffer_t &buffer, count_t<size> &result)
 	{
-		counts_t<size> count;
+		data_type *pntr = (data_type *)buffer.pntr;
+		data_type *end = pntr + (buffer.size / sizeof(data_type));
 
-		if ((size == 8) ||
-			(size == 16) ||
-			(size == 32) ||
-			(size == 64))
+		while (pntr != end)
+			result.append_data_count(*(pntr++));
+
+		result.remaining.size = buffer.size % sizeof(data_type);
+		if (result.remaining.size)
+			memcpy(&result.remaining.value, end, result.remaining.size);
+	}
+
+	template <size_t size, typename data_type = get_data_type<size>>
+	void count_size(ubuffer_t &buffer, count_t<size> result)
+	{
+		count_t<size> result;
+
+		if constexpr (size == sizeof(data_type))
 		{
-			data_type *pntr = (data_type *)buffer.pntr;
-			data_type *end = pntr + (buffer.size / sizeof(data_type));
-
-			while (pntr != end)
-				count.inc_data_count(*(pntr++));
-
-			count.remaining.size = buffer.size % sizeof(data_type);
-			if (count.remaining.size)
-				memcpy(&count.remaining.value, end, count.remaining.size);
+			count_primary_size(buffer, result);
 		}
-
-		return count;
-
-#if 0
-
-		size_t remaining_size = buffer.size % sizeof(data_type);
-		if (remaining_size)
+		else
 		{
-			result.remaining.reserve(remaining_size);
 
-			ubyte *ub_pntr = (ubyte *)end;
-			ubyte *ub_end = ub_pntr + remaining_size;
-
-			while (ub_pntr != ub_end)
-				result.remaining.push_back(*(ub_pntr++));
 		}
-
-		return result;
-#endif
 	}
 
 
@@ -172,7 +157,7 @@ namespace bh
 	// fread, fwrite counts
 
 	template <typename data_type>
-	static inline size_t fwrite_counts(FILE *file, counts_t<data_type> &counts)
+	static inline size_t fwrite_counts(FILE *file, count_t<data_type> &counts)
 	{
 		size_t total_write;
 
@@ -206,7 +191,7 @@ namespace bh
 	}
 
 	template <typename data_type>
-	static inline size_t fread_counts(FILE *file, counts_t<data_type> &counts)
+	static inline size_t fread_counts(FILE *file, count_t<data_type> &counts)
 	{
 		size_t total_read;
 		
@@ -258,6 +243,15 @@ namespace bh
 		return total_read;
 	}
 #endif
+
+#ifdef SCL_EXPERIMENTAL
+	c_string_t archive_ext(".64bh");
+	const char magic[] = { '\x64' };
+
+	c_string_t counts_64bit_ext(".64bit.counts");
+	c_string_t log_file_ext(".log");
+
+	FILE *log_file;
 
 	// data saver
 	template <typename dtype>
@@ -340,12 +334,12 @@ namespace bh
 	}
 
 	template <size_t size>
-	counts_t<size> count_and_sort_bits(ubuffer_t &buffer)
+	count_t<size> count_and_sort_bits(ubuffer_t &buffer)
 	{
-		counts_t<size> result;
+		count_t<size> result;
 		typedef get_data_type<size> data_type;
 
-		result = count_bits<size>(buffer);
+		result = count_size<size>(buffer);
 		// count_bits will not failed.
 
 		std::qsort(result.data_counts.data(), result.data_counts.size(),
@@ -452,7 +446,7 @@ namespace bh
 
 		// counting and sorting 64 bits
 		typedef uint64_t dtype;
-		counts_t<64> counts;
+		count_t<64> counts;
 
 		printf("counting & sorting %zu bits: ", sizeof(dtype) * 8);
 		counts = count_and_sort_bits<64>(buffer);
@@ -460,7 +454,7 @@ namespace bh
 
 #if 0
 		for (auto iter = counts.data_counts.cbegin(); iter < counts.data_counts.cend(); iter++)
-			printf("%016llx: %zu\n", iter->data, iter->count);
+			printf("%016llx: %zu\n", iter->data, iter->result);
 #endif
 
 		cleaner::finish();
@@ -470,5 +464,6 @@ namespace bh
 	{
 		return call_for_each(argc, argv, compress);
 	}
+#endif
 	
 }
