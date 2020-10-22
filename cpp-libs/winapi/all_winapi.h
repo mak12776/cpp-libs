@@ -9,5 +9,6 @@
 #include <functional>
 
 #include "types.h"
+#include "tools.h"
 #include "time.h"		// <Windows.h> "scl/all.h"
 #include "functions.h"	// <funtional>
