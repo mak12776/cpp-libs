@@ -242,7 +242,8 @@ namespace bh
 		
 		return total_read;
 	}
-#endif
+#endif // BH_INCLUDE_OLD_DATA_COUNT
+
 
 #ifdef SCL_EXPERIMENTAL
 	c_string_t archive_ext(".64bh");

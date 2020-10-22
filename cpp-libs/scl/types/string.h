@@ -2,49 +2,6 @@
 
 namespace scl
 {
-
-#ifdef SCL_EXPERIMENTAL
-	namespace string_tools
-	{
-		static inline char *malloc_len(size_t len)
-		{
-			char *pntr;
-			size_t size;
-
-			math::safe_add(len, (size_t)1, size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return nullptr;
-			}
-
-			pntr = (char *)mem::safe_malloc(size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return nullptr;
-			}
-
-			return pntr;
-		}
-
-		static inline char *malloc_len_value(size_t len, const char value)
-		{
-			char *pntr;
-			
-			pntr = malloc_len(len);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCSIG__);
-				return nullptr;
-			}
-			memset((void *)pntr, 0, len);
-			pntr[len] = '\0';
-
-			return pntr;
-		}
-	}
-#endif
 	namespace tools
 	{
 		static inline bool malloc_len(char **pntr, size_t len)
