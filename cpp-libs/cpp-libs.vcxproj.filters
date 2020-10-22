@@ -25,7 +25,7 @@
     <Filter Include="Header Files\scl\features">
       <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\winapi">
+    <Filter Include="Header Files\winapi">
       <UniqueIdentifier>{43afcf62-0f98-403e-8974-c9c39d488705}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -94,16 +94,16 @@
       <Filter>Header Files\programs</Filter>
     </ClInclude>
     <ClInclude Include="scl\winapi\functions.h">
-      <Filter>Header Files\scl\winapi</Filter>
+      <Filter>Header Files\winapi</Filter>
     </ClInclude>
     <ClInclude Include="scl\winapi\time.h">
-      <Filter>Header Files\scl\winapi</Filter>
+      <Filter>Header Files\winapi</Filter>
     </ClInclude>
     <ClInclude Include="scl\winapi\types.h">
-      <Filter>Header Files\scl\winapi</Filter>
+      <Filter>Header Files\winapi</Filter>
     </ClInclude>
     <ClInclude Include="scl\winapi\all_winapi.h">
-      <Filter>Header Files\scl\winapi</Filter>
+      <Filter>Header Files\winapi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
