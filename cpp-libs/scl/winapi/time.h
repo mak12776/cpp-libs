@@ -2,7 +2,7 @@
 
 namespace winapi
 {
-	// file time conversation
+	// file timem unsigned large integer conversation
 	
 	inline void ft_to_ul(FILETIME &ft, ULARGE_INTEGER &ul_int)
 	{
