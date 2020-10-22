@@ -33,6 +33,11 @@ namespace scl
 			memset(*pntr, value, len);
 			(*pntr)[len] = '\0';
 		}
+
+		static inline bool malloc_cat()
+		{
+
+		}
 	}
 
 	struct c_string_t
@@ -113,6 +118,12 @@ namespace scl
 			*c_pntr = '\0';
 			// malloc_len set `this->len`
 		}
+	};
+
+	struct sring_t
+	{
+		char *pntr;
+
 	};
 
 #ifdef SCL_EXPERIMENTAL
