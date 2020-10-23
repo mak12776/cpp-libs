@@ -79,16 +79,16 @@ namespace scl
 			return pntr;
 		}
 
-		static inline constexpr void *safe_malloc(size_t size)
+		static inline void *safe_malloc(size_t size)
 		{ return safe_call<malloc_t, global_mem.malloc>(size); }
 
-		static inline constexpr void *safe_calloc(size_t nelem, size_t size)
+		static inline void *safe_calloc(size_t nelem, size_t size)
 		{ return safe_call<calloc_t, global_mem.calloc>(nelem, size); }
 
 		template <typename data_type>
-		static inline constexpr void safe_realloc(data_type *&pntr, size_t size)
+		static inline void safe_realloc(data_type *&pntr, size_t size)
 		{
-			void *new_pntr = realloc(pntr, size);
+			void *new_pntr = global_mem.realloc(pntr, size);
 			if (new_pntr == nullptr)
 			{
 				err::set(err::NO_MEMORY);
@@ -97,6 +97,9 @@ namespace scl
 			}
 			pntr = (data_type*)new_pntr;
 		}
+
+		static inline void free(void *pntr)
+		{ global_mem.free(pntr); }
 
 		template <typename type>
 		static inline type *new_array(size_t size)
