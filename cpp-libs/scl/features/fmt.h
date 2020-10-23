@@ -20,32 +20,60 @@ namespace scl
 			fmt_num_t num;
 			size_t pos;
 
-			inline void set(fmt_num_t errnum, size_t position)
-			{ num = errnum; pos = position; }
+			inline void set(fmt_num_t errnum, size_t position) { num = errnum; pos = position; }
+			inline bool check() { return num != fmt_num_t::SUCCESS; }
 			inline void clear() { num = fmt_num_t::SUCCESS; }
 		};
 
 		fmt_t default_fmt{ fmt_num_t::SUCCESS, 0 };
 		fmt_t global_fmt = default_fmt;
 
-		static inline void set(fmt_num_t errnum, size_t index) 
-		{ global_fmt.set(errnum, index); }
-
+		static inline void set(fmt_num_t errnum, size_t index) { global_fmt.set(errnum, index); }
 		static inline void clear() { global_fmt.clear(); }
+		static inline bool check() { return global_fmt.check(); }
 
+		namespace low
+		{
+			static inline size_t get_len_valist(const char *fmt, size_t len, fmt_t &err, va_list valist)
+			{
+
+			}
+
+			static inline void format_valist(char **string, const char *fmt, size_t len, fmt_t &err, va_list valist)
+			{
+
+			}
+		}
+
+		static inline size_t get_len(const char *fmt, size_t len, ...)
+		{
+
+		}
+
+		static inline void format(char **string, const char *fmt, size_t len, ...)
+		{
+
+		}
+
+
+
+		// == fmt library ==
+
+		// -- decription --
 		// writing these library with different formats takes a lot of time,
 		// use a scripting programming language to produce the needed grammer 
 		// parser.
 
-		// deal with null-terminated strings or usual strings? support both types.
+		// -- features --
+		// deal with null-terminated strings or sized strings? support both types.
 
 		// library functions:
-
-		// write to a file
 
 		// get length of fmt
 		// write to a buffer
 		// allocate buffer and write into
+
+		// write to a file
 
 		static inline size_t get_len(const char *fmt, size_t len)
 		{
@@ -106,72 +134,11 @@ namespace scl
 				goto colon;
 
 			default:
-				
+				break;
 			}
 
 		colon:
-
-		}
-
-		static inline size_t malloc_fmt(const char *fmt, ...)
-		{
-
-		}
-	}
-
-	template <typename value_type>
-	static inline int print_size_of(FILE *stream = stdout)
-	{
-		return fprintf(stream, "sizeof %s: %zu\n", typeid(value_type).name(),
-			sizeof(value_type));
-	}
-
-	template <typename value_type>
-	static inline int print_address_of(value_type *value, const char *name = nullptr, FILE *stream = stdout)
-	{
-		if (name == nullptr) name = "...";
-		return fprintf(stream, "address of %s: %zu\n", name, value);
-	}
-
-	static inline size_t safe_fprintf(FILE *stream, const char *fmt, ...)
-	{
-		va_list ap;
-		int ret;
-
-		va_start(ap, fmt);
-		ret = vfprintf(stream, fmt, ap);
-		va_end(ap);
-
-		if (ret < 0)
-		{
-			scl::err::set(scl::err::PRINTF);
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-
 			return 0;
 		}
-
-		return (size_t)ret;
 	}
-
-	static inline size_t safe_printf(const char *fmt, ...)
-	{
-
-		va_list ap;
-		int ret;
-
-		va_start(ap, fmt);
-		ret = vprintf(fmt, ap);
-		va_end(ap);
-
-		if (ret < 0)
-		{
-			scl::err::set(scl::err::PRINTF);
-			scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-
-			return 0;
-		}
-
-		return (size_t)ret;
-	}
-
 }
