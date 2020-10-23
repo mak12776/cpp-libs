@@ -25,16 +25,21 @@ namespace scl
 
 		static inline void set(fmt_num_t errnum, size_t index) 
 		{
-			default_fmt_err.num = errnum; default_fmt_err.index = index;
+			default_fmt_err.num = errnum; 
+			default_fmt_err.index = index;
 		}
+
+		// writing these library with different formats takes a lot of time,
+		// use a scripting programming language to produce the needed grammer 
+		// parser.
 
 		// library functions:
 
-		// get length of fmt
 		// write to a file
 
+		// get length of fmt
 		// write to a buffer
-		// allocate memory and write buffer
+		// allocate buffer and write into
 
 		static inline size_t get_len(const char *fmt, size_t len)
 		{
