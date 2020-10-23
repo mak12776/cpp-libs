@@ -52,6 +52,8 @@ namespace scl
 			return _size - _len - 1;
 		}
 
+		// malloc functions
+
 		inline void malloc_size(size_t size)
 		{
 			_pntr = (char *)mem::safe_malloc(size);
@@ -91,7 +93,9 @@ namespace scl
 			_pntr[_len] = '\0';
 		}
 
-		inline void realloc_free_space()
+		// realloc functions
+
+		inline void realloc_free_unused_space()
 		{
 			if (_size > _len + 1)
 			{
@@ -103,87 +107,35 @@ namespace scl
 			_size = _len + 1;
 		}
 
-		inline void realloc_more(size_t size)
+		inline void realloc_more_space(size_t size)
 		{
 			size_t new_size;
 
 			math::safe_add(_size, size, new_size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			}
 
 			mem::safe_realloc(_pntr, new_size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
-			}
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
-		inline void realloc_reverse_free(size_t size)
+		inline void realloc_reverse_free_space(size_t size)
 		{
 			size_t free_size = this->free_size();
 
 			if (size > free_size)
 			{
 				size -= free_size;
-				realloc_more(size);
 
+				realloc_more_space(size);
 				err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
 		inline void realloc_cat(const c_string_t &string)
 		{
-			realloc_more(string.size);
+			realloc_more_space(string.size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
-		}
-
-		inline void malloc_cat(const std::initializer_list<c_string_t> &list)
-		{
-			size_t len;
-
-			if (list.size() == 0)
-				return;
-
-			// sum total len
-			auto iter = list.begin();
-			len = iter->len;
-
-			while ((++iter) != list.end())
-			{
-				math::safe_add(len, iter->len, len);
-				if (err::check())
-				{
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					return;
-				}
-			}
-
-			// malloc
-			this->malloc_len(len);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
-			}
-
-			// copy the strings
-			iter = list.begin();
-			char *c_pntr = this->pntr;
-
-			memcpy(c_pntr, iter->pntr, iter->len);
-			c_pntr += iter->len;
-			 
-			while ((++iter) != list.end())
-			{
-				memcpy(c_pntr, iter->pntr, iter->len);
-				c_pntr += iter->len;
-			}
-			*c_pntr = '\0';
-			// malloc_len set `this->len`
 		}
 	};
 
