@@ -102,18 +102,6 @@ namespace bh
 		}
 	}
 
-	static inline void log_c_string(c_string_t &string, const char *name)
-	{
-		printf("%s: [%s]\n", name, string.pntr);
-		printf("size: %zu, len: %zu\n", string.size, string.len);
-	}
-
-	static inline void log_m_string(m_string_t &string, const char *name)
-	{
-		printf("%s: [%s]\n", name, string.pntr);
-		printf("size: %zu, len: %zu\n", string.size, string.len);
-	}
-
 	c_string_t sep("\\");
 
 	static inline void count_file_name(c_string_t &parent_folder, c_string_t &name)

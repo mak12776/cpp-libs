@@ -113,19 +113,4 @@ namespace cl
 
 		return ret;
 	}
-
-	template <typename value_type>
-	static inline int print_size_of(FILE *stream = stdout)
-	{
-		return fprintf(stream, "sizeof %s: %zu\n", typeid(value_type).name(),
-			sizeof(value_type));
-	}
-
-	template <typename value_type>
-	static inline int print_address_of(value_type *value, const char *name = nullptr, FILE *stream = stdout)
-	{
-		if (name == nullptr) name = "...";
-		return fprintf(stream, "address of %s: %zu\n", name, value);
-	}
-
 }

@@ -126,7 +126,7 @@ namespace scl
 			struct __stat64 file_stat;
 			kernel::safe_stat64(name, &file_stat);
 #elif SIZE_MAX == UINT32_MAX
-			struct __stat32 file_stat;
+			struct _stat32 file_stat;
 			kernel::safe_stat32(name, &file_stat);
 #else
 #error unknown SIZE_MAX.
