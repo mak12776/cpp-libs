@@ -19,6 +19,7 @@ namespace scl
 
 		// default manager
 		constexpr mem_t default_mem{ malloc, calloc, realloc, free };
+
 		constexpr mem_t global_mem = default_mem;
 
 #ifdef SCL_EXPREMENTAL

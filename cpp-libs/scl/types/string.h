@@ -22,6 +22,7 @@ namespace scl
 		{
 			pntr = nullptr;
 			len = 0;
+			size = 0;
 		}
 
 		const inline size_t free_size()
@@ -59,6 +60,35 @@ namespace scl
 			memcpy(pntr, string, size);
 		}
 
+		inline void malloc_cat(std::initializer_list<c_string_t> list)
+		{
+			if (list.size() == 0)
+				return;
+
+			size_t new_size = 1;
+			for (c_string_t string : list)
+			{
+				math::safe_add(new_size, string.len, new_size);
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return;
+			}
+
+			pntr = (char *)mem::safe_malloc(new_size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			len = new_size - 1;
+			size = new_size;
+
+			char *new_pntr = pntr;
+			for (c_string_t string : list)
+			{
+				memcpy(new_pntr, string.pntr, string.len);
+				new_pntr += string.len;
+			}
+			*new_pntr = '\0';
+		}
+
 		inline void malloc_len_value(size_t length, const char value)
 		{
 			size_t new_size;
@@ -72,11 +102,8 @@ namespace scl
 			new_size = length + 1;
 
 			pntr = (char *)mem::safe_malloc(new_size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			}
 
 			len = length;
 			size = new_size;

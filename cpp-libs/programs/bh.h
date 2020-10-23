@@ -154,6 +154,41 @@ namespace bh
 		}
 	}
 
+	static inline void log_c_string(c_string_t &string, const char *name)
+	{
+		printf("%s: [%s]\n", name, string.pntr);
+		printf("size: %zu, len: %zu\n", string.size, string.len);
+	}
+
+	static inline void log_m_string(m_string_t &string, const char *name)
+	{
+		printf("%s: [%s]\n", name, string.pntr);
+		printf("size: %zu, len: %zu\n", string.size, string.len);
+	}
+
+	c_string_t sep("\\");
+
+	static inline void count_file_name(c_string_t &parent_folder, c_string_t &name)
+	{
+		m_string_t path;
+		ubuffer_t buffer;
+
+		path.malloc_cat({ parent_folder, sep, name });
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			return;
+
+		printf("file path: \"%s\"\n", path.pntr);
+
+		io::fopen_fread_all(path.pntr, buffer);
+		if (err::check())
+		{
+			printf("error: %s\n", err::string());
+			return;
+		}
+
+		printf("file size: %zu bits\n", buffer.size);
+	}
+
 	static inline int main(int argc, const char **argv)
 	{
 		const char *main_name = (argc != 0) ? argv[0] : "main.exe";
@@ -164,9 +199,6 @@ namespace bh
 			return 0;
 		}
 
-		c_string_t file_name;
-
-		count_size<64>()
 	}
 
 #ifdef BH_INCLUDE_OLD_DATA_COUNT

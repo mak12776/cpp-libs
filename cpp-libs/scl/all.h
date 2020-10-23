@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include <string>
+#include <variant>
 
 #endif
 
