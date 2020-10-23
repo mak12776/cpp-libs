@@ -170,7 +170,6 @@ namespace scl
 		}
 	};
 
-	
 	using string_t = std::variant<c_string_t, m_string_t>;
 
 	static inline void log_c_string(c_string_t &string, const char *name)
