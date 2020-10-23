@@ -175,7 +175,7 @@
     <ClInclude Include="scl\types\builtins.h" />
     <ClInclude Include="scl\types\linked_array.h" />
     <ClInclude Include="scl\types\string.h" />
-    <ClInclude Include="winapi\all_winapi.h" />
+    <ClInclude Include="winapi\all.h" />
     <ClInclude Include="winapi\functions.h" />
     <ClInclude Include="winapi\time.h" />
     <ClInclude Include="winapi\tools.h" />

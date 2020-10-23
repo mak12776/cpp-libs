@@ -102,11 +102,11 @@
     <ClInclude Include="winapi\tools.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="winapi\all_winapi.h">
-      <Filter>Header Files\winapi</Filter>
-    </ClInclude>
     <ClInclude Include="scl\all.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi\all.h">
+      <Filter>Header Files\winapi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
