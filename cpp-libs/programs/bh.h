@@ -5,59 +5,6 @@
 
 namespace bh
 {
-
-#ifdef BH_INCLUDE_COUNT_64BIT
-
-#pragma pack(push, 1)
-	struct data_64bit_count_t
-	{
-		uint64_t data;
-		size_t result;
-	};
-
-	struct counts_64bit_t
-	{
-		std::vector<data_64bit_count_t> data_counts;
-		std::vector<uint8_t> remaining;
-
-		counts_64bit_t(size_t size) : data_counts(size)
-		{ }
-
-		inline void append_data_count(uint64_t data)
-		{
-			for (size_t len = 0; len < data_counts.size(); len += 1)
-			{
-				if (data_counts[len].data = data)
-				{
-					data_counts[len].result += 1;
-					return;
-				}
-			}
-			data_counts.push_back({ data, 1 });
-		}
-	};
-#pragma pack(pop)
-
-	counts_64bit_t counts_64bit(ubuffer_t &buffer)
-	{
-		uint64_t *pntr = (uint64_t *)buffer.pntr;
-		uint64_t *end = pntr + (buffer.size / sizeof(uint64_t));
-
-		counts_64bit_t result(1024);
-
-		while (pntr != end)
-			result.append_data_count(*(pntr++));
-
-		uint8_t *pntr8 = (uint8_t *)end;
-		uint8_t *end8 = pntr8 + (buffer.size % sizeof(uint64_t));
-
-		while (pntr8 != end8)
-			result.remaining.push_back(*(pntr8++));
-
-		return result;
-	}
-#endif // #ifdef BH_INCLUDE_COUNT_64BIT
-
 	using namespace scl;
 
 	template <size_t size>
@@ -89,6 +36,7 @@ namespace bh
 		std::vector<data_count_t<data_type>> data_counts;
 		remaining_t<data_type> remaining;
 
+		constexpr size_t get_size() { return size; }
 		inline void append_data_count(data_type data);
 	};
 #pragma pack(pop)
@@ -106,8 +54,8 @@ namespace bh
 		if (pntr_a->count < pntr_b->count) return -1;
 		if (pntr_a->count > pntr_b->count) return 1;
 		return 0;
-	}
 
+	}
 	template <size_t size, typename data_type>
 	inline void count_t<size, data_type>::append_data_count(data_type data)
 	{
@@ -172,6 +120,7 @@ namespace bh
 	{
 		m_string_t path;
 		ubuffer_t buffer;
+		size_t buffer_bits;
 
 		path.malloc_cat({ parent_folder, sep, name });
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
@@ -180,13 +129,15 @@ namespace bh
 		printf("file path: \"%s\"\n", path.pntr);
 
 		io::fopen_fread_all(path.pntr, buffer);
-		if (err::check())
-		{
-			printf("error: %s\n", err::string());
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
-		}
 
-		printf("file size: %zu bits\n", buffer.size);
+		math::safe_mul(buffer.size, (size_t)8, buffer_bits);
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			return;
+
+		printf("file size: %zu (%zu bits)\n", buffer.size, buffer_bits);
+
 	}
 
 	static inline int main(int argc, const char **argv)
@@ -200,6 +151,59 @@ namespace bh
 		}
 
 	}
+
+
+#ifdef BH_INCLUDE_COUNT_64BIT
+
+#pragma pack(push, 1)
+	struct data_64bit_count_t
+	{
+		uint64_t data;
+		size_t result;
+	};
+
+	struct counts_64bit_t
+	{
+		std::vector<data_64bit_count_t> data_counts;
+		std::vector<uint8_t> remaining;
+
+		counts_64bit_t(size_t size) : data_counts(size)
+		{ }
+
+		inline void append_data_count(uint64_t data)
+		{
+			for (size_t len = 0; len < data_counts.size(); len += 1)
+			{
+				if (data_counts[len].data = data)
+				{
+					data_counts[len].result += 1;
+					return;
+				}
+			}
+			data_counts.push_back({ data, 1 });
+		}
+	};
+#pragma pack(pop)
+
+	counts_64bit_t counts_64bit(ubuffer_t &buffer)
+	{
+		uint64_t *pntr = (uint64_t *)buffer.pntr;
+		uint64_t *end = pntr + (buffer.size / sizeof(uint64_t));
+
+		counts_64bit_t result(1024);
+
+		while (pntr != end)
+			result.append_data_count(*(pntr++));
+
+		uint8_t *pntr8 = (uint8_t *)end;
+		uint8_t *end8 = pntr8 + (buffer.size % sizeof(uint64_t));
+
+		while (pntr8 != end8)
+			result.remaining.push_back(*(pntr8++));
+
+		return result;
+	}
+#endif // #ifdef BH_INCLUDE_COUNT_64BIT
 
 #ifdef BH_INCLUDE_OLD_DATA_COUNT
 	// fread, fwrite counts
