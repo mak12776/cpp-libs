@@ -105,7 +105,7 @@
     <ClInclude Include="winapi\all_winapi.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\all_scl.h">
+    <ClInclude Include="scl\all.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>

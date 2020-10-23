@@ -5,6 +5,7 @@
 
 namespace bh
 {
+
 #ifdef BH_INCLUDE_COUNT_64BIT
 
 #pragma pack(push, 1)
@@ -55,9 +56,7 @@ namespace bh
 
 		return result;
 	}
-#endif
-
-	using namespace scl;
+#endif // BH_INCLUDE_COUNT_64BIT
 
 	template <size_t size>
 	using get_data_type =
