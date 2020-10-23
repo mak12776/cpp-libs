@@ -85,8 +85,18 @@ namespace scl
 		static inline constexpr void *safe_calloc(size_t nelem, size_t size)
 		{ return safe_call<calloc_t, global_mem.calloc>(nelem, size); }
 
-		static inline constexpr void *safe_realloc(void *pntr, size_t size)
-		{ return safe_call<realloc_t, global_mem.realloc>(pntr, size); }
+		template <typename data_type>
+		static inline constexpr void safe_realloc(data_type *&pntr, size_t size)
+		{
+			void *new_pntr = realloc(pntr, size);
+			if (new_pntr == nullptr)
+			{
+				err::set(err::NO_MEMORY);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+			pntr = (data_type*)new_pntr;
+		}
 
 		template <typename type>
 		static inline type *new_array(size_t size)
