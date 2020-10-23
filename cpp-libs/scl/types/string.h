@@ -6,21 +6,7 @@ namespace scl
 	{
 		static inline bool malloc_len(char **pntr, size_t len)
 		{
-			size_t size;
-
-			math::safe_add(len, (size_t)1, len);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return true;
-			}
-
-			(*pntr) = (char *)mem::safe_malloc(size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return true;
-			}
+			
 
 			return false;
 		}
@@ -34,9 +20,8 @@ namespace scl
 			(*pntr)[len] = '\0';
 		}
 
-		static inline bool malloc_cat()
+		static inline bool realloc_cat()
 		{
-
 		}
 	}
 
@@ -51,28 +36,68 @@ namespace scl
 
 	struct m_string_t
 	{
-		char *pntr;
-		size_t len;
+		char *_pntr;
+		size_t _len;
+		size_t _size;
 
 		m_string_t()
 		{
-			this->pntr = nullptr;
-			this->len = 0;
+			_pntr = nullptr;
+			_len = 0;
 		}
 
-		inline void malloc_len(size_t len)
+		inline void malloc_size(size_t size)
 		{
-			if (tools::malloc_len(&(this->pntr), len))
+			_pntr = (char *)mem::safe_malloc(size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
-			this->len = len;
+			}
+
+			_size = size;
+			_len = 0;
 		}
 
 		inline void malloc_len_value(size_t len, const char value)
 		{
-			if (tools::malloc_len_value(&(this->pntr), len, value))
+			size_t size;
+
+			if (len == SIZE_MAX)
+			{
+				err::set(err::INT_OVERFLOW);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
-			this->len = len;
+			}
+			size = len + 1;
+
+			_pntr = (char *)mem::safe_malloc(size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			_len = len;
+			_size = size;
+
+			memset(_pntr, value, len);
+			_pntr[_len] = '\0';
 		}
+
+		inline void realloc_space()
+		{
+			if (_size > _len + 1)
+			{
+				mem::safe_realloc(_pntr, _len + 1);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			_size = _len + 1;
+		}
+
+		inline void malloc_cat()
 
 		inline void malloc_cat(const std::initializer_list<c_string_t> &list)
 		{
@@ -118,12 +143,6 @@ namespace scl
 			*c_pntr = '\0';
 			// malloc_len set `this->len`
 		}
-	};
-
-	struct sring_t
-	{
-		char *pntr;
-
 	};
 
 #ifdef SCL_EXPERIMENTAL

@@ -164,7 +164,9 @@ namespace bh
 			return 0;
 		}
 
+		c_string_t file_name;
 
+		count_size<64>()
 	}
 
 #ifdef BH_INCLUDE_OLD_DATA_COUNT
