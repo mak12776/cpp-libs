@@ -20,7 +20,11 @@ namespace scl
 		// default manager
 		constexpr mem_t default_mem{ malloc, calloc, realloc, free };
 
+#if SCL_LOCKED_FEATURES
 		constexpr mem_t global_mem = default_mem;
+#else
+		mem_t global_mem = default_mem;
+#endif
 
 #ifdef SCL_EXPREMENTAL
 		// text logger manager
@@ -102,6 +106,26 @@ namespace scl
 		static inline void free(void *pntr)
 		{ global_mem.free(pntr); }
 
+		template <typename data_type>
+		static inline data_type *malloc_array(size_t size)
+		{
+			data_type *pntr;
+
+			math::safe_mul(size, sizeof(data_type), size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return nullptr;
+
+			pntr = (data_type *)malloc(size);
+			if (pntr == nullptr)
+			{
+				err::set(err::NO_MEMORY);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+
+			return pntr;
+		}
+
+#ifdef SCL_EXPERIMENTAL
 		template <typename type>
 		static inline type *new_array(size_t size)
 		{
@@ -138,8 +162,6 @@ namespace scl
 
 			return array;
 		}
-
-#ifdef SCL_EXPERIMENTAL
 		// memory pointer
 
 		template <typename value_type, intptr_t manager = default_manager_pntr>

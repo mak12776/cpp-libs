@@ -412,7 +412,7 @@ namespace scl
 
 			if (width == 0) width = DEFAULT_WIDTH;
 
-			buffer = mem::new_array<ubyte>(width + 1);
+			buffer = mem::malloc_array<ubyte>(width + 1);
 
 			if (scl::err::check())
 				return 0;

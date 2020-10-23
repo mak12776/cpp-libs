@@ -17,6 +17,11 @@
 
 #endif
 
+#ifndef SCL_LOCKED_FEATURES
+#define SCL_LOCKED_FEATURES 1
+#endif
+
+
 #include "macros.h"
 #include "exit_codes.h"
 #include "math.h"					// <safeint.h>

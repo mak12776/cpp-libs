@@ -77,12 +77,9 @@ namespace scl
 		template <size_t _size>
 		struct err_t
 		{
-			num_t num;
-			size_t array_index;
+			num_t num = num_t::SUCCESS;
+			size_t array_index = 0;
 			info_t info_array[_size];
-
-			constexpr size_t array_size() const { return _size; }
-
 			
 			inline void set(num_t errnum) { num = errnum; }
 			inline bool test(num_t errnum) { return num == errnum; }
@@ -117,12 +114,13 @@ namespace scl
 		};
 #pragma pack(pop)
 
-		// default handler
 
+		// default err
 		constexpr size_t default_array_size = 4096;
 
 		typedef err_t<default_array_size> default_err_t;
-		default_err_t default_err{SUCCESS, 0, {0}};
+		default_err_t default_err;
+
 
 		// global functions
 
