@@ -29,8 +29,9 @@ namespace scl
 	{
 		const char *const pntr;
 		const size_t len;
+		const size_t size;
 
-		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr))
+		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr)), size(len + 1)
 		{ }
 	};
 
@@ -44,6 +45,11 @@ namespace scl
 		{
 			_pntr = nullptr;
 			_len = 0;
+		}
+
+		const inline size_t free_size()
+		{
+			return _size - _len - 1;
 		}
 
 		inline void malloc_size(size_t size)
@@ -85,7 +91,7 @@ namespace scl
 			_pntr[_len] = '\0';
 		}
 
-		inline void realloc_space()
+		inline void realloc_free_space()
 		{
 			if (_size > _len + 1)
 			{
@@ -97,7 +103,43 @@ namespace scl
 			_size = _len + 1;
 		}
 
-		inline void malloc_cat()
+		inline void realloc_more(size_t size)
+		{
+			size_t new_size;
+
+			math::safe_add(_size, size, new_size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			mem::safe_realloc(_pntr, new_size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+		}
+
+		inline void realloc_reverse_free(size_t size)
+		{
+			size_t free_size = this->free_size();
+
+			if (size > free_size)
+			{
+				size -= free_size;
+				realloc_more(size);
+
+				err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
+
+		inline void realloc_cat(const c_string_t &string)
+		{
+			realloc_more(string.size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
 
 		inline void malloc_cat(const std::initializer_list<c_string_t> &list)
 		{

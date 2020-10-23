@@ -103,6 +103,17 @@ namespace scl
 					array_index += 1;
 				}
 			}
+
+			inline bool check_push_file_info(const char *file_name, uint64_t line_number,
+				const char *function_name)
+			{
+				if (check())
+				{
+					push_file_info(file_name, line_number, function_name);
+					return true;
+				}
+				return false;
+			}
 		};
 #pragma pack(pop)
 
@@ -127,6 +138,12 @@ namespace scl
 			const char *function_name)
 		{
 			default_err.push_file_info(file_name, line_number, function_name);
+		}
+
+		inline bool check_push_file_info(const char *file_name, uint64_t line_number,
+			const char *function_name)
+		{
+			default_err.check_push_file_info(file_name, line_number, function_name);
 		}
 
 #if SCL_ERR_PRINT
