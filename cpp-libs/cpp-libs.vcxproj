@@ -158,7 +158,7 @@
     <ClInclude Include="programs\bh.h" />
     <ClInclude Include="programs\counter.h" />
     <ClInclude Include="programs\old_codes.h" />
-    <ClInclude Include="scl\all.h" />
+    <ClInclude Include="scl\all_scl.h" />
     <ClInclude Include="scl\exit_codes.h" />
     <ClInclude Include="scl\features\all_features.h" />
     <ClInclude Include="scl\features\cleaner.h" />

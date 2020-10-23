@@ -16,11 +16,11 @@ namespace cface
 	{ 
 	public:
 		c_unary_operation_type type;
-		c_expression *left;
-		c_expression *right;
+		c_expression *creation;
+		c_expression *exit;
 
-		c_unary_operation(c_unary_operation_type type, c_expression *left, c_expression *right)
-			: c_expression(c_expression_type::BINARY), type(type), left(left), right(right)
+		c_unary_operation(c_unary_operation_type type, c_expression *creation, c_expression *exit)
+			: c_expression(c_expression_type::BINARY), type(type), creation(creation), exit(exit)
 		{ }
 	};
 

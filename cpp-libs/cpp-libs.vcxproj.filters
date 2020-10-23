@@ -48,9 +48,6 @@
     <ClInclude Include="scl\rand.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\all.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\builtins.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
@@ -93,9 +90,6 @@
     <ClInclude Include="programs\old_codes.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
-    <ClInclude Include="winapi\all_winapi.h">
-      <Filter>Header Files\winapi</Filter>
-    </ClInclude>
     <ClInclude Include="winapi\functions.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
@@ -107,6 +101,12 @@
     </ClInclude>
     <ClInclude Include="winapi\tools.h">
       <Filter>Header Files\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi\all_winapi.h">
+      <Filter>Header Files\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\all_scl.h">
+      <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

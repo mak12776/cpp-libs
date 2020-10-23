@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../scl/all.h"
+#include "../scl/all_scl.h"
 
 #include <Windows.h>
 
@@ -10,5 +10,6 @@
 
 #include "types.h"
 #include "tools.h"
-#include "time.h"		// <Windows.h> "scl/all.h"
 #include "functions.h"	// <funtional>
+
+#include "time.h"		// <Windows.h> "scl/all.h" "functions.h"
