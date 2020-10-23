@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../scl/all_scl.h"
+#include "../scl/all.h"
 
 #include <Windows.h>
 

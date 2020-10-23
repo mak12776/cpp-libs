@@ -149,10 +149,23 @@ namespace bh
 		}
 		else
 		{
-
+			err::set(err::UNDEFINED_BEHAVIOR);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 	}
 
+	static inline int main(int argc, const char **argv)
+	{
+		const char *main_name = (argc != 0) ? argv[0] : "main.exe";
+
+		if (argc != 2)
+		{
+			printf("usage: %s [FILENAME]\n", main_name);
+			return 0;
+		}
+
+
+	}
 
 #ifdef BH_INCLUDE_OLD_DATA_COUNT
 	// fread, fwrite counts
