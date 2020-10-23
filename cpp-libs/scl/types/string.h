@@ -2,29 +2,6 @@
 
 namespace scl
 {
-	namespace tools
-	{
-		static inline bool malloc_len(char **pntr, size_t len)
-		{
-			
-
-			return false;
-		}
-
-		static inline bool malloc_len_value(char **pntr, size_t len, const char value)
-		{
-			if (malloc_len(pntr, len))
-				return true;
-
-			memset(*pntr, value, len);
-			(*pntr)[len] = '\0';
-		}
-
-		static inline bool realloc_cat()
-		{
-		}
-	}
-
 	struct c_string_t
 	{
 		const char *const pntr;
@@ -37,97 +14,103 @@ namespace scl
 
 	struct m_string_t
 	{
-		char *_pntr;
-		size_t _len;
-		size_t _size;
+		char *pntr;
+		size_t len;
+		size_t size;
 
 		m_string_t()
 		{
-			_pntr = nullptr;
-			_len = 0;
+			pntr = nullptr;
+			len = 0;
 		}
 
 		const inline size_t free_size()
 		{
-			return _size - _len - 1;
+			return size - len - 1;
 		}
 
 		// malloc functions
 
-		inline void malloc_size(size_t size)
+		inline void malloc_size(size_t _size)
 		{
-			_pntr = (char *)mem::safe_malloc(size);
+			pntr = (char *)mem::safe_malloc(_size);
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 
-			_size = size;
-			_len = 0;
+			size = _size;
+			len = 0;
 		}
 
-		inline void malloc_len_value(size_t len, const char value)
+		inline void malloc_string(const char *pntr)
 		{
-			size_t size;
 
-			if (len == SIZE_MAX)
+		}
+
+		inline void malloc_len_value(size_t length, const char value)
+		{
+			size_t new_size;
+
+			if (length == SIZE_MAX)
 			{
 				err::set(err::INT_OVERFLOW);
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
-			size = len + 1;
+			new_size = length + 1;
 
-			_pntr = (char *)mem::safe_malloc(size);
+			pntr = (char *)mem::safe_malloc(new_size);
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 
-			_len = len;
-			_size = size;
+			len = length;
+			size = new_size;
 
-			memset(_pntr, value, len);
-			_pntr[_len] = '\0';
+			memset(pntr, value, length);
+			pntr[length] = '\0';
 		}
 
 		// realloc functions
 
 		inline void realloc_free_unused_space()
 		{
-			if (_size > _len + 1)
+			if (size > len + 1)
 			{
-				mem::safe_realloc(_pntr, _len + 1);
+				mem::safe_realloc(pntr, len + 1);
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 
-			_size = _len + 1;
+			size = len + 1;
 		}
 
 		inline void realloc_more_space(size_t size)
 		{
 			size_t new_size;
 
-			math::safe_add(_size, size, new_size);
+			math::safe_add(size, size, new_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			mem::safe_realloc(_pntr, new_size);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			mem::safe_realloc(pntr, new_size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				size = new_size;
 		}
 
-		inline void realloc_reverse_free_space(size_t size)
+		inline void realloc_reverse_free_space(size_t free_size)
 		{
-			size_t free_size = this->free_size();
+			size_t current_free_size = this->free_size();
 
-			if (size > free_size)
+			if (free_size > current_free_size)
 			{
-				size -= free_size;
+				free_size -= current_free_size;
 
-				realloc_more_space(size);
+				realloc_more_space(free_size);
 				err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
@@ -135,7 +118,12 @@ namespace scl
 		inline void realloc_cat(const c_string_t &string)
 		{
 			realloc_more_space(string.size);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			memcpy(pntr + len, string.pntr, string.size);
+			len += string.len;
+			pntr[len] = '\0';
 		}
 	};
 

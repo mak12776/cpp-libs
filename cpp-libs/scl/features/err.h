@@ -143,7 +143,7 @@ namespace scl
 		inline bool check_push_file_info(const char *file_name, uint64_t line_number,
 			const char *function_name)
 		{
-			default_err.check_push_file_info(file_name, line_number, function_name);
+			return default_err.check_push_file_info(file_name, line_number, function_name);
 		}
 
 #if SCL_ERR_PRINT
