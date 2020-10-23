@@ -1,0 +1,61 @@
+
+/* comments:
+0-9
+
+10 ... 99
+
+0-9 0-9
+
+100 ... 256
+
+1-2
+
+	'0-9' - '1,2':
+		END: one digit number
+		'0-9':
+			END: two digit number
+	'1,2':
+		END: one digit number
+		'0-9':
+			END: two digit number
+			'0-9':
+				END: three digit number
+	ELSE:
+		
+		
+		
+=== new program ===
+
+END: 
+	goto stat_return_total
+'{':
+	END: 
+		goto stat_error_unmatched_curly_brackets
+	'{'
+	ELSE:
+
+=== end program ===
+		
+
+
+
+*/
+	$[index] = 0
+	$[total] = $[len]
+
+EOB:
+	return $[total]
+'{':
+	EOB:
+		raise error "unmatched curly brackets"
+	'1-9':
+		EOB:
+			raise error "unmatched curly brackets"
+		':':
+			
+	':':
+		EOB:
+			raise error "unmatched curly brackets"
+		' ' or '0-9':
+			
+		
