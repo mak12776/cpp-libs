@@ -15,23 +15,29 @@ namespace scl
 			SINGLE_RIGHT_CURLY_BRACKET,
 		};
 
-		struct fmt_err_t
+		struct fmt_t
 		{
 			fmt_num_t num;
-			size_t index;
+			size_t pos;
+
+			inline void set(fmt_num_t errnum, size_t position)
+			{ num = errnum; pos = position; }
+			inline void clear() { num = fmt_num_t::SUCCESS; }
 		};
 
-		fmt_err_t default_fmt_err{ fmt_num_t::SUCCESS, 0 };
+		fmt_t default_fmt{ fmt_num_t::SUCCESS, 0 };
+		fmt_t global_fmt = default_fmt;
 
 		static inline void set(fmt_num_t errnum, size_t index) 
-		{
-			default_fmt_err.num = errnum; 
-			default_fmt_err.index = index;
-		}
+		{ global_fmt.set(errnum, index); }
+
+		static inline void clear() { global_fmt.clear(); }
 
 		// writing these library with different formats takes a lot of time,
 		// use a scripting programming language to produce the needed grammer 
 		// parser.
+
+		// deal with null-terminated strings or usual strings? support both types.
 
 		// library functions:
 
