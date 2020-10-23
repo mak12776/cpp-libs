@@ -55,8 +55,6 @@ namespace scl
 
 		}
 
-
-
 		// == fmt library ==
 
 		// -- decription --
