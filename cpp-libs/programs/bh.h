@@ -56,7 +56,9 @@ namespace bh
 
 		return result;
 	}
-#endif // BH_INCLUDE_COUNT_64BIT
+#endif // #ifdef BH_INCLUDE_COUNT_64BIT
+
+	using namespace scl;
 
 	template <size_t size>
 	using get_data_type =
@@ -137,7 +139,7 @@ namespace bh
 	}
 
 	template <size_t size, typename data_type = get_data_type<size>>
-	void count_size(ubuffer_t &buffer, count_t<size> result)
+	void count_size(ubuffer_t &buffer, count_t<size> &result)
 	{
 		count_t<size> result;
 
