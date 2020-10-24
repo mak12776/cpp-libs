@@ -23,16 +23,25 @@
 	ELSE:
 		
 		
-		
+
 === new program ===
 
-END: 
-	goto stat_return_total
+	$[index] = 0
+	$[total] = 0
+
+END: return total
 '{':
-	END: 
-		goto stat_error_unmatched_curly_brackets
-	'{'
-	ELSE:
+	END: raise single_left_curly_bracket
+	'{':
+	
+	'0-9':
+'}':
+	END: raise single_right_curly_bracket
+	'}': raise single_right_curly_bracket
+	DEFAULT:
+DEFAULT:
+	
+
 
 === end program ===
 		
