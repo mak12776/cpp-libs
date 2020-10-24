@@ -34,14 +34,21 @@ namespace scl
 
 		namespace low
 		{
+
 			static inline size_t get_len_valist(const char *fmt, size_t len, fmt_t &err, va_list valist)
 			{
+				// the following "//#{ ... }" marks needed for a python script to locate 
+				// the body of 'get_len' & 'format' functions and place generated algorithms 
+				// inside them. please don't remove.
 
+				//#[get_line_valist start]
+				//#[get_line_valist end]
 			}
 
 			static inline void format_valist(char **string, const char *fmt, size_t len, fmt_t &err, va_list valist)
 			{
-
+				//#[format_valist start]
+				//#[format_valist end]
 			}
 		}
 
