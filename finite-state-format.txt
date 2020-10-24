@@ -38,7 +38,7 @@ END: return total
 '}':
 	END: raise single_right_curly_bracket
 	'}': raise single_right_curly_bracket
-	DEFAULT:
+	DEFAULT: goto main_check
 DEFAULT:
 	
 
