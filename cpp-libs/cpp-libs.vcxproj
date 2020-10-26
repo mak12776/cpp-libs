@@ -159,13 +159,14 @@
     <ClInclude Include="programs\counter.h" />
     <ClInclude Include="programs\old_codes.h" />
     <ClInclude Include="scl\all.h" />
+    <ClInclude Include="scl\builtins.h" />
     <ClInclude Include="scl\exit_codes.h" />
     <ClInclude Include="scl\features\all_features.h" />
     <ClInclude Include="scl\features\cleaner.h" />
     <ClInclude Include="scl\features\err.h" />
     <ClInclude Include="scl\features\fmt.h" />
     <ClInclude Include="scl\features\log.h" />
-    <ClInclude Include="scl\features\sfmt.h" />
+    <ClInclude Include="scl\features\cfmt.h" />
     <ClInclude Include="scl\features\mem.h" />
     <ClInclude Include="scl\io.h" />
     <ClInclude Include="scl\macros.h" />
@@ -173,7 +174,6 @@
     <ClInclude Include="scl\rand.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="scl\types\all_types.h" />
-    <ClInclude Include="scl\types\builtins.h" />
     <ClInclude Include="scl\types\linked_array.h" />
     <ClInclude Include="scl\types\string.h" />
     <ClInclude Include="winapi\all.h" />

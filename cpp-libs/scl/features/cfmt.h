@@ -2,7 +2,7 @@
 
 namespace scl
 {
-	namespace sfmt
+	namespace cfmt
 	{
 		// --- low format ---
 		// using stdio printf family functions with better function names.

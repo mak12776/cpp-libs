@@ -24,6 +24,7 @@
 
 #include "macros.h"
 #include "exit_codes.h"
+#include "builtins.h"
 #include "math.h"					// <safeint.h>
 #include "rand.h"
 
