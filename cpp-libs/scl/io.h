@@ -35,44 +35,7 @@ namespace scl
 			return fd;
 		}
 
-		// low level print functions
-
-		template <typename value_type>
-		static inline int print_size_of(FILE *stream = stdout)
-		{
-			return fprintf(stream, "sizeof %s: %zu\n", typeid(value_type).name(),
-				sizeof(value_type));
-		}
-
-		template <typename value_type>
-		static inline int print_address_of(value_type *value, const char *name = nullptr, FILE *stream = stdout)
-		{
-			if (name == nullptr) name = "...";
-			return fprintf(stream, "address of %s: %zu\n", name, value);
-		}
-
-		size_t DEFAULT_WIDTH = 80;
-
-		size_t print_separator(size_t width = 0, ubyte character = '-', FILE *stream = stdout)
-		{
-			ubyte *buffer;
-			size_t write_number;
-
-			if (width == 0) width = DEFAULT_WIDTH;
-
-			buffer = mem::malloc_array<ubyte>(width + 1);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
-
-			for (size_t length = 0; length < width; length += 1)
-				buffer[length] = character;
-			buffer[width++] = '\n';
-
-			write_number = fwrite(buffer, 1, width, stream);
-
-			free(buffer);
-			return write_number;
-		}
+		
 	}
 
 	namespace io

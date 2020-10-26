@@ -165,7 +165,7 @@
     <ClInclude Include="scl\features\err.h" />
     <ClInclude Include="scl\features\fmt.h" />
     <ClInclude Include="scl\features\log.h" />
-    <ClInclude Include="scl\features\low_fmt.h" />
+    <ClInclude Include="scl\features\sfmt.h" />
     <ClInclude Include="scl\features\mem.h" />
     <ClInclude Include="scl\io.h" />
     <ClInclude Include="scl\macros.h" />

@@ -108,7 +108,7 @@
     <ClInclude Include="winapi\all.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\features\low_fmt.h">
+    <ClInclude Include="scl\features\sfmt.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>
