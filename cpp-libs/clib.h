@@ -16,11 +16,11 @@ namespace cl
 		using namespace scl;
 
 		va_list ap_copy;
-		char *str;
 		size_t size;
+		char *str;
 		int ret;
 
-		// _vsprintf will not return negative values, or failed.
+		// _vsprintf will not return negative values, unless failed.
 		va_copy(ap_copy, ap);
 		ret = _vscprintf(fmt, ap_copy);
 
