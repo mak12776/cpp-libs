@@ -145,11 +145,11 @@ namespace scl
 
 		static inline size_t get_file_size(FILE *stream)
 		{
-#if ULONG_MAX <= SIZE_MAX
-			size_t file_size = (size_t)get_file_size_long(stream);
-#else
+#if ULONG_MAX > SIZE_MAX
 #error unsigned long is too big.
 #endif
+			size_t file_size = (size_t)get_file_size_long(stream);
+
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);

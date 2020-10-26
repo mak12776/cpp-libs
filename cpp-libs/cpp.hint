@@ -8,3 +8,6 @@
 #define SCL_EXPERIMENTAL
 #define PRIxDWORD
 
+#define va_start
+#define va_copy
+#define va_end
