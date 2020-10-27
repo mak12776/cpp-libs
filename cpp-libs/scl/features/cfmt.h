@@ -16,6 +16,8 @@ namespace scl
 			return (size_t)value;
 		}
 
+		// get_len
+
 		static inline bool get_len_valist(size_t &result_len, const char *fmt, va_list list)
 		{
 			int ret;
@@ -39,6 +41,8 @@ namespace scl
 			return len;
 		}
 
+		// format
+
 		static inline bool format_valist(char *buffer, size_t buffer_size, const char *fmt, va_list list)
 		{
 			int ret;
@@ -61,6 +65,8 @@ namespace scl
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
+
+		// malloc format
 
 		static inline bool malloc_format_valist(char *&pntr, size_t &size, const char *fmt, va_list list)
 		{
@@ -129,6 +135,8 @@ namespace scl
 			}
 		}
 
+		// safe malloc format ...
+
 		static inline void safe_malloc_format(char *&buffer, size_t &buffer_size, const char *fmt, ...)
 		{
 			va_list list;
@@ -138,6 +146,14 @@ namespace scl
 			va_end(list);
 
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
+
+		// safe write
+
+		static inline void safe_write(const char *fmt, ...)
+		{
+#pragma warning "incomplete code"
+			return;
 		}
 
 		// low level print functions

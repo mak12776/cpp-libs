@@ -25,7 +25,7 @@
 #include "macros.h"
 #include "exit_codes.h"
 #include "builtins.h"
-#include "math.h"					// <safeint.h>
+#include "math.h"					// <safeint.h
 #include "rand.h"
 
 #include "features/all_features.h"	// <cinttypes> <cstdio> cstdarg>
