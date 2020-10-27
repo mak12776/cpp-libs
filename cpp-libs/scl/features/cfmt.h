@@ -73,7 +73,7 @@ namespace scl
 			size_t len;
 			va_list list_copy;
 
-			va_copy(list_copy, list);
+			va_copy(list_copy, list);	 
 			if (get_len_valist(len, fmt, list_copy))
 				return true;
 

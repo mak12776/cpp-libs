@@ -162,11 +162,11 @@
     <ClInclude Include="scl\builtins.h" />
     <ClInclude Include="scl\exit_codes.h" />
     <ClInclude Include="scl\features\all_features.h" />
+    <ClInclude Include="scl\features\cfmt.h" />
     <ClInclude Include="scl\features\cleaner.h" />
     <ClInclude Include="scl\features\err.h" />
     <ClInclude Include="scl\features\fmt.h" />
     <ClInclude Include="scl\features\log.h" />
-    <ClInclude Include="scl\features\cfmt.h" />
     <ClInclude Include="scl\features\mem.h" />
     <ClInclude Include="scl\io.h" />
     <ClInclude Include="scl\macros.h" />

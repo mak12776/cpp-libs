@@ -105,11 +105,11 @@
     <ClInclude Include="winapi\all.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\features\cfmt.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
     <ClInclude Include="scl\builtins.h">
       <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\cfmt.h">
+      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
