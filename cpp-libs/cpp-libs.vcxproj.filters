@@ -28,6 +28,9 @@
     <Filter Include="Header Files\winapi">
       <UniqueIdentifier>{0ac5857c-10b0-4d7f-b3f2-a9e7979942c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scl\features\headers">
+      <UniqueIdentifier>{668c8b50-62c8-4ae0-9aa8-6215a14101df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -110,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="scl\features\cfmt.h">
       <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\headers\h_cfmt.h">
+      <Filter>Header Files\scl\features\headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

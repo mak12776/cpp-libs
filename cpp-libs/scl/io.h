@@ -34,8 +34,6 @@ namespace scl
 			}
 			return fd;
 		}
-
-		
 	}
 
 	namespace io

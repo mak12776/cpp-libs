@@ -80,6 +80,7 @@ namespace scl
 			num_t num = num_t::SUCCESS;
 			size_t array_index = 0;
 			info_t info_array[_size];
+			FILE *log_file = stderr;
 			
 			inline void set(num_t errnum) { num = errnum; }
 			inline bool test(num_t errnum) { return num == errnum; }
@@ -110,6 +111,74 @@ namespace scl
 					return true;
 				}
 				return false;
+			}
+
+			inline size_t write_traceback(FILE *file = nullptr)
+			{
+				size_t write_number;
+				size_t total = 0;
+
+				file = (file == nullptr) ? log_file : file;
+				cfmt::write(file, write_number,
+					"Traceback (most recent call last):\n");
+
+				for (size_t index = array_index - 1; index != SIZE_MAX; index -= 1)
+				{
+					cfmt::write(file, write_number, " %s: %" PRIuLINE ": %s\n", 
+						info_array[index].file_name,
+						info_array[index].line_number,
+						info_array[index].function_name);
+
+					total += write_number;
+				}
+
+				return total;
+			}
+
+			inline size_t write(FILE *file = nullptr)
+			{
+				size_t write_number;
+				file = (file == nullptr) ? log_file : file;
+
+				switch (num)
+				{
+				case scl::err::SUCCESS:
+					return 0;
+
+				case scl::err::INVALID_ARGUMENT:
+				case scl::err::NO_MEMORY:
+				case scl::err::NEW:
+				case scl::err::INT_OVERFLOW:
+				case scl::err::FLOAT_OVERFLOW:
+
+				case scl::err::OPEN:
+				case scl::err::STAT:
+				case scl::err::READ:
+				case scl::err::WRITE:
+
+				case scl::err::WIN_ERROR:
+				case scl::err::PRINTF:
+				case scl::err::UNDEFINED_BEHAVIOR:
+				case scl::err::INVALID_FILE_STRUCTURE:
+					cfmt::write(file, write_number, "error: %s\n", 
+						to_string(num));
+					break;
+
+				case scl::err::FOPEN:
+				case scl::err::FTELL:
+				case scl::err::FSEEK:
+				case scl::err::FREAD:
+				case scl::err::FWRITE:
+					cfmt::write(file, write_number, "error: %s: %s\n", 
+						to_string(num), strerror(errno));
+					break;
+				
+				default:
+					cfmt::write(file, write_number, "error: unknown error!\n", to_string(num));
+				}	
+
+				write_number += write_traceback(file);
+				return write_number;
 			}
 		};
 #pragma pack(pop)
@@ -143,6 +212,9 @@ namespace scl
 		{
 			return default_err.check_push_file_info(file_name, line_number, function_name);
 		}
+
+		static inline size_t write_traceback(FILE *file = nullptr) { return default_err.write_traceback(file); }
+		static inline size_t write(FILE *file = nullptr) { return default_err.write(file); }
 
 #if SCL_ERR_PRINT
 		static inline int print_status()

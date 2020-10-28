@@ -10,7 +10,7 @@ namespace scl
 
 		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr)), size(len + 1)
 		{ }
-	};	
+	};
 
 	struct m_string_t
 	{

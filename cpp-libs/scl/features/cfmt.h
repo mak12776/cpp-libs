@@ -68,7 +68,7 @@ namespace scl
 
 		// malloc format
 
-		static inline bool malloc_format_valist(char *&pntr, size_t &size, const char *fmt, va_list list)
+		static inline bool malloc_format_valist(char *&buffer, size_t &buffer_size, const char *fmt, va_list list)
 		{
 			size_t len;
 			va_list list_copy;
@@ -81,19 +81,21 @@ namespace scl
 				return true;
 			len += 1;
 
-			pntr = (char *)malloc(len);
-			if (pntr == nullptr)
+			buffer = (char *)malloc(len);
+			if (buffer == nullptr)
 				return true;
-			size = len;
+			buffer_size = len;
 
-			if (format_valist(pntr, size, fmt, list))
+			if (format_valist(buffer, buffer_size, fmt, list))
 			{
-				free(pntr);
+				free(buffer);
 				return true;
 			}
 
 			return false;
 		}
+
+		// safe malloc format
 
 		static inline void safe_malloc_format_valist(char *&buffer, size_t &buffer_size, const char *fmt, va_list list)
 		{
@@ -135,8 +137,6 @@ namespace scl
 			}
 		}
 
-		// safe malloc format ...
-
 		static inline void safe_malloc_format(char *&buffer, size_t &buffer_size, const char *fmt, ...)
 		{
 			va_list list;
@@ -148,33 +148,91 @@ namespace scl
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
-		// safe write
+		// write
 
-		static inline void safe_write(const char *fmt, ...)
+		static inline bool write_valist(FILE *file, size_t &write_number, const char *fmt, va_list list)
 		{
-#pragma warning "incomplete code"
-			return;
+			char *pntr;
+			size_t size;
+
+			if (malloc_format_valist(pntr, size, fmt, list))
+			{
+				write_number = 0;
+				return true;
+			}
+
+			write_number = fwrite(pntr, 1, size, file);
+			free(pntr);
+			return write_number == size;
 		}
 
-		// low level print functions
+		static inline bool write(FILE *file, size_t &write_number, const char *fmt, ...)
+		{
+			va_list list;
+			bool result;
+
+			va_start(list, fmt);
+			result = write_valist(file, write_number, fmt, list);
+			va_end(list);
+
+			return result;
+		}
+
+		// safe write
+
+		static inline size_t safe_write_valist(FILE *file, const char *fmt, va_list list)
+		{
+			char *pntr;
+			size_t size;
+			size_t write_number;
+
+			safe_malloc_format_valist(pntr, size, fmt, list);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return 0;
+
+			write_number = fwrite(pntr, 1, size, file);
+			free(pntr);
+
+			if (write_number != size)
+			{
+				err::set(err::FWRITE);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+			return write_number;
+		}
+
+		static inline size_t safe_write(FILE *file, const char *fmt, ...)
+		{
+			va_list list;
+			size_t write_number;
+
+			va_start(list, fmt);
+			write_number = safe_write_valist(file, fmt, list);
+			va_end(list);
+
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
+		}
+
+		// other print functions
 
 		template <typename value_type>
-		static inline int print_size_of(FILE *stream = stdout)
+		static inline int print_size_of(FILE *stream)
 		{
 			return fprintf(stream, "sizeof %s: %zu\n", typeid(value_type).name(),
 				sizeof(value_type));
 		}
 
 		template <typename value_type>
-		static inline int print_address_of(value_type *value, const char *name = nullptr, FILE *stream = stdout)
+		static inline int print_address_of(value_type *value, const char *name, FILE *stream)
 		{
-			if (name == nullptr) name = "...";
+			name = (name == nullptr) ? "..." : name;
 			return fprintf(stream, "address of %s: %zu\n", name, value);
 		}
 
 		size_t DEFAULT_WIDTH = 80;
 
-		size_t print_separator(size_t width = 0, ubyte character = '-', FILE *stream = stdout)
+		size_t print_separator(size_t width, ubyte character, FILE *stream)
 		{
 			ubyte *buffer;
 			size_t write_number;
