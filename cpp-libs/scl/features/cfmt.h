@@ -152,40 +152,69 @@ namespace scl
 
 		static inline bool writeln_valist(FILE *file, size_t &write_number, const char *fmt, va_list list)
 		{
-			va_list list_copy;
-
 			char *pntr;
-			size_t len;
+			size_t size;
 
-			va_copy(list_copy, list);
-			if (get_len_valist(len, fmt, list_copy))
+			if (malloc_format_valist(pntr, size, fmt, list))
 			{
 				write_number = 0;
 				return true;
 			}
 
-			if (len == SIZE_MAX)
-			{
-				write_number = 0;
-				return true;
-			}
-			len += 1;
+			pntr[size - 1] = '\n';
+			write_number = fwrite(pntr, 1, size, file);
+			free(pntr);
 
-			pntr = (char *)malloc(len);
-			if (pntr == nullptr)
-			{
-				write_number = 0;
-				return true;
-			}
-			
-			if (format_valist(pntr, len, fmt, list))
-			{
-				write_number = 0;
-				free(pntr);
-				return true;
-			}
+			return write_number != size;
+		}
 
+		static inline bool writeln(FILE *file, size_t &write_number, const char *fmt, ...)
+		{
+			bool result;
+			va_list list;
 
+			va_start(list, fmt);
+			result = writeln_valist(file, write_number, fmt, list);
+			va_end(list);
+
+			return result;
+		}
+
+		// safe writeln
+
+		static inline size_t safe_writeln_valist(FILE *file, const char *fmt, va_list list)
+		{
+			char *pntr;
+			size_t size;
+			size_t write_number;
+
+			safe_malloc_format_valist(pntr, size, fmt, list);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return 0;
+
+			pntr[size - 1] = '\n';
+			write_number = fwrite(pntr, 1, size, file);
+			free(pntr);
+
+			if (write_number != size)
+			{
+				err::set(err::FWRITE);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+			return write_number;
+		}
+
+		static inline size_t safe_writeln(FILE *file, const char *fmt, ...)
+		{
+			va_list list;
+			size_t write_number;
+
+			va_start(list, fmt);
+			write_number = safe_writeln_valist(file, fmt, list);
+			va_end(list);
+
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
 		}
 
 		// write
@@ -201,9 +230,11 @@ namespace scl
 				return true;
 			}
 
+			size -= 1;
 			write_number = fwrite(pntr, 1, size, file);
 			free(pntr);
-			return write_number == size;
+
+			return write_number != size;
 		}
 
 		static inline bool write(FILE *file, size_t &write_number, const char *fmt, ...)
@@ -230,6 +261,7 @@ namespace scl
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
 
+			size -= 1;
 			write_number = fwrite(pntr, 1, size, file);
 			free(pntr);
 

@@ -189,7 +189,8 @@ namespace scl
 			inline void write_exit(FILE *file = nullptr)
 			{
 				write(file);
-				exit(1);
+				if (num != SUCCESS) 
+					exit(1);
 			}
 		};
 #pragma pack(pop)
