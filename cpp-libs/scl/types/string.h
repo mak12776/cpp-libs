@@ -79,8 +79,8 @@ namespace scl
 
 			len = new_size - 1;
 			size = new_size;
-
 			char *new_pntr = pntr;
+
 			for (c_string_t string : list)
 			{
 				memcpy(new_pntr, string.pntr, string.len);
