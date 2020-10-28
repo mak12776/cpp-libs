@@ -148,6 +148,46 @@ namespace scl
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
+		// writeln
+
+		static inline bool writeln_valist(FILE *file, size_t &write_number, const char *fmt, va_list list)
+		{
+			va_list list_copy;
+
+			char *pntr;
+			size_t len;
+
+			va_copy(list_copy, list);
+			if (get_len_valist(len, fmt, list_copy))
+			{
+				write_number = 0;
+				return true;
+			}
+
+			if (len == SIZE_MAX)
+			{
+				write_number = 0;
+				return true;
+			}
+			len += 1;
+
+			pntr = (char *)malloc(len);
+			if (pntr == nullptr)
+			{
+				write_number = 0;
+				return true;
+			}
+			
+			if (format_valist(pntr, len, fmt, list))
+			{
+				write_number = 0;
+				free(pntr);
+				return true;
+			}
+
+
+		}
+
 		// write
 
 		static inline bool write_valist(FILE *file, size_t &write_number, const char *fmt, va_list list)

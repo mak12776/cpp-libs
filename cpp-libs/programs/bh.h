@@ -126,6 +126,8 @@ namespace bh
 
 		printf("file size: %zu (%zu bits)\n", buffer.size, buffer_bits);
 
+
+
 	}
 
 	static inline int main(int argc, const char **argv)

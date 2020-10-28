@@ -74,15 +74,18 @@ namespace scl
 			const char *function_name;
 		};
 
-		template <size_t _size>
+		template <size_t _array_size>
 		struct err_t
 		{
 			num_t num = num_t::SUCCESS;
 			size_t array_index = 0;
-			info_t info_array[_size];
+
 			FILE *log_file = stderr;
+			info_t info_array[_array_size];
 
 			// functions
+
+			inline constexpr num_t &get_num() { return num; }
 			
 			inline void set(num_t errnum) { num = errnum; }
 			inline bool test(num_t errnum) { return num == errnum; }
@@ -95,7 +98,7 @@ namespace scl
 			inline void push_file_info(const char *file_name, uint64_t line_number,
 				const char *function_name)
 			{
-				if (array_index != _size)
+				if (array_index != _array_size)
 				{
 					info_array[array_index].file_name = file_name;
 					info_array[array_index].line_number = line_number;
@@ -197,7 +200,6 @@ namespace scl
 
 		typedef err_t<default_array_size> default_err_t;
 		default_err_t default_err;
-
 
 		// global functions
 
