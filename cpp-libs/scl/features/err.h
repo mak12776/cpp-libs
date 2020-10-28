@@ -81,6 +81,8 @@ namespace scl
 			size_t array_index = 0;
 			info_t info_array[_size];
 			FILE *log_file = stderr;
+
+			// functions
 			
 			inline void set(num_t errnum) { num = errnum; }
 			inline bool test(num_t errnum) { return num == errnum; }
@@ -180,6 +182,12 @@ namespace scl
 				write_number += write_traceback(file);
 				return write_number;
 			}
+
+			inline void write_exit(FILE *file = nullptr)
+			{
+				write(file);
+				exit(1);
+			}
 		};
 #pragma pack(pop)
 
@@ -215,6 +223,7 @@ namespace scl
 
 		static inline size_t write_traceback(FILE *file = nullptr) { return default_err.write_traceback(file); }
 		static inline size_t write(FILE *file = nullptr) { return default_err.write(file); }
+		static inline void write_exit(FILE *file = nullptr) { default_err.write_exit(file); }
 
 #if SCL_ERR_PRINT
 		static inline int print_status()

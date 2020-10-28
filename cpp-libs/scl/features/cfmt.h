@@ -237,9 +237,9 @@ namespace scl
 			ubyte *buffer;
 			size_t write_number;
 
-			if (width == 0) width = DEFAULT_WIDTH;
+			width = (width == 0) ? DEFAULT_WIDTH : width;
 
-			buffer = mem::malloc_array<ubyte>(width + 1);
+			buffer = (ubyte *)mem::safe_malloc(width + 1);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
 
