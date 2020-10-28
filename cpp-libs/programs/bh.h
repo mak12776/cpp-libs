@@ -73,27 +73,19 @@ namespace bh
 	// main functions
 
 	template <size_t size, typename data_type = get_data_type<size>>
-	void count_primary_size(ubuffer_t &buffer, count_t<size> &result)
-	{
-		data_type *pntr = (data_type *)buffer.pntr;
-		data_type *end = pntr + (buffer.size / sizeof(data_type));
-
-		while (pntr != end)
-			result.append_data_count(*(pntr++));
-
-		result.remaining.size = buffer.size % sizeof(data_type);
-		if (result.remaining.size)
-			memcpy(&result.remaining.value, end, result.remaining.size);
-	}
-
-	template <size_t size, typename data_type = get_data_type<size>>
 	void count_size(ubuffer_t &buffer, count_t<size> &result)
 	{
-		count_t<size> result;
-
-		if constexpr (size == sizeof(data_type))
+		if constexpr (size == (sizeof(data_type) * 8))
 		{
-			count_primary_size(buffer, result);
+			data_type *pntr = (data_type *)buffer.pntr;
+			data_type *end = pntr + (buffer.size / sizeof(data_type));
+
+			while (pntr != end)
+				result.append_data_count(*(pntr++));
+
+			result.remaining.size = buffer.size % sizeof(data_type);
+			if (result.remaining.size)
+				memcpy(&result.remaining.value, end, result.remaining.size);
 		}
 		else
 		{
@@ -109,6 +101,7 @@ namespace bh
 		m_string_t path;
 		ubuffer_t buffer;
 		size_t buffer_bits;
+		count_t<64> count;
 
 		path.malloc_cat({ parent_folder, sep, name });
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
@@ -126,7 +119,9 @@ namespace bh
 
 		printf("file size: %zu (%zu bits)\n", buffer.size, buffer_bits);
 
-
+		count_size(buffer, count);
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			return;
 	}
 
 	static inline int main(int argc, const char **argv)
@@ -138,7 +133,6 @@ namespace bh
 			printf("usage: %s [FILENAME]\n", main_name);
 			return 0;
 		}
-
 	}
 
 
