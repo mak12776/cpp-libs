@@ -17,15 +17,32 @@ namespace bh
 	template <typename data_type>
 	struct data_count_t
 	{
+		// members
+		
 		data_type data;
 		size_t count;
 
-		static int compare(const void *a, const void *b);
+		// functions
+
+		inline int compare(const void * a, const void * b)
+		{
+			const data_count_t<data_type> *pntr_a =
+				static_cast<const data_count_t<data_type> *>(a);
+			const data_count_t<data_type> *pntr_b =
+				static_cast<const data_count_t<data_type> *>(b);
+
+			if (pntr_a->count < pntr_b->count) return -1;
+			if (pntr_a->count > pntr_b->count) return 1;
+			return 0;
+
+		}
 	};
 
 	template <typename data_type>
 	struct remaining_t
 	{
+		// members
+
 		data_type value;
 		ubyte size;
 	};
@@ -33,42 +50,29 @@ namespace bh
 	template <size_t size, typename data_type = get_data_type<size>>
 	struct count_t
 	{
+		// members
+
 		std::vector<data_count_t<data_type>> data_counts;
 		remaining_t<data_type> remaining;
 
+		// functions
+
 		constexpr size_t get_size() { return size; }
-		inline void append_data_count(data_type data);
+
+		inline void append_data_count(data_type data)
+		{
+			for (size_t len = 0; len < data_counts.size(); len += 1)
+			{
+				if (data_counts[len].data == data)
+				{
+					data_counts[len].count += 1;
+					return;
+				}
+			}
+			data_counts.push_back(data_count_t<data_type>{data, 1});
+		}
 	};
 #pragma pack(pop)
-
-	// functions
-
-	template<typename data_type>
-	inline int data_count_t<data_type>::compare(const void * a, const void * b)
-	{
-		const data_count_t<data_type> *pntr_a =
-			static_cast<const data_count_t<data_type> *>(a);
-		const data_count_t<data_type> *pntr_b =
-			static_cast<const data_count_t<data_type> *>(b);
-
-		if (pntr_a->count < pntr_b->count) return -1;
-		if (pntr_a->count > pntr_b->count) return 1;
-		return 0;
-
-	}
-	template <size_t size, typename data_type>
-	inline void count_t<size, data_type>::append_data_count(data_type data)
-	{
-		for (size_t len = 0; len < data_counts.size(); len += 1)
-		{
-			if (data_counts[len].data == data)
-			{
-				data_counts[len].count += 1;
-				return;
-			}
-		}
-		data_counts.push_back(data_count_t<data_type>{data, 1});
-	}
 
 	// main functions
 
@@ -122,6 +126,8 @@ namespace bh
 		count_size(buffer, count);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
+
+
 	}
 
 	static inline int main(int argc, const char **argv)
