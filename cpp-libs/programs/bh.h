@@ -3,6 +3,8 @@
 #include "../scl/all.h"
 #include "../clib.h"
 
+#include <set>
+
 namespace bh
 {
 	using namespace scl;
@@ -13,7 +15,6 @@ namespace bh
 		std::conditional_t<(size <= 16), uint16_t,
 		std::conditional_t<(size <= 32), uint32_t, uint64_t>>>;
 
-#pragma pack(push, 1)
 	template <typename data_type>
 	struct data_count_t
 	{
@@ -22,9 +23,14 @@ namespace bh
 		data_type data;
 		size_t count;
 
+		bool operator<(const data_count_t &other)
+		{
+			return this->count < other.count;
+		}
+
 		// functions
 
-		inline int compare(const void * a, const void * b)
+		static inline int compare(const void * a, const void * b)
 		{
 			const data_count_t<data_type> *pntr_a =
 				static_cast<const data_count_t<data_type> *>(a);
@@ -52,7 +58,7 @@ namespace bh
 	{
 		// members
 
-		std::vector<data_count_t<data_type>> data_counts;
+		std::set<data_count_t<data_type>> data_counts;
 		remaining_t<data_type> remaining;
 
 		// functions
@@ -61,22 +67,15 @@ namespace bh
 
 		inline void append_data_count(data_type data)
 		{
-			for (size_t len = 0; len < data_counts.size(); len += 1)
-			{
-				if (data_counts[len].data == data)
-				{
-					data_counts[len].count += 1;
-					return;
-				}
-			}
+			if (data_counts.find(data) != data_counts.cend())
+				return;
 			data_counts.push_back(data_count_t<data_type>{data, 1});
 		}
 	};
-#pragma pack(pop)
 
 	// main functions
 
-	static inline constexpr size_t safe_eight_time(size_t size)
+	static inline constexpr size_t safe_eight_times(size_t size)
 	{
 		constexpr size_t mask = 0xE0 << (size_bytes - 1);
 		if (size & mask)
@@ -96,7 +95,10 @@ namespace bh
 			data_type *end = pntr + (buffer.size / sizeof(data_type));
 
 			while (pntr != end)
+			{
+				printf("here");
 				result.append_data_count(*(pntr++));
+			}
 
 			result.remaining.size = buffer.size % sizeof(data_type);
 			if (result.remaining.size)
