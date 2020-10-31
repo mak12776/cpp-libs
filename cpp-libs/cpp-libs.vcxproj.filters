@@ -117,6 +117,9 @@
     <ClInclude Include="scl\features\headers\h_cfmt.h">
       <Filter>Header Files\scl\features\headers</Filter>
     </ClInclude>
+    <ClInclude Include="programs\bh_old.h">
+      <Filter>Header Files\programs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

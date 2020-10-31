@@ -5,6 +5,10 @@ namespace scl
 	typedef int8_t byte;
 	typedef uint8_t ubyte;
 
+#define BYTE_MAX	INT8_MAX
+#define BYTE_MIN	INT8_MIN
+#define UBYTE_MAX	UINT8_MAX
+
 	template <typename byte_type>
 	struct base_buffer_t
 	{
@@ -44,11 +48,6 @@ namespace scl
 				|= ((uintmax_t)1 << remaining);
 		}
 	};
-
-#define BYTE_MAX	INT8_MAX
-#define BYTE_MIN	INT8_MIN
-#define UBYTE_MAX	UINT8_MAX
-
 #if SIZE_MAX == UINT8_MAX
 	typedef int8_t ssize_t;
 
