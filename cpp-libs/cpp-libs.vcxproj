@@ -175,6 +175,8 @@
     <ClInclude Include="scl\rand.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="scl\types\all_types.h" />
+    <ClInclude Include="scl\types\bitset.h" />
+    <ClInclude Include="scl\types\buffer.h" />
     <ClInclude Include="scl\types\linked_array.h" />
     <ClInclude Include="scl\types\string.h" />
     <ClInclude Include="winapi\all.h" />

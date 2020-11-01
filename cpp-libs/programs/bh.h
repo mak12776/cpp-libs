@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../scl/all.h"
-#include "../clib.h"
 
 #include <set>
 
@@ -67,9 +66,7 @@ namespace bh
 
 		inline void append_data_count(data_type data)
 		{
-			if (data_counts.find(data) != data_counts.cend())
-				return;
-			data_counts.push_back(data_count_t<data_type>{data, 1});
+			
 		}
 	};
 

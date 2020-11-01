@@ -117,6 +117,12 @@
     <ClInclude Include="scl\builtins.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="scl\types\buffer.h">
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\bitset.h">
+      <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
