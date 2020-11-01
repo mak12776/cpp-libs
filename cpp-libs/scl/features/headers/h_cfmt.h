@@ -11,12 +11,17 @@ namespace scl
 		static inline bool format_valist(char *buffer, size_t buffer_size, const char *fmt, va_list list);
 		static inline void safe_format_valist(char *buffer, size_t buffer_size, const char *fmt, va_list list);
 
-		static inline bool malloc_format_valist(char *&pntr, size_t &size, const char *fmt, va_list list);
+		static inline bool malloc_format_valist(char *&buffer, size_t &buffer_pntr, const char *fmt, va_list list);
+
 		static inline void safe_malloc_format_valist(char *&buffer, size_t &buffer_size, const char *fmt, va_list list);
 		static inline void safe_malloc_format(char *&buffer, size_t &buffer_size, const char *fmt, ...);
 		
-		static inline bool write_valist(FILE *file, size_t &write_number, const char *fmt, va_list list);
-		static inline bool write(FILE *file, size_t &write_number, const char *fmt, ...);
+		static inline size_t writeln_check_valist(FILE *file, bool &err, const char *fmt, va_list list);
+		static inline size_t writeln_check(FILE *file, bool &err, const char *fmt, ...);
+
+		static inline size_t writeln_valist(FILE *file, const char *fmt, va_list list);
+		static inline size_t writeln(FILE *file, const char *fmt, ...);
+
 		static inline size_t safe_write_valist(FILE *file, const char *fmt, va_list list);
 		static inline size_t safe_write(FILE *file, const char *fmt, ...);
 

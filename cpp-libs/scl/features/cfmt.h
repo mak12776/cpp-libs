@@ -150,7 +150,7 @@ namespace scl
 
 		// writeln check
 
-		static inline size_t writeln_check(FILE *file, bool &err, const char *fmt, va_list list)
+		static inline size_t writeln_check_valist(FILE *file, bool &err, const char *fmt, va_list list)
 		{
 			char *pntr;
 			size_t size;
@@ -170,36 +170,36 @@ namespace scl
 			return write_number;
 		}
 
-		// writeln
-
-		static inline bool writeln_valist(FILE *file, size_t &write_number, const char *fmt, va_list list)
+		static inline size_t writeln_check(FILE *file, bool &err, const char *fmt, ...)
 		{
-			char *pntr;
-			size_t size;
-
-			if (malloc_format_valist(pntr, size, fmt, list))
-			{
-				write_number = 0;
-				return true;
-			}
-
-			pntr[size - 1] = '\n';
-			write_number = fwrite(pntr, 1, size, file);
-			free(pntr);
-
-			return write_number != size;
-		}
-
-		static inline bool writeln(FILE *file, size_t &write_number, const char *fmt, ...)
-		{
-			bool result;
 			va_list list;
+			size_t write_number;
 
 			va_start(list, fmt);
-			result = writeln_valist(file, write_number, fmt, list);
+			write_number = writeln_check_valist(file, err, fmt, list);
 			va_end(list);
 
-			return result;
+			return write_number;
+		}
+
+		// writeln
+
+		static inline size_t writeln_valist(FILE *file, const char *fmt, va_list list)
+		{
+			bool err;
+			return writeln_check_valist(file, err, fmt, list);
+		}
+
+		static inline size_t writeln(FILE *file, const char *fmt, ...)
+		{
+			va_list list;
+			size_t write_number;
+
+			va_start(list, fmt);
+			write_number = writeln_valist(file, fmt, list);
+			va_end(list);
+
+			return write_number;
 		}
 
 		// safe writeln
@@ -277,18 +277,8 @@ namespace scl
 		
 		static inline size_t write_valist(FILE *file, const char *fmt, va_list list)
 		{
-			char *pntr;
-			size_t size;
-			size_t write_number;
-
-			if (malloc_format_valist(pntr, size, fmt, list))
-				return 0;
-
-			size -= 1;
-			write_number = fwrite(pntr, 1, size, file);
-			free(pntr);
-
-			return write_number;
+			bool err;
+			return write_check_valist(file, err, fmt, list);
 		}
 
 		static inline size_t write(FILE *file, const char *fmt, ...)

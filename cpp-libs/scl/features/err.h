@@ -124,12 +124,12 @@ namespace scl
 				size_t total = 0;
 
 				file = (file == nullptr) ? log_file : file;
-				cfmt::write(file, write_number,
+				write_number = cfmt::write(file,
 					"Traceback (most recent call last):\n");
 
 				for (size_t index = array_index - 1; index != SIZE_MAX; index -= 1)
 				{
-					cfmt::write(file, write_number, " %s: %" PRIuLINE ": %s\n", 
+					write_number += cfmt::write(file, " %s: %" PRIuLINE ": %s\n", 
 						info_array[index].file_name,
 						info_array[index].line_number,
 						info_array[index].function_name);
@@ -165,8 +165,8 @@ namespace scl
 				case scl::err::PRINTF:
 				case scl::err::UNDEFINED_BEHAVIOR:
 				case scl::err::INVALID_FILE_STRUCTURE:
-					cfmt::write(file, write_number, "error: %s\n", 
-						to_string(num));
+					write_number += 
+						cfmt::write(file, "error: %s\n", to_string(num));
 					break;
 
 				case scl::err::FOPEN:
@@ -174,12 +174,13 @@ namespace scl
 				case scl::err::FSEEK:
 				case scl::err::FREAD:
 				case scl::err::FWRITE:
-					cfmt::write(file, write_number, "error: %s: %s\n", 
-						to_string(num), strerror(errno));
+					write_number += 
+						cfmt::write(file, "error: %s: %s\n", to_string(num), strerror(errno));
 					break;
 				
 				default:
-					cfmt::write(file, write_number, "error: unknown error!\n", to_string(num));
+					write_number +=
+						cfmt::write(file, "error: unknown error!\n", to_string(num));
 				}	
 
 				write_number += write_traceback(file);

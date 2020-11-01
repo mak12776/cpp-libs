@@ -21,10 +21,10 @@ namespace bh
 		
 		data_type data;
 		size_t count;
-
-		bool operator<(const data_count_t &other)
+		
+		inline bool operator=(const data_count_t &other)
 		{
-			return this->count < other.count;
+			return this->data = other.data;
 		}
 
 		// functions
@@ -56,8 +56,7 @@ namespace bh
 	struct count_t
 	{
 		// members
-		const size_t width = data_width;
-		std::set<data_count_t<data_type>> data_counts;
+		std::vector<data_count_t<data_type>> data_counts;
 		remaining_t<data_type> remaining;
 
 		// functions
