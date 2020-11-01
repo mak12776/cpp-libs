@@ -19,9 +19,6 @@
     <Filter Include="Header Files\programs">
       <UniqueIdentifier>{134fe2ca-de08-4792-b645-e6336848e710}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\types">
-      <UniqueIdentifier>{2860705e-3e8a-4e9e-95d5-27be0faccc09}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\scl\features">
       <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
     </Filter>
@@ -30,6 +27,9 @@
     </Filter>
     <Filter Include="Header Files\scl\features\headers">
       <UniqueIdentifier>{668c8b50-62c8-4ae0-9aa8-6215a14101df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scl\types">
+      <UniqueIdentifier>{2860705e-3e8a-4e9e-95d5-27be0faccc09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -108,9 +108,6 @@
     <ClInclude Include="winapi\all.h">
       <Filter>Header Files\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\builtins.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="scl\features\cfmt.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
@@ -119,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="programs\bh_old.h">
       <Filter>Header Files\programs</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\builtins.h">
+      <Filter>Header Files\scl\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
