@@ -154,12 +154,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="clib.h" />
     <ClInclude Include="programs\bh.h" />
     <ClInclude Include="programs\bh_old.h" />
     <ClInclude Include="programs\counter.h" />
     <ClInclude Include="programs\old_codes.h" />
     <ClInclude Include="scl\all.h" />
+    <ClInclude Include="scl\builtins.h" />
     <ClInclude Include="scl\exit_codes.h" />
     <ClInclude Include="scl\features\all_features.h" />
     <ClInclude Include="scl\features\cfmt.h" />
@@ -175,7 +175,6 @@
     <ClInclude Include="scl\rand.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="scl\types\all_types.h" />
-    <ClInclude Include="scl\types\builtins.h" />
     <ClInclude Include="scl\types\linked_array.h" />
     <ClInclude Include="scl\types\string.h" />
     <ClInclude Include="winapi\all.h" />

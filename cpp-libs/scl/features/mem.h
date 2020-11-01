@@ -103,9 +103,6 @@ namespace scl
 			pntr = (data_type*)new_pntr;
 		}
 
-		static inline void free(void *pntr)
-		{ global_mem.free(pntr); }
-
 		template <typename data_type>
 		static inline data_type *malloc_array(size_t size)
 		{

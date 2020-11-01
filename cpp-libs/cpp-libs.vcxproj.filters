@@ -36,9 +36,6 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="clib.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scl\exit_codes.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -117,8 +114,8 @@
     <ClInclude Include="programs\bh_old.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
-    <ClInclude Include="scl\types\builtins.h">
-      <Filter>Header Files\scl\types</Filter>
+    <ClInclude Include="scl\builtins.h">
+      <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
