@@ -52,17 +52,20 @@ namespace bh
 		ubyte size;
 	};
 
-	template <size_t size, typename data_type = get_data_type<size>>
+	template <size_t data_width, typename data_type = get_data_type<data_width>>
 	struct count_t
 	{
 		// members
-
+		const size_t width = data_width;
 		std::set<data_count_t<data_type>> data_counts;
 		remaining_t<data_type> remaining;
 
 		// functions
 
-		constexpr size_t get_size() { return size; }
+		constexpr size_t width()
+		{
+			return data_width;
+		}
 
 		inline void append_data_count(data_type data)
 		{
@@ -71,17 +74,6 @@ namespace bh
 	};
 
 	// main functions
-
-	static inline constexpr size_t safe_eight_times(size_t size)
-	{
-		constexpr size_t mask = 0xE0 << (size_bytes - 1);
-		if (size & mask)
-		{
-			err::set(err::INT_OVERFLOW);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-		}
-		return size << 3;
-	}
 
 	template <size_t size, typename data_type = get_data_type<size>>
 	void count_size(ubuffer_t &buffer, count_t<size> &result)
@@ -92,10 +84,7 @@ namespace bh
 			data_type *end = pntr + (buffer.size / sizeof(data_type));
 
 			while (pntr != end)
-			{
-				printf("here");
 				result.append_data_count(*(pntr++));
-			}
 
 			result.remaining.size = buffer.size % sizeof(data_type);
 			if (result.remaining.size)
@@ -149,4 +138,15 @@ namespace bh
 		}
 	}
 
+
+	static inline constexpr size_t safe_eight_times(size_t size)
+	{
+		constexpr size_t mask = 0xE0 << (size_bytes - 1);
+		if (size & mask)
+		{
+			err::set(err::INT_OVERFLOW);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
+		return size << 3;
+	}
 }
