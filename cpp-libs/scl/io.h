@@ -246,6 +246,15 @@ namespace scl
 			return write_number;
 		}
 
+		// 
+
+#if defined(_WIN32) || defined(_WIN64)
+		const char *sep = "\\";
+#elif defined(__linux__)
+		const char *sep = "/";
+#else
+#error Unknown operating system
+#endif
 		// buffered byte reader
 
 #ifdef SCL_EXPERIMENTAL

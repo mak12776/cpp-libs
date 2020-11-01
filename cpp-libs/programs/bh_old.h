@@ -164,7 +164,7 @@ size_t save_data(c_string_t file_name, c_string_t file_ext,
 	size_t total_write;
 	cleaner::cleaner_t<2> clean_ups;
 
-	data_name.malloc_cat({ file_name, file_ext });
+	data_name.safe_malloc_cat({ file_name, file_ext });
 	if (err::check())
 	{
 		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
@@ -197,7 +197,7 @@ size_t load_data(c_string_t file_name, c_string_t file_ext,
 	size_t total_read;
 	cleaner::cleaner_t<2> clean_ups;
 
-	data_name.malloc_cat({ file_name, file_ext });
+	data_name.safe_malloc_cat({ file_name, file_ext });
 	if (err::check())
 	{
 		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
@@ -279,7 +279,7 @@ void compress(const char *file_name_pntr)
 	size_t file_bits;
 
 	// malloc log_file_name
-	log_file_name.malloc_cat({ file_name, log_file_ext });
+	log_file_name.safe_malloc_cat({ file_name, log_file_ext });
 	if (err::check())
 	{
 		printf("error: can't malloc memory for log file name.");
@@ -290,7 +290,7 @@ void compress(const char *file_name_pntr)
 	cleaner::add_free(log_file_name.pntr);
 
 	// malloc archive_name
-	archive_name.malloc_cat({ file_name, archive_ext });
+	archive_name.safe_malloc_cat({ file_name, archive_ext });
 	if (err::check())
 	{
 		printf("error: can't malloc memory for archive file name.\n");

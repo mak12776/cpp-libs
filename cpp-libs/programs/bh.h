@@ -108,8 +108,6 @@ namespace bh
 		}
 	}
 
-	c_string_t sep("\\");
-
 	static inline void count_file_name(c_string_t &parent_folder, c_string_t &name)
 	{
 		m_string_t path;
@@ -117,7 +115,7 @@ namespace bh
 		size_t buffer_bits;
 		count_t<64> count;
 
-		path.malloc_cat({ parent_folder, sep, name });
+		path.safe_malloc_cat({ parent_folder, io::sep, name });
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
