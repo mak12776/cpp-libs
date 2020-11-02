@@ -142,7 +142,7 @@ namespace scl
 
 			inline size_t write(FILE *file = nullptr)
 			{
-				size_t write_number;
+				size_t write_number = 0;
 				file = (file == nullptr) ? log_file : file;
 
 				switch (num)

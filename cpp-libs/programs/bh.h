@@ -21,11 +21,6 @@ namespace bh
 		
 		data_type data;
 		size_t count;
-		
-		inline bool operator=(const data_count_t &other)
-		{
-			return this->data = other.data;
-		}
 
 		// functions
 
@@ -56,7 +51,7 @@ namespace bh
 	struct count_t
 	{
 		// members
-		std::vector<data_count_t<data_type>> data_counts;
+		std::vector<data_count_t<data_type>> data_count_vector;
 		remaining_t<data_type> remaining;
 
 		// functions
@@ -68,7 +63,15 @@ namespace bh
 
 		inline void append_data_count(data_type data)
 		{
-			
+			for (size_t index = 0; index < data_count_vector.size(); index += 1)
+			{
+				if (data_count_vector[index].data == data)
+				{
+					data_count_vector[index].count += 1;
+					return;
+				}
+			}
+			data_count_vector.insert(data_count_vector.cend(), { data, 1 });
 		}
 	};
 
@@ -96,12 +99,13 @@ namespace bh
 		}
 	}
 
+	template <size_t size>
 	static inline void count_file_name(c_string_t &parent_folder, c_string_t &name)
 	{
 		m_string_t path;
 		ubuffer_t buffer;
 		size_t buffer_bits;
-		count_t<64> count;
+		count_t<size> count;
 
 		path.safe_malloc_cat({ parent_folder, io::sep, name });
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
@@ -123,7 +127,7 @@ namespace bh
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
-
+		printf("finished.\n");
 	}
 
 	static inline int main(int argc, const char **argv)

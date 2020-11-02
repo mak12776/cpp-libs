@@ -11,23 +11,23 @@ struct data_64bit_count_t
 
 struct counts_64bit_t
 {
-	std::vector<data_64bit_count_t> data_counts;
+	std::vector<data_64bit_count_t> data_count_vector;
 	std::vector<uint8_t> remaining;
 
-	counts_64bit_t(size_t size) : data_counts(size)
+	counts_64bit_t(size_t size) : data_count_vector(size)
 	{ }
 
 	inline void append_data_count(uint64_t data)
 	{
-		for (size_t len = 0; len < data_counts.size(); len += 1)
+		for (size_t len = 0; len < data_count_vector.size(); len += 1)
 		{
-			if (data_counts[len].data = data)
+			if (data_count_vector[len].data = data)
 			{
-				data_counts[len].result += 1;
+				data_count_vector[len].result += 1;
 				return;
 			}
 		}
-		data_counts.push_back({ data, 1 });
+		data_count_vector.push_back({ data, 1 });
 	}
 };
 #pragma pack(pop)
@@ -71,7 +71,7 @@ static inline size_t fwrite_counts(FILE *file, count_t<data_type> &counts)
 	if (err::check()) return total_write;
 
 	// data_counts.size()
-	total_write += io::safe_fwrite_data(counts.data_counts.size(), file);
+	total_write += io::safe_fwrite_data(counts.data_count_vector.size(), file);
 	if (err::check()) return total_write;
 
 	// remaining.size()
@@ -79,8 +79,8 @@ static inline size_t fwrite_counts(FILE *file, count_t<data_type> &counts)
 	if (err::check) return total_write;
 
 	// data_counts.data()
-	total_write += io::safe_fwrite(counts.data_counts.data(),
-		sizeof(data_type) * counts.data_counts.size(), file);
+	total_write += io::safe_fwrite(counts.data_count_vector.data(),
+		sizeof(data_type) * counts.data_count_vector.size(), file);
 	if (err::check()) return total_write;
 
 	// remaining.data()
@@ -124,20 +124,20 @@ static inline size_t fread_counts(FILE *file, count_t<data_type> &counts)
 	// data_counts.size()
 	total_read += io::safe_fread_data(vector_size, file);
 	if (err::check()) return total_read;
-	counts.data_counts.resize(vector_size);
+	counts.data_count_vector.resize(vector_size);
 
 	// remaining.size()
 	total_read += io::safe_fread_data(vector_size, file);
 	counts.remaining.resize(vector_size);
 
 	// data_counts.data()
-	total_read += io::safe_fread(counts.data_counts.data(),
-		sizeof(data_type) * counts.data_counts.size(), file);
+	total_read += io::safe_fread(counts.data_count_vector.data(),
+		sizeof(data_type) * counts.data_count_vector.size(), file);
 	if (err::check()) return total_read;
 
 	// remaining.data()
-	total_read += io::safe_fread(counts.data_counts.data(),
-		sizeof(data_type) * counts.data_counts.size(), file);
+	total_read += io::safe_fread(counts.data_count_vector.data(),
+		sizeof(data_type) * counts.data_count_vector.size(), file);
 
 	return total_read;
 }
@@ -242,7 +242,7 @@ count_t<size> count_and_sort_bits(ubuffer_t &buffer)
 	result = count_size<size>(buffer);
 	// count_bits will not failed.
 
-	std::qsort(result.data_counts.data(), result.data_counts.size(),
+	std::qsort(result.data_count_vector.data(), result.data_count_vector.size(),
 		sizeof(data_count_t<data_type>), data_count_t<data_type>::compare);
 
 	return result;
@@ -353,7 +353,7 @@ void compress(const char *file_name_pntr)
 	printf("done\n");
 
 #if 0
-	for (auto iter = counts.data_counts.cbegin(); iter < counts.data_counts.cend(); iter++)
+	for (auto iter = counts.data_count_vector.cbegin(); iter < counts.data_count_vector.cend(); iter++)
 		printf("%016llx: %zu\n", iter->data, iter->result);
 #endif
 
