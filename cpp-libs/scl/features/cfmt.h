@@ -148,9 +148,9 @@ namespace scl
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
-		// writeln check
+		// check writeln
 
-		static inline size_t writeln_check_valist(FILE *file, bool &err, const char *fmt, va_list list)
+		static inline size_t check_writeln_valist(bool &err, FILE *file, const char *fmt, va_list list)
 		{
 			char *pntr;
 			size_t size;
@@ -170,13 +170,13 @@ namespace scl
 			return write_number;
 		}
 
-		static inline size_t writeln_check(FILE *file, bool &err, const char *fmt, ...)
+		static inline size_t check_writeln(bool &err, FILE *file, const char *fmt, ...)
 		{
 			va_list list;
 			size_t write_number;
 
 			va_start(list, fmt);
-			write_number = writeln_check_valist(file, err, fmt, list);
+			write_number = check_writeln_valist(file, err, fmt, list);
 			va_end(list);
 
 			return write_number;
@@ -187,7 +187,7 @@ namespace scl
 		static inline size_t writeln_valist(FILE *file, const char *fmt, va_list list)
 		{
 			bool err;
-			return writeln_check_valist(file, err, fmt, list);
+			return check_writeln_valist(file, err, fmt, list);
 		}
 
 		static inline size_t writeln(FILE *file, const char *fmt, ...)
@@ -239,9 +239,9 @@ namespace scl
 			return write_number;
 		}
 
-		// write check
+		// check write
 
-		static inline size_t write_check_valist(FILE *file, bool &err, const char *fmt, va_list list)
+		static inline size_t check_write_valist(bool &err, FILE *file, const char *fmt, va_list list)
 		{
 			char *pntr;
 			size_t size;
@@ -261,13 +261,13 @@ namespace scl
 			return write_number;
 		}
 
-		static inline size_t write_check(FILE *file, bool &err, const char *fmt, ...)
+		static inline size_t check_write(bool &err, FILE *file, const char *fmt, ...)
 		{
 			va_list list;
 			size_t write_number;
 
 			va_start(list, fmt);
-			write_number = write_check_valist(file, err, fmt, list);
+			write_number = check_write_valist(err, file, fmt, list);
 			va_end(list);
 
 			return write_number;
@@ -278,7 +278,7 @@ namespace scl
 		static inline size_t write_valist(FILE *file, const char *fmt, va_list list)
 		{
 			bool err;
-			return write_check_valist(file, err, fmt, list);
+			return check_write_valist(err, file, fmt, list);
 		}
 
 		static inline size_t write(FILE *file, const char *fmt, ...)
@@ -324,6 +324,88 @@ namespace scl
 
 			va_start(list, fmt);
 			write_number = safe_write_valist(file, fmt, list);
+			va_end(list);
+
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
+		}
+
+		// printf functions
+
+		static inline size_t printf_valist(const char *fmt, va_list list)
+		{
+			return write_valist(stdout, fmt, list);
+		}
+
+		static inline size_t printf(const char *fmt, ...)
+		{
+			va_list list;
+			size_t write_number;
+
+			va_start(list, fmt);
+			write_number = write_valist(stdout, fmt, list);
+			va_end(list);
+
+			return write_number;
+		}
+
+		static inline size_t safe_printf_valist(const char *fmt, va_list list)
+		{
+			size_t write_number;
+			write_number = safe_write_valist(stdout, fmt, list);
+
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
+		}
+
+		static inline size_t safe_printf(const char *fmt, ...)
+		{
+			va_list list;
+			size_t write_number;
+
+			va_start(list, fmt);
+			write_number = safe_write_valist(stdout, fmt, list);
+			va_end(fmt);
+
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
+		}
+
+		// printf ln functions
+
+		static inline size_t printf_ln_valist(const char *fmt, va_list list)
+		{
+			return writeln_valist(stdout, fmt, list);
+		}
+
+		static inline size_t printf_ln(const char *fmt, ...)
+		{
+			va_list list;
+			size_t write_number;
+
+			va_start(list, fmt);
+			write_number = writeln_valist(stdout, fmt, list);
+			va_end(list);
+
+			return write_number;
+		}
+
+		static inline size_t safe_printf_ln_valist(const char *fmt, va_list list)
+		{
+			size_t write_number;
+			write_number = safe_writeln_valist(stdout, fmt, list);
+
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
+		}
+
+		static inline size_t safe_printf_ln(const char *fmt, ...)
+		{
+			va_list list;
+			size_t write_number;
+
+			va_start(list, fmt);
+			write_number = safe_writeln_valist(stdout, fmt, list);
 			va_end(list);
 
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
