@@ -123,6 +123,9 @@
     <ClInclude Include="scl\types\bitset.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
+    <ClInclude Include="scl\fs.h">
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

@@ -255,52 +255,6 @@ namespace scl
 #else
 #error Unknown operating system
 #endif
-		// buffered byte reader
-
-#ifdef SCL_EXPERIMENTAL
-		template <typename byte_t>
-		struct byte_reader_t
-		{
-			virtual void get() = 0;
-		};
-
-		template <typename byte_t, size_t buffer_size>
-		static inline void fread_byte_reader(FILE *file, byte_reader_t<byte_t> &byte_reader)
-		{
-			byte_t *pntr;
-			size_t file_size;
-			cleaner::cleaner_t<1> cleaner;
-
-			file_size = get_file_size(file);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
-			}
-
-			pntr = (byte_t *)mem::safe_malloc(buffer_size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
-			}
-			cleaner.add_free(pntr);
-
-			while (file_size >= buffer_size)
-			{
-				safe_fread(pntr, buffer_size, file);
-				if (err::check())
-				{
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					cleaner.finish();
-					return;
-				}
-				file_size -= buffer_size;
-
-
-			}
-		}
-#endif
 
 		// buffered reader
 
@@ -406,8 +360,54 @@ namespace scl
 		{
 			fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
 		}
+		
+		// deprecated structures & functions
 
-		// deprecated functions
+#ifdef SCL_EXPERIMENTAL
+		template <typename byte_t>
+		struct byte_reader_t
+		{
+			virtual void get() = 0;
+		};
+
+		template <typename byte_t, size_t buffer_size>
+		static inline void fread_byte_reader(FILE *file, byte_reader_t<byte_t> &byte_reader)
+		{
+			byte_t *pntr;
+			size_t file_size;
+			cleaner::cleaner_t<1> cleaner;
+
+			file_size = get_file_size(file);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			pntr = (byte_t *)mem::safe_malloc(buffer_size);
+			if (err::check())
+			{
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+			cleaner.add_free(pntr);
+
+			while (file_size >= buffer_size)
+			{
+				safe_fread(pntr, buffer_size, file);
+				if (err::check())
+				{
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					cleaner.finish();
+					return;
+				}
+				file_size -= buffer_size;
+
+
+			}
+		}
+#endif
+
 #if 0
 		static inline size_t fread_all(void *pntr, size_t size, FILE *stream)
 		{
