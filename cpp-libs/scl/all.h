@@ -26,6 +26,7 @@
 #include "exit_codes.h"
 #include "builtins.h"
 #include "math.h"					// <safeint.h
+#include "fs.h"						//
 #include "rand.h"
 
 #include "features/all_features.h"	// <cinttypes> <cstdio> cstdarg>
