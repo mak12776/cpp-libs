@@ -385,7 +385,7 @@ namespace scl
 			template <typename data_t>
 			inline void safe_read(data_t &data)
 			{
-				safe_read(&data, )
+				safe_read(&data, sizeof data_t);
 			}
 		};
 
@@ -463,7 +463,7 @@ namespace scl
 							return true;
 
 						file = safe_fopen(file_name, "wb");
-						if (err::check_push_file_info(__FILE, __LINE__, __FUNCTION__))
+						if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 							return true;
 
 						if (saver(file, data))
