@@ -73,6 +73,7 @@ namespace winapi
 			ul_to_ft(t1_ul, ft1);
 		}
 
+#ifdef SCL_EXPERIMENTAL
 		// print functions
 
 		inline size_t print_system_time(SYSTEMTIME &st, const char *name, FILE *stream)
@@ -109,7 +110,6 @@ namespace winapi
 			return size;
 		}
 
-#ifdef SCL_EXPERIMENTAL
 		static inline const char *asprint_system_time(SYSTEMTIME &st)
 		{
 			char *str;

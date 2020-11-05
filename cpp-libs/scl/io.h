@@ -360,6 +360,17 @@ namespace scl
 		{
 			fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
 		}
+
+		// file reader, file writer
+
+		struct file_reader_t
+		{
+			FILE *file;
+			size_t read_number;
+
+
+
+		};
 		
 		// deprecated structures & functions
 
