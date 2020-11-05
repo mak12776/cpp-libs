@@ -126,10 +126,10 @@
     <ClInclude Include="scl\fs.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="programs\huffman.h">
+    <ClInclude Include="primes.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
-    <ClInclude Include="primes.h">
+    <ClInclude Include="programs\bith.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
   </ItemGroup>
