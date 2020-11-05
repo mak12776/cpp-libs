@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="primes.h" />
     <ClInclude Include="programs\bh.h" />
     <ClInclude Include="programs\bh_old.h" />
     <ClInclude Include="programs\counter.h" />

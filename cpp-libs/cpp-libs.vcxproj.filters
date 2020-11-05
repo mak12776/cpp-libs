@@ -129,6 +129,9 @@
     <ClInclude Include="programs\huffman.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
+    <ClInclude Include="primes.h">
+      <Filter>Header Files\programs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
