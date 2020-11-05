@@ -433,6 +433,40 @@ namespace scl
 			virtual bool write(FILE *file) = 0;
 		};
 
+		static inline bool cached_function(const char *file_name, bool(*func)(cache_t &), cache_t &data)
+		{
+			FILE * file;
+			bool result;
+
+			file = safe_fopen(file_name, "rb");
+			if (err::check())
+			{
+				if (errno == ENOENT)
+				{
+					err::clear();
+					if (func(data))
+						return true;
+
+					file = safe_fopen(file_name, "wb");
+					if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+						return true;
+
+					result = data.write(file);
+					fclose(file);
+					return result;
+				}
+
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return true;
+			}
+
+			result = data.read(file);
+			fclose(file);
+			return result;
+		}
+
+		// file cache
+
 		template <typename data_type>
 		struct file_cache_t
 		{

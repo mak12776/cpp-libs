@@ -10,13 +10,13 @@ namespace scl
 
 		linked_array_node(size_t size)
 		{
-			this->pntr = mem::malloc_array<data_type>(size);
+			this->pntr = mem::safe_malloc_array<data_type>(size);
 			this->next = nullptr;
 		}
 
 		linked_array_node(size_t size, linked_array_node<data_type> *next)
 		{
-			this->pntr = mem::malloc_array<data_type>(size);
+			this->pntr = mem::safe_malloc_array<data_type>(size);
 			this->next = next;
 		}
 	};

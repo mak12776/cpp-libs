@@ -176,7 +176,7 @@ namespace scl
 			size_t write_number;
 
 			va_start(list, fmt);
-			write_number = check_write_ln_valist(file, err, fmt, list);
+			write_number = check_write_ln_valist(err, file, fmt, list);
 			va_end(list);
 
 			return write_number;
@@ -187,7 +187,7 @@ namespace scl
 		static inline size_t write_ln_valist(FILE *file, const char *fmt, va_list list)
 		{
 			bool err;
-			return check_write_ln_valist(file, err, fmt, list);
+			return check_write_ln_valist(err, file, fmt, list);
 		}
 
 		static inline size_t write_ln(FILE *file, const char *fmt, ...)

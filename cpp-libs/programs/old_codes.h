@@ -224,7 +224,7 @@ void search_offsets(const char *_file_name)
 	// breaking the file:
 	// printf("breaking up the file:");
 
-	size_t *offsets = mem::malloc_array<size_t>(maximum_count);
+	size_t *offsets = mem::safe_malloc_array<size_t>(maximum_count);
 	if (err::check())
 	{
 		printf("error: can't allocate %zu offsets.\n", maximum_count);

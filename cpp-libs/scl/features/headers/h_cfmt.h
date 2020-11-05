@@ -15,9 +15,6 @@ namespace scl
 
 		static inline void safe_malloc_format_valist(char *&buffer, size_t &buffer_size, const char *fmt, va_list list);
 		static inline void safe_malloc_format(char *&buffer, size_t &buffer_size, const char *fmt, ...);
-		
-		static inline size_t check_write_ln_valist(FILE *file, bool &err, const char *fmt, va_list list);
-		static inline size_t check_write_ln(FILE *file, bool &err, const char *fmt, ...);
 
 		static inline size_t write_ln_valist(FILE *file, const char *fmt, va_list list);
 		static inline size_t write_ln(FILE *file, const char *fmt, ...);

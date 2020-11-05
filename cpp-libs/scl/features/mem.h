@@ -104,7 +104,7 @@ namespace scl
 		}
 
 		template <typename data_type>
-		static inline data_type *malloc_array(size_t size)
+		static inline data_type *safe_malloc_array(size_t size)
 		{
 			data_type *pntr;
 
