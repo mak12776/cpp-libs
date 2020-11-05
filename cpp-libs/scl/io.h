@@ -178,7 +178,7 @@ namespace scl
 		}
 
 		template<typename data_type>
-		static inline size_t safe_fwrite_data(data_type data, FILE *stream)
+		static inline size_t safe_fwrite_data(data_type &data, FILE *stream)
 		{
 			return safe_fwrite(&data, sizeof(data_type), stream);
 		}
@@ -245,16 +245,6 @@ namespace scl
 			std::fclose(file);
 			return write_number;
 		}
-
-		// 
-
-#if defined(_WIN32) || defined(_WIN64)
-		const char *sep = "\\";
-#elif defined(__linux__)
-		const char *sep = "/";
-#else
-#error Unknown operating system
-#endif
 
 		// buffered reader
 
@@ -366,10 +356,139 @@ namespace scl
 		struct file_reader_t
 		{
 			FILE *file;
-			size_t read_number;
+			size_t total_read;
 
 
+			inline bool read(void *buffer, size_t size)
+			{
+				size_t read_number = fread(buffer, 1, size, file);
+				total_read += read_number;
+				return read_number != size;
+			}
 
+			template <typename data_t>
+			inline bool read(data_t &data)
+			{
+				return read(&data, sizeof data_t);
+			}
+
+			inline void safe_read(void *buffer, size_t size)
+			{
+				size_t read_number = fread(buffer, 1, size, file);
+				if (read_number != size)
+				{
+					err::set(err::FREAD);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+			}
+
+			template <typename data_t>
+			inline void safe_read(data_t &data)
+			{
+				safe_read(&data, )
+			}
+		};
+
+		struct file_writer_t
+		{
+			FILE *file;
+			size_t total_write;
+
+			inline bool write(void *buffer, size_t size)
+			{
+				size_t write_number = fwrite(buffer, 1, size, file);
+				total_write += write_number;
+				return write_number != size;
+			}
+
+			template <typename data_t>
+			inline bool write(data_t &data)
+			{
+				return write(&data, sizeof data_t);
+			}
+
+			inline void safe_write(void *buffer, size_t size)
+			{
+				size_t write_number = fwrite(buffer, 1, size, file);
+				total_write += write_number;
+				if (write_number != size)
+				{
+					err::set(err::FWRITE);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+			}
+
+			template <typename data_t>
+			inline void safe_write(data_t &data)
+			{
+				safe_write(&data, sizeof data_t);
+			}
+		};
+
+		// cache file
+
+		struct cache_t
+		{
+			virtual bool read(FILE *file) = 0;
+			virtual bool write(FILE *file) = 0;
+		};
+
+		template <typename data_type>
+		struct file_cache_t
+		{
+			typedef bool(&loader_t)(FILE *file, data_type &);
+			typedef bool(&saver_t)(FILE * file, data_type &);
+			typedef bool(&func_t)(data_type &);
+
+			const char *file_name;
+			loader_t loader;
+			saver_t saver;
+			func_t func;
+
+			file_cache_t(const char *name, func_t func, loader_t loader, saver_t saver)
+				: file_name(name), loader(loader), saver(saver), func(func)
+			{ }
+
+			inline bool run(data_type &data)
+			{
+				FILE *file;
+
+				file = safe_fopen(file_name, "rb");
+				if (err::check())
+				{
+					if (errno == std::ENONT)
+					{
+						err::clear();
+						if (func(data))
+							return true;
+
+						file = safe_fopen(file_name, "wb");
+						if (err::check_push_file_info(__FILE, __LINE__, __FUNCTION__))
+							return true;
+
+						if (saver(file, data))
+						{
+							fclose(file);
+							return true;
+						}
+
+						fclose(file);
+						return false;
+					}
+
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					return true;
+				}
+
+				if (loader(file, data))
+				{
+					fclose(file);
+					return true;
+				}
+
+				fclose(file);
+				return false;
+			}
 		};
 		
 		// deprecated structures & functions
