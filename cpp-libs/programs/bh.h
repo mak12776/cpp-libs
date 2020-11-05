@@ -51,6 +51,7 @@ namespace bh
 	struct count_t
 	{
 		// members
+
 		std::vector<data_count_t<data_type>> data_count_vector;
 		remaining_t<data_type> remaining;
 
