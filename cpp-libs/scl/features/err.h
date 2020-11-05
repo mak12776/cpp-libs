@@ -118,7 +118,7 @@ namespace scl
 				return false;
 			}
 
-			inline size_t write_traceback(FILE *file = nullptr)
+			inline size_t print_traceback(FILE *file = nullptr)
 			{
 				size_t write_number;
 				size_t total = 0;
@@ -140,7 +140,7 @@ namespace scl
 				return total;
 			}
 
-			inline size_t write(FILE *file = nullptr)
+			inline size_t print(FILE *file = nullptr)
 			{
 				size_t write_number = 0;
 				file = (file == nullptr) ? log_file : file;
@@ -183,13 +183,13 @@ namespace scl
 						cfmt::write(file, "error: unknown error!\n", to_string(num));
 				}	
 
-				write_number += write_traceback(file);
+				write_number += print_traceback(file);
 				return write_number;
 			}
 
-			inline void write_exit(FILE *file = nullptr)
+			inline void print_exit(FILE *file = nullptr)
 			{
-				write(file);
+				print(file);
 				if (num != SUCCESS) 
 					exit(1);
 			}
@@ -225,9 +225,9 @@ namespace scl
 			return default_err.check_push_file_info(file_name, line_number, function_name);
 		}
 
-		static inline size_t write_traceback(FILE *file = nullptr) { return default_err.write_traceback(file); }
-		static inline size_t write(FILE *file = nullptr) { return default_err.write(file); }
-		static inline void write_exit(FILE *file = nullptr) { default_err.write_exit(file); }
+		static inline size_t print_traceback(FILE *file = nullptr) { return default_err.print_traceback(file); }
+		static inline size_t print(FILE *file = nullptr) { return default_err.print(file); }
+		static inline void print_exit(FILE *file = nullptr) { default_err.print_exit(file); }
 
 #if SCL_ERR_PRINT
 		static inline int print_status()

@@ -433,7 +433,8 @@ namespace scl
 			virtual bool write(FILE *file) = 0;
 		};
 
-		static inline bool cached_function(const char *file_name, bool(*func)(cache_t &), cache_t &data)
+		template <typename data_type>
+		static inline bool cached_function(const char *file_name, bool(&func)(data_type &), data_type &data)
 		{
 			FILE * file;
 			bool result;
