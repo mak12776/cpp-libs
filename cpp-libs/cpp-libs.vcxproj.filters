@@ -126,6 +126,9 @@
     <ClInclude Include="scl\fs.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="programs\huffman.h">
+      <Filter>Header Files\programs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

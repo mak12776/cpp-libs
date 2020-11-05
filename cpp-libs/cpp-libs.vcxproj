@@ -157,6 +157,7 @@
     <ClInclude Include="programs\bh.h" />
     <ClInclude Include="programs\bh_old.h" />
     <ClInclude Include="programs\counter.h" />
+    <ClInclude Include="programs\huffman.h" />
     <ClInclude Include="programs\old_codes.h" />
     <ClInclude Include="scl\all.h" />
     <ClInclude Include="scl\builtins.h" />
