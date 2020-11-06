@@ -180,7 +180,7 @@ namespace scl
 				
 				default:
 					write_number +=
-						cfmt::write(file, "error: unknown error!\n", to_string(num));
+						cfmt::write(file, "error: unknown error!\n");
 				}	
 
 				write_number += print_traceback(file);
@@ -228,6 +228,8 @@ namespace scl
 		static inline size_t print_traceback(FILE *file = nullptr) { return default_err.print_traceback(file); }
 		static inline size_t print(FILE *file = nullptr) { return default_err.print(file); }
 		static inline void print_exit(FILE *file = nullptr) { default_err.print_exit(file); }
+
+		// deprecated functions
 
 #if SCL_ERR_PRINT
 		static inline int print_status()
