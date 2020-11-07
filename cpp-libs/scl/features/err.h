@@ -187,7 +187,7 @@ namespace scl
 				return write_number;
 			}
 
-			inline void print_exit(FILE *file = nullptr)
+			inline void check_print_exit(FILE *file = nullptr)
 			{
 				print(file);
 				if (num != SUCCESS) 
@@ -227,7 +227,7 @@ namespace scl
 
 		static inline size_t print_traceback(FILE *file = nullptr) { return default_err.print_traceback(file); }
 		static inline size_t print(FILE *file = nullptr) { return default_err.print(file); }
-		static inline void print_exit(FILE *file = nullptr) { default_err.print_exit(file); }
+		static inline void check_print_exit(FILE *file = nullptr) { default_err.check_print_exit(file); }
 
 		// deprecated functions
 

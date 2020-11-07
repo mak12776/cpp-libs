@@ -18,26 +18,23 @@ namespace bith
 
 	struct segment_buffer_t
 	{
-		size_t data_count_size;
-		size_t data_count_len;
-		size_t *count_array;
+		size_t data_bits;
+		size_t data_size;
 
 		struct
 		{
-			size_t bits;
+			size_t len;
 			size_t size;
-			struct
-			{
-				ubyte *pntr;
-				size_t size;
-			} buffer;
-		} data;
+
+			ubyte *data_pntr;
+			size_t *counts_pntr;
+		} data_counts;
 
 		struct
 		{
-			size_t bits;
-			size_t size;
 			ubyte *pntr;
+			size_t bits;
+			size_t size;
 		} remaining;
 	};
 
@@ -57,19 +54,12 @@ namespace bith
 		size_t buffer_bits;
 
 		math::safe_mul(buffer.size, (size_t)8, buffer_bits);
-
-		result.data.bits = data_bits;
-		result.data.size = (data_bits / 8) + (data_bits % 8) ? 1 : 0;
-
-		switch (result.data.bits)
-		{
-		case sizeof(uint8_t):
-		}
-
-		result.data_count_size = 0;
-		if (size_manager(result.data_count_size))
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
-		
 
+		result.data_bits = data_bits;
+		result.data_size = (data_bits / 8) + (data_bits % 8) ? 1 : 0;
+
+		
 	}
 }

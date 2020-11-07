@@ -44,6 +44,18 @@ namespace scl
 #endif
 		}
 
+		template <typename type>
+		static inline bool pow(type base, type exp, type &res)
+		{
+			while (exp != 0)
+			{
+				if (mul(base, base, base))
+					return true;
+				exp -= 1;
+			}
+			res = base;
+			return false;
+		}
 
 		// safe functions
 
@@ -71,6 +83,16 @@ namespace scl
 		static inline void safe_sub(type a, type b, type &result)
 		{
 			if (sub<type>(a, b, result))
+			{
+				err::set(err::INT_OVERFLOW);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
+
+		template <typename type>
+		static inline void safe_pow(type base, type exp, type &res)
+		{
+			if (pow<type>(base, exp, res))
 			{
 				err::set(err::INT_OVERFLOW);
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
