@@ -182,8 +182,10 @@
     <ClInclude Include="scl\types\buffer.h" />
     <ClInclude Include="scl\types\linked_array.h" />
     <ClInclude Include="scl\types\string.h" />
+    <ClInclude Include="scl\winapi\all_winapi.h" />
+    <ClInclude Include="scl\winapi\functions.h" />
+    <ClInclude Include="scl\winapi\tools.h" />
     <ClInclude Include="winapi\all.h" />
-    <ClInclude Include="winapi\functions.h" />
     <ClInclude Include="winapi\time.h" />
     <ClInclude Include="winapi\tools.h" />
     <ClInclude Include="winapi\types.h" />

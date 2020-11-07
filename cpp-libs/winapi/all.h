@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../scl/all.h"
-
 #include <Windows.h>
 
 #include <cstdint>

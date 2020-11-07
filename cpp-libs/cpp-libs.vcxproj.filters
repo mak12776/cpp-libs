@@ -22,14 +22,17 @@
     <Filter Include="Header Files\scl\features">
       <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\winapi">
-      <UniqueIdentifier>{0ac5857c-10b0-4d7f-b3f2-a9e7979942c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\scl\features\headers">
       <UniqueIdentifier>{668c8b50-62c8-4ae0-9aa8-6215a14101df}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\scl\types">
       <UniqueIdentifier>{2860705e-3e8a-4e9e-95d5-27be0faccc09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scl\winapi">
+      <UniqueIdentifier>{f5616d05-5d82-4369-bdb0-5de31847f4f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\old_winapi">
+      <UniqueIdentifier>{e758c838-21f2-409b-ad11-45fef6177456}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,23 +90,8 @@
     <ClInclude Include="programs\old_codes.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
-    <ClInclude Include="winapi\functions.h">
-      <Filter>Header Files\winapi</Filter>
-    </ClInclude>
-    <ClInclude Include="winapi\time.h">
-      <Filter>Header Files\winapi</Filter>
-    </ClInclude>
-    <ClInclude Include="winapi\types.h">
-      <Filter>Header Files\winapi</Filter>
-    </ClInclude>
-    <ClInclude Include="winapi\tools.h">
-      <Filter>Header Files\winapi</Filter>
-    </ClInclude>
     <ClInclude Include="scl\all.h">
       <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="winapi\all.h">
-      <Filter>Header Files\winapi</Filter>
     </ClInclude>
     <ClInclude Include="scl\features\cfmt.h">
       <Filter>Header Files\scl\features</Filter>
@@ -131,6 +119,27 @@
     </ClInclude>
     <ClInclude Include="programs\bith.h">
       <Filter>Header Files\programs</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\winapi\all_winapi.h">
+      <Filter>Header Files\scl\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\winapi\functions.h">
+      <Filter>Header Files\scl\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi\all.h">
+      <Filter>Header Files\old_winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi\time.h">
+      <Filter>Header Files\old_winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi\tools.h">
+      <Filter>Header Files\old_winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="winapi\types.h">
+      <Filter>Header Files\old_winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\winapi\tools.h">
+      <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

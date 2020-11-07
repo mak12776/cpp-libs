@@ -6,9 +6,9 @@ namespace scl
 	{
 		enum class job_type : uint8_t
 		{
-			FCLOSE, FREE, DELETE,
+			FCLOSE, FREE, DELETE_PNTR,
 		};
-
+		
 		struct job
 		{
 			job_type type;
@@ -51,7 +51,7 @@ namespace scl
 			{
 				if (array_index != _size)
 				{
-					jobs[array_index].type = job_type::DELETE;
+					jobs[array_index].type = job_type::DELETE_PNTR;
 					jobs[array_index].pntr = pntr;
 					array_index += 1;
 				}
@@ -71,7 +71,7 @@ namespace scl
 						free(jobs[index].pntr);
 						break;
 
-					case job_type::DELETE:
+					case job_type::DELETE_PNTR:
 						delete jobs[index].pntr;
 						break;
 					}

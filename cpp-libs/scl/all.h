@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <io.h>
+#include <Windows.h>
 
 #include <random>
 #include <cinttypes>
@@ -34,8 +35,11 @@
 #include "types/all_types.h"		// <string> "features/all_features.h"
 									// "math.h"
 
+
 #include "io.h"						// <sys/types.h> <sys/stat.h> <io.h>
 									// "features/all_features.h"
+
+#include "winapi/all_winapi.h"
 
 
 
