@@ -22,9 +22,6 @@
     <Filter Include="Header Files\scl\features">
       <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\features\headers">
-      <UniqueIdentifier>{668c8b50-62c8-4ae0-9aa8-6215a14101df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\scl\types">
       <UniqueIdentifier>{2860705e-3e8a-4e9e-95d5-27be0faccc09}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="Header Files\old_winapi">
       <UniqueIdentifier>{e758c838-21f2-409b-ad11-45fef6177456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\incomplete_scl">
+      <UniqueIdentifier>{482908f3-e496-4d76-8f23-68883c4c23fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,9 +66,6 @@
     <ClInclude Include="scl\features\fmt.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
-    <ClInclude Include="scl\features\log.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
     <ClInclude Include="scl\features\mem.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
@@ -95,9 +92,6 @@
     </ClInclude>
     <ClInclude Include="scl\features\cfmt.h">
       <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\headers\h_cfmt.h">
-      <Filter>Header Files\scl\features\headers</Filter>
     </ClInclude>
     <ClInclude Include="programs\bh_old.h">
       <Filter>Header Files\programs</Filter>
@@ -140,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="scl\winapi\tools.h">
       <Filter>Header Files\scl\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\log.h">
+      <Filter>Header Files\incomplete_scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

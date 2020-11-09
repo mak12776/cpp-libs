@@ -168,7 +168,6 @@
     <ClInclude Include="scl\features\cleaner.h" />
     <ClInclude Include="scl\features\err.h" />
     <ClInclude Include="scl\features\fmt.h" />
-    <ClInclude Include="scl\features\headers\h_cfmt.h" />
     <ClInclude Include="scl\features\log.h" />
     <ClInclude Include="scl\features\mem.h" />
     <ClInclude Include="scl\fs.h" />

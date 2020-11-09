@@ -1,3 +1,40 @@
+
+how to handle errors in c++?
+use c++ exceptions or scl err_t handling?
+
+does 'scl err_t handling' log file informations?
+how to include headers in scl?
+
+---
+
+features needed in c++:
+	err header
+	mem header
+	cleaner header
+	
+	cfmt & afmt header
+	
+not needed:
+	log header
+	
+types needed in c++:
+	buffer
+	linked array
+	strings
+
+api's needed in c++:
+	for windows: winapi
+	for linux: ?
+	for maxOS: ?
+
+other headers:
+	macros
+	io
+	math
+	fs: file systems	
+
+--- 
+
 if you want better scl interface type,
 then place template parameters inside the structures,
 like this one:
