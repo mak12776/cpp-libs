@@ -25,14 +25,14 @@
     <Filter Include="Header Files\scl\winapi">
       <UniqueIdentifier>{f5616d05-5d82-4369-bdb0-5de31847f4f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\old_winapi">
-      <UniqueIdentifier>{e758c838-21f2-409b-ad11-45fef6177456}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\incomplete_scl">
       <UniqueIdentifier>{482908f3-e496-4d76-8f23-68883c4c23fd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\scl\features">
       <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\incomplete_scl\old_winapi">
+      <UniqueIdentifier>{e758c838-21f2-409b-ad11-45fef6177456}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -90,23 +90,20 @@
     <ClInclude Include="primes.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
-    <ClInclude Include="programs\bith.h">
-      <Filter>Header Files\programs</Filter>
-    </ClInclude>
     <ClInclude Include="scl\winapi\functions.h">
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
     <ClInclude Include="winapi\all.h">
-      <Filter>Header Files\old_winapi</Filter>
+      <Filter>Header Files\incomplete_scl\old_winapi</Filter>
     </ClInclude>
     <ClInclude Include="winapi\time.h">
-      <Filter>Header Files\old_winapi</Filter>
+      <Filter>Header Files\incomplete_scl\old_winapi</Filter>
     </ClInclude>
     <ClInclude Include="winapi\tools.h">
-      <Filter>Header Files\old_winapi</Filter>
+      <Filter>Header Files\incomplete_scl\old_winapi</Filter>
     </ClInclude>
     <ClInclude Include="winapi\types.h">
-      <Filter>Header Files\old_winapi</Filter>
+      <Filter>Header Files\incomplete_scl\old_winapi</Filter>
     </ClInclude>
     <ClInclude Include="scl\winapi\tools.h">
       <Filter>Header Files\scl\winapi</Filter>
@@ -122,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="scl\types\builtins.h">
       <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="bith.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

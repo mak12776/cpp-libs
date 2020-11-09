@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../scl/all.h"
+#include "scl/all.h"
 
 namespace bith
 {
