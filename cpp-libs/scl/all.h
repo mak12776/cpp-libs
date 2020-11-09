@@ -29,9 +29,11 @@
 
 #include "types/builtins.h"
 
-#include "features/err.h"		// "features/cfmt.h"
-#include "features/cfmt.h"		// "types/builtins.h" "feautres/err.h"
+#include "features/cfmt_header.h"
+
+#include "features/err.h"		// "features/cfmt_header.h"
 #include "features/mem.h"		// "features/err.h"
+#include "features/cfmt.h"		// "types/builtins.h" "feautres/err.h" "features/mem.h"
 #include "features/cleaner.h"	// <cinttypes>
 
 #include "types/buffer.h"

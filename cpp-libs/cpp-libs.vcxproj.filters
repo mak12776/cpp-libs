@@ -123,6 +123,9 @@
     <ClInclude Include="bith.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scl\features\cfmt_header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

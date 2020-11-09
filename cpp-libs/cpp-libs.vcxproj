@@ -163,6 +163,7 @@
     <ClInclude Include="scl\all.h" />
     <ClInclude Include="scl\exit_codes.h" />
     <ClInclude Include="scl\features\cfmt.h" />
+    <ClInclude Include="scl\features\cfmt_header.h" />
     <ClInclude Include="scl\features\cleaner.h" />
     <ClInclude Include="scl\features\err.h" />
     <ClInclude Include="scl\features\fmt.h" />

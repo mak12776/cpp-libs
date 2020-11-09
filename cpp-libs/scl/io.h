@@ -247,7 +247,7 @@ namespace scl
 		{
 			byte_t *pntr;
 			size_t file_size;
-			cleaner::cleaner_t<1> cleaner;
+			cleaner::cleaner_t cleaner;
 
 			file_size = get_file_size(file);
 			if (err::check())

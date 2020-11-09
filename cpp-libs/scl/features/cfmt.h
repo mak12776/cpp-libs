@@ -226,7 +226,7 @@ namespace scl
 			return write_number;
 		}
 
-		static inline size_t safe_writeln(FILE *file, const char *fmt, ...)
+		static inline size_t safe_write_ln(FILE *file, const char *fmt, ...)
 		{
 			va_list list;
 			size_t write_number;

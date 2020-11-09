@@ -169,7 +169,7 @@ namespace scl
 				case scl::err::FREAD:
 				case scl::err::FWRITE:
 					write_number += 
-						cfmt::write(file, "error: %s: %s\n", to_string(num), strerror(errno));
+						cfmt::write(file, "error: %s: %s\n", to_string(num), std::strerror(errno));
 					break;
 				
 				default:
@@ -200,22 +200,22 @@ namespace scl
 
 		// global functions
 
-		static constexpr inline void set(num_t errnum) { global_err.set(errnum); }
-		static constexpr inline void clear() { global_err.clear(); }
-		static constexpr inline void clear_if(num_t num) { global_err.clear_if(num); }
-		
-		static constexpr inline bool check() { return global_err.check(); }
-		static constexpr inline bool test(num_t errnum) { return global_err.test(errnum); }
-
-		static constexpr inline const char *string() { return global_err.string(); }
-
-		static constexpr inline void pop_file_info() { global_err.pop_file_info(); }
-		static constexpr inline void push_file_info(const char *file, line_t line, const char *function) { global_err.push_file_info(file, line, function); }
-		static constexpr inline bool check_push_file_info(const char *file, uint64_t line, const char *function) { return global_err.check_push_file_info(file, line, function); }
-
-		static constexpr inline size_t print_traceback(FILE *file = nullptr) { return global_err.print_traceback(file); }
-		static constexpr inline size_t print(FILE *file = nullptr) { return global_err.print(file); }
-		static constexpr inline void check_print_exit(FILE *file = nullptr) { global_err.check_print_exit(file); }
+		static inline void set(num_t errnum) { global_err.set(errnum); }
+		static inline void clear() { global_err.clear(); }
+		static inline void clear_if(num_t num) { global_err.clear_if(num); }
+			   
+		static inline bool check() { return global_err.check(); }
+		static inline bool test(num_t errnum) { return global_err.test(errnum); }
+			   
+		static inline const char *string() { return global_err.string(); }
+			   
+		static inline void pop_file_info() { global_err.pop_file_info(); }
+		static inline void push_file_info(const char *file, line_t line, const char *function) { global_err.push_file_info(file, line, function); }
+		static inline bool check_push_file_info(const char *file, uint64_t line, const char *function) { return global_err.check_push_file_info(file, line, function); }
+			   
+		static inline size_t print_traceback(FILE *file = nullptr) { return global_err.print_traceback(file); }
+		static inline size_t print(FILE *file = nullptr) { return global_err.print(file); }
+		static inline void check_print_exit(FILE *file = nullptr) { global_err.check_print_exit(file); }
 	}
 }
 

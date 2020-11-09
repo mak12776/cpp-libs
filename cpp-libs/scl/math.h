@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cmath>
+#include <cfenv>
+
 namespace scl
 {
 	namespace math
@@ -47,13 +50,19 @@ namespace scl
 		template <typename type>
 		static inline bool pow(type base, type exp, type &res)
 		{
-			while (exp != 0)
+			if (std::numeric_limits<type>::digits10 >= std::numeric_limits<long double>::digits10)
+				return true;
+			res = std::pow<long double, long double>(base, exp);
+			if (math_errhandling & MATH_ERREXCEPT)
 			{
-				if (mul(base, base, base))
+				if (std::fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
 					return true;
-				exp -= 1;
 			}
-			res = base;
+			else if constexpr (math_errhandling & MATH_ERRNO)
+			{
+				if ((errno == EDOM) or (errno == ERANGE))
+					return true;
+			}
 			return false;
 		}
 
@@ -94,7 +103,7 @@ namespace scl
 		{
 			if (pow<type>(base, exp, res))
 			{
-				err::set(err::INT_OVERFLOW);
+				err::set(err::FLOAT_OVERFLOW);
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
