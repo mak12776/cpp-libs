@@ -9,7 +9,6 @@ namespace scl
 #define BYTE_MIN	INT8_MIN
 #define UBYTE_MAX	UINT8_MAX
 
-
 	
 #if SIZE_MAX == UINT8_MAX
 	typedef int8_t ssize_t;

@@ -78,12 +78,15 @@ namespace scl
 			}
 		};
 
+		// default cleaner_t
+
 		constexpr size_t default_array_size = 4096;
 		job_t default_array[default_array_size];
 		
-		// default cleaner_t
 		constexpr cleaner_t default_cleaner{0, default_array_size, default_array};
 		cleaner_t global_cleaner;
+
+		// functions
 
 		void add_fclose(FILE *file) { global_cleaner.add_fclose(file); }
 		void add_free(void *pntr) { global_cleaner.add_free(pntr); }
