@@ -24,7 +24,7 @@
 
 #include "macros.h"
 #include "exit_codes.h"
-#include "math.h"		// <safeint.h
+#include "math.h"				// <safeint.h
 #include "rand.h"
 
 #include "types/builtins.h"
@@ -35,10 +35,10 @@
 #include "features/cleaner.h"	// <cinttypes>
 
 #include "types/buffer.h"
-#include "types/string.h"			// <string> "mem.h" "math.h"
+#include "types/string.h"		// <string> "mem.h" "math.h"
 
-#include "io.h"						// <sys/types.h> <sys/stat.h> <io.h>
-									// "features/all_features.h"
+#include "io.h"					// <sys/types.h> <sys/stat.h> <io.h>
+								// "features/all_features.h"
 
 #include "winapi/functions.h"
 #include "winapi/tools.h"
