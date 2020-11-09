@@ -12,6 +12,8 @@ namespace scl
 		{ }
 	};
 
+	// may be deprecated.
+
 	struct m_string_t
 	{
 		char *pntr;
@@ -31,19 +33,6 @@ namespace scl
 		}
 
 		// malloc functions
-
-		inline void safe_malloc_size(size_t _size)
-		{
-			pntr = (char *)mem::safe_malloc(_size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
-			}
-
-			size = _size;
-			len = 0;
-		}
 
 		inline void safe_malloc_copy(const char *string)
 		{

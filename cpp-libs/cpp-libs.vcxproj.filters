@@ -19,9 +19,6 @@
     <Filter Include="Header Files\programs">
       <UniqueIdentifier>{134fe2ca-de08-4792-b645-e6336848e710}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\features">
-      <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\scl\types">
       <UniqueIdentifier>{2860705e-3e8a-4e9e-95d5-27be0faccc09}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="Header Files\incomplete_scl">
       <UniqueIdentifier>{482908f3-e496-4d76-8f23-68883c4c23fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scl\features">
+      <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

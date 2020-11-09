@@ -67,6 +67,15 @@ namespace scl
 
 				return pntr;
 			}
+
+			template <typename data_type>
+			constexpr void *safe_malloc_array(size_t size, const data_type &data)
+			{
+				data_type *pntr = safe_malloc_array<data_type>(size);
+				if (not err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					std::fill_n(pntr, size, data);
+				return pntr;
+			}
 		};
 
 		// default manager
