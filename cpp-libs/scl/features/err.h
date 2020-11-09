@@ -75,40 +75,41 @@ namespace scl
 
 		struct err_t
 		{
-			num_t num;
+			num_t num = num_t::SUCCESS;
+			size_t array_index = 0;
+
 			size_t array_size;
-			size_t array_index;
 			info_t *info_array;
 
 			// functions
 			
 			void set(num_t errnum) { num = errnum; }
-			bool test(num_t errnum) { return num == errnum; }
 			void clear() { num = num_t::SUCCESS; array_index = 0; }
 			void clear_if(num_t errnum) { if (num == errnum) clear(); }
 
 			bool check() { return num != num_t::SUCCESS; }
+			bool test(num_t errnum) { return num == errnum; }
+
 			const char *string() { return to_string(num); }
 
-			void push_file_info
-				(const char *file_name, uint64_t line_number, const char *function_name)
+			void pop_file_info() { array_index -= 1; }
+
+			void push_file_info(const char *file, line_t line, const char *function)
 			{
 				if (array_index != array_size)
 				{
-					info_array[array_index].file_name = file_name;
-					info_array[array_index].line_number = line_number;
-					info_array[array_index].function_name = function_name;
+					info_array[array_index].file_name = file;
+					info_array[array_index].line_number = line;
+					info_array[array_index].function_name = function;
 					array_index += 1;
 				}
 			}
-			void pop_file_info() { array_index -= 1; }
 
-			bool check_push_file_info
-				(const char *file_name, uint64_t line_number, const char *function_name)
+			bool check_push_file_info(const char *file, line_t line, const char *function)
 			{
 				if (check())
 				{
-					push_file_info(file_name, line_number, function_name);
+					push_file_info(file, line, function);
 					return true;
 				}
 				return false;
@@ -191,126 +192,30 @@ namespace scl
 
 
 		// default err
-		constexpr size_t default_array_size = 4096;
-		constexpr info_t default_array[default_array_size];
+		constexpr size_t default_array_size = 8192;
+		info_t default_array[default_array_size];
 
-		constexpr err_t default_err{};
+		constexpr err_t default_err{ num_t::SUCCESS, 0, default_array_size, default_array };
 		err_t global_err = default_err;
 
 		// global functions
 
-		static inline void set(num_t errnum) { global_err.set(errnum); }
-		static inline bool test(num_t errnum) { return global_err.test(errnum); }
-		static inline void clear() { global_err.clear(); }
-		static inline void clear_if(num_t num) { global_err.clear_if(num); }
+		static constexpr inline void set(num_t errnum) { global_err.set(errnum); }
+		static constexpr inline void clear() { global_err.clear(); }
+		static constexpr inline void clear_if(num_t num) { global_err.clear_if(num); }
+		
+		static constexpr inline bool check() { return global_err.check(); }
+		static constexpr inline bool test(num_t errnum) { return global_err.test(errnum); }
 
-		static inline bool check() { return global_err.check(); }
-		inline const char *string() { return global_err.string(); }
+		static constexpr inline const char *string() { return global_err.string(); }
 
-		inline void push_file_info(const char *file_name, line_t line_number,
-			const char *function_name)
-		{
-			global_err.push_file_info(file_name, line_number, function_name);
-		}
+		static constexpr inline void pop_file_info() { global_err.pop_file_info(); }
+		static constexpr inline void push_file_info(const char *file, line_t line, const char *function) { global_err.push_file_info(file, line, function); }
+		static constexpr inline bool check_push_file_info(const char *file, uint64_t line, const char *function) { return global_err.check_push_file_info(file, line, function); }
 
-		inline bool check_push_file_info(const char *file_name, uint64_t line_number,
-			const char *function_name)
-		{
-			return global_err.check_push_file_info(file_name, line_number, function_name);
-		}
-
-		static inline size_t print_traceback(FILE *file = nullptr) { return global_err.print_traceback(file); }
-		static inline size_t print(FILE *file = nullptr) { return global_err.print(file); }
-		static inline void check_print_exit(FILE *file = nullptr) { global_err.check_print_exit(file); }
-
-		// deprecated functions
-
-#if SCL_ERR_PRINT
-		static inline int print_status()
-		{
-			return std::fprintf(log_file, "%s: %s\n", to_string(num), strerror(errno));
-		}
-
-		static inline int printf_status(const char *fmt, ...)
-		{
-			va_list ap;
-			char *str;
-			int ret;
-
-			va_start(ap, fmt);
-			ret = cl::vasprintf(&str, fmt, ap);
-			va_end(ap);
-
-			if (ret < 0)
-				return cl::PRINTF_ERROR;
-
-			ret = std::fprintf(log_file, "%s: %s: %s\n", to_string(num), str, strerror(errno));
-			free(str);
-
-			return ret;
-		}
-
-		static inline int print_traceback()
-		{
-			int ret, total;
-
-			// printf file info array
-			ret = std::fprintf(log_file, "Traceback (most recent call last):\n");
-			if (ret < 0)
-				return cl::PRINTF_ERROR;
-
-			total = ret;
-			for (size_t index = info_array_index - 1; index != SIZE_MAX; index -= 1)
-			{
-				ret = std::fprintf(log_file, "  %s:%" PRIuLINE ": %s\n",
-					info_array[index].file_name,
-					info_array[index].line_number,
-					info_array[index].function_name);
-
-				if (ret < 0)
-					return cl::PRINTF_ERROR;
-
-				if (math::add(total, ret, total))
-					return cl::PRINTF_ERROR;
-			}
-
-			return total;
-		}
-
-		static inline int printf(const char *fmt, ...)
-		{
-			int total, ret;
-			va_list ap;
-			char *str;
-
-			if (fmt == nullptr)
-				ret = err::print_status();
-			else
-			{
-				va_start(ap, fmt);
-				ret = cl::vasprintf(&str, fmt, ap);
-				va_end(ap);
-
-				if (ret < 0)
-					return cl::PRINTF_ERROR;
-
-				ret = std::fprintf(log_file, "%s: %s: %s\n", to_string(num), str, strerror(errno));
-				free(str);
-			}
-
-			if (ret < 0)
-				return cl::PRINTF_ERROR;
-
-			total = print_traceback();
-			if (total < 0)
-				return cl::PRINTF_ERROR;
-
-			if (math::add(total, ret, total))
-				return cl::PRINTF_ERROR;
-
-			return total;
-		}
-#endif
+		static constexpr inline size_t print_traceback(FILE *file = nullptr) { return global_err.print_traceback(file); }
+		static constexpr inline size_t print(FILE *file = nullptr) { return global_err.print(file); }
+		static constexpr inline void check_print_exit(FILE *file = nullptr) { global_err.check_print_exit(file); }
 	}
 }
 

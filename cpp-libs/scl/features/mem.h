@@ -71,8 +71,9 @@ namespace scl
 
 		// default manager
 		constexpr mem_t default_mem{ malloc, calloc, realloc, free };
-
 		mem_t global_mem = default_mem;
+
+		// functions
 
 		static constexpr inline void *malloc(size_t size) { return global_mem.malloc(size); } 
 		static constexpr inline void *calloc(size_t nelem, size_t size) { return global_mem.calloc(nelem, size); }

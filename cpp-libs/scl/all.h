@@ -30,6 +30,10 @@
 #include "fs.h"						// 
 #include "rand.h"
 
+#include "features/err.h"
+#include "features/mem.h"		// "log.h" "err.h"
+#include "features/cfmt.h"		// "builtins.h" "feautres/err.h"
+
 #include "features/all_features.h"	// <cinttypes> <cstdio> cstdarg>
 
 #include "types/all_types.h"		// <string> "features/all_features.h"
