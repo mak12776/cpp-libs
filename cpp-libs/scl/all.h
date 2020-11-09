@@ -25,19 +25,22 @@
 
 #include "macros.h"
 #include "exit_codes.h"
-#include "builtins.h"
 #include "math.h"					// <safeint.h
-#include "fs.h"						// 
+#include "fs.h"
 #include "rand.h"
 
+#include "types/builtins.h"
+
 #include "features/err.h"
-#include "features/mem.h"		// "log.h" "err.h"
-#include "features/cfmt.h"		// "builtins.h" "feautres/err.h"
+#include "features/mem.h"	// "features/err.h"
+#include "features/cfmt.h"	// "types/builtins.h" "feautres/err.h"		
 
-#include "features/all_features.h"	// <cinttypes> <cstdio> cstdarg>
+#include "types/sorted_vector.h"
+#include "types/bitset.h"
+#include "types/buffer.h"
+#include "types/string.h"			// <string> "mem.h" "math.h"
+#include "types/linked_array.h"
 
-#include "types/all_types.h"		// <string> "features/all_features.h"
-									// "math.h"
 
 
 #include "io.h"						// <sys/types.h> <sys/stat.h> <io.h>
