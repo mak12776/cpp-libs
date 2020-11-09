@@ -51,9 +51,6 @@
     <ClInclude Include="scl\rand.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\types\linked_array.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\string.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
@@ -88,9 +85,6 @@
       <Filter>Header Files\programs</Filter>
     </ClInclude>
     <ClInclude Include="scl\types\buffer.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\types\bitset.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
     <ClInclude Include="primes.h">

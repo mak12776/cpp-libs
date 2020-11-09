@@ -174,10 +174,8 @@
     <ClInclude Include="scl\math.h" />
     <ClInclude Include="scl\rand.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="scl\types\bitset.h" />
     <ClInclude Include="scl\types\buffer.h" />
     <ClInclude Include="scl\types\builtins.h" />
-    <ClInclude Include="scl\types\linked_array.h" />
     <ClInclude Include="scl\types\string.h" />
     <ClInclude Include="scl\winapi\functions.h" />
     <ClInclude Include="scl\winapi\tools.h" />

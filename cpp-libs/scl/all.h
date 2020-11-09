@@ -29,16 +29,13 @@
 
 #include "types/builtins.h"
 
-#include "features/err.h"
+#include "features/err.h"		// "features/cfmt.h"
+#include "features/cfmt.h"		// "types/builtins.h" "feautres/err.h"
 #include "features/mem.h"		// "features/err.h"
 #include "features/cleaner.h"	// <cinttypes>
-#include "features/cfmt.h"		// "types/builtins.h" "feautres/err.h"
 
-#include "types/sorted_vector.h"
-#include "types/bitset.h"
 #include "types/buffer.h"
 #include "types/string.h"			// <string> "mem.h" "math.h"
-#include "types/linked_array.h"
 
 #include "io.h"						// <sys/types.h> <sys/stat.h> <io.h>
 									// "features/all_features.h"
