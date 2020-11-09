@@ -81,25 +81,16 @@ namespace scl
 			long size;
 
 			safe_fseek(stream, 0, SEEK_END);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
-			}
 
 			size = safe_ftell(stream);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
-			}
 
 			safe_fseek(stream, 0, SEEK_SET);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
-			}
 
 			return size;
 		}
@@ -111,11 +102,8 @@ namespace scl
 #endif
 			size_t file_size = (size_t)get_file_size_long(stream);
 
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
-			}
 
 			return file_size;
 		}
@@ -131,11 +119,8 @@ namespace scl
 #else
 #error unknown SIZE_MAX.
 #endif
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
-			}
 
 			return file_stat.st_size;
 		}
@@ -183,48 +168,34 @@ namespace scl
 			return safe_fwrite(&data, sizeof(data_type), stream);
 		}
 
-		// other functions
+		// fopen fread all
 
 		static inline void fread_all(FILE *file, void **pntr, size_t &size)
 		{
 			size_t file_size;
 
 			file_size = get_file_size(file);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			}
 
 			(*pntr) = mem::safe_malloc(file_size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			}
 
 			size = safe_fread(*pntr, file_size, file);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				free(*pntr);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			}
 		}
 
 		static inline void fopen_fread_all(const char *name, void **pntr, 
 			size_t &size)
 		{
 			FILE *file = safe_fopen(name, "rb");
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			}
 
 			fread_all(file, pntr, size);
-			if (err::check())
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 			std::fclose(file);
 		}
@@ -232,19 +203,35 @@ namespace scl
 		static inline size_t fopen_fwrite_all(const char *name, void *pntr, size_t size)
 		{
 			FILE *file = safe_fopen(name, "wb");
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
-			}
 
 			size_t write_number = safe_fwrite(pntr, size, file);
-			if (err::check())
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 			std::fclose(file);
 			return write_number;
 		}
+
+		// fread, fwrite all with base_buffer_t
+
+		template <typename byte_t>
+		static inline void fread_all(FILE *file, base_buffer_t<byte_t> &buffer)
+		{
+			fread_all(file, (void **)&buffer.pntr, buffer.size);
+		}
+
+		template <typename byte_t>
+		static inline void fopen_fread_all(const char *file, base_buffer_t<byte_t> &buffer)
+		{
+			fopen_fread_all(file, (void **)&buffer.pntr, buffer.size);
+		}
+
+		template <typename byte_t>
+		static inline void fopen_fwrite_all(const char *file, base_buffer_t<byte_t> &buffer)
+		{
+			fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
+		};
 
 		// buffered reader
 
@@ -326,29 +313,6 @@ namespace scl
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 			fclose(file);
-		}
-
-		// fread, fwrite all with base_buffer_t
-
-		template <typename byte_t>
-		static inline void fread_all(FILE *file, 
-			base_buffer_t<byte_t> &buffer)
-		{ 
-			fread_all(file, (void **)&buffer.pntr, buffer.size);
-		}
-
-		template <typename byte_t>
-		static inline void fopen_fread_all(const char *file,
-			base_buffer_t<byte_t> &buffer)
-		{
-			fopen_fread_all(file, (void **)&buffer.pntr, buffer.size);
-		}
-
-		template <typename byte_t>
-		static inline void fopen_fwrite_all(const char *file,
-			base_buffer_t<byte_t> &buffer)
-		{
-			fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
 		}
 
 		// file reader, file writer
@@ -526,7 +490,7 @@ namespace scl
 			}
 		};
 		
-		// deprecated structures & functions
+		// deprecated functions
 
 #ifdef SCL_EXPERIMENTAL
 		template <typename byte_t>
@@ -567,62 +531,7 @@ namespace scl
 					return;
 				}
 				file_size -= buffer_size;
-
-
 			}
-		}
-#endif
-
-#if 0
-		static inline size_t fread_all(void *pntr, size_t size, FILE *stream)
-		{
-			size_t read_number;
-
-			read_number = fread(pntr, 1, size, stream);
-			while (read_number != size)
-			{
-				if (ferror(stream))
-				{
-					err::set(err::FERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-				else if (feof(stream))
-				{
-					err::set(err::FEOF);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-				else
-				{
-					err::set(err::UNDEFINED_BEHAVIOR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-
-				read_number += fread((ubyte *)pntr + read_number, 1, size - read_number, stream);
-			}
-			return read_number;
-		}
-
-		static inline size_t fwrite_all(void *pntr, size_t size, FILE *stream)
-		{
-			size_t write_number;
-
-			write_number = fwrite(pntr, 1, size, stream);
-			while (write_number != size)
-			{
-				if (ferror(stream))
-				{
-					err::set(err::FERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-				else
-				{
-					err::set(err::UNDEFINED_BEHAVIOR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-
-				write_number += fwrite((ubyte *)pntr + write_number, 1, size - write_number, stream);
-			}
-			return write_number;
 		}
 #endif
 	}

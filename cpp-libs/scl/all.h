@@ -2,6 +2,7 @@
 
 #ifndef SCL_NOT_INC_GLOBAL_HEADERS
 
+// windows headers
 #include <safeint.h>
 
 #include <sys/types.h>
@@ -9,6 +10,7 @@
 #include <io.h>
 #include <Windows.h>
 
+// standard template library headers
 #include <random>
 #include <cinttypes>
 #include <cstdio>
@@ -18,22 +20,19 @@
 
 #endif
 
-#ifndef SCL_LOCKED_FEATURES
-#define SCL_LOCKED_FEATURES 1
-#endif
-
+// scl headers
 
 #include "macros.h"
 #include "exit_codes.h"
-#include "math.h"					// <safeint.h
-#include "fs.h"
+#include "math.h"		// <safeint.h
 #include "rand.h"
 
 #include "types/builtins.h"
 
 #include "features/err.h"
-#include "features/mem.h"	// "features/err.h"
-#include "features/cfmt.h"	// "types/builtins.h" "feautres/err.h"		
+#include "features/mem.h"		// "features/err.h"
+#include "features/cleaner.h"	// <cinttypes>
+#include "features/cfmt.h"		// "types/builtins.h" "feautres/err.h"
 
 #include "types/sorted_vector.h"
 #include "types/bitset.h"
@@ -41,12 +40,11 @@
 #include "types/string.h"			// <string> "mem.h" "math.h"
 #include "types/linked_array.h"
 
-
-
 #include "io.h"						// <sys/types.h> <sys/stat.h> <io.h>
 									// "features/all_features.h"
 
-#include "winapi/all_winapi.h"
+#include "winapi/functions.h"
+#include "winapi/tools.h"
 
 
 

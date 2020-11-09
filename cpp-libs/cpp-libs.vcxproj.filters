@@ -87,26 +87,17 @@
     <ClInclude Include="programs\bh_old.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
-    <ClInclude Include="scl\builtins.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\buffer.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
     <ClInclude Include="scl\types\bitset.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
-    <ClInclude Include="scl\fs.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="primes.h">
       <Filter>Header Files\programs</Filter>
     </ClInclude>
     <ClInclude Include="programs\bith.h">
       <Filter>Header Files\programs</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\winapi\all_winapi.h">
-      <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
     <ClInclude Include="scl\winapi\functions.h">
       <Filter>Header Files\scl\winapi</Filter>
@@ -131,6 +122,12 @@
     </ClInclude>
     <ClInclude Include="scl\features\fmt.h">
       <Filter>Header Files\incomplete_scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\fs.h">
+      <Filter>Header Files\incomplete_scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\builtins.h">
+      <Filter>Header Files\scl\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
