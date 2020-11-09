@@ -163,7 +163,6 @@
     <ClInclude Include="scl\all.h" />
     <ClInclude Include="scl\builtins.h" />
     <ClInclude Include="scl\exit_codes.h" />
-    <ClInclude Include="scl\features\all_features.h" />
     <ClInclude Include="scl\features\cfmt.h" />
     <ClInclude Include="scl\features\cleaner.h" />
     <ClInclude Include="scl\features\err.h" />

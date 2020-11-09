@@ -63,7 +63,6 @@ namespace scl
 
 #pragma pack(push, 1)
 
-
 #define PRIuLINE PRIu64
 		typedef uint64_t line_t;
 
@@ -74,31 +73,27 @@ namespace scl
 			const char *function_name;
 		};
 
-		template <size_t _array_size>
 		struct err_t
 		{
-			num_t num = num_t::SUCCESS;
-			size_t array_index = 0;
-
-			FILE *log_file = stderr;
-			info_t info_array[_array_size];
+			num_t num;
+			size_t array_size;
+			size_t array_index;
+			info_t *info_array;
 
 			// functions
-
-			inline constexpr num_t &get_num() { return num; }
 			
-			inline void set(num_t errnum) { num = errnum; }
-			inline bool test(num_t errnum) { return num == errnum; }
-			inline void clear() { num = num_t::SUCCESS; array_index = 0; }
-			inline void clear_if(num_t errnum) { if (num == errnum) clear(); }
+			void set(num_t errnum) { num = errnum; }
+			bool test(num_t errnum) { return num == errnum; }
+			void clear() { num = num_t::SUCCESS; array_index = 0; }
+			void clear_if(num_t errnum) { if (num == errnum) clear(); }
 
-			inline bool check() { return num != num_t::SUCCESS; }
-			inline const char *string() { return to_string(num); }
+			bool check() { return num != num_t::SUCCESS; }
+			const char *string() { return to_string(num); }
 
-			inline void push_file_info(const char *file_name, uint64_t line_number,
-				const char *function_name)
+			void push_file_info
+				(const char *file_name, uint64_t line_number, const char *function_name)
 			{
-				if (array_index != _array_size)
+				if (array_index != array_size)
 				{
 					info_array[array_index].file_name = file_name;
 					info_array[array_index].line_number = line_number;
@@ -106,9 +101,10 @@ namespace scl
 					array_index += 1;
 				}
 			}
+			void pop_file_info() { array_index -= 1; }
 
-			inline bool check_push_file_info(const char *file_name, uint64_t line_number,
-				const char *function_name)
+			bool check_push_file_info
+				(const char *file_name, uint64_t line_number, const char *function_name)
 			{
 				if (check())
 				{
@@ -118,32 +114,29 @@ namespace scl
 				return false;
 			}
 
-			inline size_t print_traceback(FILE *file = nullptr)
+			size_t print_traceback(FILE *file = nullptr)
 			{
-				size_t write_number;
-				size_t total = 0;
+				size_t total;
+				file = (file == nullptr) ? stderr : file;
 
-				file = (file == nullptr) ? log_file : file;
-				write_number = cfmt::write(file,
+				total = cfmt::write(file,
 					"Traceback (most recent call last):\n");
 
 				for (size_t index = array_index - 1; index != SIZE_MAX; index -= 1)
 				{
-					write_number += cfmt::write(file, " %s: %" PRIuLINE ": %s\n", 
+					total += cfmt::write(file, " %s: %" PRIuLINE ": %s\n", 
 						info_array[index].file_name,
 						info_array[index].line_number,
 						info_array[index].function_name);
-
-					total += write_number;
 				}
 
 				return total;
 			}
 
-			inline size_t print(FILE *file = nullptr)
+			size_t print(FILE *file = nullptr)
 			{
+				file = (file == nullptr) ? stderr : file;
 				size_t write_number = 0;
-				file = (file == nullptr) ? log_file : file;
 
 				switch (num)
 				{
@@ -155,12 +148,12 @@ namespace scl
 				case scl::err::NEW:
 				case scl::err::INT_OVERFLOW:
 				case scl::err::FLOAT_OVERFLOW:
-
+					 
 				case scl::err::OPEN:
 				case scl::err::STAT:
 				case scl::err::READ:
 				case scl::err::WRITE:
-
+					 
 				case scl::err::WIN_ERROR:
 				case scl::err::PRINTF:
 				case scl::err::UNDEFINED_BEHAVIOR:
@@ -199,35 +192,36 @@ namespace scl
 
 		// default err
 		constexpr size_t default_array_size = 4096;
+		constexpr info_t default_array[default_array_size];
 
-		typedef err_t<default_array_size> default_err_t;
-		default_err_t default_err;
+		constexpr err_t default_err{};
+		err_t global_err = default_err;
 
 		// global functions
 
-		static inline void set(num_t errnum) { default_err.set(errnum); }
-		static inline bool test(num_t errnum) { return default_err.test(errnum); }
-		static inline void clear() { default_err.clear(); }
-		static inline void clear_if(num_t num) { default_err.clear_if(num); }
+		static inline void set(num_t errnum) { global_err.set(errnum); }
+		static inline bool test(num_t errnum) { return global_err.test(errnum); }
+		static inline void clear() { global_err.clear(); }
+		static inline void clear_if(num_t num) { global_err.clear_if(num); }
 
-		static inline bool check() { return default_err.check(); }
-		inline const char *string() { return  default_err.string(); }
+		static inline bool check() { return global_err.check(); }
+		inline const char *string() { return global_err.string(); }
 
 		inline void push_file_info(const char *file_name, line_t line_number,
 			const char *function_name)
 		{
-			default_err.push_file_info(file_name, line_number, function_name);
+			global_err.push_file_info(file_name, line_number, function_name);
 		}
 
 		inline bool check_push_file_info(const char *file_name, uint64_t line_number,
 			const char *function_name)
 		{
-			return default_err.check_push_file_info(file_name, line_number, function_name);
+			return global_err.check_push_file_info(file_name, line_number, function_name);
 		}
 
-		static inline size_t print_traceback(FILE *file = nullptr) { return default_err.print_traceback(file); }
-		static inline size_t print(FILE *file = nullptr) { return default_err.print(file); }
-		static inline void check_print_exit(FILE *file = nullptr) { default_err.check_print_exit(file); }
+		static inline size_t print_traceback(FILE *file = nullptr) { return global_err.print_traceback(file); }
+		static inline size_t print(FILE *file = nullptr) { return global_err.print(file); }
+		static inline void check_print_exit(FILE *file = nullptr) { global_err.check_print_exit(file); }
 
 		// deprecated functions
 

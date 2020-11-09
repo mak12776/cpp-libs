@@ -38,4 +38,5 @@ namespace scl
 #else
 #error unknown SIZE_MAX
 #endif
+
 }

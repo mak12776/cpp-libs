@@ -63,9 +63,6 @@
     <ClInclude Include="scl\features\err.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
-    <ClInclude Include="scl\features\fmt.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
     <ClInclude Include="scl\features\mem.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
@@ -74,9 +71,6 @@
     </ClInclude>
     <ClInclude Include="scl\types\all_types.h">
       <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\all_features.h">
-      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
     <ClInclude Include="programs\bh.h">
       <Filter>Header Files\programs</Filter>
@@ -136,6 +130,9 @@
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
     <ClInclude Include="scl\features\log.h">
+      <Filter>Header Files\incomplete_scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\fmt.h">
       <Filter>Header Files\incomplete_scl</Filter>
     </ClInclude>
   </ItemGroup>
