@@ -9,7 +9,7 @@ namespace scl
 			FCLOSE, FREE, DELETE_PNTR,
 		};
 		
-		struct job
+		struct job_t
 		{
 			job_type type;
 			union
@@ -19,40 +19,39 @@ namespace scl
 			};
 		};
 
-		template <size_t _size>
 		struct cleaner_t
 		{
 			size_t array_index = 0;
-			job jobs[_size];
 
-			constexpr size_t array_size() { return _size; }
+			size_t array_size;
+			job_t *job_array;
 
 			inline void add_fclose(FILE *file)
 			{
-				if (array_index != _size)
+				if (array_index != array_size)
 				{
-					jobs[array_index].type = job_type::FCLOSE;
-					jobs[array_index].file = file;
+					job_array[array_index].type = job_type::FCLOSE;
+					job_array[array_index].file = file;
 					array_index += 1;
 				}
 			}
 
 			inline void add_free(void *pntr)
 			{
-				if (array_index != _size)
+				if (array_index != array_size)
 				{
-					jobs[array_index].type = job_type::FREE;
-					jobs[array_index].pntr = pntr;
+					job_array[array_index].type = job_type::FREE;
+					job_array[array_index].pntr = pntr;
 					array_index += 1;
 				}
 			}
 
 			inline void add_delete(void *pntr)
 			{
-				if (array_index != _size)
+				if (array_index != array_size)
 				{
-					jobs[array_index].type = job_type::DELETE_PNTR;
-					jobs[array_index].pntr = pntr;
+					job_array[array_index].type = job_type::DELETE_PNTR;
+					job_array[array_index].pntr = pntr;
 					array_index += 1;
 				}
 			}
@@ -61,18 +60,18 @@ namespace scl
 			{
 				for (size_t index = 0; index < array_index; index += 1)
 				{
-					switch (jobs[index].type)
+					switch (job_array[index].type)
 					{
 					case job_type::FCLOSE:
-						fclose(jobs[index].file);
+						fclose(job_array[index].file);
 						break;
 
 					case job_type::FREE:
-						free(jobs[index].pntr);
+						free(job_array[index].pntr);
 						break;
 
 					case job_type::DELETE_PNTR:
-						delete jobs[index].pntr;
+						delete job_array[index].pntr;
 						break;
 					}
 				}
@@ -80,14 +79,15 @@ namespace scl
 		};
 
 		constexpr size_t default_array_size = 4096;
+		job_t default_array[default_array_size];
 		
 		// default cleaner_t
-		typedef cleaner_t<default_array_size> default_cleaner_t;
-		default_cleaner_t default_cleaner;
+		constexpr cleaner_t default_cleaner{0, default_array_size, default_array};
+		cleaner_t global_cleaner;
 
-		void add_fclose(FILE *file) { default_cleaner.add_fclose(file); }
-		void add_free(void *pntr) { default_cleaner.add_free(pntr); }
-		void add_delete(void *pntr) { default_cleaner.add_delete(pntr); }
-		void finish() { default_cleaner.finish(); }
+		void add_fclose(FILE *file) { global_cleaner.add_fclose(file); }
+		void add_free(void *pntr) { global_cleaner.add_free(pntr); }
+		void add_delete(void *pntr) { global_cleaner.add_delete(pntr); }
+		void finish() { global_cleaner.finish(); }
 	}
 }
