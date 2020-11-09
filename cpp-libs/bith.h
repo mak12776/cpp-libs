@@ -60,6 +60,8 @@ namespace bith
 		result.data_bits = data_bits;
 		result.data_size = (data_bits / 8) + (data_bits % 8) ? 1 : 0;
 
+		size_t possible_data_number;
+
 		
 	}
 }
