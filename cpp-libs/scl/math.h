@@ -52,6 +52,7 @@ namespace scl
 		{
 			if (std::numeric_limits<type>::digits10 >= std::numeric_limits<long double>::digits10)
 				return true;
+
 			res = std::pow<long double, long double>(base, exp);
 			if (math_errhandling & MATH_ERREXCEPT)
 			{
@@ -63,6 +64,7 @@ namespace scl
 				if ((errno == EDOM) or (errno == ERANGE))
 					return true;
 			}
+
 			return false;
 		}
 

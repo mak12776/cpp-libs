@@ -62,6 +62,10 @@ namespace bith
 
 		size_t possible_data_number;
 
-		
+		math::safe_pow((size_t)2, data_bits, possible_data_number);
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			return;
+
+
 	}
 }
