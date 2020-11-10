@@ -7,6 +7,11 @@ namespace scl
 	{
 		byte_type *pntr;
 		size_t size;
+
+		inline size_t fread(FILE *file)
+		{
+			return io::fread_array<byte_type>(pntr, size, file);
+		}
 	};
 
 	typedef base_buffer_t<void> vbuffer_t;
@@ -16,20 +21,20 @@ namespace scl
 	// fread, fwrite all with base_buffer_t
 
 	/*template <typename byte_t>
-	static inline void safe_fread_all(FILE *file, base_buffer_t<byte_t> &buffer)
+	static inline void fread_all(FILE *file, base_buffer_t<byte_t> &buffer)
 	{
-		safe_fread_all(file, (void **)&buffer.pntr, buffer.size);
+		fread_all(file, (void **)&buffer.pntr, buffer.size);
 	}
 
 	template <typename byte_t>
-	static inline void safe_fopen_fread_all(const char *file, base_buffer_t<byte_t> &buffer)
+	static inline void fopen_fread_all(const char *file, base_buffer_t<byte_t> &buffer)
 	{
-		safe_fopen_fread_all(file, (void **)&buffer.pntr, buffer.size);
+		fopen_fread_all(file, (void **)&buffer.pntr, buffer.size);
 	}
 
 	template <typename byte_t>
-	static inline void safe_fopen_fwrite_all(const char *file, base_buffer_t<byte_t> &buffer)
+	static inline void fopen_fwrite_all(const char *file, base_buffer_t<byte_t> &buffer)
 	{
-		safe_fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
+		fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
 	};*/
 }

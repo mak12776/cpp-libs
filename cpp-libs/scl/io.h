@@ -125,28 +125,7 @@ namespace scl
 			return file_stat.st_size;
 		}
 
-		// safe fread
-		static inline size_t safe_fread(void *pntr, size_t size, FILE *stream)
-		{
-			size_t read_number;
-
-			read_number = fread(pntr, 1, size, stream);
-			if (read_number != size)
-			{
-				err::set(err::FREAD);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-
-			return read_number;
-		}
-
-		template <typename data_type>
-		static inline size_t safe_fread_data(data_type &data, FILE *file)
-		{
-			return safe_fread(&data, sizeof(data_type), file);
-		}
-		
-		// safe fwrite
+		// safe fread, fwrite
 
 		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
 		{
@@ -162,15 +141,75 @@ namespace scl
 			return write_number;
 		}
 
+		static inline size_t safe_fread(void *pntr, size_t size, FILE *stream)
+		{
+			size_t read_number;
+
+			read_number = fread(pntr, 1, size, stream);
+			if (read_number != size)
+			{
+				err::set(err::FREAD);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+
+			return read_number;
+		}
+
+		// fread, fwrite data
+
+		template <typename data_type>
+		static inline size_t fread_data(data_type &data, FILE *file)
+		{
+			return safe_fread(&data, sizeof(data_type), file);
+		}
+
 		template<typename data_type>
-		static inline size_t safe_fwrite_data(data_type &data, FILE *stream)
+		static inline size_t fwrite_data(data_type &data, FILE *stream)
 		{
 			return safe_fwrite(&data, sizeof(data_type), stream);
 		}
 
-		// fopen fread all
+		// fread, fwrite array
 
-		static inline void safe_fread_all(FILE *file, void **pntr, size_t &size)
+		template <typename data_type>
+		static inline size_t fread_array(data_type *pntr, size_t data_number, FILE *file)
+		{
+			size_t read_number;
+
+			if constexpr (sizeof(data_type) != 1)
+			{
+				math::safe_mul(data_number, sizeof data_type, data_number);
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return 0;
+			}
+
+			read_number = safe_fread((void *)pntr, data_number, file);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+
+			return read_number;
+		}
+
+		template <typename data_type>
+		static inline size_t fwrite_array(data_type *pntr, size_t data_number, FILE *file)
+		{
+			size_t write_number;
+
+			if constexpr (sizeof(data_type) != 1)
+			{
+				math::safe_mul(data_number, sizeof data_type, data_number);
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return 0;
+			}
+
+			write_number = safe_fwrite(pntr, data_number, file);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+
+			return write_number;
+		}
+
+		// fread all
+
+		static inline void fread_all(FILE *file, void *&pntr, size_t &size)
 		{
 			size_t file_size;
 
@@ -178,29 +217,30 @@ namespace scl
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			(*pntr) = mem::safe_malloc(file_size);
+			pntr = mem::safe_malloc(file_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			size = safe_fread(*pntr, file_size, file);
+			size = safe_fread(pntr, file_size, file);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 		}
 
-		static inline void safe_fopen_fread_all(const char *name, void **pntr, 
-			size_t &size)
+		// fopen fread, fwrite all
+
+		static inline void fopen_fread_all(const char *name, void *&pntr, size_t &size)
 		{
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			safe_fread_all(file, pntr, size);
+			fread_all(file, pntr, size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 			std::fclose(file);
 		}
 
-		static inline size_t safe_fopen_fwrite_all(const char *name, void *pntr, size_t size)
+		static inline size_t fopen_fwrite_all(const char *name, void *pntr, size_t size)
 		{
 			FILE *file = safe_fopen(name, "wb");
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))

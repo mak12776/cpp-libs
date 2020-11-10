@@ -30,7 +30,7 @@ struct simple_data
 
 		// size of size
 
-		io::safe_fread_data<ubyte>(size_of_size, file);
+		io::fread_data<ubyte>(size_of_size, file);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
@@ -43,7 +43,7 @@ struct simple_data
 
 		// size of data
 
-		io::safe_fread_data<ubyte>(size_of_data, file);
+		io::fread_data<ubyte>(size_of_data, file);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
@@ -56,7 +56,7 @@ struct simple_data
 
 		// size
 
-		io::safe_fread_data(buffer_size, file);
+		io::fread_data(buffer_size, file);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
@@ -71,7 +71,7 @@ struct simple_data
 
 		for (size_t index = 0; index < size; index += 1)
 		{
-			io::safe_fread_data<data_type>(pntr[index], file);
+			io::fread_data<data_type>(pntr[index], file);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return true;
 		}
@@ -88,19 +88,19 @@ struct simple_data
 
 		// size of size
 
-		io::safe_fwrite_data<ubyte>(size_of_size, file);
+		io::fwrite_data<ubyte>(size_of_size, file);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
 		// size of data
 
-		io::safe_fwrite_data<ubyte>(size_of_data, file);
+		io::fwrite_data<ubyte>(size_of_data, file);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
 		// size
 
-		io::safe_fwrite_data(size, file);
+		io::fwrite_data(size, file);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
@@ -108,7 +108,7 @@ struct simple_data
 
 		for (size_t index = 0; index < size; index += 1)
 		{
-			io::safe_fwrite_data<data_type>(pntr[index], file);
+			io::fwrite_data<data_type>(pntr[index], file);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return true;
 		}

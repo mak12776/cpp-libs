@@ -36,11 +36,11 @@
 #include "features/cfmt.h"		// "types/builtins.h" "feautres/err.h" "features/mem.h"
 #include "features/cleaner.h"	// <cinttypes>
 
-#include "types/buffer.h"
-#include "types/string.h"		// <string> "mem.h" "math.h"
-
 #include "io.h"					// <sys/types.h> <sys/stat.h> <io.h>
 								// "features/all_features.h"
+
+#include "types/buffer.h"		// "io.h"
+#include "types/string.h"		// <string> "mem.h" "math.h"
 
 #include "winapi/functions.h"
 #include "winapi/tools.h"

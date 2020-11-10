@@ -63,19 +63,19 @@ static inline size_t fwrite_counts(FILE *file, count_t<data_type> &counts)
 	const ubyte size_of_data_type = sizeof(data_type);
 
 	// size of size_t
-	total_write = io::safe_fwrite_data<ubyte>(size_bytes, file);
+	total_write = io::fwrite_data<ubyte>(size_bytes, file);
 	if (err::check()) return total_write;
 
 	// size of data_type
-	total_write += io::safe_fwrite_data<ubyte>(size_of_data_type, file);
+	total_write += io::fwrite_data<ubyte>(size_of_data_type, file);
 	if (err::check()) return total_write;
 
 	// data_counts.size()
-	total_write += io::safe_fwrite_data(counts.data_count_vector.size(), file);
+	total_write += io::fwrite_data(counts.data_count_vector.size(), file);
 	if (err::check()) return total_write;
 
 	// remaining.size()
-	total_write += io::safe_fwrite_data(counts.remaining.size(), file);
+	total_write += io::fwrite_data(counts.remaining.size(), file);
 	if (err::check) return total_write;
 
 	// data_counts.data()
@@ -100,7 +100,7 @@ static inline size_t fread_counts(FILE *file, count_t<data_type> &counts)
 	size_t vector_size;
 
 	// size of size_t
-	total_read = io::safe_fread_data(ubyte_data, file);
+	total_read = io::fread_data(ubyte_data, file);
 	if (err::check()) return total_read;
 
 	if (ubyte_data != size_bytes)
@@ -111,7 +111,7 @@ static inline size_t fread_counts(FILE *file, count_t<data_type> &counts)
 	}
 
 	// size of data_type
-	total_read += io::safe_fread_data(ubyte_data, file);
+	total_read += io::fread_data(ubyte_data, file);
 	if (err::check()) return total_read;
 
 	if (ubyte_data != size_of_data_type)
@@ -122,12 +122,12 @@ static inline size_t fread_counts(FILE *file, count_t<data_type> &counts)
 	}
 
 	// data_counts.size()
-	total_read += io::safe_fread_data(vector_size, file);
+	total_read += io::fread_data(vector_size, file);
 	if (err::check()) return total_read;
 	counts.data_count_vector.resize(vector_size);
 
 	// remaining.size()
-	total_read += io::safe_fread_data(vector_size, file);
+	total_read += io::fread_data(vector_size, file);
 	counts.remaining.resize(vector_size);
 
 	// data_counts.data()
@@ -317,7 +317,7 @@ void compress(const char *file_name_pntr)
 	cl::printf_ln("log file name: %s", log_file_name.pntr);
 
 	// read file_name into buffer
-	io::safe_fopen_fread_all(file_name.pntr, (void **)&buffer.pntr, buffer.size);
+	io::fopen_fread_all(file_name.pntr, (void **)&buffer.pntr, buffer.size);
 	if (err::check())
 	{
 		printf("error: can't read '%s': %s\n", file_name.pntr,
