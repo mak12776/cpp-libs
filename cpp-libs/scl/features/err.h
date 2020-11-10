@@ -192,7 +192,7 @@ namespace scl
 
 
 		// default err
-		constexpr size_t default_array_size = 8192;
+		constexpr size_t default_array_size = (1 << 13); // 8129
 		info_t default_array[default_array_size];
 
 		constexpr err_t default_err{ num_t::SUCCESS, 0, default_array_size, default_array };

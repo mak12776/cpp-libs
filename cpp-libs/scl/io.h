@@ -227,7 +227,7 @@ namespace scl
 		{
 			byte_t *pntr;
 			size_t file_size;
-			cleaner::cleaner_t cleaner;
+			size_t cleaner_start_index = cleaner::get_index();
 
 			file_size = safe_get_size(file);
 			if (err::check())
@@ -242,7 +242,7 @@ namespace scl
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
-			cleaner.add_free(pntr);
+			cleaner::add_free(pntr);
 
 			while (file_size >= buffer_size)
 			{
@@ -250,14 +250,14 @@ namespace scl
 				if (err::check())
 				{
 					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					cleaner.finish();
+					cleaner::finish(cleaner_start_index);
 					return;
 				}
 				file_size -= buffer_size;
 
 				if (!buffer_reader.read_buffer(pntr, buffer_size))
 				{
-					cleaner.finish();
+					cleaner::finish(cleaner_start_index);
 					return;
 				}
 			}
@@ -265,17 +265,14 @@ namespace scl
 			if (file_size)
 			{
 				safe_fread(pntr, file_size, file);
-				if (err::check())
-				{
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					cleaner.finish();
+				cleaner::finish(cleaner_start_index);
+
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
-				}
 
 				if (!buffer_reader.read_buffer(pntr, file_size))
 					buffer_reader.finish();
 			}
-			cleaner.finish();
 		}
 
 		template <typename byte_t, size_t size = 8192>

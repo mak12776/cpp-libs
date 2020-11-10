@@ -56,7 +56,7 @@ namespace scl
 				}
 			}
 
-			inline void finish()
+			inline void finish(size_t start = 0)
 			{
 				for (size_t index = 0; index < array_index; index += 1)
 				{
@@ -80,7 +80,7 @@ namespace scl
 
 		// default cleaner_t
 
-		constexpr size_t default_array_size = 4096;
+		constexpr size_t default_array_size = (1 << 13); // 8192
 		job_t default_array[default_array_size];
 		
 		constexpr cleaner_t default_cleaner{0, default_array_size, default_array};
@@ -88,9 +88,11 @@ namespace scl
 
 		// functions
 
+		constexpr size_t get_index() { return global_cleaner.array_index; }
+
 		void add_fclose(FILE *file) { global_cleaner.add_fclose(file); }
 		void add_free(void *pntr) { global_cleaner.add_free(pntr); }
 		void add_delete(void *pntr) { global_cleaner.add_delete(pntr); }
-		void finish() { global_cleaner.finish(); }
+		void finish(size_t start = 0) { global_cleaner.finish(start); }
 	}
 }

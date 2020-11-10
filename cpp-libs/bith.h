@@ -69,7 +69,7 @@ namespace bith
 
 	}
 
-	static inline void count_bits(size_t data_bits, std::string file_name, segment_buffer_t &result)
+	static inline void count_bits(size_t data_bits, std::string &file_name, segment_buffer_t &result)
 	{
 		ubuffer_t buffer;
 
