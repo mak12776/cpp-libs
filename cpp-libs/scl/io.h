@@ -230,18 +230,12 @@ namespace scl
 			size_t cleaner_start_index = cleaner::get_index();
 
 			file_size = safe_get_size(file);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			}
 
 			pntr = (byte_t *)mem::safe_malloc(buffer_size);
-			if (err::check())
-			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			if (err::check(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			}
 			cleaner::add_free(pntr);
 
 			while (file_size >= buffer_size)
