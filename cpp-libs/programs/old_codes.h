@@ -179,7 +179,7 @@ void search_offsets(const char *_file_name)
 	cleaner::add_free((void *)offsets_file_name.pntr);
 
 	// read entire file into buffer
-	io::fopen_fread_all(file_name.pntr, (void **)&buffer.pntr, buffer.size);
+	io::safe_fopen_fread_all(file_name.pntr, (void **)&buffer.pntr, buffer.size);
 	if (err::check())
 	{
 		printf("error: %s\n", err::string());
@@ -290,7 +290,7 @@ void offsets_check(const char *_file_name)
 
 	ubuffer_t buffer;
 
-	io::fopen_fread_all(file_name.pntr, (void **)&buffer.pntr, buffer.size);
+	io::safe_fopen_fread_all(file_name.pntr, (void **)&buffer.pntr, buffer.size);
 	if (err::check())
 	{
 		printf("error: can't read input file: %s\n", file_name.pntr);
@@ -564,7 +564,7 @@ void func()
 	/*for (int length = 1; length < argc; length += 1)
 	{
 		const char *name = argv[length];
-		size_t size = io::get_file_name_size(name);
+		size_t size = io::safe_get_size(name);
 		if (err::check())
 		{
 			printf("error: stat() failed for '%s': errno: %s\n",

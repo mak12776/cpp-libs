@@ -76,7 +76,7 @@ namespace scl
 			}
 		}
 
-		static inline long get_file_size_long(FILE *stream)
+		static inline long safe_get_size_long(FILE *stream)
 		{
 			long size;
 
@@ -95,12 +95,12 @@ namespace scl
 			return size;
 		}
 
-		static inline size_t get_file_size(FILE *stream)
+		static inline size_t safe_get_size(FILE *stream)
 		{
 #if ULONG_MAX > SIZE_MAX
 #error unsigned long is too big.
 #endif
-			size_t file_size = (size_t)get_file_size_long(stream);
+			size_t file_size = (size_t)safe_get_size_long(stream);
 
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
@@ -108,7 +108,7 @@ namespace scl
 			return file_size;
 		}
 
-		static inline size_t get_file_name_size(const char *name)
+		static inline size_t safe_get_size(const char *name)
 		{
 #if SIZE_MAX == UINT64_MAX
 			struct __stat64 file_stat;
@@ -170,11 +170,11 @@ namespace scl
 
 		// fopen fread all
 
-		static inline void fread_all(FILE *file, void **pntr, size_t &size)
+		static inline void safe_fread_all(FILE *file, void **pntr, size_t &size)
 		{
 			size_t file_size;
 
-			file_size = get_file_size(file);
+			file_size = safe_get_size(file);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
@@ -187,20 +187,20 @@ namespace scl
 				return;
 		}
 
-		static inline void fopen_fread_all(const char *name, void **pntr, 
+		static inline void safe_fopen_fread_all(const char *name, void **pntr, 
 			size_t &size)
 		{
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			fread_all(file, pntr, size);
+			safe_fread_all(file, pntr, size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 			std::fclose(file);
 		}
 
-		static inline size_t fopen_fwrite_all(const char *name, void *pntr, size_t size)
+		static inline size_t safe_fopen_fwrite_all(const char *name, void *pntr, size_t size)
 		{
 			FILE *file = safe_fopen(name, "wb");
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
@@ -212,26 +212,6 @@ namespace scl
 			std::fclose(file);
 			return write_number;
 		}
-
-		// fread, fwrite all with base_buffer_t
-
-		template <typename byte_t>
-		static inline void fread_all(FILE *file, base_buffer_t<byte_t> &buffer)
-		{
-			fread_all(file, (void **)&buffer.pntr, buffer.size);
-		}
-
-		template <typename byte_t>
-		static inline void fopen_fread_all(const char *file, base_buffer_t<byte_t> &buffer)
-		{
-			fopen_fread_all(file, (void **)&buffer.pntr, buffer.size);
-		}
-
-		template <typename byte_t>
-		static inline void fopen_fwrite_all(const char *file, base_buffer_t<byte_t> &buffer)
-		{
-			fopen_fwrite_all(file, (void *)buffer.pntr, buffer.size);
-		};
 
 		// buffered reader
 
@@ -249,7 +229,7 @@ namespace scl
 			size_t file_size;
 			cleaner::cleaner_t cleaner;
 
-			file_size = get_file_size(file);
+			file_size = safe_get_size(file);
 			if (err::check())
 			{
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
