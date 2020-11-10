@@ -67,18 +67,19 @@ namespace bith
 		printf("possible data number: %zu\n", possible_data_number);
 	}
 
-	static inline void count_bits(size_t data_bits, std::string &file_name, segment_buffer_t &result)
+	static inline void count_bits(size_t data_bits, const char *name, segment_buffer_t &result)
 	{
 		namespace err = scl::err;
 
 		scl::ubuffer_t buffer;
 
-		
+		scl::io::fopen_fread_malloc(name, buffer);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		count_bits(data_bits, buffer, result);
+		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
-
+		free(buffer.pntr);
 	}
 }

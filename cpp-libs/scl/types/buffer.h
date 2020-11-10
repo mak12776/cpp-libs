@@ -24,9 +24,9 @@ namespace scl
 		}
 
 		template <typename byte_t>
-		static inline void fopen_fread_malloc(const char *file, base_buffer_t<byte_t> &buffer)
+		static inline void fopen_fread_malloc(const char *name, base_buffer_t<byte_t> &buffer)
 		{
-			fopen_fread_malloc(file, (void **)&buffer.pntr, buffer.size);
+			fopen_fread_malloc(name, (void **)&buffer.pntr, buffer.size);
 		}
 
 		template <typename byte_t>
