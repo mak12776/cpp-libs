@@ -73,7 +73,7 @@ namespace bith
 
 		scl::ubuffer_t buffer;
 
-		// scl::io::fopen_fread_all(file_name.c_str(), buffer.pntr, buffer.size);
+		
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
