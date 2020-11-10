@@ -4,14 +4,16 @@
 
 namespace bith
 {
+	using namespace scl;
+
 	typedef bool(&size_manager_t)(size_t &);
 
 	bool double_size_manager(size_t &size)
 	{
 		if (size == 0)
 			size = 1024;
-		scl::math::safe_mul(size, (size_t)2, size);
-		return scl::err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		math::safe_mul(size, (size_t)2, size);
+		return err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 	}
 
 	struct segment_buffer_t
@@ -42,8 +44,6 @@ namespace bith
 	{
 		data_type *pntr = buffer.pntr;
 		data_type *end = buffer.pntr + (buffer.size / sizeof(data_type));
-
-		
 	}
 
 	template <size_manager_t size_manager = double_size_manager>
@@ -69,8 +69,6 @@ namespace bith
 
 	static inline void count_bits(size_t data_bits, const char *name, segment_buffer_t &result)
 	{
-		namespace err = scl::err;
-
 		scl::ubuffer_t buffer;
 
 		scl::io::fopen_fread_malloc(name, buffer);

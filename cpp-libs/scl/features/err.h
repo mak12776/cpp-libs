@@ -144,11 +144,16 @@ namespace scl
 				case scl::err::SUCCESS:
 					return 0;
 
+				case scl::err::FLOAT_OVERFLOW:
+					write_number +=
+						cfmt::write(file, "error: %s: %s\n", to_string(num),
+							math::fe_string());
+					break;
+
 				case scl::err::INVALID_ARGUMENT:
 				case scl::err::NO_MEMORY:
 				case scl::err::NEW:
 				case scl::err::INT_OVERFLOW:
-				case scl::err::FLOAT_OVERFLOW:
 					 
 				case scl::err::OPEN:
 				case scl::err::STAT:

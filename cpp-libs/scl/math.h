@@ -7,7 +7,21 @@ namespace scl
 {
 	namespace math
 	{
-		// simple primes finder
+		template <typename int_type, typename float_type>
+		bool cast_value(int_type value, float_type &result)
+		{
+			int_type temp_value;
+			float_type temp_result;
+
+			temp_result = (float_type)value;
+			temp_value = (int_type)temp_result;
+
+			if (temp_value != value)
+				return true;
+
+			result = temp_result;
+			return false;
+		}
 
 		// safe arithmetic operations
 
@@ -47,13 +61,16 @@ namespace scl
 #endif
 		}
 
-		template <typename type>
-		static inline bool pow(type base, type exp, type &res)
+		template <typename type, typename float_type = long double>
+		static inline bool pow(type base, type exp, type &result)
 		{
-			if (std::numeric_limits<type>::digits10 >= std::numeric_limits<long double>::digits10)
+			float_type temp;
+
+			if (std::numeric_limits<type>::digits10 >= std::numeric_limits<float_type>::digits10)
 				return true;
 
-			res = std::pow<long double, long double>(base, exp);
+			temp = std::pow<long double, long double>((float_type)base, (float_type)exp);
+
 			if (math_errhandling & MATH_ERREXCEPT)
 			{
 				if (std::fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
@@ -65,7 +82,31 @@ namespace scl
 					return true;
 			}
 
+			result = temp;
 			return false;
+		}
+
+		static inline const char *fe_string()
+		{
+			switch(std::fetestexcept(FE_ALL_EXCEPT))
+			{
+#ifdef FE_DIVBYZERO
+			case FE_DIVBYZERO: return "FE_DIVBYZERO";
+#endif
+#ifdef FE_INEXACT
+			case FE_INEXACT: return "FE_INEXACT";
+#endif
+#ifdef FE_INVALID
+			case FE_INVALID: return "FE_INVALID";
+#endif
+#ifdef FE_OVERFLOW
+			case FE_OVERFLOW: return "FE_OVERFLOW";
+#endif
+#ifdef FE_UNDERFLOW
+			case FE_UNDERFLOW: return "FE_UNDERFLOW";
+#endif
+			default: return "UNKNOWN";
+			}
 		}
 
 		// safe functions
