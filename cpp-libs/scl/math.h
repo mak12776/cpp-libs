@@ -67,16 +67,12 @@ namespace scl
 		static inline bool pow(type base, type exp, type &result)
 		{
 			type temp;
+			float_type base_float, exp_float, result_float;
 
-			if constexpr (
-				std::is_same<type, float>() or
-				std::is_same<type, double>() or
-				std::is_same<type, long double>())
+			if constexpr (std::is_floating_point_v<type>)
 				temp = std::pow<type, type>(base, exp);
-			else
+			else if constexpr (std::is_integral_v<type>)
 			{
-				float_type base_float, exp_float, result_float;
-
 				if (cast_value(base, base_float) || cast_value(exp, exp_float))
 					return true;
 

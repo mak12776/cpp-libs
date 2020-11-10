@@ -413,9 +413,9 @@ void count_bit_width(const char *file_name)
 	for (size_t index = 0; index < max_buffer_index; index += 1)
 	{
 		value_type value = pntr[index];
-		std::vector<data_count_t<value_type>>::iterator search = std::find_if(data_count_vector.begin(), data_count_vector.end(), [&value](data_count_t<value_type> data_count) { return data_count.data == value; });
+		std::vector<data_count_t<value_type>>::iterator search = std::find_if(data_count_vector.begin(), data_count_vector.end(), [&value](data_count_t<value_type> data_counts) { return data_counts.data == value; });
 		/* or:
-		auto search = std::find_if(data_counts.begin(), data_counts.end(), [&value](auto data_count) { return data_count.data == value; }); */
+		auto search = std::find_if(data_counts.begin(), data_counts.end(), [&value](auto data_counts) { return data_counts.data == value; }); */
 
 		if (search != data_count_vector.end())
 			(*search).count += 1;
@@ -426,8 +426,8 @@ void count_bit_width(const char *file_name)
 	data_count_vector.shrink_to_fit();
 
 	printf("vector size: %zu\n", data_count_vector.size());
-	for (auto data_count : data_count_vector)
-		printf("%" PRIx64 ": %zu\n", data_count.data, data_count.count);
+	for (auto data_counts : data_count_vector)
+		printf("%" PRIx64 ": %zu\n", data_counts.data, data_counts.count);
 }
 #endif
 

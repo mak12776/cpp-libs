@@ -18,52 +18,79 @@ namespace bith
 
 	struct segment_buffer_t
 	{
-		size_t data_bits;
-		size_t data_size;
-
 		struct
 		{
-			size_t len;
-			size_t size;
-
-			scl::ubyte *data_pntr;
-			size_t *counts_pntr;
-		} data_counts;
-
-		struct
-		{
-			scl::ubyte *pntr;
 			size_t bits;
 			size_t size;
+			size_t data_bytes;
+		} info;
+
+		struct
+		{
+			size_t size;
+			size_t len;
+
+			ubyte *data_pntr;
+			size_t *counts_pntr;
+		} counts;
+
+		struct
+		{
+			size_t bits;
+			size_t size;
+			ubyte *pntr;
 		} remaining;
 	};
 
-
 	template <typename data_type, size_manager_t size_manager>
-	static inline void count_primary_types(scl::ubuffer_t &buffer, segment_buffer_t &result)
+	static inline void count_primitive_types(ubuffer_t &buffer, segment_buffer_t &result)
 	{
 		data_type *pntr = buffer.pntr;
 		data_type *end = buffer.pntr + (buffer.size / sizeof(data_type));
 	}
 
 	template <size_manager_t size_manager = double_size_manager>
-	static inline void count_bits(size_t data_bits, scl::ubuffer_t &buffer, segment_buffer_t &result)
+	static inline void count_bits(size_t data_bits, ubuffer_t &buffer, segment_buffer_t &result)
 	{
 		size_t buffer_bits;
 		size_t possible_data_number;
+		size_t cleaner_start_index = cleaner::get_index();
 
 		math::safe_mul(buffer.size, (size_t)8, buffer_bits);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
-		result.data_bits = data_bits;
-		result.data_size = (data_bits / 8) + (data_bits % 8) ? 1 : 0;
+		// calculate bits
+		result.info.bits = data_bits;
+		result.info.size = (data_bits / 8) + (data_bits % 8) ? 1 : 0;
 
+		// calculate possible data number
 		math::safe_pow((size_t)2, data_bits, possible_data_number);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
-		
+		// choose a minimum allocation size
+		size_manager(result.counts.size);
+		result.counts.size = (std::min)<size_t>(possible_data_number, result.counts.size);
+
+		// calculate data bytes
+		math::safe_mul(result.info.size, result.counts.size, result.info.data_bytes);
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			return;
+
+		// allocate memory for data pntr
+		result.counts.data_pntr = mem::safe_malloc(result.info.data_bytes);
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			return;
+		cleaner::add_free(result.counts.data_pntr);
+
+		// allocate memory for counts pntr
+		result.counts.counts_pntr = mem::safe_malloc_array<size_t>();
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			return;
+		cleaner::add_free(result.counts.counts_pntr);
+
+		// 
 	}
 
 	static inline void count_bits(size_t data_bits, const char *name, segment_buffer_t &result)

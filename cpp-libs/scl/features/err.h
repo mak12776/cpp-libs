@@ -15,7 +15,7 @@ namespace scl
 			NO_MEMORY, NEW,
 
 			// overflows
-			INT_OVERFLOW, FLOAT_OVERFLOW,
+			INT_OVERFLOW, FLOAT_OVERFLOW, TYPE_CAST,
 
 			// normal function
 			OPEN, STAT, READ, WRITE,
@@ -40,6 +40,7 @@ namespace scl
 
 			case INT_OVERFLOW: return "INT_OVERFLOW";
 			case FLOAT_OVERFLOW: return "FLOAT_OVERFLOW";
+			case TYPE_CAST: return "TYPE_CAST";
 
 			case STAT: return "STAT";
 			case OPEN: return "OPEN";
@@ -154,6 +155,7 @@ namespace scl
 				case scl::err::NO_MEMORY:
 				case scl::err::NEW:
 				case scl::err::INT_OVERFLOW:
+				case scl::err::TYPE_CAST:
 					 
 				case scl::err::OPEN:
 				case scl::err::STAT:
