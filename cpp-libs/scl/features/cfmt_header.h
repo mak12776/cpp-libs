@@ -53,10 +53,10 @@ namespace scl
 
 		// other print fucntions
 		template <typename value_type>
-		static inline int print_size_of(FILE *stream);
+		static inline int print_size_of(FILE *stream = stdout);
 
 		template <typename value_type>
-		static inline int print_address_of(value_type *value, const char *name, FILE *stream);
+		static inline int print_address_of(value_type *value, const char *name, FILE *stream = stdout);
 
 		size_t print_separator(size_t width, ubyte character, FILE *stream);
 	}

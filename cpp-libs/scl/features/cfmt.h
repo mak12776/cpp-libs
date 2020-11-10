@@ -417,8 +417,8 @@ namespace scl
 		template <typename value_type>
 		static inline int print_size_of(FILE *stream)
 		{
-			return fprintf(stream, "sizeof %s: %zu\n", typeid(value_type).name(),
-				sizeof(value_type));
+			return fprintf(stream, "sizeof %s: %zu\n", 
+				typeid(value_type).name(), sizeof(value_type));
 		}
 
 		template <typename value_type>
@@ -430,7 +430,7 @@ namespace scl
 
 		size_t DEFAULT_WIDTH = 80;
 
-		size_t print_separator(size_t width, ubyte character, FILE *stream)
+		static inline size_t print_separator(size_t width, ubyte character, FILE *stream)
 		{
 			ubyte *buffer;
 			size_t write_number;

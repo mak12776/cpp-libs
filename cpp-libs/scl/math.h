@@ -61,15 +61,30 @@ namespace scl
 #endif
 		}
 
+		
+
 		template <typename type, typename float_type = long double>
 		static inline bool pow(type base, type exp, type &result)
 		{
-			float_type temp;
+			type temp;
 
-			if (std::numeric_limits<type>::digits10 >= std::numeric_limits<float_type>::digits10)
-				return true;
+			if constexpr (
+				std::is_same<type, float>() or
+				std::is_same<type, double>() or
+				std::is_same<type, long double>())
+				temp = std::pow<type, type>(base, exp);
+			else
+			{
+				float_type base_float, exp_float, result_float;
 
-			temp = std::pow<long double, long double>((float_type)base, (float_type)exp);
+				if (cast_value(base, base_float) || cast_value(exp, exp_float))
+					return true;
+
+				result_float = std::pow<float_type, float_type>(base_float, exp_float);
+
+				if (cast_value(result_float, temp))
+					return true;
+			}
 
 			if (math_errhandling & MATH_ERREXCEPT)
 			{
