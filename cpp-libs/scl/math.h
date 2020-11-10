@@ -111,6 +111,16 @@ namespace scl
 
 		// safe functions
 
+		template <typename int_type, typename float_type>
+		void safe_cast_value(int_type value, float_type &result)
+		{
+			if (cast_value(value, result))
+			{
+				err::set(err::INT_OVERFLOW);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
+
 		template<typename type>
 		static inline void safe_mul(type a, type b, type &result)
 		{
