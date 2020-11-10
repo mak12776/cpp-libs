@@ -50,6 +50,7 @@ namespace bith
 	static inline void count_bits(size_t data_bits, scl::ubuffer_t &buffer, segment_buffer_t &result)
 	{
 		size_t buffer_bits;
+		size_t possible_data_number;
 
 		math::safe_mul(buffer.size, (size_t)8, buffer_bits);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
@@ -58,13 +59,11 @@ namespace bith
 		result.data_bits = data_bits;
 		result.data_size = (data_bits / 8) + (data_bits % 8) ? 1 : 0;
 
-		size_t possible_data_number;
-
 		math::safe_pow((size_t)2, data_bits, possible_data_number);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
-		printf("possible data number: %zu\n", possible_data_number);
+		
 	}
 
 	static inline void count_bits(size_t data_bits, const char *name, segment_buffer_t &result)
