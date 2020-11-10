@@ -64,6 +64,8 @@ namespace bith
 		result.info.bits = data_bits;
 		result.info.size = (data_bits / 8) + (data_bits % 8) ? 1 : 0;
 
+		// calculate remaining bits & size
+
 		// calculate possible data number
 		math::safe_pow((size_t)2, data_bits, possible_data_number);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
@@ -90,7 +92,9 @@ namespace bith
 			return;
 		cleaner::add_free(result.counts.counts_pntr);
 
-		// 
+		// allocate memory for remaining
+
+		// call necessary functions and done the fucking hell job.
 	}
 
 	static inline void count_bits(size_t data_bits, const char *name, segment_buffer_t &result)
