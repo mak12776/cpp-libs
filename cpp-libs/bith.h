@@ -60,15 +60,15 @@ namespace bith
 
 		// --- calculating informations ---
 
-		// calculating remaining bits & size
-		 result.remaining.bits = result.info.buffer_bits % result.info.bits;
-		result.remaining.size = get_bytes_per_bits(result.remaining.bits); 
-
 		// calculating counts size & len
 		size_manager(result.counts.size);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__)) return;
 		result.counts.size = std::min<size_t>(result.info.possible_data_number, result.counts.size);
 		result.counts.len = 0;
+
+		// calculating remaining bits & size
+		result.remaining.bits = result.info.buffer_bits % result.info.bits;
+		result.remaining.size = get_bytes_per_bits(result.remaining.bits);
 
 		// ---- memory allocations --
 
@@ -102,6 +102,8 @@ namespace bith
 
 		pntr = buffer.pntr;
 		end = buffer.pntr + (buffer.size / result.info.size);
+
+		cleaner::finish(cleaner_start_index);
 	}
 
 
