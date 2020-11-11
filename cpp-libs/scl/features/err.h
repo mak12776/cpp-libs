@@ -84,18 +84,18 @@ namespace scl
 
 			// functions
 			
-			void set(num_t errnum) { num = errnum; }
-			void clear() { num = num_t::SUCCESS; array_index = 0; }
-			void clear_if(num_t errnum) { if (num == errnum) clear(); }
+			inline void set(num_t errnum) { num = errnum; }
+			inline void clear() { num = num_t::SUCCESS; array_index = 0; }
+			inline void clear_if(num_t errnum) { if (num == errnum) clear(); }
 
-			bool check() { return num != num_t::SUCCESS; }
-			bool test(num_t errnum) { return num == errnum; }
+			inline bool check() { return num != num_t::SUCCESS; }
+			inline bool test(num_t errnum) { return num == errnum; }
 
-			const char *string() { return to_string(num); }
+			inline const char *string() { return to_string(num); }
 
-			void pop_file_info() { array_index -= 1; }
+			inline void pop_file_info() { array_index -= 1; }
 
-			void push_file_info(const char *file, line_t line, const char *function)
+			inline void push_file_info(const char *file, line_t line, const char *function)
 			{
 				if (array_index != array_size)
 				{
@@ -106,7 +106,7 @@ namespace scl
 				}
 			}
 
-			bool check_push_file_info(const char *file, line_t line, const char *function)
+			inline bool check_push_file_info(const char *file, line_t line, const char *function)
 			{
 				if (check())
 				{
@@ -116,7 +116,7 @@ namespace scl
 				return false;
 			}
 
-			size_t print_traceback(FILE *file = nullptr)
+			inline size_t print_traceback(FILE *file = nullptr)
 			{
 				size_t total;
 				file = (file == nullptr) ? stderr : file;
@@ -135,7 +135,7 @@ namespace scl
 				return total;
 			}
 
-			size_t print(FILE *file = nullptr)
+			inline size_t print(FILE *file = nullptr)
 			{
 				file = (file == nullptr) ? stderr : file;
 				size_t write_number = 0;
