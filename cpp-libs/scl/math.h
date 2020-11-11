@@ -162,10 +162,10 @@ namespace scl
 			}
 		}
 
-		template <typename type>
+		template <typename type, typename float_type = long double>
 		static inline void safe_pow(type base, type exp, type &res)
 		{
-			if (pow<type>(base, exp, res))
+			if (pow<type, float_type>(base, exp, res))
 			{
 				err::set(err::FLOAT_OVERFLOW);
 				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
