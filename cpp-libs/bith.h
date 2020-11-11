@@ -54,34 +54,36 @@ namespace bith
 	template <typename data_type, size_manager_t size_manager>
 	static inline void count_primitive_types(ubuffer_t &buffer, segment_buffer_t &result)
 	{
+		size_t cleaner_start_index;
 		data_type *pntr;
 		data_type *end;
-		size_t cleaner_start_index;
 
 		// --- calculating informations ---
 
 		// calculating counts size & len
 		size_manager(result.counts.size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__)) return;
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__)) 
+			return;
 		result.counts.size = std::min<size_t>(result.info.possible_data_number, result.counts.size);
 		result.counts.len = 0;
 
 		// calculating remaining bits & size
 		result.remaining.bits = result.info.buffer_bits % result.info.bits;
-		result.remaining.size = get_bytes_per_bits(result.remaining.bits);
+		result.remaining.size = result.info.buffer_size % result.info.size;
 
-		// ---- memory allocations --
+		// --- memory allocations ---
 
 		// get cleaner start index
 		cleaner_start_index = cleaner::get_index();
 
 		// allocate memory for remaining
-		result.remaining.pntr = mem::safe_malloc(result.remaining.size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__)) return;
+		result.remaining.pntr = (ubyte *)mem::safe_malloc(result.remaining.size);
+		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__)) 
+			return;
 		cleaner::add_free(result.remaining.pntr); // [from now we need call cleaner::finish at end]
 		
 		// allocate memory for data pntr
-		result.counts.data_pntr = mem::safe_malloc(data_bytes);
+		result.counts.data_pntr = (ubyte *)mem::safe_malloc_array<data_type>(result.counts.size);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 		{
 			cleaner::finish(cleaner_start_index);
@@ -100,8 +102,8 @@ namespace bith
 
 		// --- main process ---
 
-		pntr = buffer.pntr;
-		end = buffer.pntr + (buffer.size / result.info.size);
+		//pntr = (data_type *)buffer.pntr;
+		//end = pntr + (buffer.size / result.info.size);
 
 		cleaner::finish(cleaner_start_index);
 	}
@@ -128,25 +130,25 @@ namespace bith
 		{
 			if (result.info.size == sizeof(uint8_t))
 			{
-				count_primitive_types<uint8_t>(buffer, result);
+				count_primitive_types<uint8_t, size_manager>(buffer, result);
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
 			}
 			else if (result.info.size == sizeof(uint16_t))
 			{
-				count_primitive_types<uint16_t>(buffer, result);
+				count_primitive_types<uint16_t, size_manager>(buffer, result);
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
 			}
 			else if (result.info.size == sizeof(uint32_t))
 			{
-				count_primitive_types<uint32_t>(buffer, result);
+				count_primitive_types<uint32_t, size_manager>(buffer, result);
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
 			}
 			else if (result.info.size == sizeof(uint64_t))
 			{
-				count_primitive_types<uint64_t>(buffer, result);
+				count_primitive_types<uint64_t, size_manager>(buffer, result);
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
 			}

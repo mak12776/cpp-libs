@@ -50,7 +50,7 @@ namespace scl
 			}
 
 			template <typename data_type>
-			constexpr void *safe_malloc_array(size_t size)
+			constexpr data_type *safe_malloc_array(size_t size)
 			{
 				data_type *pntr;
 
@@ -94,7 +94,7 @@ namespace scl
 		static constexpr inline void *safe_realloc(void *pntr, size_t size) { return global_mem.safe_realloc(pntr, size); }
 
 		template <typename data_type>
-		static constexpr inline void *safe_malloc_array(size_t size) { return global_mem.safe_malloc_array<data_type>(size); }
+		static constexpr inline data_type *safe_malloc_array(size_t size) { return global_mem.safe_malloc_array<data_type>(size); }
 
 #ifdef SCL_EXPREMENTAL
 		// text logger manager
