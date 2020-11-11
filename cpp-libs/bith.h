@@ -47,6 +47,8 @@ namespace bith
 	{
 		data_type *pntr = buffer.pntr;
 		data_type *end = buffer.pntr + (buffer.size / sizeof(data_type));
+
+
 	}
 
 	static constexpr inline size_t get_bytes_per_bits(size_t bits)
