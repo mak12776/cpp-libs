@@ -10,16 +10,17 @@ namespace scl
 		template <typename int_type, typename float_type>
 		bool cast_value(int_type value, float_type &result)
 		{
-			float_type temp_result;
-
 			if (std::is_same_v<int_type, float_type>)
 			{
 				result = value;
 				return false;
 			}
 
-			temp_result = float_type(value);
-			if (int_type(temp_result) != value)
+			constexpr auto int_digits = std::numeric_limits<int_type>::digits;
+			constexpr auto float_digits = std::numeric_limits<int_type>::digits;
+
+			if ((int_digits > float_digits) &&
+				value > (1 << (std::numeric_limits<float_type>::digits + 1)))
 				return true;
 
 			result = temp_result;
@@ -70,6 +71,7 @@ namespace scl
 		static inline bool pow(type base, type exp, type &result)
 		{
 			type temp;
+
 			float_type base_float, exp_float, result_float;
 
 			if constexpr (std::is_floating_point_v<type>)
@@ -138,6 +140,8 @@ namespace scl
 		template<typename type>
 		static inline void safe_mul(type a, type b, type &result)
 		{
+
+
 			if (mul<type>(a, b, result))
 			{
 				err::set(err::INT_OVERFLOW);
