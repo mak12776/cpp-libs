@@ -80,7 +80,6 @@ namespace bith
 		result.remaining.pntr = (ubyte *)mem::safe_malloc(result.remaining.size);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__)) 
 			return;
-		cleaner::add_free(result.remaining.pntr); // [from now we need call cleaner::finish at end]
 		
 		// allocate memory for data pntr
 		result.counts.data_pntr = (ubyte *)mem::safe_malloc_array<data_type>(result.counts.size);
@@ -89,7 +88,6 @@ namespace bith
 			cleaner::finish(cleaner_start_index);
 			return;
 		}
-		cleaner::add_free(result.counts.data_pntr);
 
 		// allocate memory for counts pntr
 		result.counts.counts_pntr = mem::safe_malloc_array<size_t>(result.info.size);
@@ -98,7 +96,6 @@ namespace bith
 			cleaner::finish(cleaner_start_index);
 			return;
 		}
-		cleaner::add_free(result.counts.counts_pntr);
 
 		// --- main process ---
 		
