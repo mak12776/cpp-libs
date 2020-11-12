@@ -10,13 +10,16 @@ namespace scl
 		template <typename int_type, typename float_type>
 		bool cast_value(int_type value, float_type &result)
 		{
-			int_type temp_value;
 			float_type temp_result;
 
-			temp_result = (float_type)value;
-			temp_value = (int_type)temp_result;
+			if (std::is_same_v<int_type, float_type>)
+			{
+				result = value;
+				return false;
+			}
 
-			if (temp_value != value)
+			temp_result = = float_type(value);
+			if (int_type(temp_result) != value)
 				return true;
 
 			result = temp_result;

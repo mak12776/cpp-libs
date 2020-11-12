@@ -102,8 +102,6 @@ namespace bith
 
 		// --- main process ---
 
-		//pntr = (data_type *)buffer.pntr;
-		//end = pntr + (buffer.size / result.info.size);
 
 		cleaner::finish(cleaner_start_index);
 	}
