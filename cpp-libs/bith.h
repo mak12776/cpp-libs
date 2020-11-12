@@ -21,7 +21,7 @@ namespace bith
 		return (bits / 8) + ((bits % 8) ? 1 : 0);
 	}
 
-	struct segment_buffer_t
+	struct segmented_buffer_t
 	{
 		struct
 		{
@@ -49,64 +49,78 @@ namespace bith
 			size_t size;
 			ubyte *pntr;
 		} remaining;
+
+		template <size_manager_t size_manager>
+		inline void calculate_primitive_size_bits()
+		{
+			// get default size_manager value
+			size_manager(this->counts.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// choose a minimum valuue for counts size
+			this->counts.size = std::min<size_t>(this->info.possible_data_number, this->counts.size);
+			this->counts.len = 0;
+
+			// calculating remaining bits & size
+			this->remaining.bits = this->info.buffer_bits % this->info.bits;
+			this->remaining.size = get_bytes_per_bits(this->remaining.bits);
+		}
+
+		template <typename data_type>
+		inline void malloc_primitive_types()
+		{
+			// allocate memory for remaining
+			this->remaining.pntr = (ubyte *)mem::safe_malloc(this->remaining.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// allocate memory for data pntr
+			this->counts.data_pntr = (ubyte *)mem::safe_malloc_array<data_type>(this->counts.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// allocate memory for counts pntr
+			this->counts.counts_pntr = mem::safe_malloc_array<size_t>(this->counts.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+		}
 	};
 
 	template <typename data_type, size_manager_t size_manager>
-	static inline void count_primitive_types(ubuffer_t &buffer, segment_buffer_t &result)
+	static inline void count_primitive_types(ubuffer_t &buffer, segmented_buffer_t &result)
 	{
-		size_t cleaner_start_index;
 		data_type *pntr;
 		data_type *end;
 
 		// --- calculating informations ---
 
 		// calculating counts size & len
-		size_manager(result.counts.size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__)) 
-			return;
-		result.counts.size = std::min<size_t>(result.info.possible_data_number, result.counts.size);
-		result.counts.len = 0;
 
-		// calculating remaining bits & size
-		result.remaining.bits = result.info.buffer_bits % result.info.bits;
-		result.remaining.size = result.info.buffer_size % result.info.size;
-
-		// --- memory allocations ---
-
-		// get cleaner start index
-		cleaner_start_index = cleaner::get_index();
-
-		// allocate memory for remaining
-		result.remaining.pntr = (ubyte *)mem::safe_malloc(result.remaining.size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__)) 
-			return;
-		
-		// allocate memory for data pntr
-		result.counts.data_pntr = (ubyte *)mem::safe_malloc_array<data_type>(result.counts.size);
+		result.calculate_primitive_size_bits<size_manager>();
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-		{
-			cleaner::finish(cleaner_start_index);
 			return;
-		}
 
-		// allocate memory for counts pntr
-		result.counts.counts_pntr = mem::safe_malloc_array<size_t>(result.info.size);
+		result.malloc_primitive_types<data_type>();
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-		{
-			cleaner::finish(cleaner_start_index);
 			return;
-		}
 
 		// --- main process ---
-		
+		pntr = (data_type *)buffer.pntr;
+		end = (data_type *)(buffer.pntr + buffer.size - (buffer.size % result.info.size));
 
+		while (pntr <= end)
+		{
 
-		cleaner::finish(cleaner_start_index);
+			pntr += 1;
+		}
+
+		printf("success.\n");
 	}
 
 
 	template <size_manager_t size_manager = double_size_manager>
-	static inline void count_bits(size_t data_bits, ubuffer_t &buffer, segment_buffer_t &result)
+	static inline void count_bits(size_t data_bits, ubuffer_t &buffer, segmented_buffer_t &result)
 	{
 		// calculating buffer informations
 		result.info.buffer_size = buffer.size;
@@ -153,7 +167,7 @@ namespace bith
 		}
 	}
 
-	static inline void count_bits(size_t data_bits, const char *name, segment_buffer_t &result)
+	static inline void count_bits(size_t data_bits, const char *name, segmented_buffer_t &result)
 	{
 		scl::ubuffer_t buffer;
 

@@ -10,6 +10,8 @@ namespace scl
 		template <typename int_type, typename float_type>
 		bool cast_value(int_type value, float_type &result)
 		{
+			// TODO: incomplete code
+
 			if (std::is_same_v<int_type, float_type>)
 			{
 				result = value;
@@ -23,7 +25,7 @@ namespace scl
 				value > (1 << (std::numeric_limits<float_type>::digits + 1)))
 				return true;
 
-			result = temp_result;
+			result = value;
 			return false;
 		}
 
