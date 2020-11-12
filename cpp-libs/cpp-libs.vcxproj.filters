@@ -124,7 +124,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scl\features\cfmt_header.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

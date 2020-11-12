@@ -18,7 +18,7 @@ namespace scl
 				return false;
 			}
 
-			temp_result = = float_type(value);
+			temp_result = float_type(value);
 			if (int_type(temp_result) != value)
 				return true;
 
