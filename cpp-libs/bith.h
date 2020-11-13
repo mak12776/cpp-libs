@@ -93,10 +93,6 @@ namespace bith
 		data_type *pntr;
 		data_type *end;
 
-		// --- calculating informations ---
-
-		// calculating counts size & len
-
 		result.calculate_primitive_size_bits<size_manager>();
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;

@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="bith.h" />
+    <ClInclude Include="incomplete scl\old_string.h" />
     <ClInclude Include="primes.h" />
     <ClInclude Include="programs\bh.h" />
     <ClInclude Include="programs\bh_old.h" />
