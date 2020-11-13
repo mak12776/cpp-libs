@@ -6,9 +6,8 @@ namespace scl
 	{
 		const char *const pntr;
 		const size_t len;
-		const size_t size;
 
-		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr)), size(len + 1)
+		c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr))
 		{ }
 	};
 
@@ -154,22 +153,9 @@ namespace scl
 			len += string.len;
 			// realloc_free_space will set size.
 
-			memcpy(pntr + len, string.pntr, string.size); 
+			memcpy(pntr + len, string.pntr, string.len + 1);
 			pntr[len] = '\0';
 		}
 	};
 
-	using string_t = std::variant<c_string_t, m_string_t>;
-
-	static inline void log_c_string(c_string_t &string, const char *name)
-	{
-		printf("%s: [%s]\n", name, string.pntr);
-		printf("size: %zu, len: %zu\n", string.size, string.len);
-	}
-
-	static inline void log_m_string(m_string_t &string, const char *name)
-	{
-		printf("%s: [%s]\n", name, string.pntr);
-		printf("size: %zu, len: %zu\n", string.size, string.len);
-	}
 }
