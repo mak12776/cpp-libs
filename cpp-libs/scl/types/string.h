@@ -34,7 +34,7 @@ namespace scl
 
 		// malloc functions
 
-		inline void safe_malloc_copy(const char *string)
+		inline void safe_allocate_copy(const char *string)
 		{
 			len = strlen(string);
 			size = len + 1;
@@ -49,7 +49,7 @@ namespace scl
 			memcpy(pntr, string, size);
 		}
 
-		inline void safe_malloc_cat(std::initializer_list<c_string_t> list)
+		inline void safe_allocate_cat(std::initializer_list<c_string_t> list)
 		{
 			if (list.size() == 0)
 				return;
@@ -78,7 +78,7 @@ namespace scl
 			*new_pntr = '\0';
 		}
 
-		inline void malloc_len_value(size_t length, const char value)
+		inline void allocate_len_value(size_t length, const char value)
 		{
 			size_t new_size;
 

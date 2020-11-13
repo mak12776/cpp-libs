@@ -173,7 +173,7 @@ void search_offsets(const char *_file_name)
 	c_string_t file_name(_file_name);
 	m_string_t offsets_file_name;
 
-	offsets_file_name.safe_malloc_cat({ file_name, offsets_ext });
+	offsets_file_name.safe_allocate_cat({ file_name, offsets_ext });
 	if (err::check()) return;
 
 	cleaner::add_free((void *)offsets_file_name.pntr);
@@ -279,7 +279,7 @@ void offsets_check(const char *_file_name)
 	c_string_t file_name(_file_name);
 	m_string_t info_file_name;
 
-	info_file_name.safe_malloc_cat({ file_name, offsets_ext });
+	info_file_name.safe_allocate_cat({ file_name, offsets_ext });
 	if (err::check())
 	{
 		printf("error: can't allocate memory for info_file_name\n");

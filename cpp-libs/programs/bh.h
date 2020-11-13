@@ -108,7 +108,7 @@ namespace bh
 		size_t buffer_bits;
 		count_t<size> count;
 
-		path.safe_malloc_cat({ parent_folder, io::sep, name });
+		path.safe_allocate_cat({ parent_folder, io::sep, name });
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
