@@ -127,19 +127,6 @@ namespace scl
 
 		// safe fread, fwrite
 
-		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
-		{
-			size_t write_number;
-
-			write_number = fwrite(pntr, 1, size, stream);
-			if (write_number != size)
-			{
-				err::set(err::FWRITE);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-
-			return write_number;
-		}
 
 		static inline size_t safe_fread(void *pntr, size_t size, FILE *stream)
 		{
@@ -153,6 +140,20 @@ namespace scl
 			}
 
 			return read_number;
+		}
+
+		static inline size_t safe_fwrite(void *pntr, size_t size, FILE *stream)
+		{
+			size_t write_number;
+
+			write_number = fwrite(pntr, 1, size, stream);
+			if (write_number != size)
+			{
+				err::set(err::FWRITE);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+
+			return write_number;
 		}
 
 		// fread, fwrite data
@@ -223,7 +224,7 @@ namespace scl
 
 			*size = safe_fread(*pntr, file_size, file);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
+				return mem::free(*pntr);
 		}
 
 		static inline void fopen_fread_malloc(const char *name, void **pntr, size_t *size)
@@ -239,6 +240,19 @@ namespace scl
 		}
 
 		// fopen fwrite
+
+		static inline size_t fopen_fread(const char *name, void *pntr, size_t size)
+		{
+			FILE *file = safe_fopen(name, "rb");
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return 0;
+
+			size_t read_number = safe_fread(pntr, size, file);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+
+			std::fclose(file);
+			return read_number;
+		}
 
 		static inline size_t fopen_fwrite(const char *name, void *pntr, size_t size)
 		{

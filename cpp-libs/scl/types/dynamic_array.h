@@ -8,19 +8,22 @@ namespace scl
 		byte_type *pntr;
 		size_t size;
 
-		inline void fread_malloc(FILE *file)
+		inline void fread(FILE *file)
 		{
+			io::fread_array<byte_type>(pntr, size, file);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
+
+		inline void fopen_fread(const char *name)
+		{
+			io::fopen_fread(name, pntr, size);
 
 		}
 
-		inline void fopen_fread_malloc(const char *name)
+		inline void fwrite(FILE *file)
 		{
-
-		}
-
-		inline void fopen_fwrite(FILE *file)
-		{
-
+			io::fwrite_array<byte_type>(pntr, size, file);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
 		inline void fopen_fwrite(const char *name)
