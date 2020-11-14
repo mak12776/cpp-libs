@@ -39,9 +39,6 @@
 #include "io.h"					// <sys/types.h> <sys/stat.h> <io.h>
 								// "features/all_features.h"
 
-#include "types/buffer.h"		// "io.h"
-#include "types/string.h"		// <string> "mem.h" "math.h"
-
 #include "winapi/functions.h"
 #include "winapi/tools.h"
 

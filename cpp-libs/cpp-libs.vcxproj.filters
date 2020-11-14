@@ -51,9 +51,6 @@
     <ClInclude Include="scl\rand.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\types\string.h">
-      <Filter>Header Files\scl\types</Filter>
-    </ClInclude>
     <ClInclude Include="scl\features\cleaner.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
