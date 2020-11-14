@@ -5,6 +5,43 @@
 
 namespace scl
 {
+	namespace fe
+	{
+		// float environment
+
+		static inline const char *to_string()
+		{
+			switch (std::fetestexcept(FE_ALL_EXCEPT))
+			{
+#ifdef FE_DIVBYZERO
+			case FE_DIVBYZERO: return "FE_DIVBYZERO";
+#endif
+#ifdef FE_INEXACT
+			case FE_INEXACT: return "FE_INEXACT";
+#endif
+#ifdef FE_INVALID
+			case FE_INVALID: return "FE_INVALID";
+#endif
+#ifdef FE_OVERFLOW
+			case FE_OVERFLOW: return "FE_OVERFLOW";
+#endif
+#ifdef FE_UNDERFLOW
+			case FE_UNDERFLOW: return "FE_UNDERFLOW";
+#endif
+			default: return "UNKNOWN";
+			}
+		}
+
+		static inline bool check_except()
+		{
+			if constexpr ((math_errhandling & MATH_ERREXCEPT) != 0)
+				return (std::fetestexcept(FE_ALL_EXCEPT) != 0);
+			else if constexpr ((math_errhandling & MATH_ERRNO) != 0)
+				return (errno == EDOM) || (errno == ERANGE);
+			return true;
+		}
+	}
+
 	namespace math
 	{
 		template <typename src_type, typename dest_type>
@@ -13,11 +50,17 @@ namespace scl
 			constexpr auto src_digits = std::numeric_limits<src_type>::digits;
 			constexpr auto dest_digits = std::numeric_limits<dest_type>::digits;
 
+			constexpr auto src_max_exp = std::numeric_limits<src_type>::max_exponent;
+			constexpr auto dest_max_exp = std::numeric_limits<dest_type>::max_exponent;
+
 			constexpr auto src_is_integral = std::is_integral_v<src_type>;
 			constexpr auto dest_is_integral = std::is_integral_v<dest_type>;
 
 			constexpr auto src_is_float = std::is_floating_point_v<src_type>;
 			constexpr auto dest_is_float = std::is_floating_point_v<dest_type>;
+
+			constexpr auto check_digits_exp =
+				(src_digits > dest_digits) || (src_max_exp > dest_max_exp);
 
 			if constexpr (std::is_same_v<src_type, dest_type>)
 			{
@@ -25,8 +68,16 @@ namespace scl
 				return false;
 			}
 
-			if (src_type(dest_type(src)) != src)
-				return true;
+			if constexpr (
+				(src_is_integral
+					&& (dest_is_integral || dest_is_float)
+					&& (src_digits > dest_digits))
+				|| (src_is_float && dest_is_float && check_digits_exp)
+				|| (src_is_float && dest_is_integral))
+			{
+				if (src_type(dest_type(src)) != src)
+					return true;
+			}
 
 			dest = (dest_type)src;
 			return false;
@@ -70,17 +121,18 @@ namespace scl
 #endif
 		}
 
-		
-
-		template <typename type, typename float_type = long double>
+		template <typename type, typename suggested_type = long double>
 		static inline bool pow(type base, type exp, type &result)
 		{
-			type temp;
+			using float_type = std::conditional_t<
+				std::is_floating_point_v<suggested_type>,
+				suggested_type, long double>;
 
+			type temp_result;
 			float_type base_float, exp_float, result_float;
 
 			if constexpr (std::is_floating_point_v<type>)
-				temp = std::pow<type, type>(base, exp);
+				temp_result = std::pow<type, type>(base, exp);
 			else if constexpr (std::is_integral_v<type>)
 			{
 				if (cast_value(base, base_float) || cast_value(exp, exp_float))
@@ -88,47 +140,17 @@ namespace scl
 
 				result_float = std::pow<float_type, float_type>(base_float, exp_float);
 
-				if (cast_value(result_float, temp))
+				if (cast_value(result_float, temp_result))
 					return true;
 			}
 
-			if (math_errhandling & MATH_ERREXCEPT)
-			{
-				if (std::fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
-					return true;
-			}
-			else if constexpr (math_errhandling & MATH_ERRNO)
-			{
-				if ((errno == EDOM) or (errno == ERANGE))
-					return true;
-			}
+			if (fe::check_except())
+				return true;
 
-			result = temp;
+			result = temp_result;
 			return false;
 		}
 
-		static inline const char *fe_string()
-		{
-			switch(std::fetestexcept(FE_ALL_EXCEPT))
-			{
-#ifdef FE_DIVBYZERO
-			case FE_DIVBYZERO: return "FE_DIVBYZERO";
-#endif
-#ifdef FE_INEXACT
-			case FE_INEXACT: return "FE_INEXACT";
-#endif
-#ifdef FE_INVALID
-			case FE_INVALID: return "FE_INVALID";
-#endif
-#ifdef FE_OVERFLOW
-			case FE_OVERFLOW: return "FE_OVERFLOW";
-#endif
-#ifdef FE_UNDERFLOW
-			case FE_UNDERFLOW: return "FE_UNDERFLOW";
-#endif
-			default: return "UNKNOWN";
-			}
-		}
 
 		// safe functions
 
@@ -174,51 +196,43 @@ namespace scl
 			}
 		}
 
-		template <typename type, typename float_type = long double>
-		static inline void safe_pow(type base, type exp, type &res)
+		template <typename type, typename suggested_type = long double>
+		static inline void safe_pow(type base, type exp, type &result)
 		{
-			if (pow<type, float_type>(base, exp, res))
+			using float_type = std::conditional_t<
+				std::is_floating_point_v<suggested_type>, 
+				suggested_type, long double>;
+
+			type temp_result;
+			float_type base_float, exp_float, result_float;
+
+			if constexpr (std::is_floating_point_v<type>)
+				temp_result = std::pow<type, type>(base, exp);
+			else if constexpr (std::is_integral_v<type>)
 			{
-				err::set(err::FLOAT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				safe_cast_value(base, base_float);
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return;
+
+				safe_cast_value(exp, exp_float);
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return;
+
+				result_float = std::pow<type, type>(base, exp);
+
+				safe_cast_value(result_float, temp_result);
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return;
 			}
+
+			if (fe::check_except())
+			{
+				err::set(err::FLOAT_ERROR);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				return;
+			}
+
+			result = temp_result;
 		}
-
-		// specific functions
-
-#if SCL_DEPRECATED
-
-		static inline bool mul_size(size_t a, size_t b, size_t &result)
-		{
-#ifdef _MSC_VER
-
-#if SIZE_MAX == UINT32_MAX
-			typedef uint64_t size_overflow_t;
-			const uint32_t SIZE_BITS = 32;
-
-			size_overflow_t prod = (size_overflow_t)a * (size_overflow_t)b;
-			result = (size_t)prod;
-			return (prod >> SIZE_BITS) != 0;
-#elif SIZE_MAX == UINT64_MAX
-			return !msl::utilities::SafeMultiply(a, b, result);
-#else 
-#error incomplete function
-#endif // SIZE_MAX == UINT32_MAX
-
-#elif defined(__GNUC__)
-			return __builtin_mul_overflow(a, b, &result);
-#else
-#error unknown compiler
-#endif // _MSC_VER
-		}
-
-		static inline void safe_mul_size(size_t a, size_t b, size_t &result)
-		{
-			if (mul_size(a, b, result))
-				throw new std::overflow_error("size multiply overflow");
-		}
-
-#endif
-
 	}
 }

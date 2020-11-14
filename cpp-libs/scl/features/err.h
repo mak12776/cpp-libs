@@ -15,7 +15,7 @@ namespace scl
 			NO_MEMORY, NEW,
 
 			// overflows
-			INT_OVERFLOW, FLOAT_OVERFLOW, TYPE_CAST,
+			INT_OVERFLOW, FLOAT_ERROR, TYPE_CAST,
 
 			// normal function
 			OPEN, STAT, READ, WRITE,
@@ -39,7 +39,7 @@ namespace scl
 			case NEW: return "NEW"; 
 
 			case INT_OVERFLOW: return "INT_OVERFLOW";
-			case FLOAT_OVERFLOW: return "FLOAT_OVERFLOW";
+			case FLOAT_ERROR: return "FLOAT_ERROR";
 			case TYPE_CAST: return "TYPE_CAST";
 
 			case STAT: return "STAT";
@@ -145,10 +145,10 @@ namespace scl
 				case scl::err::SUCCESS:
 					return 0;
 
-				case scl::err::FLOAT_OVERFLOW:
+				case scl::err::FLOAT_ERROR:
 					write_number +=
 						cfmt::write(file, "error: %s: %s\n", to_string(num),
-							math::fe_string());
+							fe::to_string());
 					break;
 
 				case scl::err::INVALID_ARGUMENT:
