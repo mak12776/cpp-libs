@@ -8,6 +8,8 @@ namespace scl
 		byte_type *pntr;
 		size_t size;
 
+		// fread, fwrite
+
 		inline void fread(FILE *file)
 		{
 			io::fread_array<byte_type>(pntr, size, file);
@@ -20,7 +22,7 @@ namespace scl
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 		
-		// 
+		// fopen fread, fwrite
 
 		inline void fopen_fread(const char *name)
 		{
@@ -47,9 +49,9 @@ namespace scl
 		}
 
 		template <typename byte_t>
-		static inline void fopen_malloc_fread(const char *name, dynamic_array_t<byte_t> &buffer)
+		static inline void malloc_fopen_fread(const char *name, dynamic_array_t<byte_t> &buffer)
 		{
-			fopen_malloc_fread(name, (void **)&buffer.pntr, &buffer.size);
+			malloc_fopen_fread(name, (void **)&buffer.pntr, &buffer.size);
 		}
 
 		template <typename byte_t>

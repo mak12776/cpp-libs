@@ -227,7 +227,7 @@ namespace scl
 				return mem::free(*pntr);
 		}
 
-		static inline void fopen_malloc_fread(const char *name, void **pntr, size_t *size)
+		static inline void malloc_fopen_fread(const char *name, void **pntr, size_t *size)
 		{
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))

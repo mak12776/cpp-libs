@@ -171,7 +171,7 @@ namespace bith
 	{
 		scl::ubuffer_t buffer;
 
-		scl::io::fopen_malloc_fread(name, (void **)&buffer.pntr, &buffer.size);
+		scl::io::malloc_fopen_fread(name, (void **)&buffer.pntr, &buffer.size);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
