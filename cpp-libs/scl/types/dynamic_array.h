@@ -14,21 +14,24 @@ namespace scl
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
-		inline void fopen_fread(const char *name)
-		{
-			io::fopen_fread(name, pntr, size);
-
-		}
-
 		inline void fwrite(FILE *file)
 		{
 			io::fwrite_array<byte_type>(pntr, size, file);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
+		
+		// 
+
+		inline void fopen_fread(const char *name)
+		{
+			io::fopen_fread(name, pntr, size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
 
 		inline void fopen_fwrite(const char *name)
 		{
-
+			io::fopen_fwrite(name, pntr, size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 	};
 
@@ -38,15 +41,15 @@ namespace scl
 		// fread, fwrite malloc with base_buffer_t
 
 		template <typename byte_t>
-		static inline void fread_malloc(FILE *file, dynamic_array_t<byte_t> &buffer)
+		static inline void malloc_fread(FILE *file, dynamic_array_t<byte_t> &buffer)
 		{
-			fread_malloc(file, (void **)&buffer.pntr, buffer.size);
+			malloc_fread(file, (void **)&buffer.pntr, buffer.size);
 		}
 
 		template <typename byte_t>
-		static inline void fopen_fread_malloc(const char *name, dynamic_array_t<byte_t> &buffer)
+		static inline void fopen_malloc_fread(const char *name, dynamic_array_t<byte_t> &buffer)
 		{
-			fopen_fread_malloc(name, (void **)&buffer.pntr, &buffer.size);
+			fopen_malloc_fread(name, (void **)&buffer.pntr, &buffer.size);
 		}
 
 		template <typename byte_t>

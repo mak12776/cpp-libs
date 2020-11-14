@@ -117,7 +117,7 @@ namespace counter
 	{
 		ubuffer_t buffer;
 
-		io::fread_malloc(file, buffer);
+		io::malloc_fread(file, buffer);
 
 		if (err::clear_if(err::NO_MEMORY))
 		{

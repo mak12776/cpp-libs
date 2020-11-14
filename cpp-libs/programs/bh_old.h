@@ -317,7 +317,7 @@ void compress(const char *file_name_pntr)
 	cl::printf_ln("log file name: %s", log_file_name.pntr);
 
 	// read file_name into buffer
-	io::fopen_fread_malloc(file_name.pntr, (void **)&buffer.pntr, buffer.size);
+	io::fopen_malloc_fread(file_name.pntr, (void **)&buffer.pntr, buffer.size);
 	if (err::check())
 	{
 		printf("error: can't read '%s': %s\n", file_name.pntr,

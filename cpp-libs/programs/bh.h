@@ -114,7 +114,7 @@ namespace bh
 
 		printf("file path: \"%s\"\n", path.pntr);
 
-		io::fopen_fread_malloc(path.pntr, buffer);
+		io::fopen_malloc_fread(path.pntr, buffer);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 

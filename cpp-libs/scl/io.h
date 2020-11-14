@@ -210,7 +210,7 @@ namespace scl
 
 		// fread malloc
 
-		static inline void fread_malloc(FILE *file, void **pntr, size_t *size)
+		static inline void malloc_fread(FILE *file, void **pntr, size_t *size)
 		{
 			size_t file_size;
 
@@ -227,13 +227,13 @@ namespace scl
 				return mem::free(*pntr);
 		}
 
-		static inline void fopen_fread_malloc(const char *name, void **pntr, size_t *size)
+		static inline void fopen_malloc_fread(const char *name, void **pntr, size_t *size)
 		{
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			fread_malloc(file, pntr, size);
+			malloc_fread(file, pntr, size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 
 			std::fclose(file);
