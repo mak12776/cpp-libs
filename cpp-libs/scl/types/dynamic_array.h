@@ -8,32 +8,46 @@ namespace scl
 		byte_type *pntr;
 		size_t size;
 
+		// malloc fread
+
+		inline void malloc_fread(FILE *file, size_t size)
+		{
+			if constexpr (sizeof(byte_type) != 1)
+			{
+
+			}
+		}
+		
 		// fread, fwrite
 
-		inline void fread(FILE *file)
+		inline size_t fread(FILE *file)
 		{
-			io::fread_array<byte_type>(pntr, size, file);
+			size_t read_number = io::fread_array<byte_type>(pntr, size, file);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return read_number;
 		}
 
-		inline void fwrite(FILE *file)
+		inline size_t fwrite(FILE *file)
 		{
-			io::fwrite_array<byte_type>(pntr, size, file);
+			size_t write_number = io::fwrite_array<byte_type>(pntr, size, file);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
 		}
 		
 		// fopen fread, fwrite
 
-		inline void fopen_fread(const char *name)
+		inline size_t fopen_fread(const char *name)
 		{
-			io::fopen_fread(name, pntr, size);
+			size_t read_number = io::fopen_fread(name, pntr, size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return read_number;
 		}
 
-		inline void fopen_fwrite(const char *name)
+		inline size_t fopen_fwrite(const char *name)
 		{
-			io::fopen_fwrite(name, pntr, size);
+			size_t write_number = io::fopen_fwrite(name, pntr, size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
 		}
 	};
 

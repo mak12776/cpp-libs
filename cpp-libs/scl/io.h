@@ -208,7 +208,15 @@ namespace scl
 			return write_number;
 		}
 
-		// fread malloc
+		// malloc fread array
+
+		template <typename data_type>
+		static inline size_t malloc_fread_array(data_type *pntr, size_t data_number, FILE *file)
+		{
+			
+		}
+		
+		// malloc fread
 
 		static inline void malloc_fread(FILE *file, void **pntr, size_t *size)
 		{
