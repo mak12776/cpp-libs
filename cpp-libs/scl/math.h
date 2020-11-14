@@ -7,25 +7,28 @@ namespace scl
 {
 	namespace math
 	{
-		template <typename int_type, typename float_type>
-		bool cast_value(int_type value, float_type &result)
+		template <typename src_type, typename dest_type>
+		bool cast_value(src_type src, dest_type &dest)
 		{
-			// TODO: incomplete code
+			constexpr auto src_digits = std::numeric_limits<src_type>::digits;
+			constexpr auto dest_digits = std::numeric_limits<dest_type>::digits;
 
-			if (std::is_same_v<int_type, float_type>)
+			constexpr auto src_is_integral = std::is_integral_v<src_type>;
+			constexpr auto dest_is_integral = std::is_integral_v<dest_type>;
+
+			constexpr auto src_is_float = std::is_floating_point_v<src_type>;
+			constexpr auto dest_is_float = std::is_floating_point_v<dest_type>;
+
+			if constexpr (std::is_same_v<src_type, dest_type>)
 			{
-				result = value;
+				dest = src;
 				return false;
 			}
 
-			constexpr auto int_digits = std::numeric_limits<int_type>::digits;
-			constexpr auto float_digits = std::numeric_limits<int_type>::digits;
-
-			if ((int_digits > float_digits) &&
-				value > (1 << (std::numeric_limits<float_type>::digits + 1)))
+			if (src_type(dest_type(src)) != src)
 				return true;
 
-			result = value;
+			dest = (dest_type)src;
 			return false;
 		}
 

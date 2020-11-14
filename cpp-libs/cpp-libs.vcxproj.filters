@@ -126,6 +126,12 @@
     <ClInclude Include="incomplete scl\old_string.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="scl\types\dynamic_array.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\c_string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">

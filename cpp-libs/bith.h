@@ -85,6 +85,7 @@ namespace bith
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 		}
+
 	};
 
 	template <typename data_type, size_manager_t size_manager>
@@ -159,15 +160,18 @@ namespace bith
 					return;
 			}
 
-
+			// needs more code
 		}
+
+		err::set(err::INVALID_ARGUMENT);
+		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 	}
 
 	static inline void count_bits(size_t data_bits, const char *name, segmented_buffer_t &result)
 	{
 		scl::ubuffer_t buffer;
 
-		scl::io::fopen_fread_malloc(name, buffer);
+		scl::io::fopen_fread_malloc(name, (void **)&buffer.pntr, &buffer.size);
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 

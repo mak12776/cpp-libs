@@ -39,6 +39,9 @@
 #include "io.h"					// <sys/types.h> <sys/stat.h> <io.h>
 								// "features/all_features.h"
 
+#include "types/dynamic_array.h"
+#include "types/buffer.h"		// "types/dynamic_array.h"
+
 #include "winapi/functions.h"
 #include "winapi/tools.h"
 
