@@ -181,7 +181,7 @@
     <ClInclude Include="scl\types\c_string.h" />
     <ClInclude Include="scl\types\dynamic_array.h" />
     <ClInclude Include="scl\winapi\functions.h" />
-    <ClInclude Include="scl\winapi\tools.h" />
+    <ClInclude Include="scl\winapi\conv.h" />
     <ClInclude Include="winapi\all.h" />
     <ClInclude Include="winapi\time.h" />
     <ClInclude Include="winapi\tools.h" />

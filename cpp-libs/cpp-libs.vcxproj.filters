@@ -102,9 +102,6 @@
     <ClInclude Include="winapi\types.h">
       <Filter>Header Files\incomplete_scl\old_winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\winapi\tools.h">
-      <Filter>Header Files\scl\winapi</Filter>
-    </ClInclude>
     <ClInclude Include="scl\features\log.h">
       <Filter>Header Files\incomplete_scl</Filter>
     </ClInclude>
@@ -131,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="incomplete scl\old_string.h">
       <Filter>Header Files\incomplete_scl</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\winapi\conv.h">
+      <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -46,5 +46,8 @@ namespace scl
 			HANDLE proces_handle = GetCurrentProcess();
 			safe_set_priority_class(proces_handle, periority);
 		}
+
+
+		
 	}
 }
