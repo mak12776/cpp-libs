@@ -18,27 +18,7 @@ namespace scl
 			ft.dwLowDateTime = ul_int.LowPart;
 		}
 
-		// safe FileTime, SystemTime conversations
-
-		static inline void safe_file_time_to_system_time(FILETIME &ft, SYSTEMTIME &st)
-		{
-			if (!FileTimeToSystemTime(&ft, &st))
-			{
-				scl::err::set(scl::err::WIN_ERROR);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-		}
-
-		static inline void safe_system_time_to_file_time(SYSTEMTIME &st, FILETIME &ft)
-		{
-			if (!SystemTimeToFileTime(&st, &ft))
-			{
-				scl::err::set(scl::err::WIN_ERROR);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-			}
-		}
-
-		// math operations
+		// math operations between ularge integer & file time
 
 		static inline void sub_ularge_integer(ULARGE_INTEGER &ul_int1, ULARGE_INTEGER &ul_int2, ULARGE_INTEGER &res)
 		{
@@ -74,5 +54,24 @@ namespace scl
 			ularge_integer_to_file_time(ul_int2, ft2);
 		}
 
+		// safe FileTime, SystemTime conversations
+
+		static inline void safe_file_time_to_system_time(FILETIME &ft, SYSTEMTIME &st)
+		{
+			if (!FileTimeToSystemTime(&ft, &st))
+			{
+				scl::err::set(scl::err::WIN_ERROR);
+				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
+
+		static inline void safe_system_time_to_file_time(SYSTEMTIME &st, FILETIME &ft)
+		{
+			if (!SystemTimeToFileTime(&st, &ft))
+			{
+				scl::err::set(scl::err::WIN_ERROR);
+				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
 	}
 }
