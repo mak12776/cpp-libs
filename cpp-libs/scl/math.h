@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cfenv>
+#include <iostream>
 
 namespace scl
 {
@@ -196,6 +197,21 @@ namespace scl
 			}
 		}
 
+		static inline bool check_pow_error()
+		{
+			if constexpr ((math_errhandling & MATH_ERREXCEPT) == 1)
+			{
+				if (std::fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW))
+					return true;
+			}
+			else if constexpr ((math_errhandling & MATH_ERRNO) == 1)
+			{
+				if ((errno == EDOM) || (errno == ERANGE))
+					return true;
+			}
+			return false;
+		}
+
 		template <typename type, typename suggested_type = long double>
 		static inline void safe_pow(type base, type exp, type &result)
 		{
@@ -207,7 +223,15 @@ namespace scl
 			float_type base_float, exp_float, result_float;
 
 			if constexpr (std::is_floating_point_v<type>)
+			{
 				temp_result = std::pow<type, type>(base, exp);
+				if (check_pow_error())
+				{
+					err::set(err::FLOAT_ERROR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					return;
+				}
+			}
 			else if constexpr (std::is_integral_v<type>)
 			{
 				safe_cast_value(base, base_float);
@@ -219,17 +243,16 @@ namespace scl
 					return;
 
 				result_float = std::pow<type, type>(base, exp);
+				if (check_pow_error())
+				{
+					err::set(err::FLOAT_ERROR);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					return;
+				}
 
 				safe_cast_value(result_float, temp_result);
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
-			}
-
-			if (fe::check_except())
-			{
-				err::set(err::FLOAT_ERROR);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				return;
 			}
 
 			result = temp_result;

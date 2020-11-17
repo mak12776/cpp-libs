@@ -18,7 +18,7 @@ namespace scl
 
 			constexpr void *safe_malloc(size_t size)
 			{
-				void *pntr = malloc(size);
+				void *pntr = this->malloc(size);
 				if (pntr == nullptr)
 				{
 					err::set(err::NO_MEMORY);
@@ -29,7 +29,7 @@ namespace scl
 
 			constexpr void *safe_calloc(size_t count, size_t size)
 			{
-				void *pntr = calloc(count, size);
+				void *pntr = this->calloc(count, size);
 				if (pntr == nullptr)
 				{
 					err::set(err::NO_MEMORY);
@@ -38,16 +38,7 @@ namespace scl
 				return pntr;
 			}
 
-			constexpr void *safe_realloc(void *pntr, size_t size)
-			{
-				void *new_pntr = realloc(pntr, size);
-				if (new_pntr == nullptr)
-				{
-					err::set(err::NO_MEMORY);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-				}
-				return new_pntr;
-			}
+			// safe malloc array
 
 			template <typename data_type>
 			constexpr data_type *safe_malloc_array(size_t size)
@@ -58,7 +49,7 @@ namespace scl
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return nullptr;
 
-				pntr = (data_type *)malloc(size);
+				pntr = (data_type *)this->malloc(size);
 				if (pntr == nullptr)
 				{
 					err::set(err::NO_MEMORY);
@@ -76,10 +67,46 @@ namespace scl
 					std::fill_n(pntr, size, data);
 				return pntr;
 			}
+
+			// safe realloc array
+
+			constexpr void *safe_realloc(void *pntr, size_t size)
+			{
+				void *new_pntr = this->realloc(pntr, size);
+				if (new_pntr == nullptr)
+				{
+					err::set(err::NO_MEMORY);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				return new_pntr;
+			}
+
+			template <typename data_type>
+			constexpr data_type *safe_realloc_array(data_type *pntr, size_t size)
+			{
+				data_type *new_pntr = nullptr;
+
+				printf("realloc<%s> @ %p: %p, %zu\n", typeid(data_type).name(), &(this->realloc), pntr, size);
+
+				math::safe_mul(size, sizeof(data_type), size);
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return nullptr;
+
+				printf("realloc<%s> @ %p: %p, %zu\n", typeid(data_type).name(), &(this->realloc), pntr, size);
+
+				new_pntr = (data_type *)this->realloc(pntr, size);
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				{
+					err::set(err::NO_MEMORY);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+
+				return new_pntr;
+			}
 		};
 
 		// default manager
-		constexpr mem_t default_mem{ malloc, calloc, realloc, free };
+		constexpr mem_t default_mem{ std::malloc, std::calloc, std::realloc, std::free };
 		mem_t global_mem = default_mem;
 
 		// functions
@@ -95,6 +122,9 @@ namespace scl
 
 		template <typename data_type>
 		static constexpr inline data_type *safe_malloc_array(size_t size) { return global_mem.safe_malloc_array<data_type>(size); }
+
+		template <typename data_type>
+		static constexpr inline data_type *safe_realloc_array(data_type *pntr, size_t size) { return global_mem.safe_realloc_array(pntr, size); }
 
 #ifdef SCL_EXPREMENTAL
 		// text logger manager
