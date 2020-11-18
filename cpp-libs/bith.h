@@ -213,6 +213,20 @@ namespace bith
 			ubyte *pntr = counts.data_pntr;
 			ubyte *end = counts.data_pntr + (counts.len * info.size);
 
+			size_t index = 0;
+
+			while (pntr < end)
+			{
+				if (memcmp(pntr, new_data_pntr))
+				{
+					counts.counts_pntr[index] += 1;
+					return;
+				}
+
+				index += 1;
+				pntr += info.size;
+			}
+
 			
 		}
 	}; // struct segmented_buffer
