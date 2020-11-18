@@ -102,7 +102,7 @@ namespace bith
 				return;
 
 			counts.data_pntr = (ubyte *)mem::safe_realloc_array<data_type>(
-				(data_type *)counts.data_pntr, counts.size);
+					(data_type *)counts.data_pntr, counts.size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 		}
@@ -110,11 +110,11 @@ namespace bith
 		template <typename data_type, size_manager_t size_manager>
 		inline void increase_primitive_types(data_type value)
 		{
-			data_type *data_pntr = (data_type *)counts.data_pntr;
+			data_type **data_pntr = (data_type **)&(counts.data_pntr);
 
 			for (size_t index = 0; index < counts.len; index += 1)
 			{
-				if (data_pntr[index] == value)
+				if ((*data_pntr)[index] == value)
 				{
 					counts.counts_pntr[index] += 1;
 					return;
@@ -128,7 +128,7 @@ namespace bith
 					return;
 			}
 
-			data_pntr[counts.len] = value;
+			(*data_pntr)[counts.len] = value;
 			counts.counts_pntr[counts.len] = 1;
 			counts.len += 1;
 		}

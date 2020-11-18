@@ -232,7 +232,7 @@ namespace scl
 
 			*size = safe_fread(*pntr, file_size, file);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return mem::free(*pntr);
+				return free(*pntr);
 		}
 
 		static inline void malloc_fopen_fread(const char *name, void **pntr, size_t *size)
