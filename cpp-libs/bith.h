@@ -8,10 +8,25 @@ namespace bith
 
 	typedef void(&size_manager_t)(size_t &);
 
+	void half_size_manager(size_t &size)
+	{
+		if (size < 1024)
+		{
+			size = 1024;
+			return;
+		}
+
+		math::safe_add(size, size / 2, size);
+		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+	}
+
 	void double_size_manager(size_t &size)
 	{
-		if (size == 0)
+		if (size < 1024)
+		{
 			size = 1024;
+			return;
+		}
 		math::safe_mul(size, (size_t)2, size);
 		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 	}
@@ -19,7 +34,10 @@ namespace bith
 	void adder_size_manager(size_t &size)
 	{
 		if (size == 0)
+		{
 			size = 1024;
+			return;
+		}
 		math::safe_add(size, (size_t)1024, size);
 		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 	}
@@ -101,8 +119,14 @@ namespace bith
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
+			// realloc data_pntr
 			counts.data_pntr = (ubyte *)mem::safe_realloc_array<data_type>(
-					(data_type *)counts.data_pntr, counts.size);
+				(data_type *)counts.data_pntr, counts.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			counts.counts_pntr = mem::safe_realloc_array<size_t>(
+				counts.counts_pntr, counts.size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 		}
@@ -167,7 +191,7 @@ namespace bith
 	}
 
 
-	template <size_manager_t size_manager = adder_size_manager>
+	template <size_manager_t size_manager = double_size_manager>
 	static inline void count_bits(size_t data_bits, ubuffer_t &buffer, segmented_buffer_t &result)
 	{
 		// calculating buffer informations
