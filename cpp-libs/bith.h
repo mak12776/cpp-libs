@@ -76,26 +76,24 @@ namespace bith
 			ubyte *pntr;
 		} remaining;
 
-		template <size_manager_t size_manager>
-		inline void calculate_primitive_size_bits()
+		// primitive types
+
+		template <typename data_type, size_manager_t size_manager>
+		inline void malloc_primitive_types()
 		{
-			// get default size_manager value
+			// get first counts.size
 			size_manager(counts.size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			// choose a minimum valuue for counts size
+			// counts size & len
 			counts.size = std::min<size_t>(info.possible_data_number, counts.size);
 			counts.len = 0;
 
-			// calculating remaining bits & size
+			// remaining bits & size
 			remaining.bits = info.buffer_bits % info.bits;
 			remaining.size = get_bytes_per_bits(remaining.bits);
-		}
 
-		template <typename data_type>
-		inline void malloc_primitive_types()
-		{
 			// allocate memory for remaining
 			remaining.pntr = (ubyte *)mem::safe_malloc(remaining.size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
@@ -134,11 +132,11 @@ namespace bith
 		template <typename data_type, size_manager_t size_manager>
 		inline void increase_primitive_types(data_type value)
 		{
-			data_type **data_pntr = (data_type **)&(counts.data_pntr);
+			const data_type *data_pntr = (data_type *)counts.data_pntr;
 
 			for (size_t index = 0; index < counts.len; index += 1)
 			{
-				if ((*data_pntr)[index] == value)
+				if (((data_type *) counts.data_pntr)[index] == value)
 				{
 					counts.counts_pntr[index] += 1;
 					return;
@@ -152,10 +150,14 @@ namespace bith
 					return;
 			}
 
-			(*data_pntr)[counts.len] = value;
+			((data_type *)counts.data_pntr)[counts.len] = value;
 			counts.counts_pntr[counts.len] = 1;
 			counts.len += 1;
 		}
+
+		// algined bytes
+
+
 	};
 
 	template <typename data_type, size_manager_t size_manager>
@@ -164,11 +166,8 @@ namespace bith
 		data_type *pntr;
 		data_type *end;
 
-		result.calculate_primitive_size_bits<size_manager>();
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-			return;
-
-		result.malloc_primitive_types<data_type>();
+		// malloc primitive types
+		result.malloc_primitive_types<data_type, size_manager>();
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
@@ -186,8 +185,6 @@ namespace bith
 
 		// copy remaining
 		memcpy(result.remaining.pntr, pntr, result.remaining.size);
-
-		printf("success.\n");
 	}
 
 
@@ -236,8 +233,10 @@ namespace bith
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
 			}
+			else
+			{
 
-			// needs more code
+			}
 		}
 
 		err::set(err::INVALID_ARGUMENT);
