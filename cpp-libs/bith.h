@@ -187,6 +187,11 @@ namespace bith
 		memcpy(result.remaining.pntr, pntr, result.remaining.size);
 	}
 
+	template <size_manager_t size_manager>
+	static inline void count_bytes(ubuffer_t &buffer, segmented_buffer_t &result)
+	{
+
+	}
 
 	template <size_manager_t size_manager = double_size_manager>
 	static inline void count_bits(size_t data_bits, ubuffer_t &buffer, segmented_buffer_t &result)
@@ -238,9 +243,11 @@ namespace bith
 
 			}
 		}
-
-		err::set(err::INVALID_ARGUMENT);
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		else
+		{
+			err::set(err::INVALID_ARGUMENT);
+			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
 	}
 
 	static inline void count_bits(size_t data_bits, const char *name, segmented_buffer_t &result)
