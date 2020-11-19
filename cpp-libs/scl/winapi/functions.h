@@ -40,13 +40,5 @@ namespace scl
 				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
-
-		void safe_set_current_priority_class(DWORD periority)
-		{
-			HANDLE proces_handle = GetCurrentProcess();
-			safe_set_priority_class(proces_handle, periority);
-		}
-
-
 	}
 }
