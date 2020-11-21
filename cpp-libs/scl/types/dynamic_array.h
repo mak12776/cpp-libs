@@ -7,16 +7,6 @@ namespace scl
 	{
 		byte_type *pntr;
 		size_t size;
-
-		// malloc fread
-
-		inline void malloc_fread(FILE *file, size_t size)
-		{
-			if constexpr (sizeof(byte_type) != 1)
-			{
-
-			}
-		}
 		
 		// fread, fwrite
 

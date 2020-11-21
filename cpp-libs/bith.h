@@ -139,10 +139,8 @@ namespace bith
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			counts.counts_pntr = mem::safe_realloc_array<size_t>(
-				counts.counts_pntr, counts.size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
+			counts.counts_pntr = mem::safe_realloc_array<size_t>(counts.counts_pntr, counts.size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
 		template <typename data_type, size_manager_t size_manager>
@@ -188,7 +186,7 @@ namespace bith
 			remaining.bits = info.buffer_bits % info.bits;
 			remaining.size = get_bytes_per_bits(info.buffer_bits);
 
-			// read_data_size
+			// real data size
 			math::safe_mul(info.size, counts.size, real_data_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
