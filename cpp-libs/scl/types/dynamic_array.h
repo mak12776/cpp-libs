@@ -2,15 +2,18 @@
 
 namespace scl
 {
+	typedef void (&dynamic_array_manager_t)(size_t &size);
+
 	template <typename byte_type>
 	struct dynamic_array_t
 	{
 		byte_type *pntr;
 		size_t size;
 
+		dynamic_array_t()
+		pntr(nullptr), size(0) { }
+
 		// malloc fread, fwrite
-		
-		// TODO: add malloc fread, fwrite
 
 		// fread, fwrite
 

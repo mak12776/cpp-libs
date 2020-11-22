@@ -16,6 +16,17 @@ namespace scl
 			realloc_t realloc;
 			free_t free;
 
+			template <typename data_type>
+			constexpr data_type *malloc_array(size_t size)
+			{
+				if (math::mul(size, sizeof data_type, size))
+					return nullptr;
+
+				return malloc(size);
+			}
+
+			// safe malloc, calloc
+
 			constexpr void *safe_malloc(size_t size)
 			{
 				void *pntr = this->malloc(size);
@@ -100,13 +111,13 @@ namespace scl
 		mem_t global_mem = default_mem;
 
 		// functions
-
-#ifdef SCL_EXPERIMENTAL
 		static constexpr inline void *malloc(size_t size) { return global_mem.malloc(size); } 
 		static constexpr inline void *calloc(size_t nelem, size_t size) { return global_mem.calloc(nelem, size); }
 		static constexpr inline void *realloc(void *pntr, size_t size) { return global_mem.realloc(pntr, size); }
 		static constexpr inline void free(void *pntr) { return global_mem.free(pntr); }
-#endif // SCL_EXPERIMENTAL
+
+		template <typename data_type>
+		static constexpr inline data_type *malloc_array(size_t size) { return global_mem.malloc_array(size); }
 
 		static constexpr inline void *safe_malloc(size_t size) { return global_mem.safe_malloc(size); }
 		static constexpr inline void *safe_calloc(size_t count, size_t size) { return global_mem.safe_calloc(count, size); }
@@ -114,7 +125,6 @@ namespace scl
 
 		template <typename data_type>
 		static constexpr inline data_type *safe_malloc_array(size_t size) { return global_mem.safe_malloc_array<data_type>(size); }
-
 		template <typename data_type>
 		static constexpr inline data_type *safe_realloc_array(data_type *pntr, size_t size) { return global_mem.safe_realloc_array(pntr, size); }
 
