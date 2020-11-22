@@ -6,13 +6,12 @@ does 'scl err_t handling' log file informations?
 how to include headers in scl?
 
 ---
+undefined 
 
 features needed in c++:
 	err header
 	mem header
 	cleaner header
-	
-	cfmt & afmt header
 	
 not needed:
 	log header
@@ -135,4 +134,6 @@ practices for exceptions
 
     isocpp.org
     https://isocpp.org/wiki/faq/exceptions
+
+
 

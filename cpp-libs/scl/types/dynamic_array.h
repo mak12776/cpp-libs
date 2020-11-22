@@ -2,11 +2,14 @@
 
 namespace scl
 {
-	typedef void (&dynamic_array_manager_t)(size_t &size);
+	typedef void (&dynamic_array_size_manager_t)(size_t &size);
 
 	template <typename data_type>
 	struct dynamic_array_t
 	{
+		typedef data_type &reference;
+		typedef const data_type &const_reference;
+
 		data_type *pntr;
 		size_t size;
 
@@ -17,7 +20,21 @@ namespace scl
 
 		inline void allocate(size_t size)
 		{
-			pntr = mem::
+			pntr = mem::safe_malloc_array<data_type>(size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+			this->size = size;
+		}
+
+		inline void fill(const_reference value)
+		{
+			std::fill();
+		}
+
+		inline void deallocate()
+		{
+			mem::free(pntr);
+			this->size = 0;
 		}
 
 		// fread, fwrite

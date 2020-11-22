@@ -194,7 +194,7 @@ namespace scl
 				if (num != SUCCESS) 
 					exit(1);
 			}
-		};
+		}; // err_t
 #pragma pack(pop)
 
 

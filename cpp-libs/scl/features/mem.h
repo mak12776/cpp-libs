@@ -81,7 +81,6 @@ namespace scl
 					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 					return pntr;
 				}
-
 				return new_pntr;
 			}
 
