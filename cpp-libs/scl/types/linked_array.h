@@ -13,9 +13,12 @@ namespace scl
 	struct linked_array_t
 	{
 		size_t len;
-		linked_array_node_t *first;
-		linked_array_node_t *last;
+		linked_array_node_t<data_type> *first;
+		linked_array_node_t<data_type> *last;
 
-		
+		linked_array_t(size_t number_of_arrays)
+		{
+
+		}
 	};
 }
