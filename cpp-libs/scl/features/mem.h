@@ -50,7 +50,6 @@ namespace scl
 					return nullptr;
 
 				pntr = (data_type *)(this->malloc(size));
-
 				if (pntr == nullptr)
 				{
 					err::set(err::NO_MEMORY);
@@ -65,7 +64,6 @@ namespace scl
 			constexpr void *safe_realloc(void *pntr, size_t size)
 			{
 				void *new_pntr = this->realloc(pntr, size);
-
 				if (new_pntr == nullptr)
 				{
 					err::set(err::NO_MEMORY);
