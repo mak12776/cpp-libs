@@ -132,6 +132,9 @@
     <ClInclude Include="scl\winapi\conv.h">
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
+    <ClInclude Include="scl\types\linked_array.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
