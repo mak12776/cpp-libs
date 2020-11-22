@@ -15,7 +15,10 @@ namespace scl
 		
 		// malloc fread, fwrite
 
-
+		inline void allocate(size_t size)
+		{
+			pntr = mem::
+		}
 
 		// fread, fwrite
 
