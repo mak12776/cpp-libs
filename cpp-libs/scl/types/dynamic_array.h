@@ -8,6 +8,10 @@ namespace scl
 		byte_type *pntr;
 		size_t size;
 		
+		// malloc fread, fwrite
+		
+		// TODO: add malloc fread, fwrite
+
 		// fread, fwrite
 
 		inline size_t fread(FILE *file)
@@ -40,29 +44,4 @@ namespace scl
 			return write_number;
 		}
 	};
-
-#ifdef SCL_EXPERIMENTAL
-	namespace io
-	{
-		// fread, fwrite malloc with base_buffer_t
-
-		template <typename byte_t>
-		static inline void malloc_fread(FILE *file, dynamic_array_t<byte_t> &buffer)
-		{
-			malloc_fread(file, (void **)&buffer.pntr, buffer.size);
-		}
-
-		template <typename byte_t>
-		static inline void malloc_fopen_fread(const char *name, dynamic_array_t<byte_t> &buffer)
-		{
-			malloc_fopen_fread(name, (void **)&buffer.pntr, &buffer.size);
-		}
-
-		template <typename byte_t>
-		static inline void fopen_fwrite(const char *file, dynamic_array_t<byte_t> &buffer)
-		{
-			fopen_fwrite(file, (void *)buffer.pntr, buffer.size);
-		};
-	}
-#endif // SCL_EXPERIMENTAL
 }
