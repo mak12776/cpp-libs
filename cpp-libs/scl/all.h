@@ -42,6 +42,7 @@
 #include "types/dynamic_array.h"
 #include "types/buffer.h"		// "types/dynamic_array.h"
 #include "types/c_string.h"
+#include "types/linked_array.h"
 
 #include "winapi/functions.h"
 #include "winapi/conv.h"
