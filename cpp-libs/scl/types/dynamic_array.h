@@ -4,29 +4,31 @@ namespace scl
 {
 	typedef void (&dynamic_array_manager_t)(size_t &size);
 
-	template <typename byte_type>
+	template <typename data_type>
 	struct dynamic_array_t
 	{
-		byte_type *pntr;
+		data_type *pntr;
 		size_t size;
 
 		dynamic_array_t()
-		pntr(nullptr), size(0) { }
-
+			: pntr(nullptr), size(0) {}
+		
 		// malloc fread, fwrite
+
+
 
 		// fread, fwrite
 
 		inline size_t fread(FILE *file)
 		{
-			size_t read_number = io::fread_array<byte_type>(pntr, size, file);
+			size_t read_number = io::fread_array<data_type>(pntr, size, file);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return read_number;
 		}
 
 		inline size_t fwrite(FILE *file)
 		{
-			size_t write_number = io::fwrite_array<byte_type>(pntr, size, file);
+			size_t write_number = io::fwrite_array<data_type>(pntr, size, file);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return write_number;
 		}

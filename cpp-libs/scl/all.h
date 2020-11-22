@@ -44,6 +44,8 @@
 #include "types/c_string.h"
 #include "types/linked_array.h"
 
+#include "fs.h"
+
 #include "winapi/functions.h"
 #include "winapi/conv.h"
 
