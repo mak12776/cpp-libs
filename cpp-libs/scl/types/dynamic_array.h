@@ -7,7 +7,7 @@ namespace scl
 	{
 		byte_type *pntr;
 		size_t size;
-		
+
 		// malloc fread, fwrite
 		
 		// TODO: add malloc fread, fwrite

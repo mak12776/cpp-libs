@@ -12,5 +12,10 @@ namespace scl
 	template <typename data_type, size_t array_size>
 	struct linked_array_t
 	{
+		size_t len;
+		linked_array_node_t *first;
+		linked_array_node_t *last;
+
+		
 	};
 }
