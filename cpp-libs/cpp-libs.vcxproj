@@ -170,8 +170,6 @@
     <ClInclude Include="scl\features\fmt.h" />
     <ClInclude Include="scl\features\log.h" />
     <ClInclude Include="scl\features\mem.h" />
-    <ClInclude Include="scl\fs.h" />
-    <ClInclude Include="scl\fs.h" />
     <ClInclude Include="scl\io.h" />
     <ClInclude Include="scl\macros.h" />
     <ClInclude Include="scl\math.h" />

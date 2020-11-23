@@ -108,9 +108,6 @@
     <ClInclude Include="scl\features\fmt.h">
       <Filter>Header Files\incomplete_scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\fs.h">
-      <Filter>Header Files\incomplete_scl</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\builtins.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
@@ -137,6 +134,9 @@
     </ClInclude>
     <ClInclude Include="scl\fs.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\fs.h">
+      <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
