@@ -6,7 +6,15 @@ does 'scl err_t handling' log file informations?
 how to include headers in scl?
 
 ---
-undefined 
+needed types in std:
+	std::array<array_size>		array[array_size]
+	dynamic_array				pntr, size
+	
+	std::vector					pntr, len, size
+	std::list					first, last			linked_list of arrays
+	scl::linked_array			first, last
+	c_string					const char* const, const size_t
+
 
 features needed in c++:
 	err header

@@ -26,9 +26,12 @@ namespace scl
 			this->size = size;
 		}
 
-		inline void fill(const_reference value)
+		inline void reallocate(size_t size)
 		{
-			std::fill();
+			pntr = mem::safe_realloc_array<data_type>(size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+			this->size = size;
 		}
 
 		inline void deallocate()

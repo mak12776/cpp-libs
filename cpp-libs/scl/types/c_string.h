@@ -8,7 +8,8 @@ namespace scl
 		const value_type *const pntr;
 		const size_t len;
 
-		base_c_string_t(const char *pntr) : pntr(pntr), len(strlen(pntr))
+		template <size_t size>
+		base_c_string_t(const value_type(&pntr)[size]) : pntr(pntr), len(size - 1)
 		{ }
 	};
 
