@@ -201,6 +201,8 @@ namespace bith
 		{
 			size_t size;
 			size_t len;
+			size_t data_block_size;
+
 			void *data_pntr;
 			size_t *counts_pntr;
 		} counts;
@@ -255,7 +257,13 @@ namespace bith
 
 		inline void realloc_more()
 		{
+			// get new size
 			size_manager(counts.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// calculate data block size
+			math::safe_mul(counts.size, info.data_size, info.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
