@@ -173,6 +173,7 @@ namespace bith
 
 			size_t data_bits;
 			size_t data_size;
+			size_t data_block_size;
 
 			size_t possible_data_number;
 
@@ -200,9 +201,7 @@ namespace bith
 		{
 			size_t size;
 			size_t len;
-			size_t bytes_number;
-
-			ubyte *data_pntr;
+			void *data_pntr;
 			size_t *counts_pntr;
 		} counts;
 
