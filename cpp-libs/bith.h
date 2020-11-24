@@ -6,7 +6,6 @@ namespace bith
 {
 	using namespace scl;
 
-	typedef void(&size_manager_t)(size_t &);
 
 	void half_size_manager(size_t &size)
 	{
@@ -42,12 +41,14 @@ namespace bith
 		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 	}
 
+	typedef void(&size_manager_t)(size_t &);
+
 	static constexpr inline size_t get_bytes_per_bits(size_t bits)
 	{
 		return (bits / 8) + ((bits % 8) ? 1 : 0);
 	}
 
-	template <size_manager_t size_manager>
+	template <size_manager_t size_manager = double_size_manager>
 	struct segmented_buffer_t
 	{
 		struct
@@ -84,7 +85,6 @@ namespace bith
 		{
 			size_t size;
 			size_t len;
-
 			size_t data_bytes_number;
 
 			ubyte *data_pntr;
@@ -240,6 +240,8 @@ namespace bith
 
 		inline void realloc_more_fixed_bytes()
 		{
+			// get new size
+			size_manager(counts.size);
 			
 		}
 
