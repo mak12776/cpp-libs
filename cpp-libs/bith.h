@@ -6,6 +6,7 @@ namespace bith
 {
 	using namespace scl;
 
+	typedef void(&size_manager_t)(size_t &);
 
 	void half_size_manager(size_t &size)
 	{
@@ -41,14 +42,12 @@ namespace bith
 		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 	}
 
-	typedef void(&size_manager_t)(size_t &);
-
 	static constexpr inline size_t get_bytes_per_bits(size_t bits)
 	{
 		return (bits / 8) + ((bits % 8) ? 1 : 0);
 	}
 
-	template <size_manager_t size_manager = double_size_manager>
+	template <size_manager_t size_manager>
 	struct segmented_buffer_t
 	{
 		struct
@@ -85,7 +84,7 @@ namespace bith
 		{
 			size_t size;
 			size_t len;
-			size_t data_bytes_number;
+			size_t bytes_number;
 
 			ubyte *data_pntr;
 			size_t *counts_pntr;
@@ -223,17 +222,17 @@ namespace bith
 			counts.len = 0;
 
 			// calculate bytes number
-			math::safe_mul(counts.size, info.size, counts.data_bytes_number);
+			math::safe_mul(counts.size, info.size, counts.bytes_number);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// malloc data_pntr
-			counts.data_pntr = mem::safe_malloc(counts.data_bytes_number);
+			counts.data_pntr = (ubyte *)mem::safe_malloc(counts.bytes_number);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// malloc counts_pntr
-			counts.counts_pntr = mem::safe_malloc_array(counts.size);
+			counts.counts_pntr = mem::safe_malloc_array<size_t>(counts.size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 		}
@@ -242,6 +241,15 @@ namespace bith
 		{
 			// get new size
 			size_manager(counts.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// calculate bytes number
+			math::safe_mul(counts.size, info.size, counts.bytes_number);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// realloc data_pntr
 			
 		}
 
@@ -249,16 +257,17 @@ namespace bith
 		{
 			ubyte *pntr = counts.data_pntr;
 			ubyte *end = counts.data_pntr + (counts.len * info.size);
+			size_t counts_index = 0;
 
-			size_t index = 0;
 			while (pntr < end)
 			{
-				if (memcmp(pntr, new_data_pntr) == 0)
+				if (memcmp(pntr, new_data_pntr, info.size) == 0)
 				{
-					counts.counts_pntr[index] += 1;
+					counts.counts_pntr[counts_index] += 1;
 					return;
 				}
-				index += 1;
+
+				counts_index += 1;
 				pntr += info.size;
 			}
 
@@ -268,9 +277,11 @@ namespace bith
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
 			}
+
+
 		}
 
-		static inline void count_fixed_bytes(ubuffer_t &buffer)
+		inline void count_fixed_bytes(ubuffer_t &buffer)
 		{
 			ubyte *pntr;
 			ubyte *end;
@@ -291,7 +302,7 @@ namespace bith
 
 			while (pntr < end)
 			{
-				increase_fixed_bytes(*pntr);
+				increase_fixed_bytes(pntr);
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
 				pntr += info.size;
