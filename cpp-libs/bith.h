@@ -47,7 +47,123 @@ namespace bith
 		return (bits / 8) + ((bits % 8) ? 1 : 0);
 	}
 
-	template <size_manager_t size_manager>
+	template <size_manager_t size_manager = bith::double_size_manager>
+	struct fixed_data_counts
+	{
+		size_t data_bits;
+		size_t data_size;
+		size_t data_block_size;
+
+		size_t size;
+		size_t len;
+
+		void *data_pntr = nullptr;
+		size_t *counts_pntr = nullptr;
+
+		inline void malloc(size_t data_size, size_t suggested_initial_block_size)
+		{
+			// get size
+			size_manager(this->size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			this->size = std::min<size_t>(this->size, suggested_initial_block_size);
+			this->len = 0;
+
+			// calculate data size & data block size
+			this->data_size = data_size;
+			math::safe_mul(this->size, data_size, this->data_block_size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// malloc data_pntr
+			this->data_pntr = mem::safe_malloc(this->data_block_size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// malloc counts_pntr
+			this->counts_pntr = mem::safe_malloc_array<size_t>(size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
+
+		inline void realloc_more()
+		{
+			// get new size
+			size_manager(this->size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				mem::free(this->data_pntr);
+
+			// calculate data block size
+			math::safe_mul(this->size, this->data_size, this->data_block_size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// realloc data_pntr
+			this->data_pntr = mem::safe_realloc(this->data_pntr, this->data_block_size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// realloc counts_pntr
+			this->counts_pntr = mem::safe_realloc_array<size_t>(this->counts_pntr, this->size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
+
+		template <typename data_type>
+		inline void increase_primitive_types(data_type value)
+		{
+			for (size_t index = 0; index < this->len; index += 1)
+			{
+				if (((data_type *)this->data_pntr)[index] == value)
+				{
+					this->counts_pntr[index] += 1;
+					return;
+				}
+			}
+
+			if (this->len == this->size)
+			{
+				realloc_more();
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return;
+			}
+
+			((data_type *)this->data_pntr)[this->len] = value;
+			this->counts_pntr[this->len] = 1;
+			this->len += 1;
+		}
+
+		inline void increase_fixed_bytes(void *value_pntr)
+		{
+			ubyte *pntr = (ubyte *)this->data_pntr;
+			ubyte *end = (ubyte *)this->data_pntr + (this->len * this->data_size);
+			size_t index = 0;
+
+			while (pntr < end)
+			{
+				if (memcmp(pntr, value_pntr, this->data_size))
+				{
+					this->counts_pntr[index] += 1;
+					return;
+				}
+
+				pntr += this->data_size;
+				index += 1;
+			}
+
+			if (this->len == this->size)
+			{
+				realloc_more();
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return;
+			}
+
+			memcpy(end, value_pntr, this->data_size);
+			this->counts_pntr[this->len] = 1;
+			this->len += 1;
+		}
+	};
+
+	template <size_manager_t size_manager = bith::double_size_manager>
 	struct segmented_buffer_t
 	{
 		struct
@@ -55,8 +171,8 @@ namespace bith
 			size_t buffer_bits;
 			size_t buffer_size;
 
-			size_t bits;
-			size_t size;
+			size_t data_bits;
+			size_t data_size;
 
 			size_t possible_data_number;
 
@@ -70,8 +186,8 @@ namespace bith
 					return;
 
 				// calculating data informations
-				this->bits = data_bits;
-				this->size = get_bytes_per_bits(data_bits);
+				this->data_bits = data_bits;
+				this->data_size = get_bytes_per_bits(data_bits);
 
 				// calculating possible data number
 				math::safe_pow<size_t>((size_t)2, data_bits, this->possible_data_number);
@@ -103,7 +219,7 @@ namespace bith
 		inline void malloc_remaining()
 		{
 			// remaining size & bits
-			remaining.bits = info.buffer_bits % info.bits;
+			remaining.bits = info.buffer_bits % info.data_bits;
 			remaining.size = get_bytes_per_bits(remaining.bits);
 
 			// --- allocate memory ---
@@ -222,7 +338,7 @@ namespace bith
 			counts.len = 0;
 
 			// calculate bytes number
-			math::safe_mul(counts.size, info.size, counts.bytes_number);
+			math::safe_mul(counts.size, info.data_size, counts.bytes_number);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
@@ -245,30 +361,36 @@ namespace bith
 				return;
 
 			// calculate bytes number
-			math::safe_mul(counts.size, info.size, counts.bytes_number);
+			math::safe_mul(counts.size, info.data_size, counts.bytes_number);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// realloc data_pntr
-			
+			counts.data_pntr = (ubyte *)mem::safe_malloc(counts.bytes_number);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// realloc counts_pntr
+			counts.counts_pntr = (size_t *)mem::safe_malloc_array<size_t>(counts.size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
 		inline void increase_fixed_bytes(ubyte *new_data_pntr)
 		{
 			ubyte *pntr = counts.data_pntr;
-			ubyte *end = counts.data_pntr + (counts.len * info.size);
+			ubyte *end = counts.data_pntr + (counts.len * info.data_size);
 			size_t counts_index = 0;
 
 			while (pntr < end)
 			{
-				if (memcmp(pntr, new_data_pntr, info.size) == 0)
+				if (memcmp(pntr, new_data_pntr, info.data_size) == 0)
 				{
 					counts.counts_pntr[counts_index] += 1;
 					return;
 				}
 
 				counts_index += 1;
-				pntr += info.size;
+				pntr += info.data_size;
 			}
 
 			if (counts.len == counts.size)
@@ -278,7 +400,9 @@ namespace bith
 					return;
 			}
 
-
+			memcpy(counts.data_pntr + (counts.len * info.data_size), new_data_pntr, info.data_size);
+			counts.counts_pntr[counts.len] = 1;
+			counts.len += 1;
 		}
 
 		inline void count_fixed_bytes(ubuffer_t &buffer)
@@ -298,14 +422,14 @@ namespace bith
 
 			// --- main process ---
 			pntr = buffer.pntr;
-			end = buffer.pntr + buffer.size - (buffer.size % info.size);
+			end = buffer.pntr + buffer.size - (buffer.size % info.data_size);
 
 			while (pntr < end)
 			{
 				increase_fixed_bytes(pntr);
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
-				pntr += info.size;
+				pntr += info.data_size;
 			}
 
 			// copy remaining
