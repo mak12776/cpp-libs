@@ -227,6 +227,41 @@ namespace bith
 				return;
 		}
 
+		// --- malloc counts ---
+
+		inline void malloc()
+		{
+			size_manager(counts.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			counts.size = (std::min)(info.possible_data_number, counts.size);
+			counts.len = 0;
+
+			// calculate data block size
+			math::safe_mul(counts.size, info.data_size, info.data_block_size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// malloc data_pntr
+			counts.data_pntr = mem::safe_malloc(info.data_block_size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// malloc counts_pntr
+			counts.counts_pntr = mem::safe_malloc_array<size_t>(counts.size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		}
+
+		inline void realloc_more()
+		{
+			size_manager(counts.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+
+		}
+
 		// --- primitive types ---
 
 		template <typename data_type>
@@ -337,12 +372,12 @@ namespace bith
 			counts.len = 0;
 
 			// calculate bytes number
-			math::safe_mul(counts.size, info.data_size, counts.bytes_number);
+			math::safe_mul(counts.size, info.data_size, info.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// malloc data_pntr
-			counts.data_pntr = (ubyte *)mem::safe_malloc(counts.bytes_number);
+			counts.data_pntr = (ubyte *)mem::safe_malloc(info.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
@@ -360,12 +395,12 @@ namespace bith
 				return;
 
 			// calculate bytes number
-			math::safe_mul(counts.size, info.data_size, counts.bytes_number);
+			math::safe_mul(counts.size, info.data_size, info.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// realloc data_pntr
-			counts.data_pntr = (ubyte *)mem::safe_malloc(counts.bytes_number);
+			counts.data_pntr = (ubyte *)mem::safe_malloc(info.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
@@ -376,8 +411,8 @@ namespace bith
 
 		inline void increase_fixed_bytes(ubyte *new_data_pntr)
 		{
-			ubyte *pntr = counts.data_pntr;
-			ubyte *end = counts.data_pntr + (counts.len * info.data_size);
+			ubyte *pntr = (ubyte *)counts.data_pntr;
+			ubyte *end = (ubyte *)counts.data_pntr + (counts.len * info.data_size);
 			size_t counts_index = 0;
 
 			while (pntr < end)
@@ -399,7 +434,7 @@ namespace bith
 					return;
 			}
 
-			memcpy(counts.data_pntr + (counts.len * info.data_size), new_data_pntr, info.data_size);
+			memcpy(end, new_data_pntr, info.data_size);
 			counts.counts_pntr[counts.len] = 1;
 			counts.len += 1;
 		}
