@@ -173,7 +173,6 @@ namespace bith
 
 			size_t data_bits;
 			size_t data_size;
-			size_t data_block_size;
 
 			size_t possible_data_number;
 
@@ -203,8 +202,8 @@ namespace bith
 			size_t len;
 			size_t data_block_size;
 
-			void *data_pntr;
-			size_t *counts_pntr;
+			void *data_pntr = nullptr;
+			size_t *counts_pntr = nullptr;
 		} counts;
 
 		struct
@@ -212,7 +211,7 @@ namespace bith
 			size_t bits;
 			size_t size;
 
-			ubyte *pntr;
+			ubyte *pntr = nullptr;
 		} remaining;
 
 		// --- malloc remaining ---
@@ -231,7 +230,7 @@ namespace bith
 
 		// --- malloc counts ---
 
-		inline void malloc()
+		inline void malloc_counts()
 		{
 			size_manager(counts.size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
@@ -241,12 +240,12 @@ namespace bith
 			counts.len = 0;
 
 			// calculate data block size
-			math::safe_mul(counts.size, info.data_size, info.data_block_size);
+			math::safe_mul(counts.size, info.data_size, counts.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// malloc data_pntr
-			counts.data_pntr = mem::safe_malloc(info.data_block_size);
+			counts.data_pntr = mem::safe_malloc(counts.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
@@ -263,53 +262,20 @@ namespace bith
 				return;
 
 			// calculate data block size
-			math::safe_mul(counts.size, info.data_size, info.data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-
-		}
-
-		// --- primitive types ---
-
-		template <typename data_type>
-		inline void malloc_primitive_types()
-		{
-			// calculate size & bits
-			size_manager(counts.size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-			counts.size = std::min<size_t>(info.possible_data_number, counts.size);
-			counts.len = 0;
-
-			// allocate memory
-			counts.data_pntr = (ubyte *)mem::safe_malloc_array<data_type>(counts.size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-			counts.counts_pntr = mem::safe_malloc_array<size_t>(counts.size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-		}
-
-		template <typename data_type>
-		inline void realloc_more_primitive_types()
-		{
-			// get new size
-			size_manager(counts.size);
+			math::safe_mul(counts.size, info.data_size, counts.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// realloc data_pntr
-			counts.data_pntr = (ubyte *)mem::safe_realloc_array<data_type>((data_type *)counts.data_pntr, counts.size);
+			counts.data_pntr = mem::safe_realloc(counts.data_pntr, counts.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			// realloc counts_pntr
 			counts.counts_pntr = mem::safe_realloc_array<size_t>(counts.counts_pntr, counts.size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
+
+		// increase primitve types, fixed bytes
 
 		template <typename data_type>
 		inline void increase_primitive_types(data_type value)
@@ -325,7 +291,7 @@ namespace bith
 
 			if (counts.len == counts.size)
 			{
-				realloc_more_primitive_types<data_type>();
+				realloc_more();
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 					return;
 			}
@@ -335,14 +301,46 @@ namespace bith
 			counts.len += 1;
 		}
 
-		template <typename data_type, size_manager_t size_manager>
+		inline void increase_fixed_bytes(void *value_pntr)
+		{
+			ubyte *pntr = (ubyte *)counts.data_pntr;
+			ubyte *end = (ubyte *)counts.data_pntr + (counts.len * info.data_size);
+			size_t index = 0;
+
+			while (pntr < end)
+			{
+				if (memcmp(pntr, value_pntr, info.data_size) == 0)
+				{
+					counts.counts_pntr[index] += 1;
+					return;
+				}
+
+				pntr += info.data_size;
+				index += 1;
+			}
+
+			if (counts.len == counts.size)
+			{
+				realloc_more();
+				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+					return;
+			}
+
+			memcpy(end, value_pntr, info.data_size);
+			counts.counts_pntr[counts.len] = 1;
+			counts.len += 1;
+		}
+
+		// --- count primitive types, fixed bytes ---
+
+		template <typename data_type>
 		inline void count_primitive_types(ubuffer_t &buffer)
 		{
 			data_type *pntr;
 			data_type *end;
 
-			// malloc primitive types
-			malloc_primitive_types<data_type>();
+			// malloc counts
+			malloc_counts();
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
@@ -367,93 +365,13 @@ namespace bith
 			memcpy(remaining.pntr, pntr, remaining.size);
 		}
 
-		// --- fixed bytes ---
-
-		inline void malloc_fixed_bytes()
-		{
-			// counts size & bits
-			size_manager(counts.size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-			counts.size = std::min<size_t>(info.possible_data_number, counts.size);
-			counts.len = 0;
-
-			// calculate bytes number
-			math::safe_mul(counts.size, info.data_size, info.data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-			// malloc data_pntr
-			counts.data_pntr = (ubyte *)mem::safe_malloc(info.data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-			// malloc counts_pntr
-			counts.counts_pntr = mem::safe_malloc_array<size_t>(counts.size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-		}
-
-		inline void realloc_more_fixed_bytes()
-		{
-			// get new size
-			size_manager(counts.size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-			// calculate bytes number
-			math::safe_mul(counts.size, info.data_size, info.data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-			// realloc data_pntr
-			counts.data_pntr = (ubyte *)mem::safe_malloc(info.data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
-
-			// realloc counts_pntr
-			counts.counts_pntr = (size_t *)mem::safe_malloc_array<size_t>(counts.size);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
-		}
-
-		inline void increase_fixed_bytes(ubyte *new_data_pntr)
-		{
-			ubyte *pntr = (ubyte *)counts.data_pntr;
-			ubyte *end = (ubyte *)counts.data_pntr + (counts.len * info.data_size);
-			size_t counts_index = 0;
-
-			while (pntr < end)
-			{
-				if (memcmp(pntr, new_data_pntr, info.data_size) == 0)
-				{
-					counts.counts_pntr[counts_index] += 1;
-					return;
-				}
-
-				counts_index += 1;
-				pntr += info.data_size;
-			}
-
-			if (counts.len == counts.size)
-			{
-				realloc_more_fixed_bytes();
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-					return;
-			}
-
-			memcpy(end, new_data_pntr, info.data_size);
-			counts.counts_pntr[counts.len] = 1;
-			counts.len += 1;
-		}
-
 		inline void count_fixed_bytes(ubuffer_t &buffer)
 		{
 			ubyte *pntr;
 			ubyte *end;
 
-			// malloc primitive types
-			malloc_fixed_bytes();
+			// malloc counts
+			malloc_counts();
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
@@ -477,6 +395,48 @@ namespace bith
 			// copy remaining
 			memcpy(remaining.pntr, pntr, remaining.size);
 		}
+
+		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
+		{
+			this->info.calculate(data_bits, buffer.size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+
+			// --- [main process] ---
+			if (this->info.data_bits % 8 == 0)
+			{
+				if (info.data_size == sizeof(uint8_t))
+				{
+					count_primitive_types<uint8_t>(buffer);
+					err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				else if (info.data_size == sizeof(uint16_t))
+				{
+					count_primitive_types<uint16_t>(buffer);
+					err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				else if (info.data_size == sizeof(uint32_t))
+				{
+					count_primitive_types<uint32_t>(buffer);
+					err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				else if (info.data_size == sizeof(uint64_t))
+				{
+					count_primitive_types<uint64_t>(buffer);
+					err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+				else
+				{
+					count_fixed_bytes(buffer);
+					err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				}
+			}
+			else
+			{
+				err::set(err::INVALID_ARGUMENT);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			}
+		}
 	}; // struct segmented_buffer
 
 	template <size_manager_t size_manager = double_size_manager>
@@ -486,43 +446,7 @@ namespace bith
 		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
-		// --- [main process] ---
-		if (result.info.bits % 8 == 0)
-		{
-			if (result.info.size == sizeof(uint8_t))
-			{
-				result.count_primitive_types<uint8_t>(buffer, result);
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-					return;
-			}
-			else if (result.info.size == sizeof(uint16_t))
-			{
-				result.count_primitive_types<uint16_t>(buffer, result);
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-					return;
-			}
-			else if (result.info.size == sizeof(uint32_t))
-			{
-				result.count_primitive_types<uint32_t>(buffer, result);
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-					return;
-			}
-			else if (result.info.size == sizeof(uint64_t))
-			{
-				result.count_primitive_types<uint64_t, size_manager>(buffer, result);
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-					return;
-			}
-			else
-			{
-
-			}
-		}
-		else
-		{
-			err::set(err::INVALID_ARGUMENT);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-		}
+		
 	}
 
 	template <size_manager_t size_manager>
