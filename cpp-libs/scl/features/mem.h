@@ -72,36 +72,35 @@ namespace scl
 
 			// safe realloc array
 
-			constexpr void *safe_realloc(void *pntr, size_t size)
+			constexpr void safe_realloc(void **pntr, size_t size)
 			{
-				void *new_pntr = this->realloc(pntr, size);
+				void *new_pntr = this->realloc(*pntr, size);
 				if (new_pntr == nullptr)
 				{
 					err::set(err::NO_MEMORY);
 					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					return pntr;
+					return;
 				}
-				return new_pntr;
+				(*pntr) = new_pntr;
 			}
 
 			template <typename data_type>
-			constexpr data_type *safe_realloc_array(data_type *pntr, size_t size)
+			constexpr void safe_realloc_array(data_type **pntr, size_t size)
 			{
 				data_type *new_pntr;
 
 				math::safe_mul(size, sizeof(data_type), size);
 				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-					return pntr;
+					return;
 
-				new_pntr = (data_type *)(this->realloc(pntr, size));
+				new_pntr = (data_type *)(this->realloc(*pntr, size));
 				if (new_pntr == nullptr)
 				{
 					err::set(err::NO_MEMORY);
 					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					return pntr;
+					return;
 				}
-
-				return new_pntr;
+				(*pntr) = new_pntr;
 			}
 		};
 
@@ -120,12 +119,13 @@ namespace scl
 
 		static constexpr inline void *safe_malloc(size_t size) { return global_mem.safe_malloc(size); }
 		static constexpr inline void *safe_calloc(size_t count, size_t size) { return global_mem.safe_calloc(count, size); }
-		static constexpr inline void *safe_realloc(void *pntr, size_t size) { return global_mem.safe_realloc(pntr, size); }
+		static constexpr inline void safe_realloc(void **pntr, size_t size) { return global_mem.safe_realloc(pntr, size); }
 
 		template <typename data_type>
 		static constexpr inline data_type *safe_malloc_array(size_t size) { return global_mem.safe_malloc_array<data_type>(size); }
+
 		template <typename data_type>
-		static constexpr inline data_type *safe_realloc_array(data_type *pntr, size_t size) { return global_mem.safe_realloc_array(pntr, size); }
+		static constexpr inline void safe_realloc_array(data_type **pntr, size_t size) { return global_mem.safe_realloc_array(pntr, size); }
 
 #ifdef SCL_EXPREMENTAL
 		// text logger manager

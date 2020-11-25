@@ -99,12 +99,12 @@ namespace bith
 				return;
 
 			// realloc data_pntr
-			this->data_pntr = mem::safe_realloc(this->data_pntr, this->data_block_size);
+			mem::safe_realloc(&(this->data_pntr), this->data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// realloc counts_pntr
-			this->counts_pntr = mem::safe_realloc_array<size_t>(this->counts_pntr, this->size);
+			mem::safe_realloc_array<size_t>(&(this->counts_pntr), this->size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
@@ -162,6 +162,8 @@ namespace bith
 			this->len += 1;
 		}
 	};
+
+	// segmented buffer
 
 	template <size_manager_t size_manager = bith::double_size_manager>
 	struct segmented_buffer_t
@@ -267,11 +269,11 @@ namespace bith
 				return;
 
 			// realloc data_pntr
-			counts.data_pntr = mem::safe_realloc(counts.data_pntr, counts.data_block_size);
+			mem::safe_realloc(&counts.data_pntr, counts.data_block_size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			counts.counts_pntr = mem::safe_realloc_array<size_t>(counts.counts_pntr, counts.size);
+			mem::safe_realloc_array<size_t>(&counts.counts_pntr, counts.size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
@@ -395,6 +397,8 @@ namespace bith
 			// copy remaining
 			memcpy(remaining.pntr, pntr, remaining.size);
 		}
+
+		// count buffer
 
 		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
