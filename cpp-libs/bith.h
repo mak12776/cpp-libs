@@ -226,8 +226,7 @@ namespace bith
 
 			// --- allocate memory ---
 			remaining.pntr = (ubyte *)mem::safe_malloc(remaining.size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return;
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 		}
 
 		// --- malloc counts ---
@@ -402,12 +401,12 @@ namespace bith
 
 		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
-			this->info.calculate(data_bits, buffer.size);
+			info.calculate(data_bits, buffer.size);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			// --- [main process] ---
-			if (this->info.data_bits % 8 == 0)
+			if (info.data_bits % 8 == 0)
 			{
 				if (info.data_size == sizeof(uint8_t))
 				{
@@ -442,29 +441,4 @@ namespace bith
 			}
 		}
 	}; // struct segmented_buffer
-
-	template <size_manager_t size_manager = double_size_manager>
-	static inline void count_bits(size_t data_bits, ubuffer_t &buffer, segmented_buffer_t<size_manager> &result)
-	{
-		result.info.calculate(data_bits, buffer.size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-			return;
-
-		
-	}
-
-	template <size_manager_t size_manager>
-	static inline void count_bits(size_t data_bits, const char *name, segmented_buffer_t<size_manager> &result)
-	{
-		scl::ubuffer_t buffer;
-
-		scl::io::malloc_fopen_fread(name, (void **)&buffer.pntr, &buffer.size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-			return;
-
-		count_bits(data_bits, buffer, result);
-		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
-
-		free(buffer.pntr);
-	}
 }

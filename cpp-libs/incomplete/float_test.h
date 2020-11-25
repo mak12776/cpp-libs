@@ -1,5 +1,12 @@
 #pragma once
 
+// uint32_t first value:
+// 16,777,217
+
+// uint64_t first value: 
+// 9,007,199,254,740,991 (stack overflow)
+// 9,007,199,254,740,993
+
 template <typename float_type, typename int_type>
 bool check_f_i_f(const int_type value)
 {
