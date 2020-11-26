@@ -6,15 +6,31 @@ does 'scl err_t handling' log file informations?
 how to include headers in scl?
 
 ---
-needed types in std:
-	std::array<array_size>		array[array_size]
-	dynamic_array				pntr, size
+types in scl:
+	const_array					const T* const pntr, const size_t size
+
+	dynamic_array				void *pntr, size_t size
+	dynamic_list				void *pntr, size_t len, size_t size
 	
+	cyclic_array				void *pntr, void *star, void * end, size_t size, 
+	
+	linked_array				size_t len, first, last
+	linked_nodes				size_t len, first, last
+
+	c_string
+
+	- allocation function names:
+	allocate, reallocate, free
+	or 
+	malloc, realloc, free
+
+types in boost:
+	...
+
+types in std:
 	std::vector					pntr, len, size
 	std::list					first, last			linked_list of arrays
-	scl::linked_array			first, last
-	c_string					const char* const, const size_t
-
+	std::array<array_size>		array[array_size]
 
 features needed in c++:
 	err header

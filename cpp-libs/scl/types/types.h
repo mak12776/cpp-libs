@@ -1,0 +1,158 @@
+#pragma once
+
+namespace scl
+{
+	// const array
+
+	template <typename value_type>
+	struct const_array
+	{
+		const value_type *const pntr;
+		const size_t len;
+
+		template <size_t size>
+		base_c_string_t(const value_type(&pntr)[size]) : pntr(pntr), len(size - 1)
+		{ }
+	};
+
+	// dynamic list
+	template <typename data_type>
+	struct dynamic_list_t
+	{
+		data_type *pntr;
+		size_t len;
+		size_t size;
+		
+		dynamic_list_t() : pntr(nullptr), len(0), size(0) { }
+
+		inline void allocate(size_t size)
+		{
+			
+		}
+	};
+
+	// dynamic array
+
+	template <typename data_type>
+	struct dynamic_array_t
+	{
+		typedef data_type &reference;
+		typedef const data_type &const_reference;
+
+		data_type *pntr;
+		size_t size;
+
+		dynamic_array_t() : pntr(nullptr), size(0) {}
+
+		// malloc fread, fwrite
+
+		inline void allocate(size_t size)
+		{
+			pntr = mem::safe_malloc_array<data_type>(size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+			this->size = size;
+		}
+
+		inline void reallocate(size_t size)
+		{
+			pntr = mem::safe_realloc_array<data_type>(size);
+			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				return;
+			this->size = size;
+		}
+
+		inline void deallocate()
+		{
+			mem::free(pntr);
+			this->size = 0;
+		}
+
+		// fread, fwrite
+
+		inline size_t fread(FILE *file)
+		{
+			size_t read_number = io::fread_array<data_type>(pntr, size, file);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return read_number;
+		}
+
+		inline size_t fwrite(FILE *file)
+		{
+			size_t write_number = io::fwrite_array<data_type>(pntr, size, file);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
+		}
+
+		// fopen fread, fwrite
+
+		inline size_t fopen_fread(const char *name)
+		{
+			size_t read_number = io::fopen_fread(name, pntr, size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return read_number;
+		}
+
+		inline size_t fopen_fwrite(const char *name)
+		{
+			size_t write_number = io::fopen_fwrite(name, pntr, size);
+			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			return write_number;
+		}
+	};
+
+	// linked array
+
+	template <typename data_type, size_t array_size>
+	struct linked_array_node_t
+	{
+		data_type pntr[array_size];
+		linked_array_node_t<data_type, array_size> *next;
+	};
+
+	template <typename data_type, size_t array_size>
+	struct linked_array_t
+	{
+		typedef data_type& reference;
+		typedef const data_type& const_reference;
+
+		size_t len;
+		linked_array_node_t<data_type, array_size> *first;
+		linked_array_node_t<data_type, array_size> *last;
+
+		linked_array_t()
+			: len(0), first(nullptr), last(nullptr) { }
+
+		inline bool append(const_reference value)
+		{
+			if (len == 0)
+			{
+				first = mem::malloc(sizeof linked_array_node_t<data_type, array_size>);
+				if (first == nullptr)
+					return true;
+
+				last = first;
+			}
+			else if (len % array_size == 0)
+			{
+				last->next = mem::malloc(sizeof linked_array_node_t<data_type, array_size>);
+				if (last->next == nullptr)
+					return true;
+
+				last = last->next;
+			}
+
+			last[len % array_size] = value;
+			len += 1;
+		}
+	};
+
+	// other types
+
+	using c_ustring_t = const_array<unsigned char>;
+	using c_string_t = const_array<char>;
+
+	typedef dynamic_array_t<byte> buffer_t;
+	typedef dynamic_array_t<ubyte> ubuffer_t;
+	typedef dynamic_array_t<void> vbuffer_t;
+}

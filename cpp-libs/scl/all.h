@@ -39,10 +39,7 @@
 #include "io.h"					// <sys/types.h> <sys/stat.h> <io.h>
 								// "features/all_features.h"
 
-#include "types/dynamic_array.h"
-#include "types/buffer.h"		// "types/dynamic_array.h"
-#include "types/c_string.h"
-#include "types/linked_array.h"
+#include "types/types.h"
 
 #include "fs.h"
 
