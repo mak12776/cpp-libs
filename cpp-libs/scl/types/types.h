@@ -70,6 +70,13 @@ namespace scl
 
 		dynamic_array_t() : pntr(nullptr), size(0) {}
 
+		// operators
+
+		inline data_type &operator[](size_t index)
+		{
+			return pntr[index];
+		}
+
 		// allocation
 
 		inline void allocate_fread(FILE *file)
