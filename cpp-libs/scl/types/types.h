@@ -127,7 +127,7 @@ namespace scl
 				return;
 
 			if constexpr (sizeof(data_type) != 1)
-				file_size = upper_bound
+				
 
 		}
 

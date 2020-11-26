@@ -87,9 +87,14 @@ namespace scl
 		// safe arithmetic operations
 
 		template <typename type>
-		static inline type upper_bounad(type value, type divisor)
+		static inline bool upper_bounad(type value, type divisor, type &result)
 		{
 			type remaining = (value % divisor);
+			if (remaining == 0)
+			{
+				result = value;
+				return false;
+			}
 			
 		}
 
