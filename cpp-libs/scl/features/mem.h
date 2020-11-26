@@ -49,6 +49,20 @@ namespace scl
 				return pntr;
 			}
 
+			// safe malloc type
+
+			template <typename data_type>
+			constexpr data_type *safe_malloc_type()
+			{
+				data_type *pntr = this->malloc(sizeof data_type);
+				if (pntr == nullptr)
+				{
+					err::set(err::NO_MEMORY);
+					err::push_file_info(ERR_ARGS);
+				}
+				return pntr;
+			}
+
 			// safe malloc array
 
 			template <typename data_type>
@@ -120,6 +134,9 @@ namespace scl
 		static constexpr inline void *safe_malloc(size_t size) { return global_mem.safe_malloc(size); }
 		static constexpr inline void *safe_calloc(size_t count, size_t size) { return global_mem.safe_calloc(count, size); }
 		static constexpr inline void safe_realloc(void **pntr, size_t size) { return global_mem.safe_realloc(pntr, size); }
+
+		template <typename data_type>
+		static constexpr inline data_type *safe_malloc_type() { return global_mem.safe_malloc_type<data_type>(size); }
 
 		template <typename data_type>
 		static constexpr inline data_type *safe_malloc_array(size_t size) { return global_mem.safe_malloc_array<data_type>(size); }
