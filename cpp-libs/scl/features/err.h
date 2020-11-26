@@ -206,6 +206,7 @@ namespace scl
 		err_t global_err = default_err;
 
 		// global functions
+#define ERR_ARGS __FILE__, __LINE__, __FUNCTION__
 
 		static inline void set(num_t errnum) { global_err.set(errnum); }
 		static inline void clear() { global_err.clear(); }

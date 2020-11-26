@@ -4,30 +4,102 @@ namespace scl
 {
 	// const array
 
-	template <typename value_type>
+	template <typename value_type = char>
 	struct const_array
 	{
 		const value_type *const pntr;
 		const size_t len;
 
 		template <size_t size>
-		base_c_string_t(const value_type(&pntr)[size]) : pntr(pntr), len(size - 1)
+		const_array(const value_type(&pntr)[size]) : pntr(pntr), len(size - 1)
 		{ }
 	};
 
 	// dynamic list
-	template <typename data_type>
+
+	typedef void(&size_manager_t)(size_t &size);
+
+	template <size_t initial_size>
+	void double_size_manager(size_t &size)
+	{
+		if (size < initial_size)
+		{
+			size = initial_size;
+			return;
+		}
+		math::safe_mul(size, (size_t)2, size);
+		err::check_push_file_info(ERR_ARGS);
+	}
+
+	template <size_t initial_size>
+	void half_size_manager(size_t &size)
+	{
+		if (size < initial_size)
+		{
+			size = initial_size;
+			return;
+		}
+		math::safe_add(size, size / 2, size);
+		err::check_push_file_info(ERR_ARGS);
+	}
+
+	template <size_t initial_size, size_t adder_size>
+	void adder_size_manager(size_t &size)
+	{
+		if (size < initial_size)
+		{
+			size = initial_size;
+			return;
+		}
+		math::safe_add(size, adder_size, size);
+		err::check_push_file_info(ERR_ARGS);
+	}
+
+	size_manager_t default_size_manager = half_size_manager<16>;
+
+	template <typename data_type, size_manager_t size_manager = default_size_manager>
 	struct dynamic_list_t
 	{
 		data_type *pntr;
 		size_t len;
 		size_t size;
 		
-		dynamic_list_t() : pntr(nullptr), len(0), size(0) { }
+	private:
+		inline void reset() 
+		{
+			this->pntr = nullptr;
+			this->len = 0;
+			this->size = 0;
+		}
+
+	public:
+		dynamic_list_t() { reset(); }
 
 		inline void allocate(size_t size)
 		{
-			
+			this->pntr = mem::safe_malloc_array<data_type>(size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			this->len = 0;
+			this->size = size;
+		}
+
+		inline void reallocate(size_t size)
+		{
+			mem::safe_realloc_array<data_type>(&pntr, size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			if (this->len > size)
+				this->len = size;
+			this->size = size;
+		}
+
+		inline void free()
+		{
+			mem::free(pntr);
+			reset();
 		}
 	};
 
