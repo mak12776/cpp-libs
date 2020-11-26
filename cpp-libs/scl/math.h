@@ -86,6 +86,19 @@ namespace scl
 
 		// safe arithmetic operations
 
+		template <typename type>
+		static inline type upper_bounad(type value, type divisor)
+		{
+			type remaining = (value % divisor);
+			
+		}
+
+		template <typename type>
+		static inline void lower_bound(type value, type divisor, type &res)
+		{
+			return value - (value % divisor);
+		}
+
 		template<typename type>
 		static inline bool mul(type a, type b, type &res)
 		{

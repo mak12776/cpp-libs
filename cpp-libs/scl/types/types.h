@@ -126,10 +126,9 @@ namespace scl
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			if constexpr (sizeof data_type == 1)
-			{
-				
-			}
+			if constexpr (sizeof(data_type) != 1)
+				file_size = upper_bound
+
 		}
 
 		inline void allocate_fopen_fread(const char *name)
@@ -243,7 +242,7 @@ namespace scl
 	using c_ustring_t = const_array<unsigned char>;
 	using c_string_t = const_array<char>;
 
-	typedef dynamic_array_t<byte> buffer_t;
+	typedef dynamic_array_t<int8_t> buffer_t;
 	typedef dynamic_array_t<ubyte> ubuffer_t;
 	typedef dynamic_array_t<void> vbuffer_t;
 }
