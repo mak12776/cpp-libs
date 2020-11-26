@@ -55,9 +55,9 @@ namespace scl
 		err::check_push_file_info(ERR_ARGS);
 	}
 
-	size_manager_t default_size_manager = half_size_manager<16>;
+	constexpr size_manager_t default_size_manager = half_size_manager<16>;
 
-	template <typename data_type, size_manager_t size_manager = default_size_manager>
+	template <typename data_type, size_manager_t size_manager = half_size_manager<16>>
 	struct dynamic_list_t
 	{
 		data_type *pntr;
@@ -116,7 +116,26 @@ namespace scl
 
 		dynamic_array_t() : pntr(nullptr), size(0) {}
 
-		// malloc fread, fwrite
+		// allocation
+
+		inline void allocate_fread(FILE *file)
+		{
+			size_t file_size;
+
+			file_size = io::safe_get_size(FILE);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			if constexpr (sizeof data_type == 1)
+			{
+				
+			}
+		}
+
+		inline void allocate_fopen_fread(const char *name)
+		{
+
+		}
 
 		inline void allocate(size_t size)
 		{
