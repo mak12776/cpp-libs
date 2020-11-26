@@ -136,7 +136,7 @@ namespace scl
 		static constexpr inline void safe_realloc(void **pntr, size_t size) { return global_mem.safe_realloc(pntr, size); }
 
 		template <typename data_type>
-		static constexpr inline data_type *safe_malloc_type() { return global_mem.safe_malloc_type<data_type>(size); }
+		static constexpr inline data_type *safe_malloc_type() { return global_mem.safe_malloc_type<data_type>(); }
 
 		template <typename data_type>
 		static constexpr inline data_type *safe_malloc_array(size_t size) { return global_mem.safe_malloc_array<data_type>(size); }

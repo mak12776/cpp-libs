@@ -2,7 +2,7 @@
 
 #include "scl/all.h"
 
-namespace bith
+namespace compressor
 {
 	using namespace scl;
 
@@ -47,102 +47,105 @@ namespace bith
 		return (bits / 8) + ((bits % 8) ? 1 : 0);
 	}
 
-	template <size_manager_t size_manager = bith::double_size_manager>
-	struct fixed_data_counts
+	// segmented
+
+	template <size_manager_t size_manager = compressor::double_size_manager>
+	struct segmented_buffer_t
 	{
+		size_t buffer_bits;
+		size_t buffer_size;
+
 		size_t data_bits;
 		size_t data_size;
-		size_t data_block_size;
+		
+		size_t possible_data_number;
+		size_t total_data_number;
 
 		size_t size;
-		size_t len;
+		size_t length;
+		size_t data_block_size;
+
+		size_t remaining_bits;
+		size_t remaining_size;
 
 		void *data_pntr = nullptr;
-		size_t *counts_pntr = nullptr;
+		size_t *count_pntr = nullptr;
 
-		inline void malloc(size_t data_size, size_t suggested_initial_block_size)
+		void *remaining_pntr = nullptr;
+
+		inline void allocate()
 		{
-			// get size
+			this->size = 0;
+
+			// size, length
 			size_manager(this->size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			this->size = std::min<size_t>(this->size, suggested_initial_block_size);
-			this->len = 0;
+			this->size = (std::min)(this->size, this->possible_data_number);
+			this->length = 0;
 
-			// calculate data size & data block size
-			this->data_size = data_size;
-			math::safe_mul(this->size, data_size, this->data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			// data block size
+			math::safe_mul(this->size, this->data_size, this->data_block_size);
+			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			// malloc data_pntr
+			// set remaining bits, size
+			this->remaining_bits = this->buffer_bits % this->data_bits;
+			this->remaining_size = get_bytes_per_bits(this->remaining_bits);
+
+			// allocate remaining
+			this->remaining_pntr = mem::safe_malloc(this->remaining_size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			// allocate data_pntr
 			this->data_pntr = mem::safe_malloc(this->data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			// malloc counts_pntr
-			this->counts_pntr = mem::safe_malloc_array<size_t>(size);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			// allocate count_pntr
+			this->count_pntr = mem::safe_malloc_array<size_t>(this->size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
 		}
 
-		inline void realloc_more()
+		inline void reallocate_more()
 		{
 			// get new size
 			size_manager(this->size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				mem::free(this->data_pntr);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
 
-			// calculate data block size
+			// data block size
 			math::safe_mul(this->size, this->data_size, this->data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			// realloc data_pntr
+			// reallocate data_pntr
 			mem::safe_realloc(&(this->data_pntr), this->data_block_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			// realloc counts_pntr
-			mem::safe_realloc_array<size_t>(&(this->counts_pntr), this->size);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			// reallocate count_pntr
+			mem::safe_realloc_array<size_t>(&(this->count_pntr), this->size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
 		}
 
-		template <typename data_type>
-		inline void increase_primitive_types(data_type value)
-		{
-			for (size_t index = 0; index < this->len; index += 1)
-			{
-				if (((data_type *)this->data_pntr)[index] == value)
-				{
-					this->counts_pntr[index] += 1;
-					return;
-				}
-			}
+		// fixed bytes
 
-			if (this->len == this->size)
-			{
-				realloc_more();
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-					return;
-			}
-
-			((data_type *)this->data_pntr)[this->len] = value;
-			this->counts_pntr[this->len] = 1;
-			this->len += 1;
-		}
-
-		inline void increase_fixed_bytes(void *value_pntr)
+		inline void increase_fixed_bytes(ubyte *value_pntr)
 		{
 			ubyte *pntr = (ubyte *)this->data_pntr;
-			ubyte *end = (ubyte *)this->data_pntr + (this->len * this->data_size);
+			ubyte *end = (ubyte *)this->data_pntr + (this->length * this->data_size);
 			size_t index = 0;
 
 			while (pntr < end)
 			{
-				if (memcmp(pntr, value_pntr, this->data_size))
+				if (memcmp(pntr, value_pntr, this->data_size) == 0)
 				{
-					this->counts_pntr[index] += 1;
+					this->count_pntr[index] += 1;
 					return;
 				}
 
@@ -150,23 +153,169 @@ namespace bith
 				index += 1;
 			}
 
-			if (this->len == this->size)
+			if (this->length == this->size)
 			{
-				realloc_more();
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				reallocate_more();
+				if (err::check_push_file_info(ERR_ARGS))
 					return;
 			}
 
 			memcpy(end, value_pntr, this->data_size);
-			this->counts_pntr[this->len] = 1;
-			this->len += 1;
+			this->count_pntr[this->length] = 1;
+			this->length += 1;
+		}
+
+		inline void count_fixed_bytes(ubuffer_t &buffer)
+		{
+			ubyte *pntr = buffer.pntr;
+			ubyte *end = buffer.pntr + buffer.size - this->remaining_size;
+
+			allocate();
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			while (pntr < end)
+			{
+				increase_fixed_bytes(pntr);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+
+				pntr += this->data_size;
+			}
+
+			memcpy(this->remaining_pntr, end, this->remaining_size);
+		}
+
+		// primitive types
+
+		template <typename data_type>
+		inline void increase_primitive_types(data_type value)
+		{
+			for (size_t index = 0; index < this->length; index += 1)
+			{
+				if (((data_type *)this->data_pntr)[index] == value)
+				{
+					this->count_pntr[index] += 1;
+					return;
+				}
+			}
+
+			if (this->length == this->size)
+			{
+				reallocate_more();
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
+
+			((data_type *)this->data_pntr)[this->length] = value;
+			this->count_pntr[this->length] = 1;
+			this->length += 1;
+		}
+
+		template <typename data_type>
+		inline void count_primitive_types(ubuffer_t &buffer)
+		{
+			data_type *pntr = (data_type *)buffer.pntr;
+			data_type *end = (data_type *)(buffer.pntr + buffer.size - this->remaining_size);
+
+			allocate();
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			while (pntr < end)
+			{
+				increase_primitive_types(*pntr);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+
+				pntr += 1;
+			}
+
+			memcpy(this->remaining_pntr, end, this->remaining_size);
+		}
+
+		// main functions
+
+		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
+		{
+			// buffer size, bits
+			this->buffer_size = buffer.size;
+
+			math::safe_mul(buffer.size, (size_t)8, this->buffer_bits);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			// data bits, size
+			this->data_bits = data_bits;
+			this->data_size = get_bytes_per_bits(data_bits);
+
+			// possible data number
+			math::pow<size_t>(2, data_bits, this->possible_data_number);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			// total data number
+			this->total_data_number = this->buffer_bits / this->data_bits;
+
+			if (data_bits % 8 == 0)
+			{
+				switch (this->data_size)
+				{
+				case sizeof uint8_t:
+					this->count_primitive_types<uint8_t>(buffer);
+					break;
+				case sizeof uint16_t:
+					this->count_primitive_types<uint16_t>(buffer);
+					break;
+				case sizeof uint32_t:
+					this->count_primitive_types<uint32_t>(buffer);
+					break;
+				case sizeof uint64_t:
+					this->count_primitive_types<uint64_t>(buffer);
+					break;
+				default:
+					this->count_fixed_bytes(buffer);
+					break;
+				}
+			}
+			else
+			{
+				err::set(err::INVALID_ARGUMENT);
+				err::push_file_info(ERR_ARGS);
+			}
+		}
+
+		inline void count_file(size_t data_bits, FILE *file)
+		{
+			ubuffer_t buffer;
+
+			buffer.allocate_fread(file);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			count_buffer(data_bits, buffer);
+			err::check_push_file_info(file);
+		}
+
+		inline void count_name(size_t data_bits, const char *name)
+		{
+			ubuffer_t buffer;
+			
+			buffer.allocate_fopen_fread(name);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			count_buffer(data_bits, buffer);
+			err::check_push_file_info(ERR_ARGS);
 		}
 	};
 
+	// --------------------------------------------------------------
+
 	// segmented buffer
 
-	template <size_manager_t size_manager = bith::double_size_manager>
-	struct segmented_buffer_t
+	template <size_manager_t size_manager = compressor::double_size_manager>
+	struct old_segmented_buffer_t
 	{
 		struct
 		{

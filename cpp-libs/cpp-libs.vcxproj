@@ -154,7 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="bith.h" />
+    <ClInclude Include="compressor.h" />
     <ClInclude Include="incomplete scl\old_string.h" />
     <ClInclude Include="primes.h" />
     <ClInclude Include="programs\bh.h" />

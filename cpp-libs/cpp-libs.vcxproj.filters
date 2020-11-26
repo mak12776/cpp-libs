@@ -108,9 +108,6 @@
     <ClInclude Include="scl\types\builtins.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
-    <ClInclude Include="bith.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scl\features\cfmt_header.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
@@ -120,10 +117,10 @@
     <ClInclude Include="scl\winapi\conv.h">
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\fs.h">
-      <Filter>Header Files\scl</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="compressor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

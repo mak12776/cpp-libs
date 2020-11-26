@@ -99,17 +99,11 @@ namespace scl
 		template <typename type>
 		static inline void safe_upper_bound(type value, type divisor, type &result)
 		{
-			type remaining = (value % divisor);
-			if (remaining)
+			if (upper_bound(value, divisor, result))
 			{
-				if (add(value, divisor - remaining, result))
-				{
-					err::set(err::INT_OVERFLOW);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
-					return;
-				}
+				err::set(err::INT_OVERFLOW);
+				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			}
-			result = value;
 		}
 
 		template <typename type>
