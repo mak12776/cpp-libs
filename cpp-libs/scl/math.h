@@ -87,15 +87,29 @@ namespace scl
 		// safe arithmetic operations
 
 		template <typename type>
-		static inline bool upper_bounad(type value, type divisor, type &result)
+		static inline bool upper_bound(type value, type divisor, type &result)
 		{
 			type remaining = (value % divisor);
-			if (remaining == 0)
+			if (remaining)
+				return add(value, divisor - remaining, result);
+			result = value;
+			return false;
+		}
+
+		template <typename type>
+		static inline void safe_upper_bound(type value, type divisor, type &result)
+		{
+			type remaining = (value % divisor);
+			if (remaining)
 			{
-				result = value;
-				return false;
+				if (add(value, divisor - remaining, result))
+				{
+					err::set(err::INT_OVERFLOW);
+					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					return;
+				}
 			}
-			
+			result = value;
 		}
 
 		template <typename type>

@@ -15,7 +15,7 @@ namespace scl
 		{ }
 	};
 
-	// dynamic list
+	// size manager
 
 	typedef void(&size_manager_t)(size_t &size);
 
@@ -57,52 +57,6 @@ namespace scl
 
 	constexpr size_manager_t default_size_manager = half_size_manager<16>;
 
-	template <typename data_type, size_manager_t size_manager = half_size_manager<16>>
-	struct dynamic_list_t
-	{
-		data_type *pntr;
-		size_t len;
-		size_t size;
-		
-	private:
-		inline void reset() 
-		{
-			this->pntr = nullptr;
-			this->len = 0;
-			this->size = 0;
-		}
-
-	public:
-		dynamic_list_t() { reset(); }
-
-		inline void allocate(size_t size)
-		{
-			this->pntr = mem::safe_malloc_array<data_type>(size);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			this->len = 0;
-			this->size = size;
-		}
-
-		inline void reallocate(size_t size)
-		{
-			mem::safe_realloc_array<data_type>(&pntr, size);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			if (this->len > size)
-				this->len = size;
-			this->size = size;
-		}
-
-		inline void free()
-		{
-			mem::free(pntr);
-			reset();
-		}
-	};
-
 	// dynamic array
 
 	template <typename data_type>
@@ -120,26 +74,20 @@ namespace scl
 
 		inline void allocate_fread(FILE *file)
 		{
-			size_t file_size;
-
-			file_size = io::safe_get_size(FILE);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			if constexpr (sizeof(data_type) != 1)
-				
-
+			io::malloc_fread_array_all<data_type>(file, &pntr, size);
+			err::check_push_file_info(ERR_ARGS);
 		}
 
 		inline void allocate_fopen_fread(const char *name)
 		{
-
+			io::malloc_fopen_fread_array_all<data_type>(name, &pntr, size);
+			err::check_push_file_info(ERR_ARGS);
 		}
 
 		inline void allocate(size_t size)
 		{
 			pntr = mem::safe_malloc_array<data_type>(size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push_file_info(ERR_ARGS))
 				return;
 			this->size = size;
 		}
@@ -147,7 +95,7 @@ namespace scl
 		inline void reallocate(size_t size)
 		{
 			pntr = mem::safe_realloc_array<data_type>(size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push_file_info(ERR_ARGS))
 				return;
 			this->size = size;
 		}
@@ -188,6 +136,54 @@ namespace scl
 			size_t write_number = io::fopen_fwrite(name, pntr, size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
 			return write_number;
+		}
+	};
+
+	// dynamic list
+
+	template <typename data_type, size_manager_t size_manager = half_size_manager<16>>
+	struct dynamic_list_t
+	{
+		data_type *pntr;
+		size_t len;
+		size_t size;
+
+	private:
+		inline void reset()
+		{
+			this->pntr = nullptr;
+			this->len = 0;
+			this->size = 0;
+		}
+
+	public:
+		dynamic_list_t() { reset(); }
+
+		inline void allocate(size_t size)
+		{
+			this->pntr = mem::safe_malloc_array<data_type>(size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			this->len = 0;
+			this->size = size;
+		}
+
+		inline void reallocate(size_t size)
+		{
+			mem::safe_realloc_array<data_type>(&pntr, size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			if (this->len > size)
+				this->len = size;
+			this->size = size;
+		}
+
+		inline void free()
+		{
+			mem::free(pntr);
+			reset();
 		}
 	};
 
@@ -242,7 +238,7 @@ namespace scl
 	using c_ustring_t = const_array<unsigned char>;
 	using c_string_t = const_array<char>;
 
-	typedef dynamic_array_t<int8_t> buffer_t;
+	typedef dynamic_array_t<byte> buffer_t;
 	typedef dynamic_array_t<ubyte> ubuffer_t;
 	typedef dynamic_array_t<void> vbuffer_t;
 }

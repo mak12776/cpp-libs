@@ -207,18 +207,10 @@ namespace scl
 
 			return write_number;
 		}
-
-		// malloc fread array
-
-		template <typename data_type>
-		static inline size_t malloc_fread_array(data_type *pntr, size_t data_number, FILE *file)
-		{
-			
-		}
 		
 		// malloc fread
 
-		static inline void malloc_fread(FILE *file, void **pntr, size_t *size)
+		static inline void malloc_fread_all(FILE *file, void **pntr, size_t &size)
 		{
 			size_t file_size;
 
@@ -230,19 +222,71 @@ namespace scl
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			*size = safe_fread(*pntr, file_size, file);
+			safe_fread(*pntr, file_size, file);
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
-				return free(*pntr);
+			{
+				free(*pntr);
+				return;
+			}
+
+			size = file_size;
 		}
 
-		static inline void malloc_fopen_fread(const char *name, void **pntr, size_t *size)
+		static inline void malloc_fopen_fread_all(const char *name, void **pntr, size_t &size)
 		{
 			FILE *file = safe_fopen(name, "rb");
 			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			malloc_fread(file, pntr, size);
+			malloc_fread_all(file, pntr, size);
 			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+
+			std::fclose(file);
+		}
+
+		// malloc fread array
+
+		template <typename data_type>
+		static inline void malloc_fread_array_all(FILE *file, data_type **pntr, size_t &size)
+		{
+			size_t file_size;
+			size_t block_size;
+
+			file_size = safe_get_size(file);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			block_size = file_size;
+			if constexpr (sizeof(data_type) != 1)
+			{
+				math::safe_upper_bound(block_size, sizeof(data_type), block_size);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
+
+			(*pntr) = (data_type *)mem::safe_malloc(block_size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			safe_fread(*pntr, file_size, file);
+			if (err::check_push_file_info(ERR_ARGS))
+			{
+				mem::free(*pntr);
+				return;
+			}
+
+			size = block_size / sizeof(data_type);
+		}
+
+		template <typename data_type>
+		static inline void malloc_fopen_fread_array_all(const char *name, data_type **pntr, size_t &size)
+		{
+			FILE *file = safe_fopen(name, "rb");
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			malloc_fread_array_all(file, pntr, size);
+			err::check_push_file_info(ERR_ARGS);
 
 			std::fclose(file);
 		}

@@ -116,10 +116,9 @@ namespace scl
 				return false;
 			}
 
-			inline size_t print_traceback(FILE *file = nullptr)
+			inline size_t print_traceback(FILE *file = stderr)
 			{
 				size_t total;
-				file = (file == nullptr) ? stderr : file;
 
 				total = cfmt::write(file,
 					"Traceback (most recent call last):\n");
@@ -135,9 +134,8 @@ namespace scl
 				return total;
 			}
 
-			inline size_t print(FILE *file = nullptr)
+			inline size_t print(FILE *file = stderr)
 			{
-				file = (file == nullptr) ? stderr : file;
 				size_t write_number = 0;
 
 				switch (num)
@@ -188,11 +186,11 @@ namespace scl
 				return write_number;
 			}
 
-			inline void print_exit(FILE *file = nullptr)
+			inline void print_exit(FILE *file = nullptr, int exit_code = 1)
 			{
 				print(file);
 				if (num != SUCCESS) 
-					exit(1);
+					exit(exit_code);
 			}
 		}; // err_t
 #pragma pack(pop)
@@ -221,9 +219,9 @@ namespace scl
 		static inline void push_file_info(const char *file, line_t line, const char *function) { global_err.push_file_info(file, line, function); }
 		static inline bool check_push_file_info(const char *file, uint64_t line, const char *function) { return global_err.check_push_file_info(file, line, function); }
 			   
-		static inline size_t print_traceback(FILE *file = nullptr) { return global_err.print_traceback(file); }
-		static inline size_t print(FILE *file = nullptr) { return global_err.print(file); }
-		static inline void print_exit(FILE *file = nullptr) { global_err.print_exit(file); }
+		static inline size_t print_traceback(FILE *file = stderr) { return global_err.print_traceback(file); }
+		static inline size_t print(FILE *file = stderr) { return global_err.print(file); }
+		static inline void print_exit(FILE *file = stderr, int exit_code = 1) { return global_err.print_exit(file, exit_code); }
 	}
 }
 
