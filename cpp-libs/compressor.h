@@ -2,7 +2,7 @@
 
 #include "scl/all.h"
 
-namespace compressor
+namespace comp
 {
 	using namespace scl;
 
@@ -49,7 +49,26 @@ namespace compressor
 
 	// segmented
 
-	template <size_manager_t size_manager = compressor::double_size_manager>
+	template <size_manager_t size_manager = comp::double_size_manager>
+	struct thread_segmented_buffer_t
+	{
+		size_t data_bits;
+		size_t data_size;
+
+		size_t size;
+		size_t len;
+		size_t data_block_size;
+
+		void *data_pntr;
+		size_t *count_pntr;
+
+		static inline void count_buffer(ubuffer_t &buffer)
+		{
+
+		}
+	};
+
+	template <size_manager_t size_manager = comp::double_size_manager>
 	struct segmented_buffer_t
 	{
 		size_t buffer_bits;
@@ -314,7 +333,7 @@ namespace compressor
 
 	// segmented buffer
 
-	template <size_manager_t size_manager = compressor::double_size_manager>
+	template <size_manager_t size_manager = comp::double_size_manager>
 	struct old_segmented_buffer_t
 	{
 		struct
