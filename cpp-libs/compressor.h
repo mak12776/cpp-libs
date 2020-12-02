@@ -66,12 +66,11 @@ namespace comp
 		{
 			this->size = 0;
 
-			// size
+			// size, length
 			size_manager(this->size);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			// length
 			this->len = 0;
 
 			// data block size
@@ -101,7 +100,64 @@ namespace comp
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
+			// reallocate data_pntr
+			mem::safe_realloc(&(this->data_pntr), this->data_block_size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
 
+			// reallocate count_pntr
+			mem::safe_realloc_array<size_t>(&(this->count_pntr), this->size);
+			err::check_push_file_info(ERR_ARGS);
+		}
+
+		// fixed bytes
+
+
+
+		// primitive types
+
+		template <typename data_type>
+		inline void increase_primitive_types(data_type value)
+		{
+			for (size_t index = 0; index < this->length; index += 1)
+			{
+				if (((data_type *)this->data_pntr)[index] == value)
+				{
+					this->count_pntr[index] += 1;
+					return;
+				}
+			}
+
+			if (this->length == this->size)
+			{
+				reallocate_more();
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
+
+			((data_type *)this->data_pntr)[this->length] = value;
+			this->count_pntr[this->length] = 1;
+			this->length += 1;
+		}
+
+		template <typename data_type>
+		inline void count_primitive_types(ubuffer_t &buffer)
+		{
+			data_type *pntr = (data_type *)buffer.pntr;
+			data_type *end = (data_type *)(buffer.pntr + buffer.size - this->remaining_size);
+
+			allocate();
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			while (pntr < end)
+			{
+				increase_primitive_types(*pntr);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+
+				pntr += 1;
+			}
 		}
 
 		static inline void count_buffer(size_t data_bits, ubuffer_t &buffer, thread_segmented_buffer_t &self)
@@ -119,11 +175,11 @@ namespace comp
 		size_t buffer_bits;
 		size_t buffer_size;
 
-		size_t data_bits;
-		size_t data_size;
-		
 		size_t possible_data_number;
 		size_t total_data_number;
+
+		size_t data_bits;
+		size_t data_size;
 
 		size_t size;
 		size_t length;
