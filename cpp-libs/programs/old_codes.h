@@ -603,3 +603,153 @@ void func()
 
 //	return 0;
 //}
+
+#if 0
+inline void allocate()
+{
+	this->size = 0;
+
+	// size, length
+	size_manager(this->size);
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+
+	this->size = (std::min)(this->size, this->possible_data_number);
+	this->length = 0;
+
+	// data block size
+	math::safe_mul(this->size, this->data_size, this->data_block_size);
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+
+	// allocate data_pntr
+	this->data_pntr = mem::safe_malloc(this->data_block_size);
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+
+	// allocate count_pntr
+	this->count_pntr = mem::safe_malloc_array<size_t>(this->size);
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+}
+
+inline void reallocate_more()
+{
+	// get new size
+	size_manager(this->size);
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+
+	// data block size
+	math::safe_mul(this->size, this->data_size, this->data_block_size);
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+
+	// reallocate data_pntr
+	mem::safe_realloc(&(this->data_pntr), this->data_block_size);
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+
+	// reallocate count_pntr
+	mem::safe_realloc_array<size_t>(&(this->count_pntr), this->size);
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+}
+
+// fixed bytes
+
+inline void increase_fixed_bytes(ubyte *value_pntr)
+{
+	ubyte *pntr = (ubyte *)this->data_pntr;
+	ubyte *end = (ubyte *)this->data_pntr + (this->length * this->data_size);
+	size_t index = 0;
+
+	while (pntr < end)
+	{
+		if (memcmp(pntr, value_pntr, this->data_size) == 0)
+		{
+			this->count_pntr[index] += 1;
+			return;
+		}
+
+		pntr += this->data_size;
+		index += 1;
+	}
+
+	if (this->length == this->size)
+	{
+		reallocate_more();
+		if (err::check_push_file_info(ERR_ARGS))
+			return;
+	}
+
+	memcpy(end, value_pntr, this->data_size);
+	this->count_pntr[this->length] = 1;
+	this->length += 1;
+}
+
+inline void count_fixed_bytes(ubuffer_t &buffer)
+{
+	ubyte *pntr = buffer.pntr;
+	ubyte *end = buffer.pntr + buffer.size - this->remaining_size;
+
+	allocate();
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+
+	while (pntr < end)
+	{
+		increase_fixed_bytes(pntr);
+		if (err::check_push_file_info(ERR_ARGS))
+			return;
+
+		pntr += this->data_size;
+	}
+}
+
+// primitive types
+
+template <typename data_type>
+inline void increase_primitive_types(data_type value)
+{
+	for (size_t index = 0; index < this->length; index += 1)
+	{
+		if (((data_type *)this->data_pntr)[index] == value)
+		{
+			this->count_pntr[index] += 1;
+			return;
+		}
+	}
+
+	if (this->length == this->size)
+	{
+		reallocate_more();
+		if (err::check_push_file_info(ERR_ARGS))
+			return;
+	}
+
+	((data_type *)this->data_pntr)[this->length] = value;
+	this->count_pntr[this->length] = 1;
+	this->length += 1;
+}
+
+template <typename data_type>
+inline void count_primitive_types(ubuffer_t &buffer)
+{
+	data_type *pntr = (data_type *)buffer.pntr;
+	data_type *end = (data_type *)(buffer.pntr + buffer.size - this->remaining_size);
+
+	allocate();
+	if (err::check_push_file_info(ERR_ARGS))
+		return;
+
+	while (pntr < end)
+	{
+		increase_primitive_types(*pntr);
+		if (err::check_push_file_info(ERR_ARGS))
+			return;
+
+		pntr += 1;
+	}
+}
+#endif

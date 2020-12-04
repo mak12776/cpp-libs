@@ -95,7 +95,7 @@ namespace scl
 					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 					return;
 				}
-				(*pntr) = new_pntr;
+				*pntr = new_pntr;
 			}
 
 			template <typename data_type>
@@ -114,7 +114,7 @@ namespace scl
 					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
 					return;
 				}
-				(*pntr) = new_pntr;
+				*pntr = new_pntr;
 			}
 		};
 
