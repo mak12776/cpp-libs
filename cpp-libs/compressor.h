@@ -49,7 +49,21 @@ namespace comp
 
 	// segmented
 
-	template <size_manager_t size_manager = comp::double_size_manager>
+	template <size_manager_t size_manager>
+	struct pointer_count_t
+	{
+		size_t data_bits;
+		size_t data_size;
+
+		size_t size;
+		size_t len;
+		
+		void **pntr_pntr;
+		size_t count_pntr;
+
+	};
+
+	template <size_manager_t size_manager>
 	struct data_count_t
 	{
 		size_t data_bits;
@@ -238,6 +252,8 @@ namespace comp
 			}
 		}
 	};
+
+
 
 	template <size_manager_t size_manager = comp::double_size_manager>
 	struct segmented_buffer_t
