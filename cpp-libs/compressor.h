@@ -59,8 +59,7 @@ namespace comp
 		size_t len;
 		
 		void **pntr_pntr;
-		size_t count_pntr;
-
+		size_t *count_pntr;
 	};
 
 	template <size_manager_t size_manager>
@@ -70,7 +69,7 @@ namespace comp
 		size_t data_size;
 
 		size_t size;
-		size_t len;
+		size_t length;
 		size_t data_block_size;
 
 		void *data_pntr;
@@ -86,7 +85,7 @@ namespace comp
 				return;
 
 			this->size = (std::min)(this->size, suggested_size);
-			this->len = 0;
+			this->length = 0;
 
 			// data block size
 			math::safe_mul(this->size, this->data_size, this->data_block_size);
@@ -222,7 +221,7 @@ namespace comp
 			}
 		}
 
-		// main functions
+		// count buffer
 
 		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
@@ -231,60 +230,37 @@ namespace comp
 
 			if (data_bits % 8 == 0)
 			{
-				switch (data_bits)
-				{
-				case sizeof uint8_t:
-					this->count_primitive_types<uint8_t>(buffer);
-					break;
-				case sizeof uint16_t:
-					this->count_primitive_types<uint16_t>(buffer);
-					break;
-				case sizeof uint32_t:
-					this->count_primitive_types<uint32_t>(buffer);
-					break;
-				case sizeof uint64_t:
-					this->count_primitive_types<uint64_t>(buffer);
-					break;
-				default:
-					this->count_fixed_bytes(buffer);
-					break;
-				}
+
+			}
+			else
+			{
+				err::set(err::INVALID_ARGUMENT);
+				err::push_file_info(ERR_ARGS);
 			}
 		}
 	};
 
-
-
-	template <size_manager_t size_manager = comp::double_size_manager>
-	struct segmented_buffer_t
+	union data_pointer_count_t
 	{
-		// buffer informations
-		size_t buffer_bits;
-		size_t buffer_size;
+		
+	};
 
-		size_t possible_data_number;
-		size_t total_data_number;
+	struct remaining_t
+	{
+		size_t bits;
+		size_t size;
 
-		// data count
+		void *pntr;
 
-		data_count_t data_count;
-
-		// remaining
-
-		size_t remaining_bits;
-		size_t remaining_size;
-
-		void *remaining_pntr = nullptr;
-
-		inline void allocate_remaining()
+		inline void allocate(size_t buffer_bits, size_t data_bits, ubyte *buffer_pntr)
 		{
-			this->remaining_bits = this->buffer_bits % this->data_bits;
-			this->remaining_size = get_bytes_per_bits(this->remaining_size);
+			this->bits = buffer_bits % data_bits;
+			this->size = get_bytes_per_bits(this->bits);
 
-			if (this->remaining_size == 0)
+			if (this->size == 0)
 				return;
 
-			this->remaining_pntr = mem::safe_malloc(this->remaining_size);
+			this->pntr = mem::safe_malloc(this->size);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
@@ -296,6 +272,32 @@ namespace comp
 				err::push_file_info(ERR_ARGS);
 			}*/
 		}
+	};
+
+	enum class flag_t
+	{
+		POINTER_BASED = 0,
+		DATA_BASED = 1,
+	};
+
+	template <size_manager_t size_manager = comp::double_size_manager>
+	struct segmented_buffer_t
+	{
+		// buffer informations
+		size_t buffer_bits;
+		size_t buffer_size;
+
+		size_t possible_data_number;
+		size_t total_data_count;
+
+		flag_t flag;
+		union
+		{
+			data_count_t data_count;
+			pointer_count_t pointer_count;
+		};
+		
+		remaining_t remaining;
 
 		// main functions
 
@@ -303,14 +305,9 @@ namespace comp
 		{
 			// buffer size, bits
 			this->buffer_size = buffer_size;
-
 			math::safe_mul(buffer_size, (size_t)8, this->buffer_bits);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
-
-			// data bits, size
-			this->data_bits = data_bits;
-			this->data_size = get_bytes_per_bits(data_bits);
 
 			// possible data number
 			math::pow<size_t>(2, data_bits, this->possible_data_number);
@@ -318,7 +315,7 @@ namespace comp
 				return;
 
 			// total data number
-			this->total_data_number = this->buffer_bits / this->data_bits;
+			this->total_data_count = this->buffer_bits / this->data_bits;
 		}
 
 		template <size_t threads_number = 1>
@@ -332,35 +329,11 @@ namespace comp
 			{
 				if (data_bits % 8 == 0)
 				{
-					switch (this->data_size)
-					{
-					case sizeof uint8_t:
-						this->count_primitive_types<uint8_t>(buffer);
-						break;
-					case sizeof uint16_t:
-						this->count_primitive_types<uint16_t>(buffer);
-						break;
-					case sizeof uint32_t:
-						this->count_primitive_types<uint32_t>(buffer);
-						break;
-					case sizeof uint64_t:
-						this->count_primitive_types<uint64_t>(buffer);
-						break;
-					default:
-						this->count_fixed_bytes(buffer);
-						break;
-					}
-				}
-				else
-				{
-					err::set(err::INVALID_ARGUMENT);
-					err::push_file_info(ERR_ARGS);
+					
 				}
 			}
 			else
 			{
-				// thread count
-
 			}
 		}
 
