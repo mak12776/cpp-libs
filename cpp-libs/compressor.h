@@ -334,7 +334,7 @@ namespace comp
 
 		void *pntr;
 
-		inline void allocate_copy(size_t bits)
+		inline void allocate_copy(size_t bits, ubyte *buffer_pntr)
 		{
 			this->bits = bits;
 			this->size = get_bytes_per_bits(this->bits);
@@ -345,13 +345,13 @@ namespace comp
 			this->pntr = mem::safe_malloc(this->size);
 			err::check_push_file_info(ERR_ARGS);
 
-			/*if (this->remaining_bits % 8 == 0)
-				memcpy(this->remaining_pntr, end, this->remaining_size);
+			if (this->bits % 8 == 0)
+				memcpy(this->pntr, buffer_pntr, this->size);
 			else
 			{
 				err::set(err::INVALID_ARGUMENT);
 				err::push_file_info(ERR_ARGS);
-			}*/
+			}
 		}
 	};
 
@@ -395,7 +395,7 @@ namespace comp
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			this->remaining.allocate_copy(this->buffer_bits % data_bits);
+			this->remaining.allocate_copy(this->buffer_bits % data_bits, buffer.pntr);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
