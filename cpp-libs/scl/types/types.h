@@ -69,6 +69,7 @@ namespace scl
 		size_t size;
 
 		dynamic_array_t() : pntr(nullptr), size(0) {}
+		dynamic_array_t(data_type *pntr, size_t size) : pntr(pntr), size(size) {}
 
 		// operators
 

@@ -232,9 +232,10 @@ namespace comp
 		template <typename data_type>
 		inline void increase_primitive_types(data_type value)
 		{
+			data_type *pntr = (data_type *)this->data_pntr;
 			for (size_t index = 0; index < this->length; index += 1)
 			{
-				if (((data_type *)this->data_pntr)[index] == value)
+				if (pntr[index] == value)
 				{
 					this->count_pntr[index] += 1;
 					return;
@@ -246,9 +247,10 @@ namespace comp
 				reallocate_more<true>();
 				if (err::check_push_file_info(ERR_ARGS))
 					return;
+				pntr = (data_type *)this->data_pntr;
 			}
 
-			((data_type *)this->data_pntr)[this->length] = value;
+			pntr[this->length] = value;
 			this->count_pntr[this->length] = 1;
 			this->length += 1;
 		}
@@ -284,12 +286,12 @@ namespace comp
 			{
 				if (this->data_size > sizeof(size_t))
 				{
-					this->flag = (this->flag & ~POINTER_DATA_MASK) | POINTER_BASED;
+					this->flag = static_cast<flag_t>((this->flag & ~POINTER_DATA_MASK) | POINTER_BASED);
 					count_fixed_bytes_or_pointer<false>(buffer);
 				}
 				else
 				{
-					this->flag = (this->flag & ~POINTER_DATA_MASK) | DATA_BASED;
+					this->flag = static_cast<flag_t>((this->flag & ~POINTER_DATA_MASK) | DATA_BASED);
 					switch (this->data_size)
 					{
 					case sizeof uint8_t:
@@ -326,9 +328,9 @@ namespace comp
 
 		void *pntr;
 
-		inline void allocate(size_t remaining_bits)
+		inline void allocate(size_t bits)
 		{
-			this->bits = remaining_bits;
+			this->bits = bits;
 			this->size = get_bytes_per_bits(this->bits);
 
 			if (this->size == 0)
@@ -360,6 +362,7 @@ namespace comp
 		size_t possible_data_number;
 		size_t total_data_count;
 
+		// data count & remaining
 		data_count_t<size_manager> data_count;
 		remaining_t remaining;
 
@@ -369,17 +372,17 @@ namespace comp
 		{
 			// buffer size, bits
 			this->buffer_size = buffer_size;
+
 			math::safe_mul(buffer_size, (size_t)8, this->buffer_bits);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			// possible data number
+			// possible data number & total data count
 			math::pow<size_t>(2, data_bits, this->possible_data_number);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			// total data number
-			this->total_data_count = this->buffer_bits / this->data_bits;
+			this->total_data_count = this->buffer_bits / data_bits;
 		}
 
 		template <size_t thread_number = 1>
@@ -389,13 +392,18 @@ namespace comp
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			this->remaining.allocate();
+			printf("buffer size: %zu\n", buffer_size);
+			printf("buffer bits: %zu\n", buffer_bits);
+
+			this->remaining.allocate(this->buffer_bits % data_bits);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
+			ubuffer_t count_buffer(buffer.pntr, buffer.size - this->remaining.size);
+
 			if constexpr (thread_number == 1)
 			{
-				data_count.count_buffer(data_bits, { buffer.pntr, buffer.size - this->remaining.size });
+				data_count.count_buffer(data_bits, count_buffer);
 				err::check_push_file_info(ERR_ARGS);
 
 				return;
