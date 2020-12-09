@@ -51,7 +51,7 @@ namespace comp
 
 	enum flag_t
 	{
-		INDEX_BASED = 0,
+		POINTER_BASED = 0,
 		DATA_BASED = 1,
 		POINTER_DATA_MASK = 1,
 	};
@@ -207,7 +207,7 @@ namespace comp
 		inline void count_fixed_bytes_or_pointer(ubuffer_t &buffer)
 		{
 			ubyte *pntr = buffer.pntr;
-			ubyte *end = buffer.pntr + (buffer.size - this->remaining_size);
+			ubyte *end = buffer.pntr + buffer.size;
 
 			allocate<is_data>();
 			if (err::check_push_file_info(ERR_ARGS))
@@ -257,7 +257,7 @@ namespace comp
 		inline void count_primitive_types(ubuffer_t &buffer)
 		{
 			data_type *pntr = (data_type *)buffer.pntr;
-			data_type *end = (data_type *)(buffer.pntr + buffer.size - this->remaining_size);
+			data_type *end = (data_type *)(buffer.pntr + buffer.size);
 
 			allocate<true>();
 			if (err::check_push_file_info(ERR_ARGS))
@@ -282,7 +282,34 @@ namespace comp
 
 			if (data_bits % 8 == 0)
 			{
-
+				if (this->data_size > sizeof(size_t))
+				{
+					this->flag = (this->flag & ~POINTER_DATA_MASK) | POINTER_BASED;
+					count_fixed_bytes_or_pointer<false>(buffer);
+				}
+				else
+				{
+					this->flag = (this->flag & ~POINTER_DATA_MASK) | DATA_BASED;
+					switch (this->data_size)
+					{
+					case sizeof uint8_t:
+						count_primitive_types<uint8_t>(buffer);
+						break;
+					case sizeof uint16_t:
+						count_primitive_types<uint16_t>(buffer);
+						break;
+					case sizeof uint32_t:
+						count_primitive_types<uint32_t>(buffer);
+						break;
+					case sizeof uint64_t:
+						count_primitive_types<uint64_t>(buffer);
+						break;
+					default:
+						count_fixed_bytes_or_pointer<true>(buffer);
+						break;
+					}
+				}
+				err::check_push_file_info(ERR_ARGS);
 			}
 			else
 			{
@@ -299,18 +326,20 @@ namespace comp
 
 		void *pntr;
 
-		inline void allocate(size_t buffer_bits, size_t data_bits, ubyte *buffer_pntr)
+		inline void allocate(size_t remaining_bits)
 		{
-			this->bits = buffer_bits % data_bits;
+			this->bits = remaining_bits;
 			this->size = get_bytes_per_bits(this->bits);
 
 			if (this->size == 0)
 				return;
 
 			this->pntr = mem::safe_malloc(this->size);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
+			err::check_push_file_info(ERR_ARGS);
+		}
 
+		inline void copy_data()
+		{
 			/*if (this->remaining_bits % 8 == 0)
 				memcpy(this->remaining_pntr, end, this->remaining_size);
 			else
@@ -353,12 +382,24 @@ namespace comp
 			this->total_data_count = this->buffer_bits / this->data_bits;
 		}
 
-		template <size_t threads_number = 1>
+		template <size_t thread_number = 1>
 		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
 			initial_values(data_bits, buffer_size);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
+
+			this->remaining.allocate();
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			if constexpr (thread_number == 1)
+			{
+				data_count.count_buffer(data_bits, { buffer.pntr, buffer.size - this->remaining.size });
+				err::check_push_file_info(ERR_ARGS);
+
+				return;
+			}
 		}
 
 		inline void count_file(size_t data_bits, FILE *file)

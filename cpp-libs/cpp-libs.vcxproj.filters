@@ -117,11 +117,11 @@
     <ClInclude Include="scl\winapi\conv.h">
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="scl\types\types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="compressor.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\types\types.h">
+      <Filter>Header Files\scl\types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
