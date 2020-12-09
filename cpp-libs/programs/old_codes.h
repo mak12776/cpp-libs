@@ -227,7 +227,7 @@ void search_offsets(const char *_file_name)
 	size_t *offsets = mem::safe_malloc_array<size_t>(maximum_count);
 	if (err::check())
 	{
-		printf("error: can't allocate %zu offsets.\n", maximum_count);
+		printf("error: can't allocate_copy %zu offsets.\n", maximum_count);
 		cleaner::finish();
 		return;
 	}
@@ -282,7 +282,7 @@ void offsets_check(const char *_file_name)
 	info_file_name.safe_allocate_cat({ file_name, offsets_ext });
 	if (err::check())
 	{
-		printf("error: can't allocate memory for info_file_name\n");
+		printf("error: can't allocate_copy memory for info_file_name\n");
 		return;
 	}
 
@@ -339,7 +339,7 @@ void offsets_check(const char *_file_name)
 	size_t *offsets = mem::new_array<size_t>(offsets_size);
 	if (err::check())
 	{
-		printf("error: can't allocate memory for %zu offsets\n", offsets_size);
+		printf("error: can't allocate_copy memory for %zu offsets\n", offsets_size);
 		return;
 	}
 	cleaner::add_delete(offsets);

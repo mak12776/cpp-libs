@@ -277,7 +277,7 @@ namespace comp
 
 		// count buffer
 
-		inline void scan_buffer(size_t data_bits, ubuffer_t &buffer)
+		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
 			this->data_bits = data_bits;
 			this->data_size = get_bytes_per_bits(data_bits);
@@ -322,7 +322,7 @@ namespace comp
 
 		static inline void static_count_buffer(size_t data_bits, ubuffer_t &buffer, data_count_t result)
 		{
-			result.scan_buffer(data_bits, &buffer);
+			result.count_buffer(data_bits, &buffer);
 			err::check_push_file_info(ERR_ARGS);
 		}
 	};
@@ -334,7 +334,7 @@ namespace comp
 
 		void *pntr;
 
-		inline void allocate(size_t bits)
+		inline void allocate_copy(size_t bits)
 		{
 			this->bits = bits;
 			this->size = get_bytes_per_bits(this->bits);
@@ -344,10 +344,7 @@ namespace comp
 
 			this->pntr = mem::safe_malloc(this->size);
 			err::check_push_file_info(ERR_ARGS);
-		}
 
-		inline void copy_data()
-		{
 			/*if (this->remaining_bits % 8 == 0)
 				memcpy(this->remaining_pntr, end, this->remaining_size);
 			else
@@ -385,10 +382,7 @@ namespace comp
 	template <size_manager_t size_manager = comp::double_size_manager>
 	struct segmented_buffer_t
 	{
-		// buffer informations
 		info_t info;
-
-		// data count & remaining
 		data_count_t<size_manager> data_count;
 		remaining_t remaining;
 
@@ -401,7 +395,7 @@ namespace comp
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			this->remaining.allocate(this->buffer_bits % data_bits);
+			this->remaining.allocate_copy(this->buffer_bits % data_bits);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
@@ -409,7 +403,7 @@ namespace comp
 
 			if constexpr (thread_number == 1)
 			{
-				data_count.scan_buffer(data_bits, count_buffer);
+				data_count.count_buffer(data_bits, count_buffer);
 				err::check_push_file_info(ERR_ARGS);
 
 				return;
