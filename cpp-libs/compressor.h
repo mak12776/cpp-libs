@@ -49,17 +49,11 @@ namespace comp
 
 	// segmented
 
-	template <size_manager_t size_manager>
-	struct pointer_count_t
+	enum flag_t
 	{
-		size_t data_bits;
-		size_t data_size;
-
-		size_t size;
-		size_t len;
-		
-		void **pntr_pntr;
-		size_t *count_pntr;
+		POINTER_BASED = 0,
+		DATA_BASED = 1,
+		POINTER_DATA_MASK = 1,
 	};
 
 	template <size_manager_t size_manager>
@@ -67,6 +61,8 @@ namespace comp
 	{
 		size_t data_bits;
 		size_t data_size;
+
+		flag_t flag;
 
 		size_t size;
 		size_t length;
@@ -240,11 +236,6 @@ namespace comp
 		}
 	};
 
-	union data_pointer_count_t
-	{
-		
-	};
-
 	struct remaining_t
 	{
 		size_t bits;
@@ -274,12 +265,6 @@ namespace comp
 		}
 	};
 
-	enum class flag_t
-	{
-		POINTER_BASED = 0,
-		DATA_BASED = 1,
-	};
-
 	template <size_manager_t size_manager = comp::double_size_manager>
 	struct segmented_buffer_t
 	{
@@ -290,13 +275,7 @@ namespace comp
 		size_t possible_data_number;
 		size_t total_data_count;
 
-		flag_t flag;
-		union
-		{
-			data_count_t data_count;
-			pointer_count_t pointer_count;
-		};
-		
+		data_count_t data_count;
 		remaining_t remaining;
 
 		// main functions

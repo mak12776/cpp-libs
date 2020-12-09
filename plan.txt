@@ -1,4 +1,35 @@
 
+comp::segmented_buffer decision:
+
+if data_bits % 8 == 0
+	if data_bits > sizeof(size_t)
+		flag = POINTER_BASED
+		type => linked_array<void *, size_t>
+	end
+	
+	flag = DATA_BASED
+	switch data_bits
+	case sizeof(uint8_t)
+		type => primitive_data_count_t<uint8_t>
+	case sizeof(uint16_t)
+		type => primitive_data_count_t<uint16_t>
+	case sizeof(uint32_t)
+		type => primitive_data_count_t<uint32_t>
+	case sizeof(uint64_t)
+		type => primitive_data_count_t<uint64_t>
+	default
+		type => fixed_data_count_t(data_size)
+	end
+else
+	error INVALID_ARGUMENT(data_bits)
+end
+
+
+
+
+
+---
+
 how to handle errors in c++?
 use c++ exceptions or scl err_t handling?
 
