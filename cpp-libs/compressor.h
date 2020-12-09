@@ -277,7 +277,7 @@ namespace comp
 
 		// count buffer
 
-		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
+		inline void scan_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
 			this->data_bits = data_bits;
 			this->data_size = get_bytes_per_bits(data_bits);
@@ -318,6 +318,12 @@ namespace comp
 				err::set(err::INVALID_ARGUMENT);
 				err::push_file_info(ERR_ARGS);
 			}
+		}
+
+		static inline void static_count_buffer(size_t data_bits, ubuffer_t &buffer, data_count_t result)
+		{
+			result.scan_buffer(data_bits, &buffer);
+			err::check_push_file_info(ERR_ARGS);
 		}
 	};
 
@@ -392,9 +398,6 @@ namespace comp
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			printf("buffer size: %zu\n", buffer_size);
-			printf("buffer bits: %zu\n", buffer_bits);
-
 			this->remaining.allocate(this->buffer_bits % data_bits);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
@@ -403,7 +406,7 @@ namespace comp
 
 			if constexpr (thread_number == 1)
 			{
-				data_count.count_buffer(data_bits, count_buffer);
+				data_count.scan_buffer(data_bits, count_buffer);
 				err::check_push_file_info(ERR_ARGS);
 
 				return;
