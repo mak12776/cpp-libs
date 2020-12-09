@@ -358,15 +358,35 @@ namespace comp
 		}
 	};
 
-	template <size_manager_t size_manager = comp::double_size_manager>
-	struct segmented_buffer_t
+	struct info_t
 	{
-		// buffer informations
 		size_t buffer_bits;
 		size_t buffer_size;
 
 		size_t possible_data_number;
 		size_t total_data_count;
+
+		inline void initalize(size_t data_bits, size_t buffer_size)
+		{
+			this->buffer_size = buffer_size;
+
+			math::safe_mul(buffer_size, (size_t)8, this->buffer_bits);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			math::safe_pow<size_t>(2, data_bits, this->possible_data_number);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			this->total_data_count = this->buffer_bits / data_bits;
+		}
+	};
+
+	template <size_manager_t size_manager = comp::double_size_manager>
+	struct segmented_buffer_t
+	{
+		// buffer informations
+		info_t info;
 
 		// data count & remaining
 		data_count_t<size_manager> data_count;
@@ -374,27 +394,10 @@ namespace comp
 
 		// main functions
 
-		inline void initial_values(size_t data_bits, size_t buffer_size)
-		{
-			// buffer size, bits
-			this->buffer_size = buffer_size;
-
-			math::safe_mul(buffer_size, (size_t)8, this->buffer_bits);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			// possible data number & total data count
-			math::pow<size_t>(2, data_bits, this->possible_data_number);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			this->total_data_count = this->buffer_bits / data_bits;
-		}
-
 		template <size_t thread_number = 1>
 		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
-			initial_values(data_bits, buffer_size);
+			info.initalize(data_bits, buffer.size);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
