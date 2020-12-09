@@ -51,7 +51,7 @@ namespace comp
 
 	enum flag_t
 	{
-		POINTER_BASED = 0,
+		INDEX_BASED = 0,
 		DATA_BASED = 1,
 		POINTER_DATA_MASK = 1,
 	};
@@ -66,11 +66,18 @@ namespace comp
 
 		size_t size;
 		size_t length;
+
 		size_t data_block_size;
 
-		void *data_pntr;
+		union
+		{
+			void **pntr_array;
+			void *data_pntr;
+		};
+
 		size_t *count_pntr;
 
+		template <bool is_data>
 		inline void allocate(size_t suggested_size = SIZE_MAX)
 		{
 			this->size = 0;
@@ -83,21 +90,31 @@ namespace comp
 			this->size = (std::min)(this->size, suggested_size);
 			this->length = 0;
 
-			// data block size
-			math::safe_mul(this->size, this->data_size, this->data_block_size);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
+			if constexpr (is_data)
+			{
+				// data block size
+				math::safe_mul(this->size, this->data_size, this->data_block_size);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
 
-			// allocate data_pntr
-			this->data_pntr = mem::safe_malloc(this->data_block_size);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
+				// allocate data_pntr
+				this->data_pntr = mem::safe_malloc(this->data_block_size);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
+			else
+			{
+				this->pntr_array = mem::safe_malloc_array<void *>(this->size);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
 
 			// allocate count_pntr
 			this->count_pntr = mem::safe_malloc_array<size_t>(this->size);
 			err::check_push_file_info(ERR_ARGS);
 		}
 
+		template <bool is_data>
 		inline void reallocate_more()
 		{
 			// get new size
@@ -105,22 +122,56 @@ namespace comp
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
-			// data block size
-			math::safe_mul(this->size, this->data_size, this->data_block_size);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
+			if constexpr (is_data)
+			{
+				// data block size
+				math::safe_mul(this->size, this->data_size, this->data_block_size);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
 
-			// reallocate data_pntr
-			mem::safe_realloc(&(this->data_pntr), this->data_block_size);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
+				// reallocate data_pntr
+				mem::safe_realloc(&(this->data_pntr), this->data_block_size);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
+			else
+			{
+				mem::safe_realloc_array<void *>(&(this->pntr_array), this->size);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
 
 			// reallocate count_pntr
 			mem::safe_realloc_array<size_t>(&(this->count_pntr), this->size);
 			err::check_push_file_info(ERR_ARGS);
 		}
 
-		// fixed bytes
+		// fixed bytes or pointer 
+
+		inline void increase_pointer(void *value_pntr)
+		{
+			size_t index = 0;
+			while (index < this->length)
+			{
+				if (memcmp(this->pntr_array[index], value_pntr, this->data_size) == 0)
+				{
+					this->count_pntr[index] += 1;
+					return;
+				}
+				index += 1;
+			}
+
+			if (this->length == this->size)
+			{
+				reallocate_more<false>();
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
+
+			this->pntr_array[this->length] = value_pntr;
+			this->count_pntr[this->length] = 1;
+			this->length += 1;
+		}
 
 		inline void increase_fixed_bytes(ubyte *value_pntr)
 		{
@@ -142,7 +193,7 @@ namespace comp
 
 			if (this->length == this->size)
 			{
-				reallocate_more();
+				reallocate_more<true>();
 				if (err::check_push_file_info(ERR_ARGS))
 					return;
 			}
@@ -152,18 +203,23 @@ namespace comp
 			this->length += 1;
 		}
 
-		inline void count_fixed_bytes(ubuffer_t &buffer)
+		template <bool is_data>
+		inline void count_fixed_bytes_or_pointer(ubuffer_t &buffer)
 		{
 			ubyte *pntr = buffer.pntr;
-			ubyte *end = buffer.pntr + buffer.size - this->remaining_size;
+			ubyte *end = buffer.pntr + (buffer.size - this->remaining_size);
 
-			allocate();
+			allocate<is_data>();
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
 			while (pntr < end)
 			{
-				increase_fixed_bytes(pntr);
+				if constexpr (is_data)
+					increase_fixed_bytes(pntr);
+				else
+					increase_pointer((void *)pntr);
+
 				if (err::check_push_file_info(ERR_ARGS))
 					return;
 
@@ -187,7 +243,7 @@ namespace comp
 
 			if (this->length == this->size)
 			{
-				reallocate_more();
+				reallocate_more<true>();
 				if (err::check_push_file_info(ERR_ARGS))
 					return;
 			}
@@ -203,7 +259,7 @@ namespace comp
 			data_type *pntr = (data_type *)buffer.pntr;
 			data_type *end = (data_type *)(buffer.pntr + buffer.size - this->remaining_size);
 
-			allocate();
+			allocate<true>();
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 
@@ -275,7 +331,7 @@ namespace comp
 		size_t possible_data_number;
 		size_t total_data_count;
 
-		data_count_t data_count;
+		data_count_t<size_manager> data_count;
 		remaining_t remaining;
 
 		// main functions
@@ -303,17 +359,6 @@ namespace comp
 			initial_values(data_bits, buffer_size);
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
-
-			if constexpr (threads_number == 1)
-			{
-				if (data_bits % 8 == 0)
-				{
-					
-				}
-			}
-			else
-			{
-			}
 		}
 
 		inline void count_file(size_t data_bits, FILE *file)
