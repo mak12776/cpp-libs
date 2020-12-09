@@ -207,8 +207,61 @@ namespace scl
 
 			return write_number;
 		}
-		
+
 		// malloc fread
+
+		static inline void malloc_fread(FILE *file, void **pntr, size_t size)
+		{
+			(*pntr) = mem::safe_malloc(size);
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			safe_fread(*pntr, size, file);
+			if (err::check_push_file_info(ERR_ARGS))
+				free(*pntr);
+		}
+
+		static inline void malloc_fopen_fread(const char *name, void **pntr, size_t size)
+		{
+			FILE *file = safe_fopen(name, "rb");
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			malloc_fread(file, pntr, size);
+			err::check_push_file_info(ERR_ARGS);
+
+			std::fclose(file);
+		}
+
+		template <typename data_type>
+		static inline void malloc_fread_array(FILE *file, data_type **pntr, size_t size)
+		{
+			if constexpr (sizeof(data_type) != 1)
+			{
+				math::safe_mul(size, sizeof(data_type), size);
+				if (err::check_push_file_info(ERR_ARGS))
+					return;
+			}
+
+			safe_fread(*pntr, size, file);
+			if (err::check_push_file_info(ERR_ARGS))
+				free(*pntr);
+		}
+
+		template <typename data_type>
+		static inline void mallod_fopen_fread_array(const char *name, data_type **pntr, size_t size)
+		{
+			FILE *file = safe_fopen(name, "rb");
+			if (err::check_push_file_info(ERR_ARGS))
+				return;
+
+			malloc_fread_array<data_type>(file, pntr, size);
+			err::check_push_file_info(ERR_ARGS);
+
+			std::fclose(file);
+		}
+		
+		// malloc fread all
 
 		static inline void malloc_fread_all(FILE *file, void **pntr, size_t &size)
 		{

@@ -51,9 +51,9 @@ types in scl:
 	c_string
 
 	- allocation function names:
-	allocate, reallocate, free
+	[x]	allocate, reallocate, free
 	or 
-	malloc, realloc, free
+	[ ]	malloc, realloc, free
 
 types in boost:
 	...
