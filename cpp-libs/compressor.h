@@ -49,7 +49,7 @@ namespace comp
 
 	// segmented
 
-	enum class flag_t : uint32_t
+	enum flag_t : uint32_t
 	{
 		POINTER_BASED = 0,
 		DATA_BASED = 1,
@@ -62,17 +62,23 @@ namespace comp
 		size_t data_bits;
 		size_t data_size;
 
-		flag_t flag;
-
 		size_t size;
 		size_t length;
 
-		size_t data_block_size;
+		flag_t flag;
 
 		union
 		{
-			void **pntr_array;
-			void *data_pntr;
+			struct
+			{
+				ubuffer_t *buffer;
+				void **pntr_array;
+			};
+			struct
+			{
+				size_t data_block_size;
+				void *data_pntr;
+			};
 		};
 
 		size_t *count_pntr;
@@ -102,10 +108,18 @@ namespace comp
 				return;
 
 			// "data pntr" or "pntr array"
-			if ((flag & flag_t::POINTER_DATA_MASK) == flag_t::DATA_BASED)
-				io::safe_fwrite(this->data_pntr, this->data_size * this->size, file);
+			if ((flag & flag_t::POINTER_DATA_MASK) == flag_t::DATA_BASED) 
+			{ // DATA_BASED
+
+			}
+				io::safe_fwrite(this->data_pntr, this->data_size * this->length, file);
 			else
-				io::fwrite_array<void *>(this->pntr_array, this->length, file);
+			{ // POINTER_BASED
+				uintptr_t diff;
+				for (size_t index = 0; index < this->length; index += 1)
+				{
+				}
+			}
 			if (err::check_push_file_info(ERR_ARGS))
 				return;
 

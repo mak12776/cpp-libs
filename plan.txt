@@ -1,4 +1,7 @@
 
+// do exceptions
+
+
 comp::segmented_buffer decision:
 
 if data_bits % 8 == 0
@@ -25,6 +28,15 @@ else
 end
 
 
+--- levels of scanning a buffer:
+
+1. count data
+
+2. sort data as list
+
+3. pair data
+
+4. set codecs
 
 
 
