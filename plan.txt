@@ -1,7 +1,6 @@
 
 // do exceptions
 
-
 comp::segmented_buffer decision:
 
 if data_bits % 8 == 0
