@@ -110,9 +110,8 @@ namespace comp
 			// "data pntr" or "pntr array"
 			if ((flag & flag_t::POINTER_DATA_MASK) == flag_t::DATA_BASED) 
 			{ // DATA_BASED
-
-			}
 				io::safe_fwrite(this->data_pntr, this->data_size * this->length, file);
+			}
 			else
 			{ // POINTER_BASED
 				uintptr_t diff;
