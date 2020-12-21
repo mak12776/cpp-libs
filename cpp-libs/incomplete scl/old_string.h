@@ -26,7 +26,7 @@ struct m_string_t
 		len = strlen(string);
 		size = len + 1;
 
-		pntr = (char *)mem::safe_allocate(size);
+		pntr = (char *)mem::safe_malloc(size);
 		if (err::check())
 		{
 			err::push(__FILE__, __LINE__, __FUNCTION__);
@@ -49,7 +49,7 @@ struct m_string_t
 				return;
 		}
 
-		pntr = (char *)mem::safe_allocate(new_size);
+		pntr = (char *)mem::safe_malloc(new_size);
 		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
@@ -77,7 +77,7 @@ struct m_string_t
 		}
 		new_size = length + 1;
 
-		pntr = (char *)mem::safe_allocate(new_size);
+		pntr = (char *)mem::safe_malloc(new_size);
 		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 

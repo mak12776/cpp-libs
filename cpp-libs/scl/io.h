@@ -212,7 +212,7 @@ namespace scl
 
 		static inline void malloc_fread(FILE *file, void **pntr, size_t size)
 		{
-			(*pntr) = mem::safe_allocate(size);
+			(*pntr) = mem::safe_malloc(size);
 			if (err::check_push(ERR_ARGS))
 				return;
 
@@ -271,7 +271,7 @@ namespace scl
 			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			(*pntr) = mem::safe_allocate(file_size);
+			(*pntr) = mem::safe_malloc(file_size);
 			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
@@ -317,7 +317,7 @@ namespace scl
 					return;
 			}
 
-			(*pntr) = (data_type *)mem::safe_allocate(block_size);
+			(*pntr) = (data_type *)mem::safe_malloc(block_size);
 			if (err::check_push(ERR_ARGS))
 				return;
 
@@ -392,7 +392,7 @@ namespace scl
 			if (err::check(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
-			pntr = (byte_t *)mem::safe_allocate(buffer_size);
+			pntr = (byte_t *)mem::safe_malloc(buffer_size);
 			if (err::check(__FILE__, __LINE__, __FUNCTION__))
 				return;
 			cleaner::add_free(pntr);
@@ -643,7 +643,7 @@ namespace scl
 				return;
 			}
 
-			pntr = (byte_t *)mem::safe_allocate(buffer_size);
+			pntr = (byte_t *)mem::safe_malloc(buffer_size);
 			if (err::check())
 			{
 				err::push(__FILE__, __LINE__, __FUNCTION__);

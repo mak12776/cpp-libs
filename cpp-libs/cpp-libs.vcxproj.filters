@@ -51,9 +51,6 @@
     <ClInclude Include="scl\rand.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\features\cleaner.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
     <ClInclude Include="scl\features\err.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
@@ -122,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="scl\types\types.h">
       <Filter>Header Files\scl\types</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\cleaner.h">
+      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

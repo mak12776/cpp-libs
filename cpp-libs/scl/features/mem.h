@@ -12,7 +12,6 @@ namespace scl
 		struct mem_t
 		{
 			malloc_t malloc;
-			calloc_t calloc;
 			realloc_t realloc;
 			free_t free;
 
@@ -27,20 +26,12 @@ namespace scl
 				return malloc(size);
 			}
 
-			// safe malloc, calloc
+			// safe malloc
 
-			constexpr void *safe_allocate(size_t size)
+			constexpr void *safe_malloc(size_t size)
 			{
 				void *pntr = this->malloc(size);
 				if (pntr == nullptr) 
-					err::set_push(err::NO_MEMORY, ERR_ARGS);
-				return pntr;
-			}
-
-			constexpr void *safe_calloc(size_t count, size_t size)
-			{
-				void *pntr = this->calloc(count, size);
-				if (pntr == nullptr)
 					err::set_push(err::NO_MEMORY, ERR_ARGS);
 				return pntr;
 			}
@@ -63,16 +54,11 @@ namespace scl
 			{
 				data_type *pntr;
 
-				math::safe_mul(size, sizeof(data_type), size);
-				if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-					return nullptr;
+				math::safe_mul(size, sizeof(data_type), size); ERR_CHECK_VALUE(nullptr);
 
 				pntr = (data_type *)(this->malloc(size));
 				if (pntr == nullptr)
-				{
-					err::set(err::NO_MEMORY);
-					err::push(__FILE__, __LINE__, __FUNCTION__);
-				}
+					err::set_push(err::NO_MEMORY, ERR_ARGS);
 
 				return pntr;
 			}
@@ -83,11 +69,7 @@ namespace scl
 			{
 				void *new_pntr = this->realloc(*pntr, size);
 				if (new_pntr == nullptr)
-				{
-					err::set(err::NO_MEMORY);
-					err::push(__FILE__, __LINE__, __FUNCTION__);
-					return;
-				}
+					return err::set_push(err::NO_MEMORY, ERR_ARGS);
 				*pntr = new_pntr;
 			}
 
@@ -96,36 +78,28 @@ namespace scl
 			{
 				data_type *new_pntr;
 
-				math::safe_mul(size, sizeof(data_type), size);
-				if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-					return;
+				math::safe_mul(size, sizeof(data_type), size); ERR_CHECK;
 
 				new_pntr = (data_type *)(this->realloc(*pntr, size));
 				if (new_pntr == nullptr)
-				{
-					err::set(err::NO_MEMORY);
-					err::push(__FILE__, __LINE__, __FUNCTION__);
-					return;
-				}
+					return err::set_push(err::NO_MEMORY, ERR_ARGS);
 				*pntr = new_pntr;
 			}
 		};
 
 		// default manager
-		constexpr mem_t default_mem{ std::malloc, std::calloc, std::realloc, std::free };
+		constexpr mem_t default_mem{ std::malloc, std::realloc, std::free };
 		mem_t global_mem = default_mem;
 
 		// functions
 		static constexpr inline void *malloc(size_t size) { return global_mem.malloc(size); } 
-		static constexpr inline void *calloc(size_t nelem, size_t size) { return global_mem.calloc(nelem, size); }
 		static constexpr inline void *realloc(void *pntr, size_t size) { return global_mem.realloc(pntr, size); }
 		static constexpr inline void free(void *pntr) { return global_mem.free(pntr); }
 
 		template <typename data_type>
 		static constexpr inline data_type *malloc_array(size_t size) { return global_mem.malloc_array(size); }
 
-		static constexpr inline void *safe_allocate(size_t size) { return global_mem.safe_allocate(size); }
-		static constexpr inline void *safe_calloc(size_t count, size_t size) { return global_mem.safe_calloc(count, size); }
+		static constexpr inline void *safe_malloc(size_t size) { return global_mem.safe_malloc(size); }
 		static constexpr inline void safe_realloc(void **pntr, size_t size) { return global_mem.safe_realloc(pntr, size); }
 
 		template <typename data_type>
@@ -194,7 +168,7 @@ namespace scl
 
 			inline void alloc(size_t size)
 			{
-				this->pntr = mem::safe_allocate(size);
+				this->pntr = mem::safe_malloc(size);
 				if (err::check())
 				{
 					err::push(__FILE__, __LINE__, __FUNCTION__);

@@ -121,7 +121,7 @@ namespace counter
 
 		if (err::clear_if(err::NO_MEMORY))
 		{
-			buffer.pntr = mem::safe_allocate(buffer_size);
+			buffer.pntr = mem::safe_malloc(buffer_size);
 			if (err::check())
 			{
 				err::push(__FILE__, __LINE__, __FUNCTION__);

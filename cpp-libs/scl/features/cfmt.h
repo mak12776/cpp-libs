@@ -437,7 +437,7 @@ namespace scl
 
 			width = (width == 0) ? DEFAULT_WIDTH : width;
 
-			buffer = (ubyte *)mem::safe_allocate(width + 1);
+			buffer = (ubyte *)mem::safe_malloc(width + 1);
 			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 				return 0;
 

@@ -623,7 +623,7 @@ inline void allocate()
 		return;
 
 	// allocate data_pntr
-	this->data_pntr = mem::safe_allocate(this->data_block_size);
+	this->data_pntr = mem::safe_malloc(this->data_block_size);
 	if (err::check_push(ERR_ARGS))
 		return;
 

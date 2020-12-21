@@ -152,7 +152,7 @@ namespace comp
 					return;
 
 				// allocate data_pntr
-				this->data_pntr = mem::safe_allocate(this->data_block_size);
+				this->data_pntr = mem::safe_malloc(this->data_block_size);
 				if (err::check_push(ERR_ARGS))
 					return;
 			}
@@ -395,7 +395,7 @@ namespace comp
 			if (this->size == 0)
 				return;
 
-			this->pntr = mem::safe_allocate(this->size);
+			this->pntr = mem::safe_malloc(this->size);
 			err::check_push(ERR_ARGS);
 
 			if (this->bits % 8 == 0)
