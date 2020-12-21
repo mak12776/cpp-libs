@@ -2,7 +2,7 @@
 
 namespace scl
 {
-	namespace cleaner
+	namespace gc
 	{
 		enum class job_type : uint8_t
 		{

@@ -34,7 +34,7 @@
 #include "features/err.h"		// "features/cfmt_header.h"
 #include "features/mem.h"		// "features/err.h"
 #include "features/cfmt.h"		// "types/builtins.h" "feautres/err.h" "features/mem.h"
-#include "features/cleaner.h"	// <cinttypes>
+#include "features/gc.h"		// <cinttypes>
 
 #include "io.h"					// <sys/types.h> <sys/stat.h> <io.h>
 								// "features/all_features.h"

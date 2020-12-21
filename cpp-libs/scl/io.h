@@ -386,7 +386,7 @@ namespace scl
 		{
 			byte_t *pntr;
 			size_t file_size;
-			size_t cleaner_start_index = cleaner::get_index();
+			size_t cleaner_start_index = gc::get_index();
 
 			file_size = safe_get_size(file);
 			if (err::check(__FILE__, __LINE__, __FUNCTION__))
@@ -395,7 +395,7 @@ namespace scl
 			pntr = (byte_t *)mem::safe_malloc(buffer_size);
 			if (err::check(__FILE__, __LINE__, __FUNCTION__))
 				return;
-			cleaner::add_free(pntr);
+			gc::add_free(pntr);
 
 			while (file_size >= buffer_size)
 			{
@@ -403,14 +403,14 @@ namespace scl
 				if (err::check())
 				{
 					err::push(__FILE__, __LINE__, __FUNCTION__);
-					cleaner::finish(cleaner_start_index);
+					gc::finish(cleaner_start_index);
 					return;
 				}
 				file_size -= buffer_size;
 
 				if (!buffer_reader.read_buffer(pntr, buffer_size))
 				{
-					cleaner::finish(cleaner_start_index);
+					gc::finish(cleaner_start_index);
 					return;
 				}
 			}
@@ -418,7 +418,7 @@ namespace scl
 			if (file_size)
 			{
 				safe_fread(pntr, file_size, file);
-				cleaner::finish(cleaner_start_index);
+				gc::finish(cleaner_start_index);
 
 				if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 					return;
@@ -634,7 +634,7 @@ namespace scl
 		{
 			byte_t *pntr;
 			size_t file_size;
-			cleaner::cleaner_t<1> cleaner;
+			gc::cleaner_t<1> gc;
 
 			file_size = get_file_size(file);
 			if (err::check())
@@ -649,7 +649,7 @@ namespace scl
 				err::push(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
-			cleaner.add_free(pntr);
+			gc.add_free(pntr);
 
 			while (file_size >= buffer_size)
 			{
@@ -657,7 +657,7 @@ namespace scl
 				if (err::check())
 				{
 					err::push(__FILE__, __LINE__, __FUNCTION__);
-					cleaner.finish();
+					gc.finish();
 					return;
 				}
 				file_size -= buffer_size;

@@ -176,7 +176,7 @@ void search_offsets(const char *_file_name)
 	offsets_file_name.safe_allocate_cat({ file_name, offsets_ext });
 	if (err::check()) return;
 
-	cleaner::add_free((void *)offsets_file_name.pntr);
+	gc::add_free((void *)offsets_file_name.pntr);
 
 	// read entire file into buffer
 	io::malloc_fopen_fread_all(file_name.pntr, (void **)&buffer.pntr, buffer.size);
@@ -192,7 +192,7 @@ void search_offsets(const char *_file_name)
 	info_file = io::safe_fopen(offsets_file_name.pntr, "wb");
 	if (err::check()) return;
 
-	cleaner::add_fclose(info_file);
+	gc::add_fclose(info_file);
 
 	// log info file name
 	io::set_default_width(20);
@@ -228,16 +228,16 @@ void search_offsets(const char *_file_name)
 	if (err::check())
 	{
 		printf("error: can't allocate_copy %zu offsets.\n", maximum_count);
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
-	cleaner::add_delete(offsets);
+	gc::add_delete(offsets);
 
 	io::safe_fwrite(counts, sizeof(counts), info_file);
 	if (err::check())
 	{
 		printf("error: while writing counts on info file: %s\n", strerror(errno));
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
 
@@ -258,7 +258,7 @@ void search_offsets(const char *_file_name)
 		if (err::check())
 		{
 			printf("error: while writing offsets of %hhx on info file: %s\n", value, strerror(errno));
-			cleaner::finish();
+			gc::finish();
 			return;
 		}
 
@@ -286,7 +286,7 @@ void offsets_check(const char *_file_name)
 		return;
 	}
 
-	cleaner::add_free((void *)info_file_name.pntr);
+	gc::add_free((void *)info_file_name.pntr);
 
 	ubuffer_t buffer;
 
@@ -295,20 +295,20 @@ void offsets_check(const char *_file_name)
 	{
 		printf("error: can't read input file: %s\n", file_name.pntr);
 		printf("errno: %s\n", strerror(errno));
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
-	cleaner::add_free(buffer.pntr);
+	gc::add_free(buffer.pntr);
 
 	FILE *info_file = io::safe_fopen(info_file_name.pntr, "rb");
 	if (err::check())
 	{
 		printf("error: can't fopen: %s\n", info_file_name.pntr);
 		printf("errno: %s\n", strerror(errno));
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
-	cleaner::add_fclose(info_file);
+	gc::add_fclose(info_file);
 
 	for (size_t length = 0; length < counts_size; length += 1)
 		counts[length] = 0;
@@ -321,14 +321,14 @@ void offsets_check(const char *_file_name)
 	{
 		printf("error: can't read info file: %s\n", info_file_name.pntr);
 		printf("errno: %s\n", strerror(errno));
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
 
 	if (memcmp(counts, info_counts, sizeof(counts)) != 0)
 	{
 		printf("offsets check: invalid counts\n");
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
 
@@ -342,7 +342,7 @@ void offsets_check(const char *_file_name)
 		printf("error: can't allocate_copy memory for %zu offsets\n", offsets_size);
 		return;
 	}
-	cleaner::add_delete(offsets);
+	gc::add_delete(offsets);
 
 	ubyte value = 0;
 	do
@@ -351,7 +351,7 @@ void offsets_check(const char *_file_name)
 		if (err::check())
 		{
 			printf("error: while reading offsets of %hhu: %s", value, strerror(errno));
-			cleaner::finish();
+			gc::finish();
 			return;
 		}
 
@@ -361,14 +361,14 @@ void offsets_check(const char *_file_name)
 			if (offsets[length] > buffer.size)
 			{
 				printf("offsets check: offset for %hhu at %zu test bigger than size: %zu\n", value, length, buffer.size);
-				cleaner::finish();
+				gc::finish();
 				return;
 			}
 
 			if (buffer.pntr[offsets[length]] != value)
 			{
 				printf("offsets check: offset for %hhu at %zu dosn't match ubyte at %zu on input file '%s'\n", value, length, offsets[length], file_name.pntr);
-				cleaner::finish();
+				gc::finish();
 				return;
 			}
 		}
@@ -379,7 +379,7 @@ void offsets_check(const char *_file_name)
 	} while (value != 0);
 
 	printf("everything successfull.\n");
-	cleaner::finish();
+	gc::finish();
 	return;
 }
 
@@ -498,7 +498,7 @@ template <size_t size,
 template <
 	template<
 		size_t _err_size, err::err_t<_err_size> &_err,
-		size_t _cleaner_size, cleaner::cleaner_t<_cleaner_size> &_cleaner,
+		size_t _cleaner_size, gc::cleaner_t<_cleaner_size> &_cleaner,
 
 		mem::malloc_t &_malloc, mem::realloc_t &_realloc, mem::free_t &_free,
 		mem::mem_t<_malloc, _realloc, _free, _err_size, _err> &_mem

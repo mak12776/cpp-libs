@@ -127,7 +127,7 @@ namespace counter
 				err::push(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
-			cleaner::add_free(buffer.pntr);
+			gc::add_free(buffer.pntr);
 
 			// more codes here
 		}

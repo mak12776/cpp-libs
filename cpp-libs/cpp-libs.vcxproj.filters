@@ -120,7 +120,7 @@
     <ClInclude Include="scl\types\types.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
-    <ClInclude Include="scl\features\cleaner.h">
+    <ClInclude Include="scl\features\gc.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>

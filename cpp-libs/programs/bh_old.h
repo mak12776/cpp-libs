@@ -162,7 +162,7 @@ size_t save_data(c_string_t file_name, c_string_t file_ext,
 
 	FILE *data_file;
 	size_t total_write;
-	cleaner::cleaner_t<2> clean_ups;
+	gc::cleaner_t<2> clean_ups;
 
 	data_name.safe_allocate_cat({ file_name, file_ext });
 	if (err::check())
@@ -195,7 +195,7 @@ size_t load_data(c_string_t file_name, c_string_t file_ext,
 	m_string_t data_name;
 	FILE *data_file;
 	size_t total_read;
-	cleaner::cleaner_t<2> clean_ups;
+	gc::cleaner_t<2> clean_ups;
 
 	data_name.safe_allocate_cat({ file_name, file_ext });
 	if (err::check())
@@ -284,10 +284,10 @@ void compress(const char *file_name_pntr)
 	{
 		printf("error: can't malloc memory for log file name.");
 
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
-	cleaner::add_free(log_file_name.pntr);
+	gc::add_free(log_file_name.pntr);
 
 	// malloc archive_name
 	archive_name.safe_allocate_cat({ file_name, archive_ext });
@@ -295,10 +295,10 @@ void compress(const char *file_name_pntr)
 	{
 		printf("error: can't malloc memory for archive file name.\n");
 
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
-	cleaner::add_free(archive_name.pntr);
+	gc::add_free(archive_name.pntr);
 
 	// fopen log_file
 	log_file = io::safe_fopen(log_file_name.pntr, "wb");
@@ -306,10 +306,10 @@ void compress(const char *file_name_pntr)
 	{
 		printf("error: can't open log file '%s': %s\n", log_file_name.pntr, strerror(errno));
 
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
-	cleaner::add_fclose(log_file);
+	gc::add_fclose(log_file);
 
 	// printf file names
 	cl::printf_ln("file name: %s", file_name.pntr);
@@ -324,10 +324,10 @@ void compress(const char *file_name_pntr)
 			err::string());
 		printf("errno: %s\n", strerror(errno));
 
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
-	cleaner::add_free(buffer.pntr);
+	gc::add_free(buffer.pntr);
 
 	// multiply bytes number by 8
 	math::safe_mul(buffer.size, (size_t)8, file_bits);
@@ -335,7 +335,7 @@ void compress(const char *file_name_pntr)
 	{
 		printf("error: can't multiply bytes number by 8.\n");
 
-		cleaner::finish();
+		gc::finish();
 		return;
 	}
 
@@ -357,7 +357,7 @@ void compress(const char *file_name_pntr)
 		printf("%016llx: %zu\n", iter->data, iter->result);
 #endif
 
-	cleaner::finish();
+	gc::finish();
 }
 
 int compress_main(int argc, const char **argv)
