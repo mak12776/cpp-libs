@@ -16,8 +16,7 @@ namespace comp
 			return;
 		}
 
-		math::safe_add(size, size / 2, size);
-		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		math::safe_add(size, size / 2, size); ERR_CHECK_NO_RETURN;
 	}
 
 	void double_size_manager(size_t &size)
@@ -27,8 +26,7 @@ namespace comp
 			size = 1024;
 			return;
 		}
-		math::safe_mul(size, (size_t)2, size);
-		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		math::safe_mul(size, (size_t)2, size); ERR_CHECK_NO_RETURN;
 	}
 
 	void adder_size_manager(size_t &size)
@@ -38,8 +36,7 @@ namespace comp
 			size = 1024;
 			return;
 		}
-		math::safe_add(size, (size_t)1024, size);
-		err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		math::safe_add(size, (size_t)1024, size); ERR_CHECK_NO_RETURN;
 	}
 
 	static constexpr inline size_t get_bytes_per_bits(size_t bits)
@@ -87,25 +84,10 @@ namespace comp
 
 		inline void safe_fwrite(FILE *file)
 		{
-			// data bits
-			io::fwrite_data(this->data_bits, file);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			// data size
-			io::fwrite_data(this->data_size, file);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			// flag
-			io::fwrite_data(this->flag, file);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			// length
-			io::fwrite_data(this->length, file);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
+			io::fwrite_data(this->data_bits, file); ERR_CHECK;
+			io::fwrite_data(this->data_size, file); ERR_CHECK;
+			io::fwrite_data(this->flag, file); ERR_CHECK;
+			io::fwrite_data(this->length, file); ERR_CHECK;
 
 			// "data pntr" or "pntr array"
 			if ((flag & flag_t::POINTER_DATA_MASK) == flag_t::DATA_BASED) 
@@ -119,53 +101,32 @@ namespace comp
 				{
 				}
 			}
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fwrite_array<size_t>(this->count_pntr, this->length, file);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		inline void safe_fread(FILE *file)
 		{
-			// data bits
-			io::fwrite_data(this->data_bits, file);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			// data size
-			io::fwrite_data(this->data_size, file);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			// flag
-			io::fwrite_data(this->flag, file);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
-
-			// length
-			io::fwrite_data(this->length, file);
-			if (err::check_push_file_info(ERR_ARGS))
-				return
+			io::fwrite_data(this->data_bits, file); ERR_CHECK;
+			io::fwrite_data(this->data_size, file); ERR_CHECK;
+			io::fwrite_data(this->flag, file); ERR_CHECK;
+			io::fwrite_data(this->length, file); ERR_CHECK;
 			this->size = this->length;
 
 			// "data pntr" or "pntr array"
 			if ((flag & flag_t::POINTER_DATA_MASK) == flag_t::DATA_BASED)
 			{
-				math::safe_mul(this->length, this->data_size, this->data_block_size);
-				if (err::check_push_file_info(ERR_ARGS))
-					return;
-
-				io::malloc_fread(file, &(this->data_pntr), this->data_block_size);
+				math::safe_mul(this->length, this->data_size, this->data_block_size); ERR_CHECK;
+				io::malloc_fread(file, &(this->data_pntr), this->data_block_size); ERR_CHECK;
 			}
 			else
-				io::malloc_fread_array<void *>(file, &(this->pntr_array), this->length);
-			if (err::check_push_file_info(ERR_ARGS))
-				return;
+				io::malloc_fread_array<void *>(file, &(this->pntr_array), this->length); ERR_CHECK;
 
 			// count pntr
-			io::malloc_fread_array<size_t>(file, &(this->count_pntr), this->length);
-			err::check_push_file_info(ERR_ARGS);
+			io::malloc_fread_array<size_t>(file, &(this->count_pntr), this->length); ERR_CHECK_NO_RETURN;
 		}
 
 		// memory managment
@@ -177,7 +138,7 @@ namespace comp
 
 			// size, length
 			size_manager(this->size);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			this->size = (std::min)(this->size, suggested_size);
@@ -187,24 +148,24 @@ namespace comp
 			{
 				// data block size
 				math::safe_mul(this->size, this->data_size, this->data_block_size);
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 
 				// allocate data_pntr
-				this->data_pntr = mem::safe_malloc(this->data_block_size);
-				if (err::check_push_file_info(ERR_ARGS))
+				this->data_pntr = mem::safe_allocate(this->data_block_size);
+				if (err::check_push(ERR_ARGS))
 					return;
 			}
 			else
 			{
 				this->pntr_array = mem::safe_malloc_array<void *>(this->size);
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 			}
 
 			// allocate count_pntr
 			this->count_pntr = mem::safe_malloc_array<size_t>(this->size);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		template <bool is_data>
@@ -212,31 +173,31 @@ namespace comp
 		{
 			// get new size
 			size_manager(this->size);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			if constexpr (is_data)
 			{
 				// data block size
 				math::safe_mul(this->size, this->data_size, this->data_block_size);
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 
 				// reallocate data_pntr
 				mem::safe_realloc(&(this->data_pntr), this->data_block_size);
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 			}
 			else
 			{
 				mem::safe_realloc_array<void *>(&(this->pntr_array), this->size);
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 			}
 
 			// reallocate count_pntr
 			mem::safe_realloc_array<size_t>(&(this->count_pntr), this->size);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		// fixed bytes or pointer 
@@ -257,7 +218,7 @@ namespace comp
 			if (this->length == this->size)
 			{
 				reallocate_more<false>();
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 			}
 
@@ -287,7 +248,7 @@ namespace comp
 			if (this->length == this->size)
 			{
 				reallocate_more<true>();
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 			}
 
@@ -303,7 +264,7 @@ namespace comp
 			ubyte *end = buffer.pntr + buffer.size;
 
 			allocate<is_data>();
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			while (pntr < end)
@@ -312,7 +273,7 @@ namespace comp
 					increase_fixed_bytes(pntr);
 				else
 					increase_pointer((void *)pntr);
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 
 				pntr += this->data_size;
@@ -337,7 +298,7 @@ namespace comp
 			if (this->length == this->size)
 			{
 				reallocate_more<true>();
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 				pntr = (data_type *)this->data_pntr;
 			}
@@ -354,13 +315,13 @@ namespace comp
 			data_type *end = (data_type *)(buffer.pntr + buffer.size);
 
 			allocate<true>();
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			while (pntr < end)
 			{
 				increase_primitive_types(*pntr);
-				if (err::check_push_file_info(ERR_ARGS))
+				if (err::check_push(ERR_ARGS))
 					return;
 
 				pntr += 1;
@@ -403,19 +364,19 @@ namespace comp
 						break;
 					}
 				}
-				err::check_push_file_info(ERR_ARGS);
+				err::check_push(ERR_ARGS);
 			}
 			else
 			{
 				err::set(err::INVALID_ARGUMENT);
-				err::push_file_info(ERR_ARGS);
+				err::push(ERR_ARGS);
 			}
 		}
 
 		static inline void static_count_buffer(size_t data_bits, ubuffer_t &buffer, data_count_t result)
 		{
 			result.count_buffer(data_bits, &buffer);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 	};
 
@@ -434,44 +395,44 @@ namespace comp
 			if (this->size == 0)
 				return;
 
-			this->pntr = mem::safe_malloc(this->size);
-			err::check_push_file_info(ERR_ARGS);
+			this->pntr = mem::safe_allocate(this->size);
+			err::check_push(ERR_ARGS);
 
 			if (this->bits % 8 == 0)
 				memcpy(this->pntr, buffer_pntr, this->size);
 			else
 			{
 				err::set(err::INVALID_ARGUMENT);
-				err::push_file_info(ERR_ARGS);
+				err::push(ERR_ARGS);
 			}
 		}
 
 		inline void safe_fwrite(FILE *file)
 		{
 			io::fwrite_data(this->bits, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fwrite_data(this->size, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::safe_fwrite(this->pntr, this->size, file);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		inline void safe_fread(FILE *file)
 		{
 			io::fread_data(this->bits, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fread_data(this->size, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::malloc_fread(file, &(this->pntr), this->size);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 	};
 
@@ -488,11 +449,11 @@ namespace comp
 			this->buffer_size = buffer_size;
 
 			math::safe_mul(buffer_size, (size_t)8, this->buffer_bits);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			math::safe_pow<size_t>(2, data_bits, this->possible_data_number);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			this->total_data_count = this->buffer_bits / data_bits;
@@ -501,37 +462,37 @@ namespace comp
 		inline void safe_fwrite(FILE *file)
 		{
 			io::fwrite_data(this->buffer_bits, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fwrite_data(this->buffer_size, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fwrite_data(this->possible_data_number, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fwrite_data(this->total_data_count, file);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		inline void safe_fread(FILE *file)
 		{
 			io::fread_data(this->buffer_bits, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fread_data(this->buffer_size, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fread_data(this->possible_data_number, file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			io::fread_data(this->total_data_count, file);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 	};
 
@@ -547,29 +508,29 @@ namespace comp
 		inline void safe_fread(FILE *file)
 		{
 			info.safe_fread(file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			data_count.safe_fread(file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			remaining.safe_fread(file);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		inline void safe_fwrite(FILE *file)
 		{
 			info.safe_fread(file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			data_count.safe_fread(file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			remaining.safe_fread(file);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		// main functions
@@ -578,11 +539,11 @@ namespace comp
 		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
 			this->info.initalize(data_bits, buffer.size);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			this->remaining.allocate_copy(this->info.buffer_bits % data_bits, buffer.pntr);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			ubuffer_t count_buffer(buffer.pntr, buffer.size - this->remaining.size);
@@ -590,7 +551,7 @@ namespace comp
 			if constexpr (thread_number == 1)
 			{
 				data_count.count_buffer(data_bits, count_buffer);
-				err::check_push_file_info(ERR_ARGS);
+				err::check_push(ERR_ARGS);
 				return;
 			}
 		}
@@ -600,11 +561,11 @@ namespace comp
 			ubuffer_t buffer;
 
 			buffer.allocate_fread(file);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			count_buffer(data_bits, buffer);
-			err::check_push_file_info(file);
+			err::check_push(file);
 		}
 
 		inline void count_name(size_t data_bits, const char *name)
@@ -612,11 +573,11 @@ namespace comp
 			ubuffer_t buffer;
 			
 			buffer.allocate_fopen_fread(name);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			count_buffer(data_bits, buffer);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 	};
 }

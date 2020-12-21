@@ -96,7 +96,7 @@ namespace bh
 		else
 		{
 			err::set(err::UNDEFINED_BEHAVIOR);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::push(__FILE__, __LINE__, __FUNCTION__);
 		}
 	}
 
@@ -109,23 +109,23 @@ namespace bh
 		count_t<size> count;
 
 		path.safe_allocate_cat({ parent_folder, io::sep, name });
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		printf("file path: \"%s\"\n", path.pntr);
 
 		io::malloc_fopen_fread(path.pntr, buffer);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		math::safe_mul(buffer.size, (size_t)8, buffer_bits);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		printf("file size: %zu (%zu bits)\n", buffer.size, buffer_bits);
 
 		count_size(buffer, count);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		printf("finished.\n");
@@ -149,7 +149,7 @@ namespace bh
 		if (size & mask)
 		{
 			err::set(err::INT_OVERFLOW);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::push(__FILE__, __LINE__, __FUNCTION__);
 		}
 		return size << 3;
 	}

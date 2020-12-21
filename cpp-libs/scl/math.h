@@ -102,7 +102,7 @@ namespace scl
 			if (upper_bound(value, divisor, result))
 			{
 				err::set(err::INT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace scl
 			if (cast_value(value, result))
 			{
 				err::set(err::INT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -199,7 +199,7 @@ namespace scl
 			if (mul<type>(a, b, result))
 			{
 				err::set(err::INT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -209,7 +209,7 @@ namespace scl
 			if (add<type>(a, b, result))
 			{
 				err::set(err::INT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -219,7 +219,7 @@ namespace scl
 			if (sub<type>(a, b, result))
 			{
 				err::set(err::INT_OVERFLOW);
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -254,30 +254,30 @@ namespace scl
 				if (check_pow_error())
 				{
 					err::set(err::FLOAT_ERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					err::push(__FILE__, __LINE__, __FUNCTION__);
 					return;
 				}
 			}
 			else if constexpr (std::is_integral_v<type>)
 			{
 				safe_cast_value(base, base_float);
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 					return;
 
 				safe_cast_value(exp, exp_float);
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 					return;
 
 				result_float = std::pow<type, type>(base, exp);
 				if (check_pow_error())
 				{
 					err::set(err::FLOAT_ERROR);
-					err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+					err::push(__FILE__, __LINE__, __FUNCTION__);
 					return;
 				}
 
 				safe_cast_value(result_float, temp_result);
-				if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+				if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 					return;
 			}
 

@@ -17,7 +17,7 @@ namespace winapi
 				name, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 
 			if (scl::err::check())
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				scl::err::push(__FILE__, __LINE__, __FUNCTION__);
 
 			return size;
 		}
@@ -30,14 +30,14 @@ namespace winapi
 			tools::safe_ft_to_st(ft, st);
 			if (scl::err::check())
 			{
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				scl::err::push(__FILE__, __LINE__, __FUNCTION__);
 				return 0;
 			}
 
 			size = print_system_time(st, name, stream);
 
 			if (scl::err::check())
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				scl::err::push(__FILE__, __LINE__, __FUNCTION__);
 
 			return size;
 		}

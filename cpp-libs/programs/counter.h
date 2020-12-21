@@ -121,10 +121,10 @@ namespace counter
 
 		if (err::clear_if(err::NO_MEMORY))
 		{
-			buffer.pntr = mem::safe_malloc(buffer_size);
+			buffer.pntr = mem::safe_allocate(buffer_size);
 			if (err::check())
 			{
-				err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				err::push(__FILE__, __LINE__, __FUNCTION__);
 				return;
 			}
 			cleaner::add_free(buffer.pntr);
@@ -133,7 +133,7 @@ namespace counter
 		}
 		else if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::push(__FILE__, __LINE__, __FUNCTION__);
 			return;
 		}
 	}

@@ -11,7 +11,7 @@ namespace scl
 			if (total != size)
 			{
 				scl::err::set(scl::err::READ);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				scl::err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 
 			return total;
@@ -24,7 +24,7 @@ namespace scl
 			if (total != size)
 			{
 				scl::err::set(scl::err::WRITE);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				scl::err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 
 			return total;
@@ -37,7 +37,7 @@ namespace scl
 			if (!SetPriorityClass(process_handle, Priority))
 			{
 				scl::err::set(err::WIN_ERROR);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				scl::err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 	}

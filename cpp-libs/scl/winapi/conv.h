@@ -61,7 +61,7 @@ namespace scl
 			if (!FileTimeToSystemTime(&ft, &st))
 			{
 				scl::err::set(scl::err::WIN_ERROR);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				scl::err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace scl
 			if (!SystemTimeToFileTime(&st, &ft))
 			{
 				scl::err::set(scl::err::WIN_ERROR);
-				scl::err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+				scl::err::push(__FILE__, __LINE__, __FUNCTION__);
 			}
 		}
 	}

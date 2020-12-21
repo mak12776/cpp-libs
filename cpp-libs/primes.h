@@ -15,7 +15,7 @@ struct simple_data
 		using namespace scl;
 
 		pntr = mem::safe_malloc_array<data_type>(size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 		this->size = size;
 	}
@@ -31,39 +31,39 @@ struct simple_data
 		// size of size
 
 		io::fread_data<ubyte>(size_of_size, file);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
 		if (size_of_size != sizeof(size_t))
 		{
 			err::set(err::INVALID_FILE_STRUCTURE);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::push(__FILE__, __LINE__, __FUNCTION__);
 			return true;
 		}
 
 		// size of data
 
 		io::fread_data<ubyte>(size_of_data, file);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
 		if (size_of_data != sizeof(data_type))
 		{
 			err::set(err::INVALID_FILE_STRUCTURE);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::push(__FILE__, __LINE__, __FUNCTION__);
 			return true;
 		}
 
 		// size
 
 		io::fread_data(buffer_size, file);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
 		if (size != buffer_size)
 		{
 			err::set(err::INVALID_FILE_STRUCTURE);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::push(__FILE__, __LINE__, __FUNCTION__);
 			return true;
 		}
 
@@ -72,7 +72,7 @@ struct simple_data
 		for (size_t index = 0; index < size; index += 1)
 		{
 			io::fread_data<data_type>(pntr[index], file);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 				return true;
 		}
 
@@ -89,19 +89,19 @@ struct simple_data
 		// size of size
 
 		io::fwrite_data<ubyte>(size_of_size, file);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
 		// size of data
 
 		io::fwrite_data<ubyte>(size_of_data, file);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
 		// size
 
 		io::fwrite_data(size, file);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return true;
 
 		// data array
@@ -109,7 +109,7 @@ struct simple_data
 		for (size_t index = 0; index < size; index += 1)
 		{
 			io::fwrite_data<data_type>(pntr[index], file);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 				return true;
 		}
 

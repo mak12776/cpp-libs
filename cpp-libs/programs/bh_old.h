@@ -106,7 +106,7 @@ static inline size_t fread_counts(FILE *file, count_t<data_type> &counts)
 	if (ubyte_data != size_bytes)
 	{
 		err::set(err::INVALID_FILE_STRUCTURE);
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		err::push(__FILE__, __LINE__, __FUNCTION__);
 		return total_read;
 	}
 
@@ -117,7 +117,7 @@ static inline size_t fread_counts(FILE *file, count_t<data_type> &counts)
 	if (ubyte_data != size_of_data_type)
 	{
 		err::set(err::INVALID_FILE_STRUCTURE);
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		err::push(__FILE__, __LINE__, __FUNCTION__);
 		return total_read;
 	}
 
@@ -167,7 +167,7 @@ size_t save_data(c_string_t file_name, c_string_t file_ext,
 	data_name.safe_allocate_cat({ file_name, file_ext });
 	if (err::check())
 	{
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		err::push(__FILE__, __LINE__, __FUNCTION__);
 		return 0;
 	}
 	clean_ups.add_free(data_name.pntr);
@@ -175,7 +175,7 @@ size_t save_data(c_string_t file_name, c_string_t file_ext,
 	data_file = io::safe_fopen(data_name.pntr, "wb");
 	if (err::check())
 	{
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		err::push(__FILE__, __LINE__, __FUNCTION__);
 
 		clean_ups.finish();
 		return 0;
@@ -200,7 +200,7 @@ size_t load_data(c_string_t file_name, c_string_t file_ext,
 	data_name.safe_allocate_cat({ file_name, file_ext });
 	if (err::check())
 	{
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		err::push(__FILE__, __LINE__, __FUNCTION__);
 		return 0;
 	}
 	clean_ups.add_free(data_name.pntr);
@@ -208,7 +208,7 @@ size_t load_data(c_string_t file_name, c_string_t file_ext,
 	data_file = io::safe_fopen(data_name.pntr, "rb");
 	if (err::check())
 	{
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		err::push(__FILE__, __LINE__, __FUNCTION__);
 
 		clean_ups.finish();
 		return 0;
@@ -228,7 +228,7 @@ static inline void data_saver(dtype &data, void(*process_data)(dtype &),
 	load_data(data);
 	if (err::check())
 	{
-		err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+		err::push(__FILE__, __LINE__, __FUNCTION__);
 		return;
 	}
 }

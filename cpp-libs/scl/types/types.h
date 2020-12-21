@@ -28,7 +28,7 @@ namespace scl
 			return;
 		}
 		math::safe_mul(size, (size_t)2, size);
-		err::check_push_file_info(ERR_ARGS);
+		err::check_push(ERR_ARGS);
 	}
 
 	template <size_t initial_size>
@@ -40,7 +40,7 @@ namespace scl
 			return;
 		}
 		math::safe_add(size, size / 2, size);
-		err::check_push_file_info(ERR_ARGS);
+		err::check_push(ERR_ARGS);
 	}
 
 	template <size_t initial_size, size_t adder_size>
@@ -52,7 +52,7 @@ namespace scl
 			return;
 		}
 		math::safe_add(size, adder_size, size);
-		err::check_push_file_info(ERR_ARGS);
+		err::check_push(ERR_ARGS);
 	}
 
 	constexpr size_manager_t default_size_manager = half_size_manager<16>;
@@ -83,19 +83,19 @@ namespace scl
 		inline void allocate_fread(FILE *file)
 		{
 			io::malloc_fread_array_all<data_type>(file, &pntr, size);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		inline void allocate_fopen_fread(const char *name)
 		{
 			io::malloc_fopen_fread_array_all<data_type>(name, &pntr, size);
-			err::check_push_file_info(ERR_ARGS);
+			err::check_push(ERR_ARGS);
 		}
 
 		inline void allocate(size_t size)
 		{
 			pntr = mem::safe_malloc_array<data_type>(size);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 			this->size = size;
 		}
@@ -103,7 +103,7 @@ namespace scl
 		inline void reallocate(size_t size)
 		{
 			pntr = mem::safe_realloc_array<data_type>(size);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 			this->size = size;
 		}
@@ -119,14 +119,14 @@ namespace scl
 		inline size_t fread(FILE *file)
 		{
 			size_t read_number = io::fread_array<data_type>(pntr, size, file);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::check_push(__FILE__, __LINE__, __FUNCTION__);
 			return read_number;
 		}
 
 		inline size_t fwrite(FILE *file)
 		{
 			size_t write_number = io::fwrite_array<data_type>(pntr, size, file);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::check_push(__FILE__, __LINE__, __FUNCTION__);
 			return write_number;
 		}
 
@@ -135,14 +135,14 @@ namespace scl
 		inline size_t fopen_fread(const char *name)
 		{
 			size_t read_number = io::fopen_fread(name, pntr, size);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::check_push(__FILE__, __LINE__, __FUNCTION__);
 			return read_number;
 		}
 
 		inline size_t fopen_fwrite(const char *name)
 		{
 			size_t write_number = io::fopen_fwrite(name, pntr, size);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::check_push(__FILE__, __LINE__, __FUNCTION__);
 			return write_number;
 		}
 	};
@@ -170,7 +170,7 @@ namespace scl
 		inline void allocate(size_t size)
 		{
 			this->pntr = mem::safe_malloc_array<data_type>(size);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			this->len = 0;
@@ -180,7 +180,7 @@ namespace scl
 		inline void reallocate(size_t size)
 		{
 			mem::safe_realloc_array<data_type>(&pntr, size);
-			if (err::check_push_file_info(ERR_ARGS))
+			if (err::check_push(ERR_ARGS))
 				return;
 
 			if (this->len > size)

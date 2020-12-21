@@ -26,10 +26,10 @@ struct m_string_t
 		len = strlen(string);
 		size = len + 1;
 
-		pntr = (char *)mem::safe_malloc(size);
+		pntr = (char *)mem::safe_allocate(size);
 		if (err::check())
 		{
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::push(__FILE__, __LINE__, __FUNCTION__);
 			return;
 		}
 
@@ -45,12 +45,12 @@ struct m_string_t
 		for (c_string_t string : list)
 		{
 			math::safe_add(new_size, string.len, new_size);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 				return;
 		}
 
-		pntr = (char *)mem::safe_malloc(new_size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		pntr = (char *)mem::safe_allocate(new_size);
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		len = new_size - 1;
@@ -72,13 +72,13 @@ struct m_string_t
 		if (length == SIZE_MAX)
 		{
 			err::set(err::INT_OVERFLOW);
-			err::push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::push(__FILE__, __LINE__, __FUNCTION__);
 			return;
 		}
 		new_size = length + 1;
 
-		pntr = (char *)mem::safe_malloc(new_size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		pntr = (char *)mem::safe_allocate(new_size);
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		len = length;
@@ -95,7 +95,7 @@ struct m_string_t
 		if (size > len + 1)
 		{
 			mem::safe_realloc(pntr, len + 1);
-			if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 				return;
 
 			size = len + 1;
@@ -107,11 +107,11 @@ struct m_string_t
 		size_t new_size;
 
 		math::safe_add(size, more_size, new_size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		mem::safe_realloc(pntr, new_size);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		size = new_size;
@@ -126,7 +126,7 @@ struct m_string_t
 			free_size -= current_free_size;
 
 			realloc_more_space(free_size);
-			err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__);
+			err::check_push(__FILE__, __LINE__, __FUNCTION__);
 
 			// realloc_more_space will set size.
 		}
@@ -135,7 +135,7 @@ struct m_string_t
 	inline void realloc_cat(const c_string_t &string)
 	{
 		realloc_reverse_free_space(string.len);
-		if (err::check_push_file_info(__FILE__, __LINE__, __FUNCTION__))
+		if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
 			return;
 
 		len += string.len;

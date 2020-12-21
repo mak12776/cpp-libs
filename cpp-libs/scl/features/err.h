@@ -66,12 +66,13 @@ namespace scl
 
 #define PRIuLINE PRIu64
 		typedef uint64_t line_t;
+		typedef const char *name_t;
 
 		struct info_t
 		{
-			const char *file_name;
+			name_t file_name;
 			line_t line_number;
-			const char *function_name;
+			name_t function_name;
 		};
 
 		struct err_t
@@ -85,17 +86,28 @@ namespace scl
 			// functions
 			
 			inline void set(num_t errnum) { num = errnum; }
+			inline void set_push(num_t errnum, name_t file, line_t line, name_t function) { num = errnum; push(file, line, function); }
+
 			inline void clear() { num = num_t::SUCCESS; array_index = 0; }
 			inline void clear_if(num_t errnum) { if (num == errnum) clear(); }
 
 			inline bool check() { return num != num_t::SUCCESS; }
+			inline bool check_push(name_t file, line_t line, name_t function)
+			{
+				if (check())
+				{
+					push(file, line, function);
+					return true;
+				}
+				return false;
+			}
+
 			inline bool test(num_t errnum) { return num == errnum; }
 
 			inline const char *string() { return to_string(num); }
 
-			inline void pop_file_info() { array_index -= 1; }
-
-			inline void push_file_info(const char *file, line_t line, const char *function)
+			inline void pop() { array_index -= 1; }
+			inline void push(name_t file, line_t line, name_t function)
 			{
 				if (array_index != array_size)
 				{
@@ -106,15 +118,7 @@ namespace scl
 				}
 			}
 
-			inline bool check_push_file_info(const char *file, line_t line, const char *function)
-			{
-				if (check())
-				{
-					push_file_info(file, line, function);
-					return true;
-				}
-				return false;
-			}
+			// print functions
 
 			inline size_t print_traceback(FILE *file = stderr)
 			{
@@ -206,19 +210,25 @@ namespace scl
 		// global functions
 #define ERR_ARGS __FILE__, __LINE__, __FUNCTION__
 
+#define ERR_CHECK if (scl::err::check_push(__FILE__, __LINE__, __FUNCTION__)) return;
+#define ERR_CHECK_VALUE(X) if (scl::err::check_push(__FILE__, __LINE__, __FUNCTION__)) return (X);
+#define ERR_CHECK_NO_RETURN scl::err::check_push(__FILE__, __LINE__, __FUNCTION__);
+
 		static inline void set(num_t errnum) { global_err.set(errnum); }
 		static inline void clear() { global_err.clear(); }
 		static inline void clear_if(num_t num) { global_err.clear_if(num); }
+		static inline void set_push(num_t errnum, name_t file, uint64_t line, name_t function) { global_err.set_push(errnum, file, line, function); };
 			   
 		static inline bool check() { return global_err.check(); }
+		static inline bool check_push(name_t file, uint64_t line, name_t function) { return global_err.check_push(file, line, function); }
+
+		static inline void pop() { global_err.pop(); }
+		static inline void push(name_t file, uint64_t line, name_t function) { global_err.push(file, line, function); }
+
 		static inline bool test(num_t errnum) { return global_err.test(errnum); }
-			   
 		static inline const char *string() { return global_err.string(); }
-			   
-		static inline void pop_file_info() { global_err.pop_file_info(); }
-		static inline void push_file_info(const char *file, line_t line, const char *function) { global_err.push_file_info(file, line, function); }
-		static inline bool check_push_file_info(const char *file, uint64_t line, const char *function) { return global_err.check_push_file_info(file, line, function); }
-			   
+
+		// print functions	   
 		static inline size_t print_traceback(FILE *file = stderr) { return global_err.print_traceback(file); }
 		static inline size_t print(FILE *file = stderr) { return global_err.print(file); }
 		static inline void print_exit(FILE *file = stderr, int exit_code = 1) { return global_err.print_exit(file, exit_code); }
