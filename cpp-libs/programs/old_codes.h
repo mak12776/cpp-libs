@@ -498,7 +498,7 @@ template <size_t size,
 template <
 	template<
 		size_t _err_size, err::err_t<_err_size> &_err,
-		size_t _cleaner_size, gc::cleaner_t<_cleaner_size> &_cleaner,
+		size_t _cleaner_size, gc::gc_t<_cleaner_size> &_cleaner,
 
 		mem::malloc_t &_malloc, mem::realloc_t &_realloc, mem::free_t &_free,
 		mem::mem_t<_malloc, _realloc, _free, _err_size, _err> &_mem

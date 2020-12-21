@@ -162,7 +162,7 @@ size_t save_data(c_string_t file_name, c_string_t file_ext,
 
 	FILE *data_file;
 	size_t total_write;
-	gc::cleaner_t<2> clean_ups;
+	gc::gc_t<2> clean_ups;
 
 	data_name.safe_allocate_cat({ file_name, file_ext });
 	if (err::check())
@@ -195,7 +195,7 @@ size_t load_data(c_string_t file_name, c_string_t file_ext,
 	m_string_t data_name;
 	FILE *data_file;
 	size_t total_read;
-	gc::cleaner_t<2> clean_ups;
+	gc::gc_t<2> clean_ups;
 
 	data_name.safe_allocate_cat({ file_name, file_ext });
 	if (err::check())

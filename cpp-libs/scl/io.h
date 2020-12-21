@@ -8,30 +8,21 @@ namespace scl
 
 		static inline void safe_stat32(const char *pntr, struct _stat32 *stat_p)
 		{
-			if (_stat32(pntr, stat_p))
-			{
-				err::set(err::STAT);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+			if (_stat32(pntr, stat_p)) 
+				err::set_push(err::STAT, ERR_ARGS);
 		}
 
 		static inline void safe_stat64(const char *pntr, struct _stat64 *stat_p)
 		{
 			if (_stat64(pntr, stat_p))
-			{
-				err::set(err::STAT);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::STAT, ERR_ARGS);
 		}
 
 		static inline int safe_open(const char *name, int flags, int mode = 0)
 		{
 			int fd = _open(name, flags, mode);
 			if (fd == -1)
-			{
-				err::set(err::OPEN);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::OPEN, ERR_ARGS);
 			return fd;
 		}
 	}
@@ -45,10 +36,7 @@ namespace scl
 			FILE *file = std::fopen(name, mode);
 
 			if (file == nullptr)
-			{
-				err::set(err::FOPEN);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::FOPEN, ERR_ARGS);
 
 			return file;
 		}
@@ -59,10 +47,7 @@ namespace scl
 
 			value = std::ftell(stream);
 			if (value == -1)
-			{
-				err::set(err::FTELL);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::FTELL, ERR_ARGS);
 
 			return value;
 		}
@@ -70,28 +55,16 @@ namespace scl
 		static inline void safe_fseek(FILE *stream, long offset, int origin)
 		{
 			if (fseek(stream, offset, origin))
-			{
-				err::set(err::FSEEK);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::FSEEK, ERR_ARGS);
 		}
 
 		static inline long safe_get_size_long(FILE *stream)
 		{
 			long size;
 
-			safe_fseek(stream, 0, SEEK_END);
-			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
-
-			size = safe_ftell(stream);
-			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
-
-			safe_fseek(stream, 0, SEEK_SET);
-			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
-
+			safe_fseek(stream, 0, SEEK_END); ERR_CHECK_RETURN(0);
+			size = safe_ftell(stream); ERR_CHECK_RETURN(0);
+			safe_fseek(stream, 0, SEEK_SET); ERR_CHECK_RETURN(0);
 			return size;
 		}
 
@@ -100,11 +73,7 @@ namespace scl
 #if ULONG_MAX > SIZE_MAX
 #error unsigned long is too big.
 #endif
-			size_t file_size = (size_t)safe_get_size_long(stream);
-
-			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
-
+			size_t file_size = (size_t)safe_get_size_long(stream); ERR_CHECK_RETURN(0);
 			return file_size;
 		}
 
@@ -112,16 +81,13 @@ namespace scl
 		{
 #if SIZE_MAX == UINT64_MAX
 			struct __stat64 file_stat;
-			low_io::safe_stat64(name, &file_stat);
+			low_io::safe_stat64(name, &file_stat); ERR_CHECK_RETURN(0);
 #elif SIZE_MAX == UINT32_MAX
 			struct _stat32 file_stat;
-			low_io::safe_stat32(name, &file_stat);
+			low_io::safe_stat32(name, &file_stat); ERR_CHECK_RETURN(0);
 #else
 #error unknown SIZE_MAX.
 #endif
-			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
-
 			return file_stat.st_size;
 		}
 
@@ -134,6 +100,7 @@ namespace scl
 
 			read_number = fread(pntr, 1, size, stream);
 			if (read_number != size)
+				
 			{
 				err::set(err::FREAD);
 				err::push(__FILE__, __LINE__, __FUNCTION__);
@@ -560,6 +527,7 @@ namespace scl
 			return result;
 		}
 
+#if 0
 		// file cache
 
 		template <typename data_type>
@@ -619,6 +587,7 @@ namespace scl
 				return false;
 			}
 		};
+#endif
 		
 		// deprecated functions
 
@@ -634,7 +603,7 @@ namespace scl
 		{
 			byte_t *pntr;
 			size_t file_size;
-			gc::cleaner_t<1> gc;
+			gc::gc_t<1> gc;
 
 			file_size = get_file_size(file);
 			if (err::check())

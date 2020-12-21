@@ -19,7 +19,7 @@ namespace scl
 			};
 		};
 
-		struct cleaner_t
+		struct gc_t
 		{
 			size_t array_index = 0;
 
@@ -78,21 +78,21 @@ namespace scl
 			}
 		};
 
-		// default cleaner_t
+		// default gc_t
 
 		constexpr size_t default_array_size = (1 << 13); // 8192
 		job_t default_array[default_array_size];
 		
-		constexpr cleaner_t default_cleaner{0, default_array_size, default_array};
-		cleaner_t global_cleaner;
+		constexpr gc_t default_gc{0, default_array_size, default_array};
+		gc_t global_gc = default_gc;
 
 		// functions
 
-		constexpr size_t get_index() { return global_cleaner.array_index; }
+		constexpr size_t get_index() { return global_gc.array_index; }
 
-		void add_fclose(FILE *file) { global_cleaner.add_fclose(file); }
-		void add_free(void *pntr) { global_cleaner.add_free(pntr); }
-		void add_delete(void *pntr) { global_cleaner.add_delete(pntr); }
-		void finish(size_t start = 0) { global_cleaner.finish(start); }
+		void add_fclose(FILE *file) { global_gc.add_fclose(file); }
+		void add_free(void *pntr) { global_gc.add_free(pntr); }
+		void add_delete(void *pntr) { global_gc.add_delete(pntr); }
+		void finish(size_t start = 0) { global_gc.finish(start); }
 	}
 }

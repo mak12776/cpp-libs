@@ -538,21 +538,13 @@ namespace comp
 		template <size_t thread_number = 1>
 		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
-			this->info.initalize(data_bits, buffer.size);
-			if (err::check_push(ERR_ARGS))
-				return;
+			this->info.initalize(data_bits, buffer.size); ERR_CHECK;
+			this->remaining.allocate_copy(this->info.buffer_bits % data_bits, buffer.pntr); ERR_CHECK;
 
-			this->remaining.allocate_copy(this->info.buffer_bits % data_bits, buffer.pntr);
-			if (err::check_push(ERR_ARGS))
-				return;
-
-			ubuffer_t count_buffer(buffer.pntr, buffer.size - this->remaining.size);
-
+			ubuffer_t count_buffer(buffer.pntr, buffer.size - this->remaining.size); ERR_CHECK;
 			if constexpr (thread_number == 1)
 			{
-				data_count.count_buffer(data_bits, count_buffer);
-				err::check_push(ERR_ARGS);
-				return;
+				data_count.count_buffer(data_bits, count_buffer); ERR_CHECK;
 			}
 		}
 
@@ -560,12 +552,8 @@ namespace comp
 		{
 			ubuffer_t buffer;
 
-			buffer.allocate_fread(file);
-			if (err::check_push(ERR_ARGS))
-				return;
-
-			count_buffer(data_bits, buffer);
-			err::check_push(file);
+			buffer.allocate_fread(file); ERR_CHECK;
+			count_buffer(data_bits, buffer); ERR_CHECK_NO_RETURN;
 		}
 
 		inline void count_name(size_t data_bits, const char *name)

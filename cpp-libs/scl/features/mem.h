@@ -54,7 +54,7 @@ namespace scl
 			{
 				data_type *pntr;
 
-				math::safe_mul(size, sizeof(data_type), size); ERR_CHECK_VALUE(nullptr);
+				math::safe_mul(size, sizeof(data_type), size); ERR_CHECK_RETURN(nullptr);
 
 				pntr = (data_type *)(this->malloc(size));
 				if (pntr == nullptr)
