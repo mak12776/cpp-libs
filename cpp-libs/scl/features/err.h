@@ -214,7 +214,6 @@ namespace scl
 #define ERR_CHECK_RETURN(X) if (scl::err::check_push(__FILE__, __LINE__, __FUNCTION__)) return (X);
 #define ERR_CHECK_NO_RETURN scl::err::check_push(__FILE__, __LINE__, __FUNCTION__);
 
-
 		static inline void set(num_t errnum) { global_err.set(errnum); }
 		static inline void clear() { global_err.clear(); }
 		static inline void clear_if(num_t num) { global_err.clear_if(num); }
