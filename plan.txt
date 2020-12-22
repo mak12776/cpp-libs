@@ -54,10 +54,12 @@ types in scl:
 	dynamic_array				void *pntr, size_t size
 	dynamic_list				void *pntr, size_t len, size_t size
 	
+	linked_array				a linked list of fixed size arrays
+	linked_dynamic_array		a linked list of different size arrays
+	linked_list					a linked list of variable
+
 	cyclic_array				void *pntr, void *star, void * end, size_t size, 
-	
-	linked_array				size_t len, first, last
-	linked_nodes				size_t len, first, last
+
 
 	c_string
 

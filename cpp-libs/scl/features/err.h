@@ -210,9 +210,10 @@ namespace scl
 		// global functions
 #define ERR_ARGS __FILE__, __LINE__, __FUNCTION__
 
-#define ERR_CHECK if (scl::err::check_push(__FILE__, __LINE__, __FUNCTION__)) return;
-#define ERR_CHECK_RETURN(X) if (scl::err::check_push(__FILE__, __LINE__, __FUNCTION__)) return (X);
-#define ERR_CHECK_NO_RETURN scl::err::check_push(__FILE__, __LINE__, __FUNCTION__);
+#define ERR_CHECK scl::err::check_push(ERR_ARGS)
+#define ERR_CHECK_RETURN if (ERR_CHECK) return;
+#define ERR_CHECK_RETURN_VAL(X) if (ERR_CHECK) return (X);
+#define ERR_CHECK_NO_RETURN ERR_CHECK;
 
 		static inline void set(num_t errnum) { global_err.set(errnum); }
 		static inline void clear() { global_err.clear(); }

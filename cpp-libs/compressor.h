@@ -84,10 +84,10 @@ namespace comp
 
 		inline void safe_fwrite(FILE *file)
 		{
-			io::fwrite_data(this->data_bits, file); ERR_CHECK;
-			io::fwrite_data(this->data_size, file); ERR_CHECK;
-			io::fwrite_data(this->flag, file); ERR_CHECK;
-			io::fwrite_data(this->length, file); ERR_CHECK;
+			io::fwrite_data(this->data_bits, file); ERR_CHECK_RETURN;
+			io::fwrite_data(this->data_size, file); ERR_CHECK_RETURN;
+			io::fwrite_data(this->flag, file); ERR_CHECK_RETURN;
+			io::fwrite_data(this->length, file); ERR_CHECK_RETURN;
 
 			// "data pntr" or "pntr array"
 			if ((flag & flag_t::POINTER_DATA_MASK) == flag_t::DATA_BASED) 
@@ -110,20 +110,20 @@ namespace comp
 
 		inline void safe_fread(FILE *file)
 		{
-			io::fwrite_data(this->data_bits, file); ERR_CHECK;
-			io::fwrite_data(this->data_size, file); ERR_CHECK;
-			io::fwrite_data(this->flag, file); ERR_CHECK;
-			io::fwrite_data(this->length, file); ERR_CHECK;
+			io::fwrite_data(this->data_bits, file); ERR_CHECK_RETURN;
+			io::fwrite_data(this->data_size, file); ERR_CHECK_RETURN;
+			io::fwrite_data(this->flag, file); ERR_CHECK_RETURN;
+			io::fwrite_data(this->length, file); ERR_CHECK_RETURN;
 			this->size = this->length;
 
 			// "data pntr" or "pntr array"
 			if ((flag & flag_t::POINTER_DATA_MASK) == flag_t::DATA_BASED)
 			{
-				math::safe_mul(this->length, this->data_size, this->data_block_size); ERR_CHECK;
-				io::malloc_fread(file, &(this->data_pntr), this->data_block_size); ERR_CHECK;
+				math::safe_mul(this->length, this->data_size, this->data_block_size); ERR_CHECK_RETURN;
+				io::malloc_fread(file, &(this->data_pntr), this->data_block_size); ERR_CHECK_RETURN;
 			}
 			else
-				io::malloc_fread_array<void *>(file, &(this->pntr_array), this->length); ERR_CHECK;
+				io::malloc_fread_array<void *>(file, &(this->pntr_array), this->length); ERR_CHECK_RETURN;
 
 			// count pntr
 			io::malloc_fread_array<size_t>(file, &(this->count_pntr), this->length); ERR_CHECK_NO_RETURN;
@@ -538,13 +538,13 @@ namespace comp
 		template <size_t thread_number = 1>
 		inline void count_buffer(size_t data_bits, ubuffer_t &buffer)
 		{
-			this->info.initalize(data_bits, buffer.size); ERR_CHECK;
-			this->remaining.allocate_copy(this->info.buffer_bits % data_bits, buffer.pntr); ERR_CHECK;
+			this->info.initalize(data_bits, buffer.size); ERR_CHECK_RETURN;
+			this->remaining.allocate_copy(this->info.buffer_bits % data_bits, buffer.pntr); ERR_CHECK_RETURN;
 
-			ubuffer_t count_buffer(buffer.pntr, buffer.size - this->remaining.size); ERR_CHECK;
+			ubuffer_t count_buffer(buffer.pntr, buffer.size - this->remaining.size); ERR_CHECK_RETURN;
 			if constexpr (thread_number == 1)
 			{
-				data_count.count_buffer(data_bits, count_buffer); ERR_CHECK;
+				data_count.count_buffer(data_bits, count_buffer); ERR_CHECK_RETURN;
 			}
 		}
 
@@ -552,7 +552,7 @@ namespace comp
 		{
 			ubuffer_t buffer;
 
-			buffer.allocate_fread(file); ERR_CHECK;
+			buffer.allocate_fread(file); ERR_CHECK_RETURN;
 			count_buffer(data_bits, buffer); ERR_CHECK_NO_RETURN;
 		}
 
