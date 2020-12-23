@@ -291,10 +291,7 @@ namespace scl
 					file_size -= buffer_size;
 
 					if (!read_buffer(pntr, buffer_size))
-					{
-						mem::free(pntr);
-						return;
-					}
+						return mem::free(pntr);
 				}
 
 				if (file_size)
@@ -302,9 +299,10 @@ namespace scl
 					safe_fread(pntr, file_size, file); ERR_CHECK_RETURN_VALUE(mem::free(pntr));
 
 					if (!read_buffer(pntr, file_size))
-						finish();
+						return mem::free(pntr);
 				}
 				mem::free(pntr);
+				finish();
 			}
 
 			template <size_t buffer_size = 8192>
