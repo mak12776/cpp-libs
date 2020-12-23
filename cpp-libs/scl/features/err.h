@@ -212,7 +212,7 @@ namespace scl
 
 #define ERR_CHECK scl::err::check_push(ERR_ARGS)
 #define ERR_CHECK_RETURN if (ERR_CHECK) return;
-#define ERR_CHECK_RETURN_VAL(X) if (ERR_CHECK) return (X);
+#define ERR_CHECK_RETURN_VALUE(X) if (ERR_CHECK) return (X);
 #define ERR_CHECK_NO_RETURN ERR_CHECK;
 
 		static inline void set(num_t errnum) { global_err.set(errnum); }

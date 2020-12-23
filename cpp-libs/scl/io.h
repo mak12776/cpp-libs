@@ -62,9 +62,10 @@ namespace scl
 		{
 			long size;
 
-			safe_fseek(stream, 0, SEEK_END); ERR_CHECK_RETURN_VAL(0);
-			size = safe_ftell(stream); ERR_CHECK_RETURN_VAL(0);
-			safe_fseek(stream, 0, SEEK_SET); ERR_CHECK_RETURN_VAL(0);
+			safe_fseek(stream, 0, SEEK_END); ERR_CHECK_RETURN_VALUE(0);
+			size = safe_ftell(stream); ERR_CHECK_RETURN_VALUE(0);
+			safe_fseek(stream, 0, SEEK_SET); ERR_CHECK_RETURN_VALUE(0);
+
 			return size;
 		}
 
@@ -73,7 +74,7 @@ namespace scl
 #if ULONG_MAX > SIZE_MAX
 #error unsigned long is too big.
 #endif
-			size_t file_size = (size_t)safe_get_size_long(stream); ERR_CHECK_RETURN_VAL(0);
+			size_t file_size = (size_t)safe_get_size_long(stream); ERR_CHECK_RETURN_VALUE(0);
 			return file_size;
 		}
 
@@ -81,10 +82,10 @@ namespace scl
 		{
 #if SIZE_MAX == UINT64_MAX
 			struct __stat64 file_stat;
-			low_io::safe_stat64(name, &file_stat); ERR_CHECK_RETURN_VAL(0);
+			low_io::safe_stat64(name, &file_stat); ERR_CHECK_RETURN_VALUE(0);
 #elif SIZE_MAX == UINT32_MAX
 			struct _stat32 file_stat;
-			low_io::safe_stat32(name, &file_stat); ERR_CHECK_RETURN_VAL(0);
+			low_io::safe_stat32(name, &file_stat); ERR_CHECK_RETURN_VALUE(0);
 #else
 #error unknown SIZE_MAX.
 #endif
@@ -137,7 +138,11 @@ namespace scl
 		{
 			size_t read_number;
 			if constexpr (sizeof(data_type) != 1)
-				math::safe_mul(data_number, sizeof data_type, data_number); ERR_CHECK_RETURN_VAL(0);
+			{
+				math::safe_mul(data_number, sizeof data_type, data_number);
+				ERR_CHECK_RETURN_VALUE(0);
+			}
+
 			read_number = safe_fread((void *)pntr, data_number, file); ERR_CHECK_NO_RETURN;
 			return read_number;
 		}
@@ -147,8 +152,30 @@ namespace scl
 		{
 			size_t write_number;
 			if constexpr (sizeof(data_type) != 1)
-				math::safe_mul(data_number, sizeof data_type, data_number); ERR_CHECK_RETURN_VAL(0);
+			{
+				math::safe_mul(data_number, sizeof data_type, data_number); 
+				ERR_CHECK_RETURN_VALUE(0);
+			}
+
 			write_number = safe_fwrite(pntr, data_number, file); ERR_CHECK_NO_RETURN;
+			return write_number;
+		}
+
+		// fopen fread, fwrite
+
+		static inline size_t fopen_fread(const char *name, void *pntr, size_t size)
+		{
+			FILE *file = safe_fopen(name, "rb"); ERR_CHECK_RETURN_VALUE(0);
+			size_t read_number = safe_fread(pntr, size, file); ERR_CHECK_NO_RETURN;
+			std::fclose(file);
+			return read_number;
+		}
+
+		static inline size_t fopen_fwrite(const char *name, void *pntr, size_t size)
+		{
+			FILE *file = safe_fopen(name, "wb"); ERR_CHECK_RETURN_VALUE(0);
+			size_t write_number = safe_fwrite(pntr, size, file); ERR_CHECK_NO_RETURN;
+			std::fclose(file);
 			return write_number;
 		}
 
@@ -157,9 +184,7 @@ namespace scl
 		static inline void malloc_fread(FILE *file, void **pntr, size_t size)
 		{
 			(*pntr) = mem::safe_malloc(size); ERR_CHECK_RETURN;
-			safe_fread(*pntr, size, file);
-			if (ERR_CHECK)
-				free(*pntr);
+			safe_fread(*pntr, size, file); ERR_CHECK_RETURN_VALUE(free(*pntr));
 		}
 
 		static inline void malloc_fopen_fread(const char *name, void **pntr, size_t size)
@@ -169,15 +194,19 @@ namespace scl
 			std::fclose(file);
 		}
 
+		// malloc fread array
+
 		template <typename data_type>
 		static inline void malloc_fread_array(FILE *file, data_type **pntr, size_t size)
 		{
 			if constexpr (sizeof(data_type) != 1)
-				math::safe_mul(size, sizeof(data_type), size); ERR_CHECK_RETURN;
+			{
+				math::safe_mul(size, sizeof(data_type), size); 
+				ERR_CHECK_RETURN;
+			}
 
-			safe_fread(*pntr, size, file);
-			if (ERR_CHECK)
-				free(*pntr);
+			safe_fread(*pntr, size, file); 
+			ERR_CHECK_RETURN_VALUE(free(*pntr));
 		}
 
 		template <typename data_type>
@@ -193,12 +222,11 @@ namespace scl
 		static inline void malloc_fread_all(FILE *file, void **pntr, size_t &size)
 		{
 			size_t file_size;
-			file_size = safe_get_size(file); ERR_CHECK_RETURN;
 
+			file_size = safe_get_size(file); ERR_CHECK_RETURN;
 			(*pntr) = mem::safe_malloc(file_size); ERR_CHECK_RETURN;
 
-			safe_fread(*pntr, file_size, file); ERR_CHECK_RETURN_VAL(free(*pntr));
-
+			safe_fread(*pntr, file_size, file); ERR_CHECK_RETURN_VALUE(free(*pntr));
 			size = file_size;
 		}
 
@@ -209,7 +237,7 @@ namespace scl
 			std::fclose(file);
 		}
 
-		// malloc fread array
+		// malloc fread array all
 
 		template <typename data_type>
 		static inline void malloc_fread_array_all(FILE *file, data_type **pntr, size_t &size)
@@ -218,11 +246,17 @@ namespace scl
 			size_t block_size;
 
 			file_size = safe_get_size(file); ERR_CHECK_RETURN;
+
 			block_size = file_size;
 			if constexpr (sizeof(data_type) != 1)
-				math::safe_upper_bound(block_size, sizeof(data_type), block_size); ERR_CHECK_RETURN;
+			{
+				math::safe_upper_bound(block_size, sizeof(data_type), block_size); 
+				ERR_CHECK_RETURN;
+			}
+
 			(*pntr) = (data_type *)mem::safe_malloc(block_size); ERR_CHECK_RETURN;
-			safe_fread(*pntr, file_size, file); ERR_CHECK_RETURN_VAL(mem::free(*pntr));
+
+			safe_fread(*pntr, file_size, file); ERR_CHECK_RETURN_VALUE(mem::free(*pntr));
 			size = block_size / sizeof(data_type);
 		}
 
@@ -234,24 +268,6 @@ namespace scl
 			std::fclose(file);
 		}
 
-		// fopen fwrite
-
-		static inline size_t fopen_fread(const char *name, void *pntr, size_t size)
-		{
-			FILE *file = safe_fopen(name, "rb"); ERR_CHECK_RETURN(0);
-			size_t read_number = safe_fread(pntr, size, file); ERR_CHECK_NO_RETURN;
-			std::fclose(file);
-			return read_number;
-		}
-
-		static inline size_t fopen_fwrite(const char *name, void *pntr, size_t size)
-		{
-			FILE *file = safe_fopen(name, "wb"); ERR_CHECK_RETURN(0);
-			size_t write_number = safe_fwrite(pntr, size, file); ERR_CHECK_NO_RETURN;
-			std::fclose(file);
-			return write_number;
-		}
-
 		// buffered reader
 
 		template <typename byte_t>
@@ -259,64 +275,46 @@ namespace scl
 		{
 			virtual bool read_buffer(byte_t *pntr, size_t size) = 0;
 			virtual void finish() = 0;
+
+			template <size_t buffer_size = 8192>
+			inline void fread_all(FILE *file)
+			{
+				byte_t *pntr;
+				size_t file_size;
+
+				file_size = safe_get_size(file); ERR_CHECK_RETURN;
+				pntr = (byte_t *)mem::safe_malloc(buffer_size); ERR_CHECK_RETURN;
+
+				while (file_size >= buffer_size)
+				{
+					safe_fread(pntr, buffer_size, file); ERR_CHECK_RETURN_VALUE(mem::free(pntr));
+					file_size -= buffer_size;
+
+					if (!read_buffer(pntr, buffer_size))
+					{
+						mem::free(pntr);
+						return;
+					}
+				}
+
+				if (file_size)
+				{
+					safe_fread(pntr, file_size, file); ERR_CHECK_RETURN_VALUE(mem::free(pntr));
+
+					if (!read_buffer(pntr, file_size))
+						finish();
+				}
+				mem::free(pntr);
+			}
+
+			template <size_t buffer_size = 8192>
+			inline void fopen_fread_all(const char *name)
+			{
+				FILE *file = fopen(name, "rb"); ERR_CHECK_RETURN;
+				fread_all(file); ERR_CHECK_NO_RETURN;
+				std::fclose(file);
+			}
 		};
-
-		template <typename byte_t, size_t buffer_size = 8192>
-		static inline void fread_buffered(FILE *file, buffer_reader_t<byte_t> &buffer_reader)
-		{
-			byte_t *pntr;
-			size_t file_size;
-			size_t gc_index = gc::get_index();
-
-			file_size = safe_get_size(file); ERR_CHECK_RETURN;
-			pntr = (byte_t *)mem::safe_malloc(buffer_size); ERR_CHECK_RETURN;
-			gc::add_free(pntr);
-
-			while (file_size >= buffer_size)
-			{
-				safe_fread(pntr, buffer_size, file);
-				if (err::check())
-				{
-					err::push(ERR_ARGS);
-					gc::finish(gc_index);
-					return;
-				}
-				file_size -= buffer_size;
-
-				if (!buffer_reader.read_buffer(pntr, buffer_size))
-				{
-					gc::finish(gc_index);
-					return;
-				}
-			}
-
-			if (file_size)
-			{
-				safe_fread(pntr, file_size, file);
-				gc::finish(gc_index);
-				ERR_CHECK_RETURN;
-
-				if (!buffer_reader.read_buffer(pntr, file_size))
-					buffer_reader.finish();
-			}
-		}
-
-		template <typename byte_t, size_t size = 8192>
-		static inline void fopen_fread_buffered(const char *file_name, buffer_reader_t<byte_t> &buffer_reader)
-		{
-			FILE *file = safe_fopen(file_name, "rb");
-			if (err::check())
-			{
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-				return;
-			}
-
-			fread_buffered(file, buffer_reader);
-			if (err::check())
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-
-			fclose(file);
-		}
 
 		// file reader, file writer
 

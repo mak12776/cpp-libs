@@ -123,7 +123,10 @@ namespace comp
 				io::malloc_fread(file, &(this->data_pntr), this->data_block_size); ERR_CHECK_RETURN;
 			}
 			else
+			{
 				io::malloc_fread_array<void *>(file, &(this->pntr_array), this->length); ERR_CHECK_RETURN;
+			}
+				
 
 			// count pntr
 			io::malloc_fread_array<size_t>(file, &(this->count_pntr), this->length); ERR_CHECK_NO_RETURN;
@@ -134,70 +137,54 @@ namespace comp
 		template <bool is_data>
 		inline void allocate(size_t suggested_size = SIZE_MAX)
 		{
+			// get initial size
 			this->size = 0;
+			size_manager(this->size); ERR_CHECK_RETURN;
 
-			// size, length
-			size_manager(this->size);
-			if (err::check_push(ERR_ARGS))
-				return;
-
+			// choose size and set length
 			this->size = (std::min)(this->size, suggested_size);
 			this->length = 0;
 
 			if constexpr (is_data)
 			{
 				// data block size
-				math::safe_mul(this->size, this->data_size, this->data_block_size);
-				if (err::check_push(ERR_ARGS))
-					return;
+				math::safe_mul(this->size, this->data_size, this->data_block_size); ERR_CHECK_RETURN;
 
 				// allocate data_pntr
-				this->data_pntr = mem::safe_malloc(this->data_block_size);
-				if (err::check_push(ERR_ARGS))
-					return;
+				this->data_pntr = mem::safe_malloc(this->data_block_size); ERR_CHECK_RETURN;
 			}
-			else
+			else 
 			{
-				this->pntr_array = mem::safe_malloc_array<void *>(this->size);
-				if (err::check_push(ERR_ARGS))
-					return;
+				this->pntr_array = mem::safe_malloc_array<void *>(this->size); 
+				ERR_CHECK_RETURN;
 			}
 
 			// allocate count_pntr
-			this->count_pntr = mem::safe_malloc_array<size_t>(this->size);
-			err::check_push(ERR_ARGS);
+			this->count_pntr = mem::safe_malloc_array<size_t>(this->size); ERR_CHECK_NO_RETURN;
 		}
 
 		template <bool is_data>
 		inline void reallocate_more()
 		{
 			// get new size
-			size_manager(this->size);
-			if (err::check_push(ERR_ARGS))
-				return;
+			size_manager(this->size); ERR_CHECK_RETURN;
 
 			if constexpr (is_data)
 			{
 				// data block size
-				math::safe_mul(this->size, this->data_size, this->data_block_size);
-				if (err::check_push(ERR_ARGS))
-					return;
+				math::safe_mul(this->size, this->data_size, this->data_block_size); ERR_CHECK_RETURN;
 
 				// reallocate data_pntr
-				mem::safe_realloc(&(this->data_pntr), this->data_block_size);
-				if (err::check_push(ERR_ARGS))
-					return;
+				mem::safe_realloc(&(this->data_pntr), this->data_block_size); ERR_CHECK_RETURN;
 			}
 			else
 			{
-				mem::safe_realloc_array<void *>(&(this->pntr_array), this->size);
-				if (err::check_push(ERR_ARGS))
-					return;
+				mem::safe_realloc_array<void *>(&(this->pntr_array), this->size); 
+				ERR_CHECK_RETURN;
 			}
 
 			// reallocate count_pntr
-			mem::safe_realloc_array<size_t>(&(this->count_pntr), this->size);
-			err::check_push(ERR_ARGS);
+			mem::safe_realloc_array<size_t>(&(this->count_pntr), this->size); ERR_CHECK_NO_RETURN;
 		}
 
 		// fixed bytes or pointer 
@@ -217,9 +204,8 @@ namespace comp
 
 			if (this->length == this->size)
 			{
-				reallocate_more<false>();
-				if (err::check_push(ERR_ARGS))
-					return;
+				reallocate_more<false>(); 
+				ERR_CHECK_RETURN;
 			}
 
 			this->pntr_array[this->length] = value_pntr;
@@ -248,8 +234,7 @@ namespace comp
 			if (this->length == this->size)
 			{
 				reallocate_more<true>();
-				if (err::check_push(ERR_ARGS))
-					return;
+				ERR_CHECK_RETURN;
 			}
 
 			memcpy(end, value_pntr, this->data_size);
@@ -263,9 +248,7 @@ namespace comp
 			ubyte *pntr = buffer.pntr;
 			ubyte *end = buffer.pntr + buffer.size;
 
-			allocate<is_data>();
-			if (err::check_push(ERR_ARGS))
-				return;
+			allocate<is_data>(); ERR_CHECK_RETURN;
 
 			while (pntr < end)
 			{
@@ -273,8 +256,7 @@ namespace comp
 					increase_fixed_bytes(pntr);
 				else
 					increase_pointer((void *)pntr);
-				if (err::check_push(ERR_ARGS))
-					return;
+				ERR_CHECK_RETURN;
 
 				pntr += this->data_size;
 			}
@@ -297,9 +279,7 @@ namespace comp
 
 			if (this->length == this->size)
 			{
-				reallocate_more<true>();
-				if (err::check_push(ERR_ARGS))
-					return;
+				reallocate_more<true>(); ERR_CHECK_RETURN;
 				pntr = (data_type *)this->data_pntr;
 			}
 
@@ -314,15 +294,12 @@ namespace comp
 			data_type *pntr = (data_type *)buffer.pntr;
 			data_type *end = (data_type *)(buffer.pntr + buffer.size);
 
-			allocate<true>();
-			if (err::check_push(ERR_ARGS))
-				return;
+			allocate<true>(); ERR_CHECK_RETURN;
 
 			while (pntr < end)
 			{
-				increase_primitive_types(*pntr);
-				if (err::check_push(ERR_ARGS))
-					return;
+				increase_primitive_types(*pntr); 
+				ERR_CHECK_RETURN;
 
 				pntr += 1;
 			}
@@ -552,7 +529,7 @@ namespace comp
 		{
 			ubuffer_t buffer;
 
-			buffer.allocate_fread(file); ERR_CHECK_RETURN;
+			buffer.allocate_fread_all(file); ERR_CHECK_RETURN;
 			count_buffer(data_bits, buffer); ERR_CHECK_NO_RETURN;
 		}
 
@@ -560,7 +537,7 @@ namespace comp
 		{
 			ubuffer_t buffer;
 			
-			buffer.allocate_fopen_fread(name);
+			buffer.allocate_fopen_fread_all(name);
 			if (err::check_push(ERR_ARGS))
 				return;
 
