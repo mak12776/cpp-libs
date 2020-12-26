@@ -1,5 +1,15 @@
 #pragma once
 
+#include <cstdlib>
+#include <cinttypes>
+#include <cstdint>
+#include <cstdio>
+#include <cerrno>
+#include <cstring>
+
+#include "cfmt_header.h"
+#include "../math.h"
+
 namespace scl
 {
 	namespace err
@@ -236,3 +246,4 @@ namespace scl
 	}
 }
 
+#include "cfmt.h"

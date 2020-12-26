@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstdarg>
+#include <cstdio>
+
 namespace scl
 {
 	namespace cfmt
@@ -58,6 +61,6 @@ namespace scl
 		template <typename value_type>
 		static inline int print_address_of(value_type *value, const char *name, FILE *stream = stdout);
 
-		size_t print_separator(size_t width, ubyte character, FILE *stream);
+		size_t print_separator(size_t width, char character, FILE *stream);
 	}
 }

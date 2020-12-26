@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstdio>
+#include <io.h>
+
 namespace scl
 {
 	namespace cfmt

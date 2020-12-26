@@ -28,11 +28,11 @@
     <Filter Include="Header Files\incomplete_scl">
       <UniqueIdentifier>{482908f3-e496-4d76-8f23-68883c4c23fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scl\features">
-      <UniqueIdentifier>{5f756f26-3540-4b20-80cd-7e332c91df77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\incomplete_scl\old_winapi">
       <UniqueIdentifier>{e758c838-21f2-409b-ad11-45fef6177456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scl\features">
+      <UniqueIdentifier>{8422d004-9112-4107-8a70-32e06f21200e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -51,12 +51,6 @@
     <ClInclude Include="scl\rand.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="scl\features\err.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\mem.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
     <ClInclude Include="scl\macros.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
@@ -71,9 +65,6 @@
     </ClInclude>
     <ClInclude Include="scl\all.h">
       <Filter>Header Files\scl</Filter>
-    </ClInclude>
-    <ClInclude Include="scl\features\cfmt.h">
-      <Filter>Header Files\scl\features</Filter>
     </ClInclude>
     <ClInclude Include="programs\bh_old.h">
       <Filter>Header Files\programs</Filter>
@@ -105,9 +96,6 @@
     <ClInclude Include="scl\types\builtins.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
-    <ClInclude Include="scl\features\cfmt_header.h">
-      <Filter>Header Files\scl\features</Filter>
-    </ClInclude>
     <ClInclude Include="incomplete scl\old_string.h">
       <Filter>Header Files\incomplete_scl</Filter>
     </ClInclude>
@@ -120,7 +108,19 @@
     <ClInclude Include="scl\types\types.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
+    <ClInclude Include="scl\features\cfmt.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\cfmt_header.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\err.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
     <ClInclude Include="scl\features\gc.h">
+      <Filter>Header Files\scl\features</Filter>
+    </ClInclude>
+    <ClInclude Include="scl\features\mem.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
   </ItemGroup>

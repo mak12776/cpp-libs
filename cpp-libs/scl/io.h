@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdio>
+
 namespace scl
 {
 	namespace low_io
