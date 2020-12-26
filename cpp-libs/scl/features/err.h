@@ -1,15 +1,5 @@
 #pragma once
 
-#include <cstdlib>
-#include <cinttypes>
-#include <cstdint>
-#include <cstdio>
-#include <cerrno>
-#include <cstring>
-
-#include "cfmt_header.h"
-#include "../math.h"
-
 namespace scl
 {
 	namespace err
@@ -245,5 +235,3 @@ namespace scl
 		static inline void print_exit(FILE *file = stderr, int exit_code = 1) { return global_err.print_exit(file, exit_code); }
 	}
 }
-
-#include "cfmt.h"

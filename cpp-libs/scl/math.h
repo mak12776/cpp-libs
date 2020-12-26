@@ -1,9 +1,5 @@
 #pragma once
 
-#include <cmath>
-#include <cfenv>
-#include <iostream>
-
 namespace scl
 {
 	namespace fe

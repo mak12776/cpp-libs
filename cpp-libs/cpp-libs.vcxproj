@@ -179,6 +179,7 @@
     <ClInclude Include="scl\types\types.h" />
     <ClInclude Include="scl\winapi\functions.h" />
     <ClInclude Include="scl\winapi\conv.h" />
+    <ClInclude Include="sort.h" />
     <ClInclude Include="winapi\all.h" />
     <ClInclude Include="winapi\time.h" />
     <ClInclude Include="winapi\tools.h" />
