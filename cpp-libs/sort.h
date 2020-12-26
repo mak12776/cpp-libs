@@ -4,6 +4,22 @@
 namespace sort
 {
 	template <typename data_t>
+	void print_vector(std::vector<data_t> vec)
+	{
+		for (size_t index = 0; index < vec.size(); index += 1)
+			std::cout << vec[index] << ", ";
+		std::cout << std::endl;
+	}
+
+	template <typename data_t>
+	void print_array(data_t *pntr, size_t size)
+	{
+		for (size_t index = 0; index < size; index += 1)
+			std::cout << pntr[index] << ", ";
+		std::cout << std::endl;
+	}
+
+	template <typename data_t>
 	using comp_t = int(const data_t &, const data_t &);
 
 	// sort functions
@@ -24,7 +40,7 @@ namespace sort
 	}
 
 	template <typename data_t>
-	void vector(sort_func_t<data_t> func, std::vector<data_t> vec, comp_t<data_t> comp)
+	void vector(sort_func_t<data_t> func, std::vector<data_t> &vec, comp_t<data_t> comp)
 	{
 		func(vec.data(), vec.size(), comp);
 	}
