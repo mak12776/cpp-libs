@@ -34,7 +34,10 @@ namespace sort
 		{
 			size_t index_j = index_i;
 			while ((index_j > 0) && (comp(pntr[index_j - 1], pntr[index_j]) == 1))
+			{
 				std::swap(pntr[index_j - 1], pntr[index_j]);
+				index_j -= 1;
+			}
 			index_i += 1;
 		}
 	}
@@ -53,10 +56,9 @@ namespace sort
 		std::default_random_engine engine;
 
 		std::vector<data_t> result(size);
-		if (size >= INT_MAX)
-			throw std::range_error("size is too big." + size);
+		data_t step = 0;
 		for (size_t index = 0; index < result.capacity(); index += 1) 
-			result[index] = (int)index;
+			result[index] = step++;
 		std::shuffle(result.begin(), result.end(), engine);
 		return result;
 	}
@@ -65,13 +67,24 @@ namespace sort
 	std::vector<data_t> best_vector(size_t size)
 	{
 		std::vector<data_t> result(size);
-		for (size_t index = 0; index < result.capacity(); index += 1) 
-			result[index] = index;
+		data_t step = 0;
+		for (size_t index = 0; index < result.capacity(); index += 1)
+			result[index] = step++;
 		return result;
 	}
 
 	template <typename data_t>
 	std::vector<data_t> worst_vector(size_t size)
+	{
+		std::vector<data_t> result(size);
+		data_t step = (data_t)(size - 1);
+		for (size_t index = 0; index < result.capacity(); index += 1)
+			result[index] = step--;
+		return result;
+	}
+
+	template <typename data_t>
+	std::vector<data_t> random_vector(size_t size)
 	{
 		std::default_random_engine engine;
 		std::uniform_int dist;
@@ -81,5 +94,4 @@ namespace sort
 		result[index] = dist(engine);
 		return result;
 	}
-
 }
