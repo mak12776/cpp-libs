@@ -177,8 +177,8 @@ namespace scl
 
 		// safe functions
 
-		template <typename int_type, typename float_type>
-		void safe_cast_value(int_type value, float_type &result)
+		template <typename src_type, typename dest_type>
+		void safe_cast_value(src_type value, dest_type &result)
 		{
 			if (cast_value(value, result))
 			{

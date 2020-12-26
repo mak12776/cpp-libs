@@ -6,9 +6,14 @@ namespace sort
 	template <typename data_t>
 	void print_vector(std::vector<data_t> vec)
 	{
-		for (size_t index = 0; index < vec.size(); index += 1)
-			std::cout << vec[index] << ", ";
-		std::cout << std::endl;
+		std::cout << "[" << vec.size() << "]: {";
+		if (!vec.empty())
+		{
+			std::cout << vec[0];
+			for (size_t index = 1; index < vec.size(); index += 1)
+				std::cout << ", " << vec[index];
+		}
+		std::cout << "}" << std::endl;
 	}
 
 	template <typename data_t>
@@ -76,8 +81,13 @@ namespace sort
 	template <typename data_t>
 	std::vector<data_t> worst_vector(size_t size)
 	{
+		data_t max_step;
+		if (scl::math::cast_value(size - 1, max_step))
+			throw std::range_error("");
+
 		std::vector<data_t> result(size);
-		data_t step = (data_t)(size - 1);
+
+		data_t step = max_step;
 		for (size_t index = 0; index < result.capacity(); index += 1)
 			result[index] = step--;
 		return result;
