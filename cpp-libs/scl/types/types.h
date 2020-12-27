@@ -198,30 +198,32 @@ namespace scl
 	// linked array
 
 	template <typename data_type, size_t array_size>
-	struct linked_array_node_t
-	{
-		data_type pntr[array_size];
-		linked_array_node_t<data_type, array_size> *next;
-	};
-
-	template <typename data_type, size_t array_size>
 	struct linked_array_t
 	{
 		typedef data_type& reference;
 		typedef const data_type& const_reference;
 
+		struct node_t
+		{
+			data_type pntr[array_size];
+			node_t *next;
+
+			constexpr inline size_t size() { return array_size; }
+			constexpr data_type& operator[](size_t index) { return pntr[index]; }
+		};
+
 		size_t len;
-		linked_array_node_t<data_type, array_size> *first;
-		linked_array_node_t<data_type, array_size> *last;
+		node_t *first;
+		node_t *last;
 
 		linked_array_t()
 			: len(0), first(nullptr), last(nullptr) { }
 
-		inline bool append(const_reference value)
+		inline bool append(reference value)
 		{
 			if (len == 0)
 			{
-				first = mem::malloc(sizeof linked_array_node_t<data_type, array_size>);
+				first = (node_t *)mem::malloc(sizeof node_t);
 				if (first == nullptr)
 					return true;
 
@@ -229,21 +231,40 @@ namespace scl
 			}
 			else if (len % array_size == 0)
 			{
-				last->next = mem::malloc(sizeof linked_array_node_t<data_type, array_size>);
+				last->next = (node_t *)mem::malloc(sizeof node_t);
 				if (last->next == nullptr)
 					return true;
 
 				last = last->next;
 			}
 
-			last[len % array_size] = value;
+			last->pntr[len % array_size] = value;
 			len += 1;
 			return false;
+		}
+
+		inline void safe_append(const_reference value)
+		{
+			if (len == 0)
+			{
+				last = first = mem::safe_malloc_type<node_t>(); 
+				ERR_CHECK_RETURN;
+			}
+			else if (len % array_size == 0)
+			{
+				last->next = mem::safe_malloc_type<node_t>(); 
+				ERR_CHECK_RETURN;
+
+				last = last->next;
+			}
+
+			last->pntr[len % array_size] = value;
+			len += 1;
 		}
 	};
 
 
-	// other types
+	// sub types
 
 	using c_ustring_t = const_array<unsigned char>;
 	using c_string_t = const_array<char>;

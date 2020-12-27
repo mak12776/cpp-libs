@@ -41,7 +41,7 @@ namespace scl
 			template <typename data_type>
 			constexpr data_type *safe_malloc_type()
 			{
-				data_type *pntr = this->malloc(sizeof data_type);
+				data_type *pntr = (data_type *)this->malloc(sizeof data_type);
 				if (pntr == nullptr)
 					err::set_push(err::NO_MEMORY, ERR_ARGS);
 				return pntr;
