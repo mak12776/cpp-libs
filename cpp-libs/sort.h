@@ -3,6 +3,48 @@
 
 namespace sort
 {
+	template <typename data_t>
+	using list_t = scl::dynamic_array_t<data_t>;
+
+	template <typename data_t>
+	using comp_t = int(const data_t &, const data_t &);
+
+	// sort functions
+	template <typename data_t>
+	using sort_func_t = void(list_t, comp_t<data_t>*);
+
+	namespace tools
+	{
+		template <typename data_t>
+		void print_list(list_t<data_t> list)
+		{
+			std::cout << "[" << list.size() << "]: {";
+			if (list.empty() == 0)
+			{
+				std::cout << list[0];
+				for (size_t index = 1; index < vec.size(); index += 1)
+					std::cout << ", " << vec[index];
+			}
+			std::cout << "}" << std::endl;
+		}
+	}
+
+	template <typename data_t>
+	void insertion_sort(list_t<data_t> list, comp_t<data_t> comp)
+	{
+		size_t index_i = 1;
+		while (index_i < list.size)
+		{
+			size_t index_j = index_i;
+			while ((index_j > 0) && (comp(list[index_j - 1], list[index_j]) == 1))
+			{
+				std::swap(list[index_j - 1], list[index_j]);
+				index_j -= 1;
+			}
+			index_i += 1;
+		}
+	}
+
 	namespace linked_tree_sort
 	{
 		enum flag_t : uint8_t
@@ -26,61 +68,12 @@ namespace sort
 		};
 	}
 
-	template <typename data_T>
-	using list_t = scl::dynamic_array_t<data_t>;
-
-	namespace tools
-	{
-		template <typename array_t>
-		void print_list(array_t list)
-		{
-			std::cout << "[" << list.size() << "]: {";
-			
-		}
-	}
-
-	template <typename data_t>
-	void print_vector(std::vector<data_t> vec)
-	{
-		std::cout << "[" << vec.size() << "]: {";
-		if (!vec.empty())
-		{
-			std::cout << vec[0];
-			for (size_t index = 1; index < vec.size(); index += 1)
-				std::cout << ", " << vec[index];
-		}
-		std::cout << "}" << std::endl;
-	}
-
 	template <typename data_t>
 	void print_array(data_t *pntr, size_t size)
 	{
 		for (size_t index = 0; index < size; index += 1)
 			std::cout << pntr[index] << ", ";
 		std::cout << std::endl;
-	}
-
-	template <typename data_t>
-	using comp_t = int(const data_t &, const data_t &);
-
-	// sort functions
-	template <typename data_t>
-	using sort_func_t = void(data_t *, size_t, comp_t<data_t>*);
-
-	template <typename data_t>
-	void insertion_sort(data_t *pntr, size_t count, comp_t<data_t> comp)
-	{
-		size_t index_i = 1;
-		while (index_i < count)
-		{
-			size_t index_j = index_i;
-			while ((index_j > 0) && (comp(pntr[index_j - 1], pntr[index_j]) == 1))
-			{
-				std::swap(pntr[index_j - 1], pntr[index_j]);
-				index_j -= 1;
-			}
-			index_i += 1;
-		}
 	}
 
 	template <typename data_t>
