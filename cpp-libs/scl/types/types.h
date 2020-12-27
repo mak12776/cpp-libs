@@ -2,22 +2,9 @@
 
 namespace scl
 {
-	// const array
-
-	template <typename value_type = char>
-	struct const_array
-	{
-		const value_type *const pntr;
-		const size_t len;
-
-		template <size_t size>
-		const_array(const value_type(&pntr)[size]) : pntr(pntr), len(size - 1)
-		{ }
-	};
-
 	// size manager
 
-	typedef void(&size_manager_t)(size_t &size);
+	typedef void(*size_manager_t)(size_t &size);
 
 	template <size_t initial_size>
 	void double_size_manager(size_t &size)
@@ -54,7 +41,28 @@ namespace scl
 
 	constexpr size_manager_t default_size_manager = half_size_manager<16>;
 
+	// const array
+
+	template <typename value_type = char>
+	struct const_array
+	{
+		const value_type *const pntr;
+		const size_t len;
+
+		template <size_t size>
+		const_array(const value_type(&pntr)[size]) : pntr(pntr), len(size - 1)
+		{ }
+	};
+
 	// dynamic array
+
+	template <typename data_type, size_t array_size>
+	struct static_array_t
+	{
+		data_type pntr[array_size];
+
+		constexpr inline size_t size() { return array_size; }
+	};
 
 	template <typename data_type>
 	struct dynamic_array_t
@@ -83,18 +91,6 @@ namespace scl
 			this->size = size;
 		}
 
-		inline void reallocate(size_t size)
-		{
-			pntr = mem::safe_realloc_array<data_type>(size); ERR_CHECK_RETURN;
-			this->size = size;
-		}
-
-		inline void deallocate()
-		{
-			mem::free(pntr);
-			this->size = 0;
-		}
-
 		inline void allocate_fread_all(FILE *file)
 		{
 			io::malloc_fread_array_all<data_type>(file, &pntr, size); ERR_CHECK_NO_RETURN;
@@ -104,6 +100,20 @@ namespace scl
 		{
 			io::malloc_fopen_fread_array_all<data_type>(name, &pntr, size); ERR_CHECK_NO_RETURN;
 		}
+
+		inline void reallocate(size_t size)
+		{
+			pntr = mem::safe_realloc_array<data_type>(size); ERR_CHECK_RETURN;
+			this->size = size;
+		}
+
+		inline void deallocate()
+		{
+			mem::free(pntr);
+			this->pntr = nullptr;
+			this->size = 0;
+		}
+
 
 		// fread, fwrite
 
@@ -134,9 +144,16 @@ namespace scl
 		}
 	};
 
-	// dynamic list
+	// list
 
-	template <typename data_type, size_manager_t size_manager = half_size_manager<16>>
+	template <typename data_type>
+	struct static_list_t
+	{
+		data_type *pntr;
+		size_t len;
+	};
+
+	template <typename data_type, size_manager_t size_manager = default_size_manager>
 	struct dynamic_list_t
 	{
 		data_type *pntr;
@@ -158,19 +175,14 @@ namespace scl
 
 		inline void allocate(size_t size)
 		{
-			this->pntr = mem::safe_malloc_array<data_type>(size);
-			if (err::check_push(ERR_ARGS))
-				return;
-
+			this->pntr = mem::safe_malloc_array<data_type>(size); ERR_CHECK_RETURN;
 			this->len = 0;
 			this->size = size;
 		}
 
 		inline void reallocate(size_t size)
 		{
-			mem::safe_realloc_array<data_type>(&pntr, size);
-			if (err::check_push(ERR_ARGS))
-				return;
+			mem::safe_realloc_array<data_type>(&pntr, size); ERR_CHECK_RETURN;
 
 			if (this->len > size)
 				this->len = size;
@@ -179,8 +191,7 @@ namespace scl
 
 		inline void deallocate()
 		{
-			mem::free(pntr);
-			reset();
+			mem::free(pntr); reset();
 		}
 	};
 
@@ -231,10 +242,6 @@ namespace scl
 		}
 	};
 
-	struct linked_dynamic_array_t
-	{
-
-	};
 
 	// other types
 

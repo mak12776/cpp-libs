@@ -3,7 +3,7 @@
 
 namespace sort
 {
-	namespace lintree_sort
+	namespace linked_tree_sort
 	{
 		enum flag_t : uint8_t
 		{
@@ -20,7 +20,7 @@ namespace sort
 
 		struct list_tree
 		{
-			flag_t flag_pntr;
+			flag_t *flag_pntr;
 			size_t *root;
 			chain_node *chain_pntr;
 		};
