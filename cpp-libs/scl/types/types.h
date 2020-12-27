@@ -146,10 +146,10 @@ namespace scl
 
 	// list
 
-	template <typename data_type>
+	template <typename data_type, size_t array_size>
 	struct static_list_t
 	{
-		data_type *pntr;
+		data_type pntr[array_size];
 		size_t len;
 	};
 
@@ -260,6 +260,13 @@ namespace scl
 			last->pntr[len % array_size] = value;
 			len += 1;
 		}
+	};
+
+	template <typename data_type>
+	struct linked_list_t
+	{
+		typedef data_type& reference;
+		typedef const data_type& const_reference;
 	};
 
 

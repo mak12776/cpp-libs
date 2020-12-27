@@ -26,6 +26,19 @@ namespace sort
 		};
 	}
 
+	template <typename data_T>
+	using list_t = scl::dynamic_array_t<data_t>;
+
+	namespace tools
+	{
+		template <typename data_t>
+		void print_vector(list_t<data_t> vec)
+		{
+			std::cout << "[" << std::size(vec) << "]: {";
+
+		}
+	}
+
 	template <typename data_t>
 	void print_vector(std::vector<data_t> vec)
 	{
