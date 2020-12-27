@@ -100,15 +100,13 @@ namespace scl
 			va_copy(list_copy, list);
 			if (get_len_valist(len, fmt, list_copy))
 			{
-				err::set(err::PRINTF);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
+				err::set_push(err::PRINTF, ERR_ARGS);
 				return;
 			}
 
 			if (len == SIZE_MAX)
 			{
-				err::set(err::INT_OVERFLOW);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
+				err::set_push(err::INT_OVERFLOW, ERR_ARGS);
 				return;
 			}
 			len += 1;
@@ -116,16 +114,14 @@ namespace scl
 			buffer = (char *)malloc(len);
 			if (buffer == nullptr)
 			{
-				err::set(err::NO_MEMORY);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
+				err::set_push(err::NO_MEMORY, ERR_ARGS);
 				return;
 			}
 			buffer_size = len;
 
 			if (format_valist(buffer, buffer_size, fmt, list))
 			{
-				err::set(err::PRINTF);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
+				err::set_push(err::PRINTF, ERR_ARGS);
 
 				free(buffer);
 				return;
@@ -140,7 +136,7 @@ namespace scl
 			safe_malloc_format_valist(buffer, buffer_size, fmt, list);
 			va_end(list);
 
-			err::check_push(__FILE__, __LINE__, __FUNCTION__);
+			ERR_CHECK_NO_RETURN;
 		}
 
 		// check write ln
@@ -205,19 +201,15 @@ namespace scl
 			size_t size;
 			size_t write_number;
 
-			safe_malloc_format_valist(pntr, size, fmt, list);
-			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
+			safe_malloc_format_valist(pntr, size, fmt, list); ERR_CHECK_RETURN_VALUE(0);
 
 			pntr[size - 1] = '\n';
 			write_number = fwrite(pntr, 1, size, file);
 			free(pntr);
 
 			if (write_number != size)
-			{
-				err::set(err::FWRITE);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::FWRITE, ERR_ARGS);
+
 			return write_number;
 		}
 
@@ -230,7 +222,7 @@ namespace scl
 			write_number = safe_write_ln_valist(file, fmt, list);
 			va_end(list);
 
-			err::check_push(__FILE__, __LINE__, __FUNCTION__);
+			ERR_CHECK_NO_RETURN;
 			return write_number;
 		}
 
@@ -296,19 +288,15 @@ namespace scl
 			size_t size;
 			size_t write_number;
 
-			safe_malloc_format_valist(pntr, size, fmt, list);
-			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
+			safe_malloc_format_valist(pntr, size, fmt, list); ERR_CHECK_RETURN_VALUE(0);
 
 			size -= 1;
 			write_number = fwrite(pntr, 1, size, file);
 			free(pntr);
 
 			if (write_number != size)
-			{
-				err::set(err::FWRITE);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::FWRITE, ERR_ARGS);
+
 			return write_number;
 		}
 
@@ -321,7 +309,7 @@ namespace scl
 			write_number = safe_write_valist(file, fmt, list);
 			va_end(list);
 
-			err::check_push(__FILE__, __LINE__, __FUNCTION__);
+			ERR_CHECK_NO_RETURN;
 			return write_number;
 		}
 
@@ -349,7 +337,7 @@ namespace scl
 			size_t write_number;
 			write_number = safe_write_valist(stdout, fmt, list);
 
-			err::check_push(__FILE__, __LINE__, __FUNCTION__);
+			ERR_CHECK_NO_RETURN;
 			return write_number;
 		}
 
@@ -362,7 +350,7 @@ namespace scl
 			write_number = safe_write_valist(stdout, fmt, list);
 			va_end(fmt);
 
-			err::check_push(__FILE__, __LINE__, __FUNCTION__);
+			ERR_CHECK_NO_RETURN;
 			return write_number;
 		}
 
@@ -390,7 +378,7 @@ namespace scl
 			size_t write_number;
 			write_number = safe_write_ln_valist(stdout, fmt, list);
 
-			err::check_push(__FILE__, __LINE__, __FUNCTION__);
+			ERR_CHECK_NO_RETURN;
 			return write_number;
 		}
 
@@ -403,7 +391,7 @@ namespace scl
 			write_number = safe_write_ln_valist(stdout, fmt, list);
 			va_end(list);
 
-			err::check_push(__FILE__, __LINE__, __FUNCTION__);
+			ERR_CHECK_NO_RETURN;
 			return write_number;
 		}
 
@@ -432,9 +420,7 @@ namespace scl
 
 			width = (width == 0) ? DEFAULT_WIDTH : width;
 
-			buffer = (ubyte *)mem::safe_malloc(width + 1);
-			if (err::check_push(__FILE__, __LINE__, __FUNCTION__))
-				return 0;
+			buffer = (ubyte *)mem::safe_malloc(width + 1); ERR_CHECK_RETURN_VALUE(0);
 
 			for (size_t length = 0; length < width; length += 1)
 				buffer[length] = character;
