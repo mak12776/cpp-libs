@@ -216,8 +216,7 @@ namespace scl
 		node_t *first;
 		node_t *last;
 
-		linked_array_t()
-			: len(0), first(nullptr), last(nullptr) { }
+		linked_array_t() : len(0), first(nullptr), last(nullptr) { }
 
 		inline bool append(reference value)
 		{
