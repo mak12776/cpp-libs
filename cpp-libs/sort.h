@@ -31,11 +31,11 @@ namespace sort
 
 	namespace tools
 	{
-		template <typename data_t>
-		void print_vector(list_t<data_t> vec)
+		template <typename array_t>
+		void print_list(array_t list)
 		{
-			std::cout << "[" << std::size(vec) << "]: {";
-
+			std::cout << "[" << list.size() << "]: {";
+			
 		}
 	}
 

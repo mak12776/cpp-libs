@@ -34,10 +34,8 @@ namespace scl
 		{
 			size_t len = 0;
 			if (get_len_valist(len, fmt, list))
-			{
-				err::set(err::PRINTF);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::PRINTF, ERR_ARGS);
+
 			return len;
 		}
 
@@ -60,10 +58,7 @@ namespace scl
 		static inline void safe_format_valist(char *buffer, size_t buffer_size, const char *fmt, va_list list)
 		{
 			if (format_valist(buffer, buffer_size, fmt, list))
-			{
-				err::set(err::PRINTF);
-				err::push(__FILE__, __LINE__, __FUNCTION__);
-			}
+				err::set_push(err::PRINTF, ERR_ARGS);
 		}
 
 		// malloc format
