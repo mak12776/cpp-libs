@@ -20,11 +20,11 @@ namespace sort
 		template <typename data_t>
 		void print_array(array_t<data_t> list)
 		{
-			std::cout << "[" << list.size() << "]: {";
+			std::cout << "[" << list.size << "]: {";
 			if (list.empty() == 0)
 			{
 				std::cout << list[0];
-				for (size_t index = 1; index < list.size(); index += 1)
+				for (size_t index = 1; index < list.size; index += 1)
 					std::cout << ", " << list[index];
 			}
 			std::cout << "}" << std::endl;

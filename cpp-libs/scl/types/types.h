@@ -134,19 +134,19 @@ namespace scl
 		{ 
 			data_type *iter_pntr; 
 
-			inline reference operator*()
+			constexpr inline reference operator*()
 			{
 				return *iter_pntr;
 			}
 
-			inline bool operator!=(iterator other)
+			constexpr inline bool operator!=(iterator other)
 			{
 				return this->iter_pntr != other.iter_pntr;
 			}
 
-			iterator operator++()
+			constexpr void operator++()
 			{
-				return iterator{ this->iter_pntr + 1 };
+				this->iter_pntr++;
 			}
 		};
 
