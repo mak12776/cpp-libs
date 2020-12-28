@@ -31,6 +31,16 @@ namespace sort
 		}
 
 		template <typename data_type>
+		array_t<data_type> copy_array(array_t<data_type> array)
+		{
+			array_t<data_type> result;
+			result.allocate(result.size()); ERR_CHECK_RETURN_VALUE(result);
+			std::copy(array.begin(), array.end(), result.begin());
+			return result;
+		}
+
+
+		template <typename data_type>
 		array_t<data_type> best_array(size_t size)
 		{
 			array_t<data_type> result;
@@ -58,9 +68,7 @@ namespace sort
 		array_t<data_type> worst_array(size_t size)
 		{
 			array_t<data_type> result;
-			data_type step;
-
-			scl::math::safe_cast_value(size, step); ERR_CHECK_RETURN_VALUE(result);
+			data_type step = (data_type)size;
 
 			result.allocate(size); ERR_CHECK_RETURN_VALUE(result);
 			for (size_t index = 0; index < result.size(); index++)
