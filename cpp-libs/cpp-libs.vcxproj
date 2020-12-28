@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="sort.h" />
     <ClInclude Include="scl\compressor.h" />
     <ClInclude Include="incomplete scl\old_string.h" />
     <ClInclude Include="primes.h" />

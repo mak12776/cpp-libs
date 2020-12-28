@@ -126,6 +126,9 @@
     <ClInclude Include="scl\sort.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
+    <ClInclude Include="sort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
