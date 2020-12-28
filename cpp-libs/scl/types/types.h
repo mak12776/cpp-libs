@@ -4,7 +4,36 @@ namespace scl
 {
 	// size manager
 
+	// --- header definitions ---
+
 	typedef void(*size_manager_t)(size_t &size);
+
+	template <size_t initial_size>
+	void double_size_manager(size_t &size);
+
+	template <size_t initial_size>
+	void half_size_manager(size_t &size);
+
+	template <size_t initial_size, size_t adder_size>
+	void adder_size_manager(size_t &size);
+
+	constexpr size_manager_t default_size_manager = half_size_manager<16>;
+
+	template <typename data_type, size_t array_size>
+	struct static_array_t;
+
+	template <typename data_type>
+	struct dynamic_array_t;
+
+	template <typename data_type, size_t array_size>
+	struct static_list_t;
+
+	template <typename data_type, size_manager_t size_manager = default_size_manager>
+	struct dynamic_list_t;
+
+
+
+	// --- source declerations ---
 
 	template <size_t initial_size>
 	void double_size_manager(size_t &size)
@@ -39,8 +68,6 @@ namespace scl
 		math::safe_add(size, adder_size, size); ERR_CHECK_NO_RETURN;
 	}
 
-	constexpr size_manager_t default_size_manager = half_size_manager<16>;
-
 	// const array
 
 	template <typename value_type = char>
@@ -64,6 +91,7 @@ namespace scl
 		constexpr inline size_t size() { return array_size; }
 	};
 
+
 	template <typename data_type>
 	struct dynamic_array_t
 	{
@@ -78,9 +106,58 @@ namespace scl
 
 		// operators
 
-		inline data_type &operator[](size_t index)
+		template <size_manager_t size_manager>
+		inline void as_dynamic_list(dynamic_list_t<data_type, size_manager> &list)
+		{
+			list.pntr = this->pntr;
+			list.size = this->size;
+			list.len = this->size;
+		}
+
+		inline operator dynamic_list_t<data_type> const ()
+		{
+			dynamic_list_t<data_type> result;
+			result.pntr = this->pntr;
+			result.len = this->size;
+			result.size = this->size;
+			return result;
+		}
+
+		inline reference operator[](size_t index)
 		{
 			return pntr[index];
+		}
+
+		// iterators
+
+		struct iterator
+		{ 
+			data_type *iter_pntr; 
+
+			inline reference operator*()
+			{
+				return *iter_pntr;
+			}
+
+			inline bool operator!=(iterator other)
+			{
+				return this->iter_pntr != other.iter_pntr;
+			}
+
+			iterator operator++()
+			{
+				return iterator{ this->iter_pntr + 1 };
+			}
+		};
+
+		constexpr iterator begin()
+		{
+			return iterator{this->pntr};
+		}
+
+		constexpr iterator end()
+		{
+			return iterator{ this->pntr + this->size };
 		}
 
 		// allocation
@@ -103,7 +180,7 @@ namespace scl
 
 		inline void reallocate(size_t size)
 		{
-			pntr = mem::safe_realloc_array<data_type>(size); ERR_CHECK_RETURN;
+			mem::safe_realloc_array<data_type>(&pntr, size); ERR_CHECK_RETURN;
 			this->size = size;
 		}
 
@@ -153,7 +230,7 @@ namespace scl
 		size_t len;
 	};
 
-	template <typename data_type, size_manager_t size_manager = default_size_manager>
+	template <typename data_type, size_manager_t size_manager>
 	struct dynamic_list_t
 	{
 		data_type *pntr;
@@ -170,6 +247,17 @@ namespace scl
 
 	public:
 		dynamic_list_t() { reset(); }
+
+		// operators
+
+		inline operator dynamic_array_t<data_type> const ()
+		{
+			dynamic_array_t<data_type> result;
+			result.pntr = this->pntr;
+			result.len = this->size;
+			result.size = this->size;
+			return result;
+		}
 
 		// allocation
 
