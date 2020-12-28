@@ -102,9 +102,6 @@
     <ClInclude Include="scl\winapi\conv.h">
       <Filter>Header Files\scl\winapi</Filter>
     </ClInclude>
-    <ClInclude Include="compressor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scl\types\types.h">
       <Filter>Header Files\scl\types</Filter>
     </ClInclude>
@@ -124,7 +121,10 @@
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
     <ClInclude Include="sort.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\scl</Filter>
+    </ClInclude>
+    <ClInclude Include="compressor.h">
+      <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

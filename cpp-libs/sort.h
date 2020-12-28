@@ -1,5 +1,7 @@
 
 #include "scl/all.h"
+#include <variant>
+#include <execution>
 
 namespace sort
 {
@@ -87,16 +89,36 @@ namespace sort
 		
 	}
 
-	template <typename data_t>
-	using data_comp_t = bool(*)(const data_t *, const data_t *);
 
-	using int_comp_t = int(*)(const void *, const void *);
+	template <typename data_type>
+	int void_comp(const void *_first, const void *_second)
+	{
+		data_type *first = static_cast<data_type *>(_first);
+		data_type *second = static_cast<data_type *>(_second);
+		if ((*first) < (*second)) return -1;
+		if ((*first) > (*second)) return 1;
+		return 0;
+	}
+
+	template <typename data_type>
+	bool data_comp(const data_type &first, const data_type &second) { return first < second; }
+
+	template <typename data_type>
+	using void_comp_t = int(*)(const void *, const void *);
+
+	template <typename data_type>
+	using data_comp_t = bool(*)(const data_type&, const data_type&);
+
+	template <typename data_type>
+	using comp_t = std::variant<void_comp_t<data_type>, data_comp_t<data_type>>;
+
+
 
 	template <typename data_t>
 	using sort_func_t = void(*)(array_t<data_t>, data_comp_t<data_t>);
 
 	template <typename data_t>
-	void insertion_sort(array_t<data_t> list, int_comp_t comp)
+	void insertion_sort(array_t<data_t> list, comp_t<data_t> comp)
 	{
 		size_t index_i = 1;
 		while (index_i < list.size())
@@ -137,11 +159,6 @@ namespace sort
 	};
 
 	typedef uint32_t DataType;
-
-	int data_comp(const void *_first, const void *_second)
-	{
-		DataType *first = static_cast<DataType*>(_first);
-	}
 
 	func_list_t<DataType> func_list[] = {
 		{"std_sort", std_sort}
