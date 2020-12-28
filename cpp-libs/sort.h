@@ -14,8 +14,7 @@ namespace sort
 
 	namespace tools
 	{
-		using random_engine = std::default_random_engine;
-		random_engine engine;
+		std::default_random_engine engine;
 
 		template <class T>
 		list<T> best_list(size_t size, T initial = std::numeric_limits<T>::min())
@@ -52,13 +51,15 @@ namespace sort
 
 		template <class T, size_t size>
 		using list_creator_array = std::array<std::tuple<list_creator<T>, std::string>, size>;
-
-		using data_type = uint32_t;
-
-		list_creator_array<data_type, 3> creator_array = {
-			std::make_tuple(best_list<data_type>, std::string("best sort")),
-			std::make_tuple(worst_list<data_type>, std::string("worst sort")),
-			std::make_tuple(unique_list<data_type>, std::string("unique sort")),
-		};
 	}
+
+	using data_type = uint32_t;
+
+	tools::list_creator_array<data_type, 3> creator_array = {
+			std::make_tuple(tools::best_list<data_type>, std::string("best sort")),
+			std::make_tuple(tools::worst_list<data_type>, std::string("worst sort")),
+			std::make_tuple(tools::unique_list<data_type>, std::string("unique sort")),
+	};
+
+
 }
