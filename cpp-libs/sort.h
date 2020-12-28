@@ -83,17 +83,20 @@ namespace sort
 
 			return result;
 		}
+
+		
 	}
 
-	using comp_t = int(*)(const void *, const void *);
+	template <typename data_t>
+	using data_comp_t = bool(*)(const data_t *, const data_t *);
 
-
+	using int_comp_t = int(*)(const void *, const void *);
 
 	template <typename data_t>
-	using sort_func_t = void(*)(array_t<data_t>, comp_t);
+	using sort_func_t = void(*)(array_t<data_t>, data_comp_t<data_t>);
 
 	template <typename data_t>
-	void insertion_sort(array_t<data_t> list, comp_t comp)
+	void insertion_sort(array_t<data_t> list, int_comp_t comp)
 	{
 		size_t index_i = 1;
 		while (index_i < list.size())
@@ -109,19 +112,19 @@ namespace sort
 	}
 
 	template <typename data_t>
-	void std_sort(array_t<data_t> array, comp_t comp)
+	void std_sort(array_t<data_t> array, data_comp_t<data_t> comp)
 	{
 		std::sort(std::execution::seq, array.begin(), array.end(), comp);
 	}
 
 	template <typename data_t>
-	void std_stable_sort(array_t<data_t> array, comp_t comp)
+	void std_stable_sort(array_t<data_t> array, data_comp_t<data_t> comp)
 	{
 		std::stable_sort(std::execution::seq, array.begin(), array.end(), comp);
 	}
 	
 	template <typename data_t>
-	void std_qsort(array_t<data_t> array, comp_t comp)
+	void std_qsort(array_t<data_t> array, data_comp_t<data_t> comp)
 	{
 		std::qsort(array.data(), array.size(), sizeof(array.value_type), comp);
 	}
