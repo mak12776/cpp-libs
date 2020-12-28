@@ -83,25 +83,12 @@ namespace sort
 
 			return result;
 		}
-
-
-		template <typename data_type>
-		int data_comp(const void *_first, const void *_second)
-		{
-			const data_type *first = static_cast<const data_type*>(_first);
-			const data_type *second = static_cast<const data_type*>(_second);
-
-			if ((*first) < (*second)) return -1;
-			if ((*first) > (*second)) return 1;
-			return 0;
-		}
 	}
 
-	template <typename data_t>
 	using comp_t = int(*)(const void *, const void *);
 
 	template <typename data_t>
-	using sort_func_t = void(*)(array_t<data_t>, comp_t<data_t>);
+	using sort_func_t = void(*)(array_t<data_t>, comp_t);
 
 	template <typename data_t>
 	void insertion_sort(array_t<data_t> list, comp_t<data_t> comp)
@@ -140,17 +127,16 @@ namespace sort
 	template <typename data_t>
 	struct func_list_t
 	{
-		struct
-		{
-			const char *name;
-			sort_func_t<data_t> func;
-		} *list;
-		comp_t<data_t> comp;
+		const char *name;
+		sort_func_t<data_t> func;
 	};
 
 	typedef uint32_t DataType;
 
-	comp_t<DataType> simple_comp = tools::data_comp<DataType>;
+	func_list_t<DataType> func_list[] = {
+		{"std_sort", std_sort}
+	};
+
 
 	namespace linked_tree_sort
 	{
