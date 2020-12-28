@@ -95,6 +95,8 @@ namespace scl
 	template <typename data_type>
 	struct dynamic_array_t
 	{
+		typedef data_type value_type;
+
 		typedef data_type &reference;
 		typedef const data_type &const_reference;
 

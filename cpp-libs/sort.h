@@ -6,13 +6,6 @@ namespace sort
 	template <typename data_t>
 	using array_t = scl::dynamic_array_t<data_t>;
 
-	template <typename data_t>
-	using comp_t = int(const data_t &, const data_t &);
-
-	// sort functions
-	template <typename data_t>
-	using sort_func_t = void(array_t<data_t>, comp_t<data_t>*);
-
 	typedef std::mt19937_64 default_random_engine;
 
 	namespace tools
@@ -90,7 +83,25 @@ namespace sort
 
 			return result;
 		}
+
+
+		template <typename data_type>
+		int data_comp(const void *_first, const void *_second)
+		{
+			const data_type *first = static_cast<const data_type*>(_first);
+			const data_type *second = static_cast<const data_type*>(_second);
+
+			if ((*first) < (*second)) return -1;
+			if ((*first) > (*second)) return 1;
+			return 0;
+		}
 	}
+
+	template <typename data_t>
+	using comp_t = int(*)(const void *, const void *);
+
+	template <typename data_t>
+	using sort_func_t = void(*)(array_t<data_t>, comp_t<data_t>);
 
 	template <typename data_t>
 	void insertion_sort(array_t<data_t> list, comp_t<data_t> comp)
@@ -108,7 +119,66 @@ namespace sort
 		}
 	}
 
+	template <typename data_t>
+	void std_sort(array_t<data_t> array, comp_t<data_t> comp)
+	{
+		std::sort(std::execution::seq, array.begin(), array.end(), comp);
+	}
+
+	template <typename data_t>
+	void std_stable_sort(array_t<data_t> array, comp_t<data_t> comp)
+	{
+		std::stable_sort(std::execution::seq, array.begin(), array.end(), comp);
+	}
+	
+	template <typename data_t>
+	void std_qsort(array_t<data_t> array, comp_t<data_t> comp)
+	{
+		std::qsort(array.data(), array.size(), sizeof(array.value_type), comp);
+	}
+
+	template <typename data_t>
+	struct func_list_t
+	{
+		struct
+		{
+			const char *name;
+			sort_func_t<data_t> func;
+		} *list;
+		comp_t<data_t> comp;
+	};
+
+	typedef uint32_t DataType;
+
+	comp_t<DataType> simple_comp = tools::data_comp<DataType>;
+
 	namespace linked_tree_sort
 	{
+		enum flag_t : uint8_t
+		{
+			AVAIBLE = 0x80,
+			HAS_LEFT = 0x40,
+			HAS_RIGHT = 0x20,
+		};
+
+		struct chain_node
+		{
+			size_t left;
+			size_t right;
+		};
+
+		struct list_tree
+		{
+			flag_t *flag_pntr;
+			chain_node *chain_pntr;
+
+			void allocate(size_t size)
+			{
+				chain_pntr = scl::mem::safe_malloc_array<chain_node>(size); 
+				ERR_CHECK_RETURN;
+
+
+			}
+		};
 	}
 }
