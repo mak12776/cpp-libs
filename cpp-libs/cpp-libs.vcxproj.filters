@@ -120,10 +120,10 @@
     <ClInclude Include="scl\features\mem.h">
       <Filter>Header Files\scl\features</Filter>
     </ClInclude>
-    <ClInclude Include="sort.h">
+    <ClInclude Include="scl\compressor.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
-    <ClInclude Include="compressor.h">
+    <ClInclude Include="scl\sort.h">
       <Filter>Header Files\scl</Filter>
     </ClInclude>
   </ItemGroup>

@@ -154,7 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="compressor.h" />
+    <ClInclude Include="scl\compressor.h" />
     <ClInclude Include="incomplete scl\old_string.h" />
     <ClInclude Include="primes.h" />
     <ClInclude Include="programs\bh.h" />
@@ -179,7 +179,7 @@
     <ClInclude Include="scl\types\types.h" />
     <ClInclude Include="scl\winapi\functions.h" />
     <ClInclude Include="scl\winapi\conv.h" />
-    <ClInclude Include="sort.h" />
+    <ClInclude Include="scl\sort.h" />
     <ClInclude Include="winapi\all.h" />
     <ClInclude Include="winapi\time.h" />
     <ClInclude Include="winapi\tools.h" />
