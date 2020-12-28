@@ -6,23 +6,16 @@
 
 // windows headers
 
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <io.h>
 #include <Windows.h>
 
 
 #include <random>
 #include <cinttypes>
-#include <cstdio>
 #include <cstdarg>
+
 #include <string>
+
 #include <variant>
-
-
-
-
 
 #endif // 0
 // <sys/types.h> <sys/stat.h> <io.h>
@@ -50,6 +43,7 @@
 #include <cinttypes>	// needed by "features/gc.h", "features/err.h"
 
 #endif
+
 
 // scl headers
 #include "macros.h"
