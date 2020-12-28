@@ -98,97 +98,86 @@ namespace scl
 		typedef data_type &reference;
 		typedef const data_type &const_reference;
 
-		data_type *pntr;
-		size_t size;
+		typedef data_type *pointer;
 
-		dynamic_array_t() : pntr(nullptr), size(0) {}
-		dynamic_array_t(data_type *pntr, size_t size) : pntr(pntr), size(size) {}
+		pointer pntr;
+		size_t array_size;
+
+		dynamic_array_t() : pntr(nullptr), array_size(0) {}
+		dynamic_array_t(data_type *pntr, size_t size) : pntr(pntr), array_size(size) {}
+
+		// members functions
+
+		constexpr size_t size() { return this->array_size; }
+		constexpr bool empty() { return this->array_size == 0; }
+		constexpr pointer data() { return this->pntr; }
 
 		// operators
-
-		template <size_manager_t size_manager>
-		inline void as_dynamic_list(dynamic_list_t<data_type, size_manager> &list)
-		{
-			list.pntr = this->pntr;
-			list.size = this->size;
-			list.len = this->size;
-		}
-
-		inline operator dynamic_list_t<data_type> const ()
-		{
-			dynamic_list_t<data_type> result;
-			result.pntr = this->pntr;
-			result.len = this->size;
-			result.size = this->size;
-			return result;
-		}
 
 		inline reference operator[](size_t index)
 		{
 			return pntr[index];
 		}
 
+		// cast operators
+
+		template <size_manager_t size_manager>
+		inline void as_dynamic_list(dynamic_list_t<data_type, size_manager> &list)
+		{
+			list.pntr = this->pntr;
+			list.size = this->array_size;
+			list.len = this->array_size;
+		}
+
+		inline operator dynamic_list_t<data_type> const ()
+		{
+			dynamic_list_t<data_type> result;
+			result.pntr = this->pntr;
+			result.len = this->array_size;
+			result.size = this->array_size;
+			return result;
+		}
+
 		// iterators
 
-		struct iterator
-		{ 
-			data_type *iter_pntr; 
+		typedef data_type *iterator;
+		typedef const data_type *const_iterator;
 
-			constexpr inline reference operator*()
-			{
-				return *iter_pntr;
-			}
+		constexpr iterator begin() { return this->pntr; } 
+		constexpr const_iterator cbegin() { return this->pntr; }
+		constexpr iterator end() { return this->pntr + this->array_size; }
+		constexpr const_iterator cend() { return this->pntr + this->array_size; }
 
-			constexpr inline bool operator!=(iterator other)
-			{
-				return this->iter_pntr != other.iter_pntr;
-			}
-
-			constexpr void operator++()
-			{
-				this->iter_pntr++;
-			}
-		};
-
-		constexpr iterator begin()
-		{
-			return iterator{this->pntr};
-		}
-
-		constexpr iterator end()
-		{
-			return iterator{ this->pntr + this->size };
-		}
 
 		// allocation
 
 		inline void allocate(size_t size)
 		{
 			pntr = mem::safe_malloc_array<data_type>(size); ERR_CHECK_RETURN;
-			this->size = size;
+			this->array_size = size;
 		}
 
 		inline void allocate_fread_all(FILE *file)
 		{
-			io::malloc_fread_array_all<data_type>(file, &pntr, size); ERR_CHECK_NO_RETURN;
+			io::malloc_fread_array_all<data_type>(file, &pntr, array_size); ERR_CHECK_NO_RETURN;
 		}
 
 		inline void allocate_fopen_fread_all(const char *name)
 		{
-			io::malloc_fopen_fread_array_all<data_type>(name, &pntr, size); ERR_CHECK_NO_RETURN;
+			io::malloc_fopen_fread_array_all<data_type>(name, &pntr, array_size); ERR_CHECK_NO_RETURN;
 		}
 
 		inline void reallocate(size_t size)
 		{
 			mem::safe_realloc_array<data_type>(&pntr, size); ERR_CHECK_RETURN;
-			this->size = size;
+			this->array_size = size;
 		}
 
 		inline void deallocate()
 		{
 			mem::free(pntr);
 			this->pntr = nullptr;
-			this->size = 0;
+			this->array_size = 0;
 		}
 
 
@@ -196,13 +185,13 @@ namespace scl
 
 		inline size_t fread(FILE *file)
 		{
-			size_t read_number = io::fread_array<data_type>(pntr, size, file); ERR_CHECK_NO_RETURN;
+			size_t read_number = io::fread_array<data_type>(pntr, array_size, file); ERR_CHECK_NO_RETURN;
 			return read_number;
 		}
 
 		inline size_t fwrite(FILE *file)
 		{
-			size_t write_number = io::fwrite_array<data_type>(pntr, size, file); ERR_CHECK_NO_RETURN;
+			size_t write_number = io::fwrite_array<data_type>(pntr, array_size, file); ERR_CHECK_NO_RETURN;
 			return write_number;
 		}
 
@@ -210,13 +199,13 @@ namespace scl
 
 		inline size_t fopen_fread(const char *name)
 		{
-			size_t read_number = io::fopen_fread(name, pntr, size); ERR_CHECK_NO_RETURN;
+			size_t read_number = io::fopen_fread(name, pntr, array_size); ERR_CHECK_NO_RETURN;
 			return read_number;
 		}
 
 		inline size_t fopen_fwrite(const char *name)
 		{
-			size_t write_number = io::fopen_fwrite(name, pntr, size); ERR_CHECK_NO_RETURN;
+			size_t write_number = io::fopen_fwrite(name, pntr, array_size); ERR_CHECK_NO_RETURN;
 			return write_number;
 		}
 	};
