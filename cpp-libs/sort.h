@@ -87,11 +87,13 @@ namespace sort
 
 	using comp_t = int(*)(const void *, const void *);
 
+
+
 	template <typename data_t>
 	using sort_func_t = void(*)(array_t<data_t>, comp_t);
 
 	template <typename data_t>
-	void insertion_sort(array_t<data_t> list, comp_t<data_t> comp)
+	void insertion_sort(array_t<data_t> list, comp_t comp)
 	{
 		size_t index_i = 1;
 		while (index_i < list.size())
@@ -107,19 +109,19 @@ namespace sort
 	}
 
 	template <typename data_t>
-	void std_sort(array_t<data_t> array, comp_t<data_t> comp)
+	void std_sort(array_t<data_t> array, comp_t comp)
 	{
 		std::sort(std::execution::seq, array.begin(), array.end(), comp);
 	}
 
 	template <typename data_t>
-	void std_stable_sort(array_t<data_t> array, comp_t<data_t> comp)
+	void std_stable_sort(array_t<data_t> array, comp_t comp)
 	{
 		std::stable_sort(std::execution::seq, array.begin(), array.end(), comp);
 	}
 	
 	template <typename data_t>
-	void std_qsort(array_t<data_t> array, comp_t<data_t> comp)
+	void std_qsort(array_t<data_t> array, comp_t comp)
 	{
 		std::qsort(array.data(), array.size(), sizeof(array.value_type), comp);
 	}
@@ -132,6 +134,11 @@ namespace sort
 	};
 
 	typedef uint32_t DataType;
+
+	int data_comp(const void *_first, const void *_second)
+	{
+		DataType *first = static_cast<DataType*>(_first);
+	}
 
 	func_list_t<DataType> func_list[] = {
 		{"std_sort", std_sort}
