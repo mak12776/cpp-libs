@@ -167,31 +167,6 @@ namespace sort
 
 	namespace linked_tree_sort
 	{
-		enum flag_t : uint8_t
-		{
-			AVAIBLE = 0x80,
-			HAS_LEFT = 0x40,
-			HAS_RIGHT = 0x20,
-		};
-
-		struct chain_node
-		{
-			size_t left;
-			size_t right;
-		};
-
-		struct list_tree
-		{
-			flag_t *flag_pntr;
-			chain_node *chain_pntr;
-
-			void allocate(size_t size)
-			{
-				chain_pntr = scl::mem::safe_malloc_array<chain_node>(size); 
-				ERR_CHECK_RETURN;
-
-
-			}
-		};
+		
 	}
 }
