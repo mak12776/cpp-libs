@@ -165,8 +165,4 @@ namespace sort
 	};
 
 
-	namespace linked_tree_sort
-	{
-		
-	}
 }
