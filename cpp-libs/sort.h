@@ -6,6 +6,7 @@
 #include <random>
 #include <variant>
 #include <array>
+#include <tuple>
 
 namespace sort
 {
@@ -14,118 +15,141 @@ namespace sort
 
 	namespace tools
 	{
+		// list creators
+
 		std::default_random_engine engine;
 
-		template <class T>
-		list<T> best_list(size_t size, T initial = std::numeric_limits<T>::min())
+		template <class data_type>
+		list<data_type> best_list(size_t size)
 		{
-			std::vector<T> vec(size);
-			std::generate(std::execution::par, vec.begin(), vec.end(), [&] {return initial++; });
+			data_type value = std::numeric_limits<data_type>::min();
+			std::vector<data_type> vec(size);
+			std::generate(std::execution::par, vec.begin(), vec.end(), [&] {return value++; });
 			return vec;
 		}
 
-		template <class T>
-		list<T> worst_list(size_t size, T initial = std::numeric_limits<T>::max())
+		template <class data_type>
+		list<data_type> worst_list(size_t size)
 		{
-			std::vector<T> vec(size);
-			std::generate(std::execution::par, vec.begin(), vec.end(), [&] {return initial--; });
+			data_type value = std::numeric_limits<data_type>::max();
+			std::vector<data_type> vec(size);
+			std::generate(std::execution::par, vec.begin(), vec.end(), [&] {return value--; });
 			return vec;
 		}
 
-		template <class T>
-		list<T> unique_list(size_t size)
+		template <class data_type>
+		list<data_type> unique_list(size_t size)
 		{
-			std::vector<T> vec = best_list<T>(size);
+			std::vector<data_type> vec = best_list<data_type>(size);
 			std::shuffle(vec.begin(), vec.end(), engine);
 			return vec;
 		}
+
+		template <class data_type>
+		using list_creator = std::function<list<data_type>(size_t)>;
+
+		template <class data_type>
+		using list_creator_vector = std::vector<std::tuple<std::string, list_creator<data_type>>>;
+
+		template <class data_type>
+		list_creator_vector<data_type> creator_vector = {
+			std::make_tuple(std::string("best sort"), best_list<data_type>),
+			std::make_tuple(std::string("worst sort"), worst_list<data_type>),
+			std::make_tuple(std::string("unique sort"), unique_list<data_type>),
+		};
+
+		// compare functions
+
+		template <class data_type>
+		using lt_comp_t = std::function<bool(const data_type&, const data_type&)>;
+		using int_comp_t = int(*)(const void *, const void *);
+
+		template <class data_type>
+		using comp_t = std::variant<lt_comp_t<data_type>, int_comp_t>;
+
+		static size_t compares_number = 0;
+		void reset_compares_number() { compares_number = 0; }
+
+		template <class data_type>
+		bool lt_comp(const data_type &first, const data_type& second) 
+		{ 
+			compares_number += 1;
+			return first < second;
+		}
+
+		template <class data_type>
+		int int_comp(const void *_first, const void *_second)
+		{
+			const data_type *first = static_cast<const data_type*>(_first);
+			const data_type *second = static_cast<const data_type*>(_second);
+
+			compares_number += 1;
+			if ((*first) < (*second)) return -1;
+			if ((*first) > (*second)) return 1;
+			return 0;
+		}
+
+		// sort functions
+
+		template <class data_type>
+		using lt_sort_function = std::function<void(std::vector<data_type>&, lt_comp_t<data_type>)>;
+
+		template <class data_type>
+		using int_sort_function = std::function<void(std::vector<data_type>&, int_comp_t)>;
+
+		template <class data_type>
+		using sort_function = std::variant<lt_sort_function<data_type>, int_sort_function<data_type>>;
+
+		template <class data_type>
+		using sort_function_vector = std::vector<std::tuple<std::string, sort_function<data_type>>>;
+
 	}
 
-	template <class T>
-	using list_creator_with_initial = std::function<list<T>(size_t, T)>;
-
-	template <class T>
-	using normal_list_creator = std::function<list<T>(size_t)>;
-
-	template <class T>
-	using list_creator = std::variant<list_creator_with_initial<T>, normal_list_creator<T>>;
-
-	template <class T>
-	using list_creator_vector = std::vector<std::tuple<list_creator<T>, std::string>>;
-
 	template <typename data_type>
-	list_creator_vector<data_type> creator_vector = {
-			std::make_tuple(tools::best_list<data_type>, std::string("best sort")),
-			std::make_tuple(tools::worst_list<data_type>, std::string("worst sort")),
-			std::make_tuple(tools::unique_list<data_type>, std::string("unique sort")),
-	};
-
-	template <class T>
-	using lt_comp_t = std::function<bool(const T&, const T&)>;
-
-	template <class T>
-	using int_comp_t = std::function<bool(const void *, const void *)>;
-
-	template <class T>
-	using comp_t = std::variant<lt_comp_t<T>, int_comp_t<T>>;
-
-	template <class T>
-	bool lt_comp(const T &first, const T& second) { return first < second; }
-
-	template <class T>
-	int int_comp(const void *_first, const void *_second)
-	{
-		T *first = static_cast<T*>(_first);
-		T *second = static_cast<T*>(_second);
-
-		if ((*first) < (*second)) return -1;
-		if ((*first) > (*second)) return 1;
-		return 0;
-	}
-
-	template <class T>
-	using lt_sort_function = std::function<void(std::vector<T>&, lt_comp_t<T>)>;
-
-	template <class T>
-	using int_sort_function = std::function<void(std::vector<T>&, int_comp_t<T>)>;
-
-	template <class T>
-	using sort_function = std::variant<lt_sort_function<T>, int_sort_function<T>>;
-
-	template <typename data_type>
-	void std_sort(std::vector<data_type> &vec, lt_comp_t<data_type> comp)
+	void std_sort(std::vector<data_type> &vec, tools::lt_comp_t<data_type> comp)
 	{
 		std::sort(std::execution::seq, vec.begin(), vec.end(), comp);
 	}
 
-	template <class T>
-	void std_stable_sort(std::vector<T> &vec, lt_comp_t<T> comp)
+	template <class data_type>
+	void std_stable_sort(std::vector<data_type> &vec, tools::lt_comp_t<data_type> comp)
 	{
 		std::stable_sort(std::execution::seq, vec.begin(), vec.end(), comp);
 	}
 
-	template <class T>
-	void std_qsort(std::vector<T> &vec, int_comp_t<T> comp)
+	template <class data_type>
+	void std_qsort(std::vector<data_type> &vec, tools::int_comp_t comp)
 	{
-		std::qsort(vec.data(), vec.size(), sizeof(T), comp);
+		std::qsort(vec.data(), vec.size(), sizeof(data_type), comp);
 	}
 
-	template <class T>
-	using sort_function_vector = std::vector<std::tuple<std::string, sort_function<T>, comp_t<T>>>;
-
-	template <class T>
-	sort_function_vector<T> sort_vector = {
-		std::make_tuple(std::string("std sort"), std_sort<T>, lt_comp<T>),
-		std::make_tuple(std::string("std stable sort"), std_stable_sort<T>, lt_comp<T>),
-		std::make_tuple(std::string("std stable sort"), std_qsort<T>, int_comp<T>),
+	template <class data_type>
+	tools::sort_function_vector<data_type> sort_vector = {
+		std::make_tuple(std::string("std sort"), std_sort<data_type>),
+		std::make_tuple(std::string("std stable sort"), std_stable_sort<data_type>),
+		std::make_tuple(std::string("std qsort"), std_qsort<data_type>),
 	};
 
 
 
-
-	template <typename T>
-	void test_sort_functions(list_creator_vector<T> &creator_vector, sort_function_vector<T> &sort_vector)
+	template <class data_type>
+	void test_functions(tools::list_creator_vector<data_type> &creator_vector, tools::sort_function_vector<data_type> &sort_vector, size_t size)
 	{
+		std::vector<std::vector<data_type>> vectors(creator_vector.size());
 
+		// creating vectors
+		for (size_t index = 0; index < vectors.size(); index += 1)
+		{
+			tools::list_creator<data_type> creator = std::get<tools::list_creator<data_type>>(creator_vector[index]);
+			vectors[index] = creator(size);
+		}
+
+		// testings sort functions
+	}
+
+	template <typename data_type>
+	void test_default_functions(size_t size)
+	{
+		return test_functions(tools::creator_vector<data_type>, sort_vector<data_type>, size);
 	}
 }
